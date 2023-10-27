@@ -1,0 +1,55 @@
+\section{The Imp language}
+
+We'll denote by \(\z\) the set of integers with the usual order plus
+two bonus elements \(-\infty\) and \(+\infty\), s.t. \(-\infty \leq
+  z \leq +\infty \quad \forall z \in \z\).
+
+\begin{center}
+\begin{tabular}{lll}
+\expr \(\ni e\) & ::= & \(x \in S \mid x \in [a,b] \mid x \leq k \mid x > k \mid \tru \mid \ff \mid\)\\[0pt]
+ &  & \(x := k \mid x := y + k \mid x := y - k\)\\[0pt]
+\imp \(\ni C\) & ::= & \(e \mid C + C \mid C ; C \mid C*\)\\[0pt]
+\end{tabular}
+
+\end{center}
+
+The concrete collecting semantics is standard. Environments are
+(total) maps from variables to (numerical) values
+\[\env = \{\rho \mid \rho : \var \to \z\}\]
+
+So that we can define the concrete semantics of basic expressions
+\[\llp \cdot \rrp : \expr \to \env \to (\env \cup \{\bot\})\] where
+\(\bot\) rapresents undefinedness/unreachability. For all \(\rho \in
+  \env\)
+
+\begin{center}
+\begin{tabular}{rcl}
+\(\llp x\in S \rrp \rho\) & = & \(\begin{cases} \rho & \rho(x) \in S \\ \bot & \text{otherwise} \end{cases}\)\\[0pt]
+\(\llp x\in [a,b] \rrp \rho\) & = & \(\begin{cases} \rho & \rho(x) \in [a,b]  \\ \bot & \text{otherwise}  \end{cases}\)\\[0pt]
+\(\llp x \leq k \rrp \rho\) & = & \(\begin{cases} \rho & \rho(x) \leq k  \\ \bot & \text{otherwise}  \end{cases}\)\\[0pt]
+\(\llp x > k \rrp \rho\) & = & \(\begin{cases} \rho & \rho(x) > k  \\ \bot & \text{otherwise}  \end{cases}\)\\[0pt]
+\(\llp \tru \rrp \rho\) & = & \(\rho\)\\[0pt]
+\(\llp \ff \rrp \rho\) & = & \(\bot\)\\[0pt]
+\(\llp x := k \rrp \rho\) & = & \(\rho[x \mapsto k]\)\\[0pt]
+\(\llp x := y + k \rrp \rho\) & = & \(\rho[x \mapsto y + k]\)\\[0pt]
+\(\llp x := y-k \rrp \rho\) & = & \(\rho[x \mapsto y - k]\)\\[0pt]
+\end{tabular}
+
+\end{center}
+
+
+The concrete collecting domain is the complete lattice \(\dom =
+  \langle 2^\env, \subseteq \rangle\) and the concrete collecting
+semantics \(\langle \cdot \rangle : \imp \to \dom \to \dom\) is
+defined as:
+
+\begin{center}
+\begin{tabular}{rcl}
+\(\langle e \rangle X\) & = & \(\{\llp e \rrp \rho \mid \rho \in X, \llp e \rrp \rho \neq \bot\}\)\\[0pt]
+\(\langle C_1 + C_2 \rangle X\) & = & \(\langle C_1 \rangle X \cup \langle C_2 \rangle X\)\\[0pt]
+\(\langle C_1; C_2 \rangle X\) & = & \(\langle C_2 \rangle (\langle C_1 \rangle X)\)\\[0pt]
+\(\langle C^* \rangle\) & = & \(\bigcup_{i \in \n} \langle C \rangle^i X\)\\[0pt]
+\end{tabular}
+
+\end{center}
+

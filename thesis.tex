@@ -1,0 +1,31 @@
+\documentclass[
+  10pt,       % fontsize
+  oneside,    % symmetric pagination, for digital view
+  a4paper,    % ma vafanculo
+  english,    % attenscion plis
+]{book}
+
+\usepackage{preamble}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\begin{document}
+
+%% config && title page
+\frontmatter
+\import{./config/}{mod}
+
+\import{./src/intro/}{mod}
+
+%% TOC
+\cleardoublepage
+\tableofcontents
+
+%% Structure
+\cleardoublepage
+\mainmatter
+\import{./src/chapters/}{mod}
+
+\backmatter
+\import{./src/biblio/}{mod}
+\end{document}
