@@ -1,0 +1,143 @@
+\section{Program semantics}
+In the next lines we'll refer to a generic deterministic programming
+language Prog, which is just bounded to be Turing complete.
+
+\begin{definition}[Programming language]
+  A programming language is a set of instructions?
+\end{definition}
+
+\begin{definition}[Denotational semantics]\label{def:denotational}
+  Given a programming language \(\prog\) a denotational-style
+  semantics is a function \[ \llb \cdot \rrb : \prog \to D \hto D\]
+  which maps each and every program to a partial function on a set of
+  I/O values.
+\end{definition}
+
+\begin{definition}[Small-step semantics]
+  A small step transition relation \[\Rightarrow \subseteq (\prog
+  \times D) \times ((\prog \times D) \cup D)\] is a small step
+  semantics functionally equivalent a denotational semantics
+  (\ref{def:denotational}): \[\langle P, i \rangle \Rightarrow^* o
+  \iff \llb P \rrb i = o\]
+\end{definition}
+
+\begin{notation}[encoding equality]
+  Let \(\xi : D \tor \n\) be an enocding function from \(D\) values to
+  \(\n\) and \(\omega : \n \tor D\) be a decoding function from \(\n\)
+  to \(D\) values. We'll say that \(g \cong f\) if \[f = \xi \circ g
+  \circ \omega\]
+\end{notation}
+
+\begin{definition}[Turing completeness]\label{def:turingc}
+  A programming language is said to be Turing complete when for every
+  partial recursive function \(f : \n \htor \n\) there exists a
+  program \(P\in \prog\) s.t. \[\llb P \rrb \cong f\]
+
+  \begin{observation}
+    \[\{\llb P \rrb : \n \htor \n \mid P \in \prog\} = \n \htor \n\]
+  \end{observation}
+\end{definition}
+
+\begin{notation}[I/O semantics]
+  We'll overload the notation of \(\llb P\rrb\) to also identify a
+  program by the partial recursive function it computes. i.e., \[\llb
+  P \rrb : \n \htor \n\]
+\end{notation}
+
+\subsection{Collecting semantics}
+
+We are interested in inferring program invariants, i.e., properties of
+the memory state a program can be in each moment of the
+computation. Our program semantics will ultimately operate on a
+\emph{set} of memory states.
+
+\begin{definition}[Memory states]\label{def:states}
+  A memory state \(\rho \in \env\) is a function mapping each variable
+  to its value \[\env \defin \{\rho \mid \rho : \var \to \z\}\]
+\end{definition}
+
+\begin{definition}[Concrete domain]\label{def:concrete}
+  The concrete domain of a collecting semantics is the complete
+  lattice \(\wp(\env)\), paired with the inclusion relation as partial
+  order, the empty set as bottom element and the set \(\env\) as top
+  element, union and intersection defined as usual on sets.
+
+  \[\dom \defin \langle \wp(\env), \subseteq, \cup, \cap,
+  \emptyset, \env \rangle\]
+\end{definition}
+
+\begin{definition}[Collecting semantics]\label{def:collecting}
+  Let \(\prog\) be a non-deterministic turing complete language. That
+  operates on numeric values (in pair with assumption
+  \ref{ass:data}). The function \[\langle \cdot \rangle : \prog \to
+  \dom \hto \dom\] is the collecting semantics of the language.
+\end{definition}
+
+The collecting semantics \(\langle \cdot \rangle\) we just defined is
+in pair with the denotational semantics we introduced in definition
+\ref{def:denotational}, but instead of operating on single values it
+operates on collection of states. It also maps each and every program
+to a \emph{total} function on the complete lattice \(\dom\).
+
+Notice that the collecting semantics as defined maps each program in
+the language to a \emph{partial} function in the domain \(\dom\). The
+intuition is that otherwise we could always decide weather a program
+halts on itself, as the collecting semantics returns the \emph{most
+precise} invariant for a program.
+
+\begin{theorem}[Collecting semantics is not decidable]
+  Let \(P\in\prog\) be a program in our Turing complete language. Then
+  \(\langle P \rangle\) is not total recursive.
+\end{theorem}
+
+\begin{proof}
+  Let \(P\in\prog\) be a program in our Turing complete language. As
+  for definition \ref{def:turingc}, it idetifies a partial recursive
+  function \(\llb P \rrb \cong f : \n \htor \n\). And therefore
+  there's an encoding function \(\xi : \prog \to \n\) and a decoding
+  function \(\omega : \n \to \prog\). The same goes for the sets of
+  states of the concrete collecting domain: we assumed in
+  \ref{ass:data} that there's a single data type: \(\n\), therefore we
+  also assume here that we have an encoding \(\xi_\dom : \dom \to \n\)
+  and a deconding \(\omega_\dom : \n \to \dom\) for the elements of
+  the concrete collecting domain. If the domain of \(\langle \cdot
+  \rangle\) was the set of total recursive functions, we could build a
+  decision function for the set \(K = \{x \mid x \in \dom_x\}\), which
+  is known to be not recursive. The procedure, in abstract terms would
+  be the following:
+  \begin{itemize}
+  \item take \(x \in \n\), it will be our input for the decision
+    function, we would have to decide weather \(\phi_x(x)\downarrow\);
+  \item we set \(P = \omega(x), X = \{\omega_\dom(x)\}\) as our inputs
+    for the (by hyp.) total collecting semantics;
+  \item we have two possible results:
+    \begin{itemize}
+    \item \(\langle \omega(x) \rangle \{\omega_\dom(x)\} =
+      \emptyset\): it means that the program, run with the only input
+      state of itself would not halt (\(x\not\in K\));
+    \item \(\langle \omega(x) \rangle \{\omega_\dom(x)\} = X \neq
+      \emptyset\): the program run on itself halts on some final state
+      (invariant), therefore it halts on itself (\(x\in K\)).
+    \end{itemize}
+  \end{itemize}
+\end{proof}
+%% C deve esser calcolabile, quindi ci restringiamo ad un suo
+%% sottinsieme ricorsivo o ricorsivamente enumerabile?
+
+%% Finitezza
+Because of the latter result, one may ask itself weather just the
+information of finiteness is decidable on concrete collecting
+invariants. Turns out not even this is decidable.
+
+\begin{theorem}
+  Let \(P\in\prog\) be a program in our Turing complete language. Then
+  \[\Omega(\langle P \rangle X) = \begin{cases} 1 & |\langle P \rangle
+    X| < \infty \\ 0 & \text{otherwise} \end{cases}\] is not computable.
+\end{theorem}
+
+\begin{proof}
+  The function \(\Omega\) is the decision function for the following
+  set \[F = \{\}\]
+\end{proof}
+
+

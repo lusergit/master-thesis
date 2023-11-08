@@ -5,10 +5,11 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{geometry}
 \RequirePackage{amsmath}
+\RequirePackage{tabu}
 \RequirePackage{amsfonts}
 \RequirePackage{amssymb}
 \RequirePackage{proof}
-\RequirePackage[hidelinks]{hyperref}
+\RequirePackage[pdfa,hidelinks]{hyperref}
 \RequirePackage{graphicx}
 \RequirePackage{longtable}
 \RequirePackage{wrapfig}
@@ -18,15 +19,24 @@
 \RequirePackage{capt-of}
 \RequirePackage{stmaryrd}
 \RequirePackage{amsthm}
+\RequirePackage{mathtools}
 \RequirePackage{algorithm}
 \RequirePackage{algpseudocode}
 \RequirePackage{dsfont}
-\RequirePackage[backend=biber,style=verbose-ibid,hyperref,backref]{biblatex}
+\RequirePackage{tikz}
+\RequirePackage[
+  hyperref,
+  style=alphabetic,
+]{biblatex}
+\RequirePackage{xcolor}
+\bibliography{references}
 
 \RequirePackage{import}
 
 \RequirePackage{data}
 \RequirePackage{commands}
+
+\definecolor{unipdred}{RGB}{155,0,20}
 
 \geometry{
 	top=25mm,
@@ -34,8 +44,3 @@
 	left=30mm,
 	right=30mm
 }
-
-\author{\Authors}
-\title{\Title}
-\date{\Date}
-

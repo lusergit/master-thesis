@@ -1,0 +1,82 @@
+\section{Recursion Theory}
+
+Following \cite{ranzato:analysis}, we'll provide the general
+terminology and nottion fr computable funcitons in recursion theory,
+as in
+\cite{cutland1980computability,odifreddi1992classical,rogers1987theory}.
+
+\begin{definition}[Total functions]
+  Let \(X,Y\) be two sets. Then \[X \to Y\] is the set of all total
+  functions from \(X\) to \(Y\).
+\end{definition}
+
+\begin{definition}[Partial functions]
+  Let \(X,Y\) be two sets. Then \[X \hto Y\] is the set of all partial
+  functions from \(X\) to \(Y\).
+\end{definition}
+
+\begin{definition}[Domain of partial functions]
+  Let \(f : X \hto Y\). \(f(x)\downarrow\) means that \(f\) is defined
+  on \(x\), \(f(x)\uparrow\) means that \(f\) is undefined on
+  \(x\). Hence \[dom(f) = \{x \in X \mid f(x)\downarrow\}\]
+\end{definition}
+
+\begin{notation}[Implication overloading]
+  If \(S\subseteq Y\) then by \(f(x) \in S\) we mean \(f(x)\downarrow
+  \Rightarrow f(x) \in S\)
+\end{notation}
+
+\begin{notation}[Function Equality]
+  If \(f,g : X \hto Y\) then by \(f=g\) we mean that \(dom(f) =
+  dom(g)\) and for any \(x \in dom(f) = dom(g)\), \(f(x) = g(x)\).
+\end{notation}
+
+\begin{notation}[Set of partial recursive functions]
+  By \(\n \htor \n\) we denote the set of partial recursive functions
+  on natural numbers
+\end{notation}
+
+\begin{notation}[Set of total recursive functions]
+  By \(\n \tor \n\) we denote the set of partial recursive functions
+  on natural numbers
+\end{notation}
+
+\begin{definition}[Recursively enumerable set]
+  \(A \subseteq \n\) is \emph{recursively enumerable} (r.e. or
+  semidecidable) if \(A = dom(f)\) for some \(f \in \n \htor \n\)
+\end{definition}
+
+\begin{definition}[Recursive set]
+  \(A\subseteq \n\) is a recursive set if both \(A\) and its
+  complement \(\overline{A} = \n \setminus A\) are semidecidable,
+  i.e., there exists some \(f \in \n \tor \n\) s.t. \[f = \lambda n
+  . (n \in A) ? 1 : 0\]
+\end{definition}
+
+\begin{theorem}[Bijection over a recursive set]\label{th:bijection}
+  Let \(f : A \tor B\) be a total bijection, i.e., \(\forall x \in A
+  \exists y \in B \mid f(x) = y\). Then \(B\) is recursive
+\end{theorem}
+
+\begin{proof}\label{proof:bijection}
+  \(A\) recursive: there exists \(\bigx_A = \lambda x . (x \in A)? 1 :
+  0\), and \(f : A \tor B\) is a total bijection, which means
+  \(\forall x \in A \exists y \in B \mid f(x) = y\). We can build the
+  decision function for \(B\) as \[\bigx_B(y) = sg(\mu x . |f(x) -
+  y|)\] which is total, since because of the bijection property,
+  termination is guaranteed. It is also recursive, since composition
+  of recursive functions. Therefore \(B\) is recursive.
+\end{proof}
+
+\begin{observation}\label{obs:bijection}
+  One could always write the decision function as in proof
+  \ref{proof:bijection}, but in general it is not a total function, as
+  the image of a general function is not the whole codomain; we need
+  the surjectivity hypothesis for that. But nonetheless the \(B\) set
+  would always be at least r.e., since \(\bigx_B\) would always work,
+  as its domain would always be \(B\), but it would be partial instead
+  of total.
+
+  Since \(B\) would be the domain of a partial recursive function, in
+  general \(B\) is semidecidable.
+\end{observation}

@@ -1,0 +1,110 @@
+\section{Deciding Finiteness}
+Turns out that not even deciding weather the best invariant is finite
+or not is decidable, as it would allow to decide (again) for
+termination.
+
+In order to do that we need a couple of preliminaries:
+
+\begin{theorem}[Semantics of basic expressions reduces cardinality]\label{th:redcard}
+  Given a basic expression \(e \in \expr\) and a Concrete invariant
+  \(X \in \dom\) with \(|X| < \infty\)
+
+  \[ | \langle e \rangle X | \leq |X| < \infty \]
+
+  \begin{proof}
+    Is sufficent to recall that \[\langle e \rangle X = \{ \llp e \rrp
+    \rho \mid \rho \in X \wedge \llp e \rrp \rho \neq \bot \} \] we
+    can see that according to the semantics either an environment in
+    the initial set \(X\) is updated or it is discarded, as its update
+    ends up being the \(\bot\) state. Since no new states are added to
+    the image of \(\langle e \rangle X\), \(|\langle e \rangle X| \leq
+    |X| < \infty\).
+  \end{proof}
+
+\end{theorem}
+
+\begin{theorem}
+  [Infinite invariant implies non-termination]
+  \label{th:infinvnonterm}
+  Let \(C\in \imp\) be program written in the \(\imp\) language, \(X\)
+  a finite set of intial environments. If the invariant \(\langle C
+  \rangle X\) is infinite, \(C\) does not halt.
+  \begin{proof}
+    We'll work by induction on the structure of the language.
+    \paragraph*{Base cases\\}
+    The only base case we have to conisder is when \(C = e\), which is
+    already covered by theorem \ref{th:redcard}. \(\langle e \rangle
+    X\) produces a finite amount fo states, therefore the statement
+    holds vacuously.
+
+    \paragraph*{Recursive cases\\}
+    \begin{itemize}
+    \item[\(C = C_1 + C_2\)] In this case
+    \item[\(C = C_1;C_2\)] In this case
+    \item[\(C = C_1^*\)] In this case 
+    \end{itemize}
+  \end{proof}
+\end{theorem}
+
+\begin{theorem}[Finiteness oracle]\label{th:finiteness}
+  Given an oracle
+  \[
+  \Omega(X) = \begin{cases}
+    1 & X \text{ is infinite} \\
+    0 & X \text{ is finite}
+  \end{cases}
+  \]
+  program termination is decidable.
+  
+  \begin{proof}
+    Given the oracle \(\Omega\) as described in theorem
+    \ref{th:finiteness} We could decide for the termination of \(C \in
+    \imp\). \(\Omega(\langle C \rangle X)\) has 2 possible outcomes:
+    \begin{itemize}
+    \item[\textbf{1}] therefore by \ref{th:infinvnonterm}, \(C\)
+      starting from environment \(X\) does not terminate.
+    \item[\textbf{0}] In this case we can build a procedure to decide
+      weather the program terminates or not. Intuitively we have to go
+      trough a finite amount of states in order to find a cycle of
+      states the program passes trough. If we find a cycle, then the
+      program does not terminate, otherwise the program terinates.
+      The procedure to check for a cycle in the trace of states is the
+      algorithm \ref{alg:cycle}.
+      \begin{algorithm}
+        \caption{Termination procedure (kleene-term(C))}\label{alg:term}
+        \label{alg:cycle}
+        \begin{algorithmic}
+          \State Environments \(\gets \{\rho\}\)
+          \State NewEnv \(\gets \langle C \rangle\)Environments
+          \While{NewEnv \(\not\in\) Environments \(\wedge\) \(b\)(NewEnv)}
+          \State Environments \(\gets\) Environments \(\cup\) NewEnv
+          \State NewEnv \(\gets \langle C \rangle \{\)NewEnv\(\}\)
+          \EndWhile
+
+          \If{NewEnv \(\in\) Environments} \State \Return 1
+          \Comment{We found a cycle of environments, therefore \(P_1\)
+            does not terminate} \EndIf
+
+          \State \Return 0 \Comment{We otherwise exited the cycle
+            because the guard on the final new state is not respected
+            anymore, therefore the original program terminates}
+        \end{algorithmic}
+      \end{algorithm}
+
+      The procedure must terminate, since the set of Environments to
+      explore is bound to be finite by our oracle \(\Omega\).  The
+      whole procedure to compute termination becomes algorithm
+      \ref{alg:term}.
+      \begin{algorithm}
+        \caption{Termination procedure (term(C))}\label{alg:term}
+        \begin{algorithmic}
+          \If{\(\Omega(P, \rho ) = 0\)}
+          \State \Return kleene-term(P)
+          \EndIf
+          \State \Return 1
+        \end{algorithmic}
+      \end{algorithm}
+
+    \end{itemize}
+  \end{proof}
+\end{theorem}

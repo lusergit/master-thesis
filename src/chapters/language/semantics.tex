@@ -1,1 +1,186 @@
 \section{Semantics}
+
+In the following section we'll provide the semantics of the language
+we're working on and we'll make some obstervarions; we'll also prove
+some properties of the language we'll use in the next sections.
+
+The first building block is that of environments. We'll use
+environments to model the most precise invariant our semantic can
+describe for a program.
+
+\begin{definition}[Environments]
+  Environments are (total) maps from variables to (numerical)
+  values \[\env = \{\rho \mid \rho : \var \to \z\}\]
+
+  Note: the set of notable variables is assumed to be finite.
+\end{definition}
+
+An environment is therefore a map from a finite set of interesting
+variables (\(\var\)) to a set of possible values the variables can
+assume (because of assumption \ref{ass:data} we're restraining
+ourseves to integer values, without loss of generality as more complex
+datatypes can be conded into \(\n\) values, as long as we provide an
+enconding function \(\xi : D \to \n\) for some data type \(D\).
+
+The next building block is the semantics of basic expressions, which
+encodes the most important operations we can do on variables: tests
+and assignments. Tests are used in the semantics to filter out some
+states, namely those state that do not respect some condition, while
+assignments are used as a way of updating the state in which our
+machine finds itself during the execution of a program.
+
+\begin{definition}[Semantics of Basic Expressions]
+  For basic expressions \(e \in \expr\) the concrete semantics \(\llp
+  \cdot \rrp : \expr \to \env \to \env \cup \{\bot\}\) is recursively
+  defined as follows:
+  \begin{align*}
+    \llp x\in S \rrp \rho & \defin \begin{cases} \rho & \rho(x)\in S \\ \bot & \text{otherwise} \end{cases} \\
+    \llp x\in [a,b] \rrp \rho & \defin \begin{cases} \rho & \rho(x)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
+    \llp x \leq k \rrp \rho & \defin \begin{cases} \rho & \rho(x)\leq k \\ \bot & \text{otherwise} \end{cases} \\
+    \llp x > k \rrp \rho & \defin \begin{cases} \rho & \rho(x) > k \\ \bot & \text{otherwise} \end{cases} \\
+    \llp \tru \rrp \rho & \defin \rho \\
+    \llp \ff \rrp \rho & \defin \bot \\
+    \llp x := k \rrp & \defin \rho [x \mapsto k] \\
+    \llp x := y + k \rrp & \defin \rho [x \mapsto \rho(y) + k] \\
+    \llp x := y - k \rrp & \defin \rho [x \mapsto \rho(y) - k] \\
+  \end{align*}
+\end{definition}
+
+Notice that each expression maps to a \emph{total} map, therefore
+given an expression, each element of the \(2^\env\) lattice is
+mapped to something by this function.
+
+The next building block is the concrete collecting semantics for the
+language, maps each program in \(\imp\) to a partial function on the
+\(\dom\) complete lattice, mappting a set of 
+
+\begin{definition}[Concrete collecting domain]
+  The concrete collecting domain for the \(\imp\) language concrete
+  collecting semantics is the complete lattice \[\dom \defin \langle
+  2^\env , \subseteq \rangle \]
+\end{definition}
+
+We can therefore define the concrete collecting semantics for our
+language:
+
+\begin{definition}[Concrete collecting semantics]
+  The concrete collecting semantics for \(\imp\) is given by the total
+  mapping \[\langle \cdot \rangle : \imp \to \dom \to \dom\] which
+  maps each program \(C \in \imp\) to its total mapping \[\langle C
+  \rangle : \dom \to \dom\] on the complete lattice \(\dom\). The
+  semantics is recursively defined as follows: given \(X \in 2^\env\)
+
+  \begin{align*}
+    \langle e \rangle X & \defin \{\llp e \rrp \rho \mid \rho \in X,
+    \llp e \rrp e \rho \neq \bot\} \\
+    \langle C_1 + C_2 \rangle X & \defin \langle C_1 \rangle X \cup
+    \langle C_2 \rangle X \\
+    \langle C_1 ; C_2 \rangle X & \defin \langle C_2 \rangle (\langle
+    C_1 \rangle X) \\
+    \langle C^* \rangle X & \defin \bigcup_{i \in \n} \langle C \rangle^i X
+  \end{align*}
+\end{definition}
+
+\begin{notation}[Concrete collecting semantics overloading]
+  By an abuse of notation we'll use \(\langle C \rangle\) to identify
+  a program by the partial recursive function it computes on the
+  complete lattice \(\dom\), therefore \[\langle C \rangle : \n \htor
+  \n\]
+\end{notation}
+
+We also define a one step relation \(\to\), functionally equivalent to
+the collecting semantics, built on the concept of stores, tuples of
+programs and states:
+
+\begin{definition}[Store]
+  A program store is a tuple of a program and a state:
+  \[\state \defin \imp \times \env\]
+\end{definition}
+
+\begin{definition}[Small step collecting semantics]
+  The small step collecting semantics \(\to \subseteq \state \times
+  \state \cup \env\) is recursively defined trough the following rules:
+
+  %% definendo eval strategy per il non determinismo????? si
+  %% \bgroup
+  %% \renewcommand{\arraystretch}{2}
+  %% \begin{tabular}{c c c}
+  \[\infer[\text{(EXPR}]{\langle e, X \rangle \to \sem{e} X}{}
+  \quad
+  \infer[\text{(EMPTY}]
+      {\langle C, \emptyset \rangle \to \emptyset}
+      {}\]
+      
+  \[\infer[\text{(SUM}_1]
+      {\langle C_1 + C_2 , X \rangle \to \langle C_1' + C_2 , X' \rangle}
+      {\langle C_1 , X \rangle \to \langle C_1' , X' \rangle}
+    \quad
+    \infer[\text{(SUM}_2]
+        {\langle e + C_2 , X \rangle \to \langle e + C_2' , X' \rangle}
+        {\langle C_2 , X \rangle \to \langle C_2' , X' \rangle}
+        \]
+
+  \[\infer[\text{(SUM}_{\text{expr}}]
+      {\langle e_1 + e_2 , X \rangle \to \langle e_1 \rangle X \cup \langle e_2\rangle X}
+      {}
+  \]
+                
+  \[\infer[\text{(CONC}]
+      {\langle C_1;C_2 , X\rangle \to \langle C_1';C_2 , X' \rangle}
+      {\langle C_1, X \rangle \to \langle C_1', X' \rangle}
+    \quad
+    \infer[\text{(CONC}_{\text{expr}}]
+      {\langle e;C_2 , X\rangle \to \langle C_2 , X' \rangle}
+      {\langle e, X \rangle \to X'}
+  \]
+          
+  \[\infer[\text{(KLEENE}]
+      {\langle C^* , X \rangle \to \langle C*, X' \rangle}
+      {\langle C , X \rangle \to^* X' \quad X' \neq X}
+    \quad
+    \infer[\text{(KLEENE}_{\text{fix}}]
+      {\langle C^*, X \rangle \to X}
+      {\langle C , X \rangle \to^* X}
+  \]
+                                        %% \end{tabular}
+                                        %% \egroup
+\end{definition}
+
+Thanks to the latter definition of a small step collecting semantics
+we can define a \emph{trace} for a program: the collection of sets of
+states trough which the small step semantics goes trough
+
+\begin{notation}
+  We'll call \(\env^\infty \defin 2^{2^\env}\), the poerset of the
+  powerset of \(\env\), to model (possibly infinite) traces of sets of
+  states in our small step collecting semantics
+\end{notation}
+
+\begin{definition}[Trace]
+  Traces are all the tuples \(\imp \times 2^\env\) realted by the
+  transition relation \(\to\)
+
+  \[\trace \defin \{\tau \in \env^\infty \mid \forall i \in \{1, \dots, |\tau|\} \tau_{i-1} \to \tau_i\} \}\]
+  we'll also call this set the set of all \emph{collecting straces}
+\end{definition}
+
+\begin{definition}[Trace semantics]
+  The trace semantics of a program \(C\in\imp\) is the set of all
+  possible collecting traces starting from a program
+  
+  \[\trace(C) \defin \{\tau \in \trace \mid \exists X \in 2^\env . \tau_0 = \langle C, X \rangle \}\]
+
+\end{definition}
+
+\begin{definition}[Program trace]
+  Let \(C \in \imp\) be a program and let \(X \in 2^\env\) be an
+  initial set of program states.  A \emph{program trace} \(\tau\) is
+  any nonempty possibly infinite sequence (indexed by \(\n\)) of
+  program states, related by the \(\to\) transition relation:
+  \[\trace(C, X) \defin \{\tau \in \trace(C) \mid \tau_0 = X\} \]
+\end{definition}
+
+\begin{theorem}[Finite traces]
+  Let \(C\in\imp\) be a program and \(X\) a finite collection of
+  environment. If \(\tau = Trace(C,X)\) is finite, then 
+\end{theorem}

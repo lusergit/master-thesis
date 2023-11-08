@@ -1,43 +1,95 @@
-
-@BOOK{book1,
- title = {Title of the book with some {Upper Case LETTERS}},
- author = {Surname1, Name1 and Surname2, Name2 and Surname3, Name3},
- publisher = {Book publisher},
- edition = {1st},
- year = {2021}
+@inproceedings{patrickradiha:one,
+author = {Cousot, Patrick and Cousot, Radhia},
+title = {Abstract Interpretation: A Unified Lattice Model for Static Analysis of Programs by Construction or Approximation of Fixpoints},
+year = {1977},
+isbn = {9781450373500},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/512950.512973},
+doi = {10.1145/512950.512973},
+abstract = {A program denotes computations in some universe of objects. Abstract interpretation of programs consists in using that denotation to describe computations in another universe of abstract objects, so that the results of abstract execution give some information on the actual computations. An intuitive example (which we borrow from Sintzoff [72]) is the rule of signs. The text -1515 * 17 may be understood to denote computations on the abstract universe {(+), (-), (±)} where the semantics of arithmetic operators is defined by the rule of signs. The abstract execution -1515 * 17 → -(+) * (+) → (-) * (+) → (-), proves that -1515 * 17 is a negative number. Abstract interpretation is concerned by a particular underlying structure of the usual universe of computations (the sign, in our example). It gives a summary of some facets of the actual executions of a program. In general this summary is simple to obtain but inaccurate (e.g. -1515 + 17 → -(+) + (+) → (-) + (+) → (±)). Despite its fundamentally incomplete results abstract interpretation allows the programmer or the compiler to answer questions which do not need full knowledge of program executions or which tolerate an imprecise answer, (e.g. partial correctness proofs of programs ignoring the termination problems, type checking, program optimizations which are not carried in the absence of certainty about their feasibility, …).},
+booktitle = {Proceedings of the 4th ACM SIGACT-SIGPLAN Symposium on Principles of Programming Languages},
+pages = {238–252},
+numpages = {15},
+location = {Los Angeles, California},
+series = {POPL '77}
 }
 
-@ARTICLE{article1,
-  title = {Title of the article},
-  author = {Surname4, Name4 and Surname5, Name5 and Surname6, Name6},
-  journal = {Journal's name},
-  volume = {1},
-  number = {2},
-  pages = {3--5},
-  year = {2021}
+@inproceedings{patrickradiha:two,
+author = {Cousot, Patrick and Cousot, Radhia},
+title = {Systematic Design of Program Analysis Frameworks},
+year = {1979},
+isbn = {9781450373579},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/567752.567778},
+doi = {10.1145/567752.567778},
+abstract = {Semantic analysis of programs is essential in optimizing compilers and program verification systems. It encompasses data flow analysis, data type determination, generation of approximate invariant assertions, etc.Several recent papers (among others Cousot \& Cousot[77a], Graham \& Wegman[76], Kam \& Ullman[76], Kildall[73], Rosen[78], Tarjan[76], Wegbreit[75]) have introduced abstract approaches to program analysis which are tantamount to the use of a program analysis framework (A,t,\~{a}) where A is a lattice of (approximate) assertions, t is an (approximate) predicate transformer and \~{a} is an often implicit function specifying the meaning of the elements of A. This paper is devoted to the systematic and correct design of program analysis frameworks with respect to a formal semantics.Preliminary definitions are given in Section 2 concerning the merge over all paths and (least) fixpoint program-wide analysis methods. In Section 3 we briefly define the (forward and backward) deductive semantics of programs which is later used as a formal basis in order to prove the correctness of the approximate program analysis frameworks. Section 4 very shortly recall the main elements of the lattice theoretic approach to approximate semantic analysis of programs.The design of a space of approximate assertions A is studied in Section 5. We first justify the very reasonable assumption that A must be chosen such that the exact invariant assertions of any program must have an upper approximation in A and that the approximate analysis of any program must be performed using a deterministic process. These assumptions are shown to imply that A is a Moore family, that the approximation operator (wich defines the least upper approximation of any assertion) is an upper closure operator and that A is necessarily a complete lattice. We next show that the connection between a space of approximate assertions and a computer representation is naturally made using a pair of isotone adjoined functions. This type of connection between two complete lattices is related to Galois connections thus making available classical mathematical results. Additional results are proved, they hold when no two approximate assertions have the same meaning.In Section 6 we study and examplify various methods which can be used in order to define a space of approximate assertions or equivalently an approximation function. They include the characterization of the least Moore family containing an arbitrary set of assertions, the construction of the least closure operator greater than or equal to an arbitrary approximation function, the definition of closure operators by composition, the definition of a space of approximate assertions by means of a complete join congruence relation or by means of a family of principal ideals.Section 7 is dedicated to the design of the approximate predicate transformer induced by a space of approximate assertions. First we look for a reasonable definition of the correctness of approximate predicate transformers and show that a local correctness condition can be given which has to be verified for every type of elementary statement. This local correctness condition ensures that the (merge over all paths or fixpoint) global analysis of any program is correct. Since isotony is not required for approximate predicate transformers to be correct it is shown that non-isotone program analysis frameworks are manageable although it is later argued that the isotony hypothesis is natural. We next show that among all possible approximate predicate transformers which can be used with a given space of approximate assertions there exists a best one which provides the maximum information relative to a program-wide analysis method. The best approximate predicate transformer induced by a space of approximate assertions turns out to be isotone. Some interesting consequences of the existence of a best predicate transformer are examined. One is that we have in hand a formal specification of the programs which have to be written in order to implement a program analysis framework once a representation of the space of approximate assertions has been chosen. Examples are given, including ones where the semantics of programs is formalized using Hoare[78]'s sets of traces.In Section 8 we show that a hierarchy of approximate analyses can be defined according to the fineness of the approximations specified by a program analysis framework. Some elements of the hierarchy are shortly exhibited and related to the relevant literature.In Section 9 we consider global program analysis methods. The distinction between "distributive" and "non-distributive" program analysis frameworks is studied. It is shown that when the best approximate predicate transformer is considered the coincidence or not of the merge over all paths and least fixpoint global analyses of programs is a consequence of the choice of the space of approximate assertions. It is shown that the space of approximate assertions can always be refined so that the merge over all paths analysis of a program can be defined by means of a least fixpoint of isotone equations.Section 10 is devoted to the combination of program analysis frameworks. We study and examplify how to perform the "sum", "product" and "power" of program analysis frameworks. It is shown that combined analyses lead to more accurate information than the conjunction of the corresponding separate analyses but this can only be achieved by a new design of the approximate predicate transformer induced by the combined program analysis frameworks.},
+booktitle = {Proceedings of the 6th ACM SIGACT-SIGPLAN Symposium on Principles of Programming Languages},
+pages = {269–282},
+numpages = {14},
+location = {San Antonio, Texas},
+series = {POPL '79}
 }
 
-@INPROCEEDINGS{conference1,
- title = {Title of the conference},
- author = {Surname7, Name7 and Surname8, Name8 and Surname9, Name9},
- booktitle = {Proceedings of the conference's name},
- month = {Feb.},
- year = {2021},
- address = {city, state}
+@inproceedings{ranzato:analysis,
+author={Cousot, Patrick and Giacobazzi, Roberto and Ranzato, Francesco},
+editor={Chockler, Hana and Weissenbacher, Georg},
+title={Program Analysis Is Harder Than Verification: A Computability Perspective},
+booktitle={Computer Aided Verification},
+year={2018},
+publisher={Springer International Publishing},
+address={Cham},
+pages={75--95},
+abstract={We study from a computability perspective static program analysis, namely detecting sound program assertions, and verification, namely sound checking of program assertions. We first design a general computability model for domains of program assertions and corresponding program analysers and verifiers. Next, we formalize and prove an instantiation of Rice's theorem for static program analysis and verification. Then, within this general model, we provide and show a precise statement of the popular belief that program analysis is a harder problem than program verification: we prove that for finite domains of program assertions, program analysis and verification are equivalent problems, while for infinite domains, program analysis is strictly harder than verification.},
+isbn={978-3-319-96142-2}
 }
 
-@ONLINE{online1,
- author = {{Author of the resource}},
- title = {Title of the resource},
- url  = {https://unipd.it},
- addendum = {(accessed: 16.02.2021)}
+@article{ranzato:history,
+  author={Giacobazzi, Roberto and Ranzato, Francesco},
+  journal={IEEE Annals of the History of Computing}, 
+  title={History of Abstract Interpretation}, 
+  year={2022},
+  volume={44},
+  number={2},
+  pages={33-43},
+  doi={10.1109/MAHC.2021.3133136}}
+
+@book{mine:course,
+  author={Antonie Miné},
+  title={Static Inference of Numeric Invariants by Abstract Interpretation},
+  year={2018},
+  location={Université Pierre et Marie Curie, Paris, France},
 }
 
-@STANDARD{standard1,
- title = {Name of the standard},
- year = {2021},
- month = {Feb.},
- organization = {organization},
- note = {Identifier of the standard}
+@book{cutland1980computability,
+  title={Computability: An introduction to recursive function theory},
+  author={Cutland, Nigel},
+  year={1980},
+  publisher={Cambridge university press}
+}
+
+@book{odifreddi1992classical,
+  title={Classical recursion theory: The theory of functions and sets of natural numbers},
+  author={Odifreddi, Piergiorgio},
+  year={1992},
+  publisher={Elsevier}
+}
+
+@article{turing1936computable,
+  title={On computable numbers, with an application to the Entscheidungsproblem},
+  author={Turing, Alan Mathison and others},
+  journal={J. of Math},
+  volume={58},
+  number={345-363},
+  pages={5},
+  year={1936}
+}
+
+@book{rogers1987theory,
+  title={Theory of recursive functions and effective computability},
+  author={Rogers Jr, Hartley},
+  year={1987},
+  publisher={MIT press}
 }
 

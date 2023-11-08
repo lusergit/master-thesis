@@ -4,16 +4,45 @@
 \newcommand{\imp}{\text{Imp}}
 \newcommand{\expr}{\text{Exp}}
 \newcommand{\env}{\text{Env}}
+\newcommand{\state}{\text{State}}
 \newcommand{\var}{\text{Var}}
 \newcommand{\z}{\ensuremath{\mathbb{Z}}}
 \newcommand{\n}{\ensuremath{\mathbb{N}}}
 \newcommand{\tru}{\ensuremath{\texttt{true}}}
 \newcommand{\ff}{\ensuremath{\texttt{false}}}
 \newcommand{\dom}{\ensuremath{\mathbb{C}}}
-\newcommand{\sem}[1]{\ensuremath{\langle \texttt{#1} \rangle}}
+\newcommand{\sem}[1]{\ensuremath{\langle #1 \rangle}}
 \newcommand{\cc}[1]{\ensuremath{\text{#1}}}
 \newcommand{\llp}{\ensuremath{\llparenthesis}}
 \newcommand{\rrp}{\ensuremath{\rrparenthesis}}
+\newcommand{\llb}{\ensuremath{\llbracket}}
+\newcommand{\rrb}{\ensuremath{\rrbracket}}
 \newcommand{\bigx}{\ensuremath{\mathcal{X}}}
+\newcommand{\one}{\ensuremath{\mathds{1}}}
+\newcommand{\hto}{\ensuremath{\hookrightarrow}}
+\newcommand{\htor}{\ensuremath{\xhookrightarrow{r}}}
+\newcommand{\tor}{\ensuremath{\xrightarrow{r}}}
+\newcommand{\prog}{\ensuremath{\text{Prog}}}
+\newcommand{\trace}{\ensuremath{\text{Trace}}}
+\newcommand{\defin}{\ensuremath{\triangleq}}
+\newcommand{\lubof}[2][]{\ensuremath{\cup_{#1} #2}}
+\newcommand{\glbof}[2][]{\ensuremath{\cap_{#1} #2}}
+
+\theoremstyle{theorem}
 \newtheorem{theorem}{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{example}{Example}[chapter]
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{assumption}{Assumption}[chapter]
+\newtheorem{notation}{Notation}[chapter]
+\newtheorem{problem}{Problem}[chapter]
+
+\newtheorem*{question*}{Question}
+\newtheorem*{solution*}{Solution}
+
+
 \let\emptyset\varnothing
+\let\phi\varphi
+\let\leq\leqslant

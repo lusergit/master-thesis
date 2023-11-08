@@ -1,1 +1,90 @@
 \section{Decidability}
+The concrete semantics we described so far is able to express exactly
+the most precide program invariant for every program. Unfortunately
+this semantics is generally not computable, due to three reasons:
+
+\begin{problem}[Domain rapresentation]\label{problem:domain}
+  the concrete elements live in the complete lattice \(\dom = \langle
+  2^\env, \subseteq \rangle\) which is infinite and therefore not
+  computable rapresentable. The section \ref{decide:dom} explores what
+  happens when we restrict our domain to decidable (recursive) sets
+  and how we can mitigate this problem;
+\end{problem}
+
+\begin{problem}[Concrete operations]\label{problem:operations}
+  the semantics operators for atomic statements \(\llp \cdot \rrp,
+  \langle \cdot \rangle\) and the join operation \(\cup\) are not
+  computable -- or, given a finite domain \(\dom_\alpha\), would be
+  too costly to evaluate individually on each memory state;
+\end{problem}
+
+\begin{problem}[Domain Exploration non-Termination]\label{problem:exploration}
+  the iterations needed in order to evaluate the semantics of loops
+  for the denotational semantics, or in general solve the equational
+  semantics may not be a procedure that converges in finite time --
+  or, for a finite \(\dom_\alpha\) may require on finite, yet
+  extremely long chains
+\end{problem}
+
+The general way is to sove the point 1 and 2 trough abstraction and
+the 3rd point via convergence accelleration (namely the widening and
+narrowing operations)
+
+\subsection{Semantics decidability}\label{decide:sem}
+The initial question is weather the collecting semantics \(\langle
+\cdot \rangle : \imp \to \dom \to \dom\) termination is decidable or
+not, i.e., if the following predicate \[Q(C,X) = ``\langle C \rangle
+(X) \downarrow\text{''}\] is decidable or not. The intuitive result is
+that the predicate is not decidable, as it asks weather program
+termination is decidable or not, which is the famous halting problem
+(from \cite{turing1936computable}).
+
+\begin{theorem}[Termination is not decidable]
+  The predicate \[Q(C,X) = ``\langle C \rangle (X)
+  \downarrow\text{''}\] is not decidable
+\end{theorem}
+
+\begin{proof}
+  For all \(C\in\imp\), we identify the partial recursive function
+  \(\sem{C} : \n \htor \n\) which encodes for the collecting semantics
+  of \(C\). if its termination was decidable we could decide for the
+  termination of \(C\):
+\end{proof}
+
+\subsection{Domain rapresentation}\label{decide:dom}
+%% Given a program \(C \in \imp\), we would like to be able to rapresent
+%% the elements of the domain and codomain of the semantic function
+%% \(\langle C \rangle : 2_\alpha^\env \to 2_\alpha^\env\) where \(\alpha
+%% \in \{\) r.e., rec \(\}\), in the sense that we're restraining
+%% ourselves either to a recursive subset of the whole powerset of
+%% environments or to a recursively enumerable subset. The following
+%% section aims to explore what happens in these 2 cases. We claim that
+%% if we restrain ourselves a recursive subset of the power set of
+%% states, the semantic function can only have as codomain a recursively
+%% enumberable subset of states, this is due to known facts in
+%% computability theory, while if we start from a recursively enumerable
+%% set we end up again in a recursively enumerable set, ultimately
+%% deciding \(\alpha\) r.e..
+Problem \ref{problem:domain} can be solved by restraining our domain
+\(\dom\) to its decidable subsets or recursively enumerable
+subsets. If we restrain ourselves to recursive subsets however, the
+image of the collecting semantics is composed of recursively
+enumerable sets:
+
+\begin{theorem}\label{th:domain}
+  let \(C\in\imp, X\subseteq\env\), \(X\) \emph{decidable}, i.e.,
+  \(\exists \bigx_X = \lambda x . (x \in X) ? 1 : 0\). \[Y = \langle C
+  \rangle X\] is not decidable.
+\end{theorem}
+
+\begin{proof}\label{proof:domain}
+  Recall observation \ref{obs:bijection}: in general a partial
+  function over a decidable set returns a semi-decidable set,
+  therefore \(Y\) is (in general) r.e.
+\end{proof}
+
+Because of the latter observation we can imagine that if we restrain
+ouselves to decidable sets as domain of our semantics function, the
+result will be anyway the set of recursively enumerable
+domains \[\langle \cdot \rangle : \imp \to \dom_{rec} \hto
+\dom_{r.e.}\]
