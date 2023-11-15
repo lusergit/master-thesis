@@ -1,0 +1,34 @@
+\section{Interval Analysis}
+The following chapter aims to introduce what we mean by interval
+analysis, giving some background and definition and finally proving
+the decidability of the analysis without the use of a widening
+operator. Notice that this is not in contrast to the more general
+results on concrete semantics, as interval analysis, falling under the
+broader umbrella of static analysis aims to provide a sound but maybe
+not complete analysis results.
+
+\begin{definition}[Interval domain]
+  We call by \[Int \defin \{[a,b] \mid a \in \z \cup \{-\infty\}
+  \wedge b \in \z \cup \{+\infty\} \wedge a \leq b\}\]
+  the interval domain.
+\end{definition}
+
+\begin{definition}[Concretization map]
+  The concretization map \(\gamma : Int \to 2^\z\) is the
+  following \[\gamma([a,b]) = \{x \in \z \mid a \leq x \leq b\}; \quad
+  \gamma(\bot) = \emptyset\]
+\end{definition}
+
+\begin{definition}[Abstract domain]
+  The We'll call by \(\biga\) the abstract domain \[\biga \defin (Var \to
+  int_*) \cup \{\bot\}\]
+\end{definition}
+
+\begin{definition}[Abstract concretization]
+  The abstract domain \(\biga\) concretization map is
+  \begin{align}
+    \gamma(\bot) & \defin \emptyset \\ \forall \eta \neq \bot, \quad
+    \gamma(\eta) & \defin \{\rho \in \env \mid \forall x \in \var
+    . \rho(x) \in \gamma(\eta(x))\}
+  \end{align}
+\end{definition}

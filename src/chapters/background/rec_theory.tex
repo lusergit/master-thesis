@@ -53,30 +53,25 @@ as in
   . (n \in A) ? 1 : 0\]
 \end{definition}
 
-\begin{theorem}[Bijection over a recursive set]\label{th:bijection}
-  Let \(f : A \tor B\) be a total bijection, i.e., \(\forall x \in A
-  \exists y \in B \mid f(x) = y\). Then \(B\) is recursive
+\begin{theorem}[Computable function over a recursive set]
+  Given \(f : A \tor B\), let the domain \(A\) to be recursive. \(B\)
+  is at least r. e.
 \end{theorem}
 
-\begin{proof}\label{proof:bijection}
-  \(A\) recursive: there exists \(\bigx_A = \lambda x . (x \in A)? 1 :
-  0\), and \(f : A \tor B\) is a total bijection, which means
-  \(\forall x \in A \exists y \in B \mid f(x) = y\). We can build the
-  decision function for \(B\) as \[\bigx_B(y) = sg(\mu x . |f(x) -
-  y|)\] which is total, since because of the bijection property,
-  termination is guaranteed. It is also recursive, since composition
-  of recursive functions. Therefore \(B\) is recursive.
+\begin{proof}
+  \(f : A \tor B\) total recursive function over a recusrive set
+  \(A\). We can write the function \[\bigx_B = \lambda x . sg(\mu z
+  . |f(z) - x|)\] which is computable as it is composition of
+  computable functions. In oder terms, this is function
+  \[\bigx_B(x)
+  = \begin{cases}
+    1 & x \in B \\
+    \uparrow & \text{otherwise}
+  \end{cases}\]
+  which is the semi-decision function for \(B\)
 \end{proof}
 
-\begin{observation}\label{obs:bijection}
-  One could always write the decision function as in proof
-  \ref{proof:bijection}, but in general it is not a total function, as
-  the image of a general function is not the whole codomain; we need
-  the surjectivity hypothesis for that. But nonetheless the \(B\) set
-  would always be at least r.e., since \(\bigx_B\) would always work,
-  as its domain would always be \(B\), but it would be partial instead
-  of total.
-
-  Since \(B\) would be the domain of a partial recursive function, in
-  general \(B\) is semidecidable.
+\begin{observation}
+  In general, \(B\) is not recursive, as it would means that both \(A
+  \leq_m B\) and \(B \leq_m A\), which is not the case
 \end{observation}
