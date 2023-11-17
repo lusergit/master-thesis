@@ -1,0 +1,131 @@
+
+We also define a one step relation \(\to\), functionally equivalent to
+the collecting semantics, built on the concept of stores, tuples of
+programs and states:
+
+\begin{definition}[State]
+  A program state is a tuple of a program and a state:
+  \[\state \defin \imp \times \env\]
+\end{definition}
+
+\begin{definition}[Small step collecting semantics]
+  The small step collecting semantics \(\to \subseteq \state \times
+  (\state \cup \env)\) is recursively defined trough the following
+  rules:
+  
+  \[\infer[\text{(EXPR}]{\stt{ e, \rho } \to \stt{ \epsilon, \sem{e} \rho }}{}
+  \quad
+  \infer[\text{(EMPTY}]
+      {\stt{ C, \emptyset } \to \stt{ \epsilon , \emptyset }}
+      {}\]
+      
+  \[\infer[\text{(SUM}_1]
+          {\stt{ C_1 + C_2 , \rho } \to \stt{ C_1, \rho}} {}
+    \quad
+    \infer[\text{(SUM}_2]
+      {\stt{ C_1 + C_2 , \rho } \to \stt{ C_2, \rho}} {}      
+  \]
+                
+  \[\infer[\text{(CONC}_1]
+      {\stt{ C_1;C_2 , \rho} \to \stt{ C_1';C_2 , \rho' }}
+      {\stt{ C_1, \rho } \to \stt{ C_1',  \rho' }}
+    \quad
+    \infer[\text{(CONC}_2]
+      {\stt{ C_1;C_2 , \rho} \to \stt{ C_2 , \rho' }}
+      {\stt{ C_1, \rho } \to \stt{ \epsilon,  \rho' }}  
+  \]
+          
+  \[\infer[\text{(KLEENE}]
+      {\stt{ C^* , \rho } \to \stt{ C*, \rho' }} {\stt{ C
+        , \rho } \to^* \stt{ \epsilon , \rho' } & \rho' \neq
+        \rho}
+    \quad
+    \infer[\text{(KLEENE}_{\text{fix}}]
+      {\stt{ C^*, \rho } \to \stt{ \epsilon , \rho }}
+      {\stt{ C , \rho } \to^* \stt{ \epsilon , \rho }}
+  \]
+\end{definition}
+
+Thanks to the latter definition of a small step collecting semantics
+we can define a \emph{trace} for a program: the collection of sets of
+states trough which the small step semantics ``executes'' a
+program. Notice that if \(C = \epsilon\) then \(\forall X \in 2^\env\)
+\(\stt{ \epsilon , X } \not\to\) meaning that the execution
+cannot proceed and we reached a final set of states.
+
+\begin{definition}[Trace]
+  Traces are all States related by the transition relation \(\to\)
+
+  \[\trace \defin \{\tau \in \state^\infty \mid \forall i \in \{1, \dots, |\tau|\} \tau_{i-1} \to \tau_i\} \}\]
+\end{definition}
+
+\begin{definition}[Trace semantics]
+  The trace semantics of a program \(C\in\imp\) is the set of all
+  possible collecting traces starting from a program
+  
+  \[\trace(C) \defin \{\tau \in \trace \mid \exists X \in 2^\env . \tau_0 = \stt{ C, X } \}\]
+
+\end{definition}
+
+We're interested in the traces of a program starting from some initial
+set of states \(X \in 2^\env\), therefore, we call by \(\trace
+(C,X)\) the traces starting from the tuple \(\stt{ C, X
+}\)
+
+\begin{definition}[Program trace]
+  Let \(C \in \imp\) be a program and let \(\rho \in \env\) be an
+  initial program state. A \emph{program trace} \(\tau\) is the trace
+  of program \(C\) with initial state \(\rho\): \[\trace (C,\rho) \defin
+  \{\tau \in \trace (C) \mid \tau_0 = \stt{ C, \rho }\}\]
+\end{definition}
+
+\begin{definition}[Collecting Program trace]
+  Let \(C \in \imp\) be a program and let \(X \in 2^\env\) be an
+  initial set of program states. A \emph{collecting program trace}
+  \(\tau\) is the trace of program \(C\) with initial set of states
+  state \(X\): \[\trace_c (C,X) \defin \bigcup_{\rho \in
+    X}\trace(C,\rho)\]
+\end{definition}
+
+%% \begin{definition}[Program collecting trace]
+%%   Let \(C \in \imp\) be a program and let \(X \in 2^\env\) be an
+%%   initial set of program states.  A \emph{program collecting trace} is
+%%   the union of all the traces with \(\stt{ C, \rho }\) for all
+%%   \(\rho \in X\) as starting points: \[\trace (C,X) \defin
+%%   \bigcup_{\rho \in X}\trace (C,\rho)\]
+%% \end{definition}
+
+\begin{definition}[Partial invariant]
+  Let \(C \in \imp, \tau \in \trace\). We call the \emph{invariant} of
+  \(C\) on the (possibly infinite) trace \(\tau\) the environments
+  that appear in any state in the sequence: \[\inv[C](\tau) = \{ \rho
+  \in \env \mid \exists i \in\n . \tau_i = \stt{C,\rho}\}\]
+\end{definition}
+
+\begin{definition}[Collecting invariant]
+  Let \(C \in \imp, X\in 2^\env\). We call the \emph{collecting
+  invariant} of \(C\) on the (possibly infinite) trace \(\tau\) the
+  sets of environments that appear in any state in the
+  sequence: \[\inv[C,X](K) \defin \bigcup_{\tau \in \trace(C, X)} \inv[K](\tau)\]
+\end{definition}
+
+
+when we're dealing with finite traces we're particularly interested in
+the final invariant. This invariant is in fact present only if the
+program terminates (producing a finite trace), therefore we use the
+special notation \(\inv(\tau)\) as follows:
+
+\begin{notation}[Trace invariant]
+  Let \(\tau\) be a finite trace, then the \emph{invariant} of the
+  trace is \[\inv[\epsilon](\tau) = \inv(\tau) = \{ X \in 2^\env \mid
+  \exists i \in\n . \tau_i = \stt{\epsilon,X}\}\]
+\end{notation}
+
+We already saw that in general deciding termination of the collecting
+semantics of a program is impossible (recall theorem
+\ref{th:collectingundec}); but with the context of traces one might
+think that at leas knowing weather a program produces a finite
+invariant starting from some finite set of environments is decidable
+or not. The claim is that this information is undecidable, as it would
+allow to decide for termination. In the following lines we'll
+introduce the necessary tools and we'll prove it.

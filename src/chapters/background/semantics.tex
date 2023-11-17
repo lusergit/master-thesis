@@ -8,9 +8,9 @@ language Prog, which is just bounded to be Turing complete.
 
 \begin{definition}[Denotational semantics]\label{def:denotational}
   Given a programming language \(\prog\) a denotational-style
-  semantics is a function \[ \llb \cdot \rrb : \prog \to D \to D\]
-  which maps each and every program to a function on a set of I/O
-  values.
+  semantics is a function \[ \llb \cdot \rrb : \prog \to D \hto D\]
+  which maps each and every program to a partial function on a set of
+  I/O values.
 \end{definition}
 
 In pair with that we usually define a small step semantics which
@@ -108,21 +108,20 @@ before (\(D \cong \dom\)):
 
 Notice how the collecting semantics is similar to the general program
 semantics \(\llb \cdot \rrb : \prog \to D \to D\); in fact, we can say
-that \[\forall P \in \prog \quad \langle P \rangle \{\rho\} \cong \llb
-P \rrb \rho\]
-if \(D = \env\).
+that \[\forall P \in \prog \quad \sem{P} \{\rho\} = \emptyset \iff
+\llb P \rrb \rho \uparrow\]
 
-\begin{theorem}[Collecting semantics undecidability]\label{th:collectingundec}
+\begin{lemma}[Collecting semantics undecidability]\label{le:collectingundec}
   In general the statement \[Q(P,X) = "\langle P \rangle X
   \downarrow"\] is undecidable.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
   To prove that, we can just observe that for a single state \(\rho\)
   deciding weather \(\llb P \rrb \rho \downarrow\) is undecidable, as
   it would mean that the set \[B_n = \{x \mid n \in dom(\phi_x)\}\] is
   recursive, which is not, which is a well known fact coming from the
-  output problem \cite[p.~104]{cutland1980computability}. Therefore
+  input problem \cite[p.~104]{cutland1980computability}. Therefore
   since given a single state \(\rho\) deciding weather \(\langle P
   \rangle\{\rho\}\downarrow\) is undecidable, the statement \(Q(P,X)\)
   is in general undecidable.

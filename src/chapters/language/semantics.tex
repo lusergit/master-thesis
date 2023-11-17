@@ -81,151 +81,104 @@ language:
   \end{align*}
 \end{definition}
 
-We also define a one step relation \(\to\), functionally equivalent to
-the collecting semantics, built on the concept of stores, tuples of
-programs and states:
-
-\begin{definition}[State]
-  A program state is a tuple of a program and a state:
-  \[\state \defin (\imp \cup \{\epsilon\}) \times \env\]
-  where with \(\epsilon\) we signal the empty program.
+\begin{definition}[Program length]
+  Given a program \(C\in\imp\) its length is recursively defined as
+  follows:
+  \begin{align*}
+    len(e)         & \defin 1 \\
+    len(C_1 + C_2) & \defin len(C_1) + len(C_2) + 1 \\
+    len(C_1;C_2)   & \defin len(C_1) + len(C_2) + 1 \\
+    len(C^*)       & \defin len(C) + 1
+  \end{align*}
 \end{definition}
 
-\begin{definition}[Small step collecting semantics]
-  The small step collecting semantics \(\to \subseteq \state \times
-  \state\) is recursively defined trough the following rules:
-  
-  \[\infer[\text{(EXPR}]{\stt{ e, X } \to \stt{ \epsilon, \sem{e} X }}{}
-  \quad
-  \infer[\text{(EMPTY}]
-      {\stt{ C, \emptyset } \to \stt{ \epsilon , \emptyset }}
-      {}\]
-      
-  \[\infer[\text{(SUM}_{\text{expr}}]
-      {\stt{ C_1 + C_2 , X } \to \stt{ \epsilon, X_1 \cup
-        X_2 }} {\stt{ C_1, X } \to^* \stt{ \epsilon,
-        X_1 } & \stt{ C_2 , X } \to^* \stt{ \epsilon ,
-        X_2 }}
-  \]
-                
-  \[\infer[\text{(CONC}]
-      {\stt{ C_1;C_2 , X} \to \stt{ C_2 , X' }}
-      {\stt{ C_1, X } \to^* \stt{ \epsilon,  X' }}
-  \]
-          
-  \[\infer[\text{(KLEENE}]
-      {\stt{ C^* , X } \to \stt{ C*, X' }} {\stt{ C
-        , X } \to^* \stt{ \epsilon , X' } & X' \neq
-        X}
-    \quad
-    \infer[\text{(KLEENE}_{\text{fix}}]
-      {\stt{ C^*, X } \to \stt{ \epsilon , X }}
-      {\stt{ C , X } \to^* \stt{ \epsilon , X }}
-  \]
-\end{definition}
-
-Thanks to the latter definition of a small step collecting semantics
-we can define a \emph{trace} for a program: the collection of sets of
-states trough which the small step semantics ``executes'' a
-program. Notice that if \(C = \epsilon\) then \(\forall X \in 2^\env\)
-\(\stt{ \epsilon , X } \not\to\) meaning that the execution
-cannot proceed and we reached a final set of states.
-
-\begin{notation}[State sequences]
-  We'll call by \(\state^\infty\) all the (possibly infinite)
-  sequences of states.
-\end{notation}
-
-\begin{definition}[Trace]
-  Traces are all States (the tuples \(\imp \times 2^\env\)) related by
-  the transition relation \(\to\)
-
-  \[\trace \defin \{\tau \in \state^\infty \mid \forall i \in \{1, \dots, |\tau|\} \tau_{i-1} \to \tau_i\} \}\]
-  
-  we'll also call this set the set of all \emph{collecting traces}
-\end{definition}
-
-\begin{definition}[Trace semantics]
-  The trace semantics of a program \(C\in\imp\) is the set of all
-  possible collecting traces starting from a program
-  
-  \[\trace(C) \defin \{\tau \in \trace \mid \exists X \in 2^\env . \tau_0 = \stt{ C, X } \}\]
-
-\end{definition}
-
-We're interested in the traces of a program starting from some initial
-set of states \(X \in 2^\env\), therefore, we call by \(\trace
-(C,X)\) the traces starting from the tuple \(\stt{ C, X
-}\)
-
-\begin{definition}[Program trace]
-  Let \(C \in \imp\) be a program and let \(X \in 2^\env\) be a set of
-  initial program states. A \emph{program trace} \(\tau\) is the trace
-  of program \(C\) with initial set of states \(X\): \[\trace (C,X)
-  \defin \{\tau \in \trace (C) \mid \tau_0 = \stt{ C, X }\}\]
-\end{definition}
-
-%% \begin{definition}[Program collecting trace]
-%%   Let \(C \in \imp\) be a program and let \(X \in 2^\env\) be an
-%%   initial set of program states.  A \emph{program collecting trace} is
-%%   the union of all the traces with \(\stt{ C, \rho }\) for all
-%%   \(\rho \in X\) as starting points: \[\trace (C,X) \defin
-%%   \bigcup_{\rho \in X}\trace (C,\rho)\]
-%% \end{definition}
-
-\begin{definition}[Partial invariant]
-  Let \(C \in \imp, \tau \in \trace\). We call the \emph{invariant} of
-  \(C\) on the (possibly infinite) trace \(\tau\) the sets of
-  environments that appear in any state in the
-  sequence: \[\inv[C](\tau) = \{ X \in 2^\env \mid \exists i \in\n
-  . \tau_i = \stt{C,X}\}\]
-\end{definition}
-
-when we're dealing with finite traces we're particularly interested in
-the final invariant. This invariant is in fact present only if the
-program terminates (producing a finite trace), therefore we use the
-special notation \(\inv(\tau)\) as follows:
-
-\begin{notation}[Trace invariant]
-  Let \(\tau\) be a finite trace, then the \emph{invariant} of the
-  trace is \[\inv[\epsilon](\tau) = \inv(\tau) = \{ X \in 2^\env \mid
-  \exists i \in\n . \tau_i = \stt{C,X}\}\]
-\end{notation}
-
-We already saw that in general deciding termination of the collecting
-semantics of a program is impossible (recall theorem
-\ref{th:collectingundec}); but with the context of traces one might
-think that at leas knowing weather a program produces a finite
-invariant starting from some finite set of environments is decidable
-or not. The claim is that this information is undecidable, as it would
-allow to decide for termination. In the following lines we'll
-introduce the necessary tools and we'll prove it.
-
-\begin{theorem}[finite sets on finite traces]
+\begin{lemma}[finite sets on finite traces]
   Let \(X \in 2^\env\) be a finite set of environments, \(C \in \imp\)
-  a program in the \(\imp\) language and \(\trace(C,X)\) its
-  trace. Then \[\tau = \trace(C,X) \text{ is finite } \Rightarrow
-  \inv(\tau) \text{ is finite}\]
-\end{theorem}
+  a program in the \(\imp\) language for which we know it
+  terminates. Therefore \[\sem{C}X \text{ is finite}\]
+\end{lemma}
 
 \begin{proof}
-  We'll prove that by strong induction on the number of steps in the
-  trace \(\trace (C,X)\).
-
-  If \(\stt{C,X} \to^1 \stt{\epsilon, X'}\) we have 2 cases:
-  \begin{enumerate}
-  \item either EMPTY was the latest applied rule, therefore \(\forall
-    C \in \imp, X = \emptyset, \stt{C, \emptyset} \to \stt{\epsilon,
-      \emptyset}\) is the full trace and therefore \(\inv(\tau) =
-    \emptyset\) which is finite;
-  \item otherwise the EXPR rule was the lastly applied rule, therefore
-    \(C = e\), and \(\forall X \in 2^\env\) \(\stt{e, X} \to
-    \stt{\epsilon, \sem{e}X}\) where \(\sem{e}X = \{\llp e \rrp \rho
-    \mid \rho \in X . \llp e \rrp \rho \neq \bot\}\) which is finite
-  \end{enumerate}
+  %% We'll prove that by structural induction on the length of the
+  %% program \(C\) (considered of finite length):
+  %% \begin{itemize}
+  %% \item \textbf{Base case} \(C = e \in \expr\), therefore \[\sem{e}X
+  %%   = \{\llp e \rrp \rho \mid \rho \in X, \llp e \rrp \rho \neq
+  %%   \bot\}\] which is finite, since is based on the states in \(X\)
+  %% \item \textbf{Inductive cases}
+  %%   \begin{itemize}
+  %%   \item \(C = C_1 + C_2\). \(\sem{C_1 + C_2}X = \sem{C_1}X \cup
+  %%     \sem{C_2}X\) by induction \(\sem{C_1}X\) and \(\sem{C_2}X\) are
+  %%     finite, and their union is therefore finite;
+  %%   \item \(C = C_1;C_2\). \(\sem{C_1;C_2}X = \sem{C_2}(\sem{C_1}X)\)
+  %%     by induction \(\sem{C_1}X)\) produces a finite set \(X'\), and
+  %%     again by induction \(\sem{C_2}X'\) is again finite;
+  %%   \item \(C = C_1^*\). \(\sem{C_1^*}X =
+  %%     \bigcup_{i\in\n}\sem{C_1}^iX\) again, by structural induction,
+  %%     \(\sem{C_1}^iX\) is finite for all \(i\in\n\). We use the fact
+  %%     that \(C\) produces a finite trace to ensure that
+  %%     \(\sem{C_1^*}X\) converges to a fix point, which means that at
+  %%     some point \(\sem{C_1}^jX = \sem{C_1}^{j+k}X\) for some \(j \in
+  %%     \n\) and for all \(k \in \n\), therefore, the fix point is
+  %%     finite.
+  %%   \end{itemize}
+  %% \end{itemize}
+  We'll prove the theorem y structural induction on the length of the
+  program \(C\):
+  \paragraph*{Base case: \\}
+  \(C \equiv e\), therefore \(\sem{e} X = \{\llp e \rrp \rho \mid \rho
+  \in X , \llp e \rrp \rho \neq \bot\}\) has at most as much elements
+  as \(X\), which is a finite quantity.
+  \paragraph*{Inductive cases: \\}
+  \begin{itemize}
+  \item \(C \equiv C_1 + C_2\), threfore \(\sem{C_1 +C_2}X =
+    \sem{C_1}X \cup \sem{C_2}X\) by induction, \(\sem{C_1}X\) and
+    \(\sem{C_2}X\) are finite (as \(C_1, C_2\) are programs of length
+    strictly smaller than \(C\)), therefore their union \(\sem{C_1}X
+    \cup \sem{C_2}X = \sem{C_1 +C_2}X\) is finite;
+  \item \(C \equiv C_1; C_2\), therefore \(\sem{C_1;C_2}X =
+    \sem{C_1}(\sem{C_1}X)\). By induction since \(C_1\) is strictly
+    smaller than \(C\), \(\sem{C_1}X = Y\) is finite, therefore, again
+    by induction \(\sem{C_2}Y\) is finite;
+  \item \(C \equiv C^*\), therefore \(\sem{C^*}X =
+    \bigcup_{i\in\n}\sem{C}^iX\). By hypothesis it terminates,
+    therefore \(\exists i \in \n \mid \sem{C}^iX = \sem{C}^{i+k}X
+    \forall k \in \n\), which is the least upper bound on the
+    lattice. We have to use induction again on the number \(j \in
+    [i;k]\) of applications of \(\sem{C}\):
+    \begin{itemize}
+    \item[base case:] one step, \(C\) has length strictly smaller than
+      \(C^*\) and \(X\) is finite, therefore \(\sem{C}X = X_1\) is finite.
+    \item[recursive case:] k steps: \(X_k\) is again finite by
+      inductive hp, again since \(C\) is stricly smaller than \(C^*\)
+      we can use the other inductive hypothesis and say that
+      \(\sem{C}X_k = X_{k+1}\) is again, finite.
+    \end{itemize}
+  \end{itemize}
 \end{proof}
 
+\begin{observation}
+  The latter theorem states that given a finite set of initial states
+  with the collecting semantics we defined and knowing that the
+  program terminates, then the invariant on the final step of the
+  computation will be finite. This implies that from a finite set of
+  initial environments an \emph{infinite} environment can be produced
+  only by a program that halts in a finite number of steps.
+\end{observation}
 
+The next step is to prove that a given a finite set of initial states
+and a program, if we know that the final invariant is finite, we cound
+decide termination:
+
+\begin{lemma}[Finite invariant on finite program]
+  Given a finite set of initial states \(X \in 2^\env\), a program
+  \(C\in\imp\), knowing weather \(\sem{C}X = Y\) is finite is
+  impossible.
+\end{lemma}
+
+\begin{proof}
+  
+\end{proof}
 
 \begin{theorem}[Invariant finiteness is undecidable]\label{th:finiteness}
   There's no decision function for the statement \[Q(C,X) = "\sem{C} X

@@ -1,4 +1,4 @@
 all: compile
 
 compile:
-	latexmk -outdir=out -auxdir=aux -pdf thesis.tex
+	latexmk -pdflatex='pdflatex -file-line-error -synctex=1' -outdir=out -auxdir=aux -pdf thesis.tex
