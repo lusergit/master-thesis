@@ -92,6 +92,82 @@ language:
   \end{align*}
 \end{definition}
 
+Along with the collecting semantics we're also defining a one step
+transition relation. This will be useful to prove that finiteness is
+not decidable, as it helps to reason about program execution in a
+recursive way. The relation is defined on program states:
+
+\begin{definition}[Program State]
+  Program states are tuples of programs and program
+  environments: \[\state \defin \imp \times \env\]
+\end{definition}
+
+\begin{definition}[Small step semantics]\label{def:sosem}
+  The small step transition relation \(\to : \state \times (\state
+  \cup \env)\) is a small step semantics for the
+  \(\imp\) language. It is defined based on the following rules
+  \[\infer[\text{expr}]
+          {\stt{e, \rho} \to \sexp{e}\rho}
+          {\sexp{e}\rho \neq \bot}\]
+          
+          \[\infer[\text{sum}_1]
+                  {\stt{C_1 + C_2, \rho} \to \stt{C_1, \rho}}
+                  {} \quad
+                  \infer[\text{sum}_2]
+                        {\stt{C_1 + C_2, \rho} \to \stt{C_2, \rho}}
+                        {}\]
+                        
+                        \[\infer[\text{comp}_1]
+                                {\stt{C_1; C_2, \rho} \to \stt{C_1'; C_2, \rho'}}
+                                {\stt{C_1, \rho} \to \stt{C_1', \rho'}} \quad
+                                \infer[\text{comp}_2]
+                                      {\stt{C_1; C_2, \rho} \to \stt{C_2, \rho'}}
+                                      {\stt{C_1, \rho} \to \rho'}\]
+
+                                      \[\infer[\text{star}]
+                                              {\stt{C^*, \rho} \to \stt{C;C^*, \rho}}
+                                              {} \quad
+                                              \infer[\text{star}_{\text{fix}}]
+                                                    {\stt{C^*, \rho} \to \rho}
+                                                    {\stt{C, \rho} \to^* \rho}\]
+\end{definition}
+
+As we can see non-determinism can produce multiple traces stargin from
+the same program and initial state. This does not affect the
+expressivity of the language, but makes it harder to reason about
+program execution, insted of single traces we should instead speak
+about execution graphs (generally they are trees, but there might be
+cycles due to the Kleene Star):
+
+\begin{definition}[Execution tree]
+  Given a program \(C\in\imp\) and an initial environment \(\rho \in
+  \env\), according to the rules of the small step semantics in
+  definition \ref{def:sosem} we can create an \emph{execution tree} of
+  the program, where each node is linked to the next one according to
+  the \(\to\) relation.
+\end{definition}
+
+\begin{example}
+  Consider the program \(C = x := 1; (((x\leq 5; x := x + 1)*;x>5) +
+  (x := 6))\) and the initial environment \(\emptyset\). The following
+  is the execution tree it generates based on \(\to\) relations. For
+  simplicity we'll first label some intermediate program executions:
+
+  Figure \ref{fig:exec} shows the execution graph of program \(C\).
+  
+  \begin{figure}
+    \centering
+    \usetikzlibrary{positioning}
+    \usetikzlibrary{graphs}
+    \begin{tikzpicture}[->,>=stealth]
+      \graph{
+        start/\(\stt{C,\emptyset}\) -> set/\(\stt{C_1, \{x\mapsto 1\}}\)
+      };
+    \end{tikzpicture}
+    \caption{Execution graph of \(C\)}\label{fig:exec}
+  \end{figure}
+\end{example}
+
 \begin{lemma}[finite sets on finite traces]
   Let \(X \in 2^\env\) be a finite set of environments, \(C \in \imp\)
   a program in the \(\imp\) language for which we know it
@@ -150,8 +226,8 @@ language:
     \item[base case:] one step, \(C\) has length strictly smaller than
       \(C^*\) and \(X\) is finite, therefore \(\sem{C}X = X_1\) is finite.
     \item[recursive case:] k steps: \(X_k\) is again finite by
-      inductive hp, again since \(C\) is stricly smaller than \(C^*\)
-      we can use the other inductive hypothesis and say that
+      inductive hypothesis. Since \(C\) is stricly smaller than
+      \(C^*\) we can use the other inductive hypothesis and say that
       \(\sem{C}X_k = X_{k+1}\) is again, finite.
     \end{itemize}
   \end{itemize}
@@ -172,12 +248,12 @@ decide termination:
 
 \begin{lemma}[Finite invariant on finite program]
   Given a finite set of initial states \(X \in 2^\env\), a program
-  \(C\in\imp\), knowing weather \(\sem{C}X = Y\) is finite is
-  impossible.
+  \(C\in\imp\), ``\(\sem{C}X = Y\) is finite'' is undecidable.
 \end{lemma}
 
 \begin{proof}
-  
+  Suppose we can decide weather \(\sem{C}X\) (the most precise
+  invariant for the program C) is finite.
 \end{proof}
 
 \begin{theorem}[Invariant finiteness is undecidable]\label{th:finiteness}

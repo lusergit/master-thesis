@@ -121,10 +121,14 @@ that \[\forall P \in \prog \quad \sem{P} \{\rho\} = \emptyset \iff
   deciding weather \(\llb P \rrb \rho \downarrow\) is undecidable, as
   it would mean that the set \[B_n = \{x \mid n \in dom(\phi_x)\}\] is
   recursive, which is not, which is a well known fact coming from the
-  input problem \cite[p.~104]{cutland1980computability}. Therefore
-  since given a single state \(\rho\) deciding weather \(\langle P
+  input problem \cite[p.~104]{cutland1980computability}. Since given a
+  single state \(\rho\) deciding weather \(\langle P
   \rangle\{\rho\}\downarrow\) is undecidable, the statement \(Q(P,X)\)
   is in general undecidable.
 \end{proof}
 
 %% is collecting semantics total?
+We're however interested in computer rapresentable elements of the
+concrete domain \(\dom\). Because of observation \ref{obs:comprec} if
+we have a recursive set of environments \(X\in2^\env\), their image
+\(\sem{C}X = Y\) will in general be r.e.

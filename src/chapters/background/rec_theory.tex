@@ -53,10 +53,10 @@ as in
   . (n \in A) ? 1 : 0\]
 \end{definition}
 
-\begin{theorem}[Computable function over a recursive set]
+\begin{lemma}[Computable function over a recursive set]\label{le:comprec}
   Given \(f : A \tor B\), let the domain \(A\) to be recursive. \(B\)
   is at least r. e.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
   \(f : A \tor B\) total recursive function over a recusrive set
@@ -71,7 +71,10 @@ as in
   which is the semi-decision function for \(B\)
 \end{proof}
 
-\begin{observation}
+\begin{observation}\label{obs:comprec}
   In general, \(B\) is not recursive, as it would means that both \(A
-  \leq_m B\) and \(B \leq_m A\), which is not the case
+  \leq_m B\) and \(B \leq_m A\), which is not always the case, but it
+  is r.e., as we could always write the inverse function as in lemma
+  \ref{le:comprec} and derive a semi-decision function for the image
+  of the function.
 \end{observation}
