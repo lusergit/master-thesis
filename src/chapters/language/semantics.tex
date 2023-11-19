@@ -139,67 +139,64 @@ program execution, insted of single traces we should instead speak
 about execution graphs (generally they are trees, but there might be
 cycles due to the Kleene Star):
 
-\begin{definition}[Execution tree]
-  Given a program \(C\in\imp\) and an initial environment \(\rho \in
-  \env\), according to the rules of the small step semantics in
-  definition \ref{def:sosem} we can create an \emph{execution tree} of
-  the program, where each node is linked to the next one according to
-  the \(\to\) relation.
+\begin{definition}[Execution graphs]
+  An execution graph is a transition system where \[\exec \defin
+  (\Gamma, T, \tto)\] where \(\Gamma \subseteq \state \cup \env\) is
+  the subset of states we're considering, \(T = \env\) is the set of
+  final states of the transition system and \(\tto \subseteq (\state
+  \times \Gamma)\) s.t. \((s,t) \in E \Rightarrow s \to t\) is the
+  transitions that occur in the system.
+\end{definition}
+
+Usually we're interested in a particular execution graph for some
+program \(C\), starting from a state \(\rho\):
+
+\begin{definition}[Execution graph]
+  Given a program \(C\in\imp\) and an initial state \(\rho\in\env\)
+  its execution graphs are defined as \[\exec(C,\rho) \defin
+  \{(\Gamma,T,\tto) \in \exec \mid \stt{C,\rho} \in \Gamma \wedge
+  \forall s \in \Gamma, t\in\state . s \to t \Rightarrow t \in \Gamma
+  \wedge (s,t) \in \tto\}\]
 \end{definition}
 
 \begin{example}
   Consider the program \(C = x := 1; (((x\leq 5; x := x + 1)*;x>5) +
-  (x := 6))\) and the initial environment \(\emptyset\). The following
-  is the execution tree it generates based on \(\to\) relations. For
-  simplicity we'll first label some intermediate program executions:
-
-  Figure \ref{fig:exec} shows the execution graph of program \(C\).
+  (x := 6))\) and the initial environment \(\emptyset\).  Figure
+  \ref{fig:exec} shows a part of the execution graph of program \(C\).
   
   \begin{figure}
     \centering
     \usetikzlibrary{positioning}
     \usetikzlibrary{graphs}
     \begin{tikzpicture}[->,>=stealth]
-      \graph{
-        start/\(\stt{C,\emptyset}\) -> set/\(\stt{C_1, \{x\mapsto 1\}}\)
-      };
+      \node (start)  {\(\stt{x := 1; (((x\leq 5; x := x + 1)*;x>5) + (x := 6)), \emptyset}\)};
+      \node (second) [below = of start]  {\(\stt{x := 1; (((x\leq 5; x := x + 1)*;x>5) + (x := 6)), \{x \mapsto 1\}}\)};
+      \node (third1) [left of = second, below = of second] {\(\stt{((x\leq 5; x := x + 1)*;x>5), \{x\mapsto 1\}}\)};
+      \node (third2) [right = of third1] {\(\stt{x:=6, \{x \mapsto 1\}}\)};
+      \node (forth)  [below = of third1] {\(\dots\)};
+      \node (final)  [right = of forth] {\(\{x\mapsto 6\}\)};
+
+      \path
+      (start)  edge (second)
+      (second) edge (third1) edge (third2)
+      (third1) edge (forth)
+      (third2) edge (final)
+      (forth)  edge (final);
+      
     \end{tikzpicture}
-    \caption{Execution graph of \(C\)}\label{fig:exec}
+    \caption{Partial execution graph of \(C\)}\label{fig:exec}
   \end{figure}
 \end{example}
 
-\begin{lemma}[finite sets on finite traces]
+\begin{lemma}[finite sets on finite traces]\label{le:finite}
   Let \(X \in 2^\env\) be a finite set of environments, \(C \in \imp\)
-  a program in the \(\imp\) language for which we know it
-  terminates. Therefore \[\sem{C}X \text{ is finite}\]
+  a program in the \(\imp\) language for which we know goes trough
+  finite amount of states in its execution graph. Therefore \[\sem{C}X
+  \text{ is finite}\]
 \end{lemma}
 
 \begin{proof}
-  %% We'll prove that by structural induction on the length of the
-  %% program \(C\) (considered of finite length):
-  %% \begin{itemize}
-  %% \item \textbf{Base case} \(C = e \in \expr\), therefore \[\sem{e}X
-  %%   = \{\llp e \rrp \rho \mid \rho \in X, \llp e \rrp \rho \neq
-  %%   \bot\}\] which is finite, since is based on the states in \(X\)
-  %% \item \textbf{Inductive cases}
-  %%   \begin{itemize}
-  %%   \item \(C = C_1 + C_2\). \(\sem{C_1 + C_2}X = \sem{C_1}X \cup
-  %%     \sem{C_2}X\) by induction \(\sem{C_1}X\) and \(\sem{C_2}X\) are
-  %%     finite, and their union is therefore finite;
-  %%   \item \(C = C_1;C_2\). \(\sem{C_1;C_2}X = \sem{C_2}(\sem{C_1}X)\)
-  %%     by induction \(\sem{C_1}X)\) produces a finite set \(X'\), and
-  %%     again by induction \(\sem{C_2}X'\) is again finite;
-  %%   \item \(C = C_1^*\). \(\sem{C_1^*}X =
-  %%     \bigcup_{i\in\n}\sem{C_1}^iX\) again, by structural induction,
-  %%     \(\sem{C_1}^iX\) is finite for all \(i\in\n\). We use the fact
-  %%     that \(C\) produces a finite trace to ensure that
-  %%     \(\sem{C_1^*}X\) converges to a fix point, which means that at
-  %%     some point \(\sem{C_1}^jX = \sem{C_1}^{j+k}X\) for some \(j \in
-  %%     \n\) and for all \(k \in \n\), therefore, the fix point is
-  %%     finite.
-  %%   \end{itemize}
-  %% \end{itemize}
-  We'll prove the theorem y structural induction on the length of the
+  We'll prove it by structural induction on the length of the
   program \(C\):
   \paragraph*{Base case: \\}
   \(C \equiv e\), therefore \(\sem{e} X = \{\llp e \rrp \rho \mid \rho
@@ -233,13 +230,14 @@ cycles due to the Kleene Star):
   \end{itemize}
 \end{proof}
 
-\begin{observation}
+\begin{observation}\label{obs:finite}
   The latter theorem states that given a finite set of initial states
   with the collecting semantics we defined and knowing that the
   program terminates, then the invariant on the final step of the
   computation will be finite. This implies that from a finite set of
-  initial environments an \emph{infinite} environment can be produced
-  only by a program that halts in a finite number of steps.
+  initial environments an \emph{infinite} set of environments can be
+  produced only by a program which has a branch of its execution graph
+  which is infinite.
 \end{observation}
 
 The next step is to prove that a given a finite set of initial states
@@ -253,10 +251,19 @@ decide termination:
 
 \begin{proof}
   Suppose we can decide weather \(\sem{C}X\) (the most precise
-  invariant for the program C) is finite.
+  invariant for the program C) is finite. Based on the result we have
+  2 options:
+  \begin{itemize}
+  \item \textbf{The invariant is infinite}: in this case because of
+    observation \ref{obs:finite}, we can say that the original program
+    does not halt, as it would not terminate in a finite amount of
+    steps.
+  \item \textbf{The invariant is finite}: in this case we can decide
+    termination by looking at the execution graph of the original
+    program. Lemma \ref{le:finite} does not provide any information in
+    the case that the starting set of environments is finite and the
+    resulting set is finite, but we know that it was generated by a
+    finite amount of states in the execution graph of \(C\) on \(X\)
+    because of observation \ref{obs:finite}. 
+  \end{itemize}
 \end{proof}
-
-\begin{theorem}[Invariant finiteness is undecidable]\label{th:finiteness}
-  There's no decision function for the statement \[Q(C,X) = "\sem{C} X
-  \text{ is finite}"\]
-\end{theorem}
