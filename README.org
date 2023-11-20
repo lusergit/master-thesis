@@ -1,0 +1,11 @@
+#+title: Interval semantics
+#+author: Luca Zaninotto -- 2057074
+#+date: \today
+* Compilation
+  =pwd= should be the root folder of the project.
+  #+begin_src sh
+    make -k
+  #+end_src
+** Requirements
+   The project in order to compile requires a =latex-full=-like
+   environment with =latexmk= and =make= installed
