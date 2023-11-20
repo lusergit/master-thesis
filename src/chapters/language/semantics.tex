@@ -46,10 +46,6 @@ machine finds itself during the execution of a program.
   \end{align*}
 \end{definition}
 
-Notice that each expression maps to a \emph{total} map, therefore
-given an expression, each element of the \(2^\env\) lattice is
-mapped to something by this function.
-
 The next building block is the concrete collecting semantics for the
 language, maps each program in \(\imp\) to a function on the \(\dom\)
 complete lattice.
@@ -136,8 +132,7 @@ As we can see non-determinism can produce multiple traces stargin from
 the same program and initial state. This does not affect the
 expressivity of the language, but makes it harder to reason about
 program execution, insted of single traces we should instead speak
-about execution graphs (generally they are trees, but there might be
-cycles due to the Kleene Star):
+about execution graphs.
 
 \begin{definition}[Execution graphs]
   An execution graph is a transition system where \[\exec \defin
@@ -170,11 +165,11 @@ program \(C\), starting from a state \(\rho\):
     \usetikzlibrary{graphs}
     \begin{tikzpicture}[->,>=stealth]
       \node (start)  {\(\stt{x := 1; (((x\leq 5; x := x + 1)*;x>5) + (x := 6)), \emptyset}\)};
-      \node (second) [below = of start]  {\(\stt{x := 1; (((x\leq 5; x := x + 1)*;x>5) + (x := 6)), \{x \mapsto 1\}}\)};
-      \node (third1) [left of = second, below = of second] {\(\stt{((x\leq 5; x := x + 1)*;x>5), \{x\mapsto 1\}}\)};
-      \node (third2) [right = of third1] {\(\stt{x:=6, \{x \mapsto 1\}}\)};
+      \node (second) [below = of start]  {\(\stt{x := 1; (((x\leq 5; x := x + 1)*;x>5) + (x := 6)), \emptyset[x \mapsto 1]}\)};
+      \node (third1) [left of = second, below = of second] {\(\stt{((x\leq 5; x := x + 1)*;x>5), \emptyset[x\mapsto 1]}\)};
+      \node (third2) [right = of third1] {\(\stt{x:=6, \emptyset[x \mapsto 1]}\)};
       \node (forth)  [below = of third1] {\(\dots\)};
-      \node (final)  [right = of forth] {\(\{x\mapsto 6\}\)};
+      \node (final)  [right = of forth] {\(\emptyset[x\mapsto 6]\)};
 
       \path
       (start)  edge (second)
@@ -187,6 +182,83 @@ program \(C\), starting from a state \(\rho\):
     \caption{Partial execution graph of \(C\)}\label{fig:exec}
   \end{figure}
 \end{example}
+
+\begin{observation}[Basic graph constructions]
+  We can observe that the semantics of a program identifies some
+  building blocks of the execution graph:
+  \begin{itemize}
+  \item \(\stt{e,\rho}\) identifies a node with on single child which
+    is a terminal environment \(\llp e \rrp \rho\) (as in figure \ref{fig:base})
+    \begin{figure}
+      \centering
+      \begin{tikzpicture}[->, >=stealth]
+        \node (dots)                 {\(\dots\)};
+        \node (node) [right =of dots] {\(\stt{e, \rho}\)};
+        \node (end)  [right =of node] {\(\llp e \rrp \rho (\neq \bot)\)};
+
+        \path
+        (dots) edge (node)
+        (node) edge (end);
+      \end{tikzpicture}
+      \caption{single expression execution semantics}\label{fig:base}
+    \end{figure}
+  \item \(\stt{C_1 + C_2, \rho}\) In this case the node has 2
+    children, one labelled by the execution of the first branch, one
+    by the execution of the other, as shown in figure \ref{fig:branch}
+    \begin{figure}
+      \centering
+      \begin{tikzpicture}[->, >=stealth]
+        \node (dots)                 {\(\dots\)};
+        \node (node) [below =of dots] {\(\stt{C_1 + C_2, \rho}\)};
+        \node (left) [below =of node, left of=node] {\(\stt{C_1, \rho}\)};
+        \node (right) [below =of node, right of=node] {\(\stt{C_2, \rho}\)};
+
+        \path
+        (dots) edge (node)
+        (node) edge (left) edge (right);
+      \end{tikzpicture}
+      \caption{Execution of a \(+\) instruction}\label{fig:branch}
+    \end{figure}
+  \item \(\stt{C_1;C_2, \rho}\) In this case we should label the
+    intermediate executions \(\sem{C_1}X = Y\) so that we cna
+    rapresent the execution graph, shown in figure \ref{fig:comp}
+    \begin{figure}
+      \centering
+      \begin{tikzpicture}[->, >=stealth]
+        \node (dots)                 {\(\dots\)};
+        \node (node) [right =of dots] {\(\stt{C_1;C_2, \rho}\)};
+        \node (scnd) [right =of node] {\(\stt{C_1';C_2, \rho'}\)};
+        \node (ndts) [right =of scnd] {\(\dots\)};
+        \node (thrd) [right =of ndts] {\(\stt{C_2, \rho''}\)};
+        \node (end)  [right =of thrd] {\(\dots\)};
+
+        \path
+        (dots) edge (node)
+        (node) edge (scnd)
+        (scnd) edge (ndts)
+        (ndts) edge (thrd)
+        (thrd) edge (end);
+      \end{tikzpicture}
+      \caption{Execution of concatenated instructions}\label{fig:branch}
+    \end{figure}
+  \item \(\stt{C*, \rho}\) in this case 2 things can happen. Either we
+    produce an infinite path, a cycle, or at some point we can apply
+    \(\text{star}_{\text{fix}}\)
+    \begin{figure}
+      \centering
+      \begin{tikzpicture}[->, >=stealth]
+        %% ... -> <C*,r> -> ...
+        
+        %% ... -> <C,r> -> ...
+        %%           ^______|
+
+        %% ... -> <C*,r> -> <C*,r'> ->^{star fix} r' 
+      \end{tikzpicture}
+      \caption{Execution of concatenated instructions}\label{fig:branch}
+    \end{figure}
+    
+  \end{itemize}
+\end{observation}
 
 \begin{lemma}[finite sets on finite traces]\label{le:finite}
   Let \(X \in 2^\env\) be a finite set of environments, \(C \in \imp\)
@@ -240,7 +312,7 @@ program \(C\), starting from a state \(\rho\):
   which is infinite.
 \end{observation}
 
-\begin{lemma}
+\begin{lemma}\label{le:infinitebranch}
   Let \(X\in2^\env, C\in\imp\) be respectively a finite collection of
   environments and a finite program. If \(\sem{C}X\) is infinite then
   the execution graph contains an infinite branch.
@@ -260,8 +332,8 @@ program \(C\), starting from a state \(\rho\):
     inductive hypothesis either one of \(\sem{C_1}X\, \sem{C_2}X)\) is
     infinite, and contains an infinite branch. Either case, in the end
     \(\sem{C}X\) if infinite, contains an infinite branch.
-  \item \(C\equiv C_1;C_2\), \(sem{C_1;C_2}X =
-    \{\sec{C_2}(\sem{C_1}X)\). We have 2 cases: either \(\sem{C_1}X\)
+  \item \(C\equiv C_1;C_2\), \(\sem{C_1;C_2}X =
+    \sem{C_2}(\sem{C_1}X)\). We have 2 cases: either \(\sem{C_1}X\)
     is infinite, and sice \(C_1\) is striclty smaller than \(C\) by
     inductive hypothesis it contains an infinite branch in the
     execution graph or \(\sem{C_1}X = Y\) is finite, but in this case
@@ -273,21 +345,26 @@ program \(C\), starting from a state \(\rho\):
     infinite only if there's no \(j\in\n\mid \sem{C}^jX_{j-1} =
     \sem{C}^{j+1}X_{j}\), which means that we're creating an infinite
     chain of \(X_i \forall i \in \n \mid \forall j,k \in \n X_j \neq
-    X_k\), and therefore we're creating the infinte path \[\forall j
-    \in \n \quad \stt{C_1^*, X_1} \tto* \stt{C_1^*, X_2} \tto \dots
+    X_k\), and therefore there is an infinte path \[\forall j \in \n
+    \quad \stt{C_1^*, X_1} \tto^* \stt{C_1^*, X_2} \tto \dots \tto
     \stt{C_1^*, X_j} \tto \dots\] which is in the execution graph for
     the original program \(C_1^*\).
+
+    %% ok ma occhio che la path è su stati singoli, quindi ognuno di
+    %% quelli induce un grafo, uno avrà una path infinita, forse
+    %% meglio ragionare sempre su collezioni di ingoli stati?
+    %% \(\{\rho\}\)
   \end{itemize}
 \end{proof}
 
-\begin{example}
+\begin{example}\label{ex:loop}
   This lemma provides an insights that links non-termination to an
   infinite path in the execution graph, but it is not the only way a
   program might not terminate. In fact, considering the program \(C =
   (x:=1; (x\leq 1; x:=1)^*)\) which of course does not halt on the
-  empty environment \(\env\) but has the execution graph in figure
-  \ref{fig:exegraphnont}, which is composed of a finite amount of
-  states, but since it contains a cycle, the program does not
+  empty environment \(\emptyset\) and has the execution graph in
+  figure \ref{fig:exegraphnont}, which is composed of a finite amount
+  of states, but since it contains a cycle, the program does not
   terminate.
 
   \begin{figure}
@@ -295,9 +372,9 @@ program \(C\), starting from a state \(\rho\):
     \usetikzlibrary{positioning}
     \begin{tikzpicture}[->,>=stealth]
       \node (a) {\(\sem{(x:=1; (x\leq 1; x:=1)^*), \emptyset}\)};
-      \node (b) [below of = a] {\(\sem{(x\leq 1; x:=1)^*, \{x\mapsto 1\}}\)};
-      \node (c) [below of = b, left of = b] {\(\sem{(x\leq 1; x:=1);(\dots)^*, \{x\mapsto 1\}}\)};
-      \node (d) [below of = c] {\(\sem{x:=1;(\dots)^*, \{x\mapsto 1\}}\)};
+      \node (b) [below of = a] {\(\sem{(x\leq 1; x:=1)^*, \emptyset[x\mapsto 1]}\)};
+      \node (c) [below of = b, left of = b] {\(\sem{(x\leq 1; x:=1);(\dots)^*, \emptyset[x\mapsto 1]}\)};
+      \node (d) [below of = c] {\(\sem{x:=1;(\dots)^*, \emptyset[x\mapsto 1]}\)};
 
       \path
       (a) edge (b)
@@ -328,13 +405,15 @@ decide termination:
   \item \textbf{The invariant is infinite}: in this case because of
     observation \ref{obs:finite}, we can say that the original program
     does not halt, as it would not terminate in a finite amount of
-    steps.
+    steps. Additionally, because of lemma \ref{le:infinitebranch} the
+    execution graph of the program contains an infinite branch, which
+    is the one responsible for non-termination.
   \item \textbf{The invariant is finite}: This does not give direct
-    informations about the termination of the program. However it
-    means that there's no infinite branch in the execution graph of
-    \(C\), therefore we can decide termination by looking at the
-    execution graph: the rough idea is that if there's a cycle the
-    execution graph, the program does not halt, otherwise it halts.
+    informations about the termination of the program, because like in
+    example \ref{ex:loop} the program can have a finite invariant but
+    it might not terminate due to the presence of a cycle in the
+    termination graph. However it means that there's no infinite
+    branch in the execution graph of \(C\).
 
     %% dire bene, ci devono essere un numero finito di stati e quindi
     %% posso esplorare il sistema di transizioni
@@ -350,6 +429,7 @@ decide termination:
       \begin{figure}
         \centering
         \usetikzlibrary{positioning}
+        \usetikzlibrary{graphs}
         \begin{tikzpicture}[->,>=stealth]
           \node (start)                {\(\cdot\)};
           \node (bls) [right of=start] {\(\cdot\)};
