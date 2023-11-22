@@ -1,11 +1,40 @@
 \section{Deciding invariant finiteness}
 
 \begin{lemma}\label{le:finiteness}
-  Given \(C\in\imp\) and an initial \(X \in \poset{env}\), the
-  predicate \[Q(C,X)= ``\sem{C}X \text{ is finite}" \] is
-  undecidable.
+  Given \(C\in\imp\) where the \(^*\) operator does not appear, and a
+  finite \(X \in \poset{env}\), the predicate "\(\sem{C}X\) is finite"
+  is decidable.
 \end{lemma}
 
 \begin{proof}
+  By induction on the program \(C\):
+  \paragraph*{Base case:\\}
+  \(C \equiv e\), therefore \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in
+  X , \bsem{e}\rho \neq \bot\}\), which is finite, since \(X\) is
+  finite.
   
+  \paragraph*{Inductive cases:\\}
+  \begin{enumerate}
+  \item \(C\equiv C_1 + C_2\), therefore \(\sem{C_1 + C_2} X =
+    \sem{C_1}X \cup \sem{C_2}X\). By inductive hypothesis, both
+    \(\sem{C_1}X, \sem{C_2}X\) are finite, as they're sub expressions
+    of \(C\). Since the union of finite sets is finite, \(\sem{C_1 +
+      C_2}X\) is finite.
+  \item \(C\equiv C_1; C_2\), therefore \(\sem{C_1;C_2}X =
+    \sem{C_2}(\sem{C_1}X)\). By inductive hypothesis \(\sem{C_1}X =
+    Y\) is finite. Again by inductive hypothesis \(\sem{C_2}Y\) is
+    finite.
+  \end{enumerate}
+\end{proof}
+
+\begin{lemma}\label{le:infiniteness}
+  Given \(C\in\imp\) where the \(^*\) operator does not appear, and a
+  finite \(X \in \poset{env}\), the predicate "\(\sem{C^*}X\) is
+  finite" is undecidable.
+\end{lemma}
+
+\begin{proof}
+  %% \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^iX\). Because of lemma
+  %% \ref{le:finiteness}, all \(\sem{C}^iX\) are finite, but their union
+  %% might not.
 \end{proof}
