@@ -1,31 +1,11 @@
-\section{Deciding Finiteness}
+\section{Deciding invariant finiteness}
 
-Another information we might want to grasp from the concrete semantics
-is weather the concrete invariant is finite or not. In this section we
-argue that not even this information is obtainable, as it would allow
-to decide for termination.
-
-\begin{theorem}
-  Given \(C\in\imp\) and an initial \(X \in 2^\env\), the
+\begin{lemma}\label{le:finiteness}
+  Given \(C\in\imp\) and an initial \(X \in \poset{env}\), the
   predicate \[Q(C,X)= ``\sem{C}X \text{ is finite}" \] is
   undecidable.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
-  Consider \(C\in\imp, 2^\env \ni X = \{\rho\}\) a subset composed of
-  a single state. The evaluation of \(\sem{C}\{\rho\}\) is exactly the
-  strongest invariant for the trace \(\trace(C,\rho)\). If its
-  finiteness was decidable, we could also decide for termination.
-
-  Suppose we have an oracle \(\Omega = \lambda C , X . Q(C,X) ? 1 :
-  0\). there are 2 cases for \(\Omega(C,\{\rho\})\):
-  \begin{itemize}
-  \item \(\Omega(C,\{\rho\}) = 0\): Then the most precise invariant
-    for the program consists in an infinite quantity of states. The
-    only way a program could produce infinite states is by not
-    terminating.
-  \item \(\Omega(C,\{\rho\}) = 1\): Then it means that the strongest
-    invariant consists in a finite amount of states. We can build a
-    procedure to decide \(C\) termination thanks to traces:
-  \end{itemize}
+  
 \end{proof}

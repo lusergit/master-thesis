@@ -140,7 +140,7 @@ Therefore \(\sem{C}X = \emptyset \iff \forall \rho \in X
     sum\textsubscript{2}. By inductive hypothesis \[\sem{C_1}X =
     \{\rho_t \in\poset{\env} \mid \rho \in X , \stt{C_1,\rho} \to^* \rho_t\} \quad
     \sem{C_2}X = \{\rho_t \in\poset{\env} \mid \rho \in X , \stt{C_2,\rho} \to^*
-    \rho_t\}\]. Therefore
+    \rho_t\}\] Therefore
     \begin{align*}
       \sem{C_1 + C_2}X & = \sem{C_1}X \cup \sem{C_2}X & \text{(by definition)}\\
       & = \{\rho_t \in\poset{\env} \mid \rho \in X , \stt{C_1,\rho} \to^* \rho_t\} \cup \{\rho_t \in\poset{\env} \mid \rho \in X , \stt{C_2,\rho} \to^* \rho_t\} & \text{(by ind. hp)}\\
@@ -158,7 +158,7 @@ Therefore \(\sem{C}X = \emptyset \iff \forall \rho \in X
       & = \{\rho_t \in\poset{\env} \mid \rho \in X \stt{C_1, \rho} \to^* \rho_x \wedge \stt{C_2, \rho_x} \to^* \rho_t\} & \text{(by definition)}\\
       & = \{\rho_t \in\poset{\env} \mid \rho \in X . \stt{C_1;C_2, \rho} \to^* \rho_t\}
     \end{align*}
-  \item \(C \equiv C_1^*\) \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^i X\)
+  \item \(C \equiv C^*\) \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^i X\)
     \begin{align*}
       \sem{C^*}X & = \sem{C}X \cup \sem{C}^2X \cup \dots & \text{(by definition)}\\
       & = \{\rho_t \in\poset{\env} \mid \rho \in X, \stt{C,\rho} \to^* \rho_t\} \cup \{\rho_t \in\poset{\env} \mid \rho \in X, \stt{C;C,\rho} \to^* \rho_t\} \cup \dots & \text{(by ind. hp)}\\
@@ -166,9 +166,8 @@ Therefore \(\sem{C}X = \emptyset \iff \forall \rho \in X
       & = \{\rho_t \in\poset{\env} \mid \rho \in X, \vee_{i\in\n} \stt{C^i, \rho} \to^* \rho_t\} \\
       & = \{\rho_t \in\poset{\env} \mid \rho \in X, \stt{C^*, \rho} \to^* \rho_t\}
     \end{align*}
-
-    Therefore we can notice that \(\sem{C}X = \emptyset \iff
-    \nexists \rho \in X \mid \stt{C,\rho} \to^* \rho_t\) for some
-    \(\rho_t\in\env\).
   \end{enumerate}
 \end{proof}
+
+We can notice that \(\sem{C}X = \emptyset \iff \nexists \rho_t\in\env, \rho \in X
+\mid \stt{C,\rho} \to^* \rho_t\).
