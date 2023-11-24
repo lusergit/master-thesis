@@ -151,7 +151,7 @@ Therefore \(\sem{C}X = \emptyset \iff \forall \rho \in X
       & = \{\rho_t \in\env \mid \rho \in X \stt{C_1, \rho} \to^* \rho_x \wedge \stt{C_2, \rho_x} \to^* \rho_t\} & \text{(by definition)}\\
       & = \{\rho_t \in\env \mid \rho \in X . \stt{C_1;C_2, \rho} \to^* \rho_t\}
     \end{align*}
-  \item \(C \equiv C^*\) \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^i X\)
+  \item \(C \equiv C^*\) : \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^i X\)
     \begin{align*}
       \sem{C^*}X & = X \cup \sem{C}X \cup \sem{C}^2X \cup \dots & \text{(by definition)}\\
       & = X \cup \{\rho_t \in\env \mid \rho \in X, \stt{C,\rho} \to^* \rho_t\} \cup \{\rho_t \in\poset{\env} \mid \rho \in X, \stt{C;C,\rho} \to^* \rho_t\} \cup \dots & \text{(by ind. hp)}\\
