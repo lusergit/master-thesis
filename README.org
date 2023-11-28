@@ -9,3 +9,5 @@
 ** Requirements
    The project in order to compile requires a =latex-full=-like
    environment with =latexmk= and =make= installed
+** Results
+   Results are available at [[./out/thesis.pdf]]
