@@ -109,8 +109,8 @@ transition relation.
 \end{definition}
 
 \begin{lemma}[Collecting and small step link]\label{le:link}
-  For any \(C\in\imp, X \in \poset{\env}\) \[\sem{C}X = \{\rho_t \mid
-  \rho \in X, \stt{C, \rho} \to^* \rho_t\}\] 
+  For any \(C\in\imp, X \in \poset{\env}\) \[\sem{C}X = \{\rho_t \in
+  \env \mid \rho \in X, \stt{C, \rho} \to^* \rho_t\}\]
 \end{lemma}
 
 Therefore \(\sem{C}X = \emptyset \iff \forall \rho \in X
@@ -353,13 +353,13 @@ say \[f \in \partialrec[k] \Rightarrow \exists C \in \imp \mid C(a_1,
 this we get a couple of facts that derive from well known
 computability results:
 \begin{itemize}
-\item deciding weather \(\sem{C}X \neq \emptyset\) is the same as
-  deciding \(x \in dom(f)\) for some \(f \in \partialrec[k]\), which
-  is undecidable (from the input problem in
-  \cite[p.~104]{cutland1980computability})
-\item dually, deciding weather \(\sem{C}X = \emptyset\) is also
-  undecidable. The set of functions \(f\in \partialrec[k]\)
-  s.t. \(f(x) \uparrow \forall x \in \n^k\) is not trivial and
-  saturated, therefore it is not recursive (by Rice's theorem
-  \cite{rice1953classes}).
+\item deciding weather \(\sem{C}X \neq \emptyset\) (i.e., \(C(a_1,
+  \dots, a_k) \downarrow\)) is the same as deciding \(x \in dom(f)\)
+  for some \(f \in \partialrec[k]\), which is undecidable (from the
+  input problem in \cite[p.~104]{cutland1980computability})
+\item dually, deciding weather \(\sem{C}X = \emptyset\) (i.e.,
+  \(C(a_1, \dots, a_k)\uparrow\)) is also undecidable. The set of
+  functions \(f\in \partialrec[k]\) s.t. \(f(x) \uparrow \forall x \in
+  \n^k\) is not trivial and saturated, therefore it is not recursive
+  (by Rice's theorem \cite{rice1953classes}).
 \end{itemize}
