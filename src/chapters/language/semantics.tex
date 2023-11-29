@@ -16,15 +16,15 @@ describe for a program.
     \cdot} : \expr \to \env \to \env \cup \{\bot\}\) is recursively
   defined as follows:
   \begin{align*}
-    \bsem{ x\in S} \rho & \defin \begin{cases} \rho & \rho(x)\in S \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{ x\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(x)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{ x \leq k} \rho & \defin \begin{cases} \rho & \rho(x)\leq k \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{ x > k} \rho & \defin \begin{cases} \rho & \rho(x) > k \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{ \tru} \rho & \defin \rho \\
-    \bsem{ \ff} \rho & \defin \bot \\
-    \bsem{ x := k} \rho & \defin \rho [x \mapsto k] \\
-    \bsem{ x := y + k} \rho & \defin \rho [x \mapsto \rho(y) + k] \\
-    \bsem{ x := y - k} \rho & \defin \rho [x \mapsto \rho(y) - k] \\
+    \bsem{x\in S} \rho & \defin \begin{cases} \rho & \rho(x)\in S \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{x\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(x)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{x \leq k} \rho & \defin \begin{cases} \rho & \rho(x)\leq k \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{x > k} \rho & \defin \begin{cases} \rho & \rho(x) > k \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{\tru} \rho & \defin \rho \\
+    \bsem{\ff} \rho & \defin \bot \\
+    \bsem{x := k} \rho & \defin \rho [x \mapsto k] \\
+    \bsem{x := y + k} \rho & \defin \rho [x \mapsto \rho(y) + k] \\
+    \bsem{x := y - k} \rho & \defin \rho [x \mapsto \rho(y) - k] \\
   \end{align*}
 \end{definition}
 

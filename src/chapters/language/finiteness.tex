@@ -1,9 +1,8 @@
 \section{Deciding invariant finiteness}
 
 \begin{lemma}\label{le:finiteness}
-  Given \(C\in\imp\) where the \(^*\) operator does not appear, and a
-  finite \(X \in \poset{env}\), the predicate "\(\sem{C}X\) is finite"
-  is decidable.
+  If \(C\in\imp\) where the \(^*\) operator does not appear, and a
+  finite \(X \in \poset{env}\) then \[\sem{C}X \text{ is finite}\]
 \end{lemma}
 
 \begin{proof}
@@ -36,8 +35,8 @@
 \begin{proof}
   Suppose we can decide weather \(\sem{C^*}X\) is finite or
   infinite. We'll show that in both cases we can decide weather
-  \(C(a_1, \dots, a_k)\downarrow\) or \(C(a_1, \dots, a_k)\uparrow\),
-  which we already show were undecidable statements.
+  \(C^*(a_1, \dots, a_k)\downarrow\) or \(C^*(a_1, \dots,
+  a_k)\uparrow\), which we already show were undecidable statements.
   \begin{itemize}
   \item Suppose we can decide that \(\sem{C^*}X\) is infinite for some
     \(C\in\imp\) and \(X\in\poset{\env}\). Since \(\sem{C^*}X =
@@ -50,26 +49,25 @@
     \sem{C}^i X = \sem{C}^{i+j}X\) and therefore \(\forall i,j\in\n
     \{\rho_t \in \env \mid \rho \in X , \stt{C^i, \rho} \to^* \rho_t\}
     \neq \{\rho_t \in \env \mid \rho \in X , \stt{C^{i+j}, \rho} \to^*
-    \rho_t\}\). Therefore \(C^*\) does not reach an upper bound
-    starting from \(X\) in a finite amount of steps.
-  \item if we know instead that \(\sem{C^*}X\) is finite, we have 2
+    \rho_t\}\). Therefore \(C^*(a_1, \dots, a_k)\uparrow\).
+  \item If we know instead that \(\sem{C^*}X\) is finite, we have 2
     subcases:
     \begin{enumerate}
     \item \(\exists i \in\n \mid \sem{C}^iX = \sem{C}^{i+1}X\), which
       means that by kleene iteration we reach the \(\lub\) after a
-      finte amount of applications of \(C\), therefore \(C\) halts.
+      finte amount of applications of \(C\), therefore \(C^*(a_1,
+      \dots, a_k)\downarrow\).
     \item \(\exists i,j \in \n, j > 1 \mid \sem{C}^iX = \sem{C}^{i +
       j}X\) which means that by kleene iteration we do not reach the
       \(\lub\) after a finite amount of iterations, but we cycle
       trough a finite amount of different collections of states \(X_1,
       X_2, \dots, X_k\): \[\sem{C}^iX \neq \sem{C}^{i+1}X \wedge
-      \sem{C}^iX = \sem{C}^{i+j}X\] in this case the program does not
-      terminate but cycles trough a finite amount of program
-      environments.
+      \sem{C}^iX = \sem{C}^{i+j}X\] in this case \(C(a_1, \dots,
+      a_k)\uparrow\).
     \end{enumerate}
 
-    Either way, we can decide weather \(C(a_1, \dots, a_k)
-    \downarrow\) or \(C(a_1, \dots, a_k) \uparrow\) which are two
+    Either way, we can decide weather \(C^*(a_1, \dots, a_k)
+    \downarrow\) or \(C^*(a_1, \dots, a_k) \uparrow\) which are two
     undecidable statements.
   \end{itemize}
 \end{proof}
