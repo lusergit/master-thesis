@@ -1,34 +1,54 @@
 \section{Interval Analysis}
-The following chapter aims to introduce what we mean by interval
-analysis, giving some background and definition and finally proving
-the decidability of the analysis without the use of a widening
-operator. Notice that this is not in contrast to the more general
-results on concrete semantics, as interval analysis, falling under the
-broader umbrella of static analysis aims to provide a sound but maybe
-not complete analysis results.
 
-\begin{definition}[Interval domain]
-  We call by \[Int \defin \{[a,b] \mid a \in \z \cup \{-\infty\}
-  \wedge b \in \z \cup \{+\infty\} \wedge a \leq b\}\]
-  the interval domain.
+We define \emph{interval analysis} of the above language \(\imp\) in a
+standard way, taking the best correct approximations (bca) for the
+basic expressions in \(\expr\).
+  
+\begin{definition}[Integer intervals]
+  We call
+  \[ \Int \defin \{ \interval{a}{b} \mid a \in \z \cup
+  \{-\infty\} \wedge b \in \z \cup \{+\infty\} \wedge a\leq b \} \cup
+  \{\bot\} \] set of integer intervals.
 \end{definition}
 
 \begin{definition}[Concretization map]
-  The concretization map \(\gamma : Int \to 2^\z\) is the
-  following \[\gamma([a,b]) = \{x \in \z \mid a \leq x \leq b\}; \quad
-  \gamma(\bot) = \emptyset\]
+  We define the \emph{concretization map} \(\gamma:\Int \to
+  \poset{\z}\) as
+  \begin{align*}
+    \gamma(\interval{a}{b}) & \defin \{x\in \z \mid a \leq x \leq b\} \\
+    \gamma(\bot) & \defin \emptyset
+  \end{align*}
 \end{definition}
 
-\begin{definition}[Abstract domain]
-  The We'll call by \(\biga\) the abstract domain \[\biga \defin (Var \to
-  int_*) \cup \{\bot\}\]
+\begin{observation}
+  \(\tuple{\Int,\sqsubseteq}\) is a complete lattice where for all
+  \(I,J\in \Int\), \(I\sqsubseteq J\) iff \(\gamma(I) \subseteq
+  \gamma(J)\).
+\end{observation}
+
+\begin{definition}[Abstract integer domain]
+  Let \(\Int_* \defin \Int \setminus \{\bot\}\). The abstract
+  domain \(\bA\) for program analysis is the variable-wise
+  lifting of \(\Int\): \[ \bA \defin (\var \to \Int_*) \cup \{
+  \bot \} \]
 \end{definition}
 
-\begin{definition}[Abstract concretization]
-  The abstract domain \(\biga\) concretization map is
-  \begin{align}
-    \gamma(\bot) & \defin \emptyset \\ \forall \eta \neq \bot, \quad
-    \gamma(\eta) & \defin \{\rho \in \env \mid \forall x \in \var
-    . \rho(x) \in \gamma(\eta(x))\}
-  \end{align}
+where the intervals for a given variable are always nonempty, while
+\(\bot\) represents the empty set of environments.  Thus, the
+corresponding concretization is defined as follows:
+
+\begin{definition}[Interval concretization]
+  We define the \emph{concretization map} for the abstract domain
+  \(\bA\) \(\concr[\Int] : \bA \to \poset{\env}\) as
+  \begin{align*}
+    \gamma(\bot) &\defin \varnothing\\
+    \forall \eta\neq \bot \quad \gamma(\eta) &\defin \{\rho \in \env \mid \forall x\in \var \: \rho(x) \in \gamma(\eta(x))\} 
+  \end{align*}
 \end{definition}
+
+\begin{observation}
+  If we consider the ordering \(\sqsubseteq\) on \(\bA\)
+  s.t. \[\forall \eta, \theta \in \bA \quad \eta \sqsubseteq \theta
+  \iff \concr[\Int](\eta) \subseteq \concr[\Int](\theta)\] then
+  \(\tuple{\bA, \sqsubseteq}\) is a complete lattice.
+\end{observation}

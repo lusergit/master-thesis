@@ -9,9 +9,9 @@ z = + \infty\) and \(-\infty + z = - \infty -z = - \infty\).
 We'll focus on the following non-deterministic language.
 
 \begin{align*}
-  \expr \ni e ::= & \quad x \in S \mid x \in [a,b] \mid x \leq k \mid x > k \mid \tru \mid \ff \mid \\
+  \expr \ni \cc{e} ::= & \quad x \in S \mid x \in [a,b] \mid x \leq k \mid x > k \mid \tru \mid \ff \mid \\
   & \quad x := k \mid x := y + k \mid x := y - k \\
-  \imp \ni C ::= & \quad e \mid C + C \mid C ; C \mid C*
+  \imp \ni \cc{C} ::= & \quad \cc{e} \mid \cc{C + C} \mid \cc{C ; C} \mid \cc{C*}
 \end{align*}
 
 where \(x, y \in \var\) a finite set of variables of interest, i.e.,
