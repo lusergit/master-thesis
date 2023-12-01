@@ -29,7 +29,7 @@ basic expressions in \(\expr\).
 \begin{definition}[Abstract integer domain]
   Let \(\Int_* \defin \Int \setminus \{\bot\}\). The abstract
   domain \(\bA\) for program analysis is the variable-wise
-  lifting of \(\Int\): \[ \bA \defin (\var \to \Int_*) \cup \{
+  lifting of \(\Int\): \[ \bA \defin (\Var \to \Int_*) \cup \{
   \bot \} \]
 \end{definition}
 
@@ -41,8 +41,8 @@ corresponding concretization is defined as follows:
   We define the \emph{concretization map} for the abstract domain
   \(\bA\) \(\concr[\Int] : \bA \to \poset{\env}\) as
   \begin{align*}
-    \gamma(\bot) &\defin \varnothing\\
-    \forall \eta\neq \bot \quad \gamma(\eta) &\defin \{\rho \in \env \mid \forall x\in \var \: \rho(x) \in \gamma(\eta(x))\} 
+    \concr[\Int](\bot) &\defin \emptyset\\
+    \forall \eta\neq \bot \quad \concr[\Int](\eta) &\defin \{\rho \in \env \mid \forall x\in \Var \: \rho(x) \in \gamma(\eta(x))\} 
   \end{align*}
 \end{definition}
 
@@ -52,3 +52,425 @@ corresponding concretization is defined as follows:
   \iff \concr[\Int](\eta) \subseteq \concr[\Int](\theta)\] then
   \(\tuple{\bA, \sqsubseteq}\) is a complete lattice.
 \end{observation}
+
+\begin{definition}[Interval sharpening]
+  \label{de:trunc}
+  For a nonempty interval \(\interval{a}{b} \in \Int\) and \(c \in \Z\), we define
+  two operations raising \(\uparrow\) the lower bound to \(c\) and lowering \(\downarrow\) the upper
+  bound to \(c\), respectively:
+  \begin{align*}
+    &\truncL{\interval{a}{b}}{c} \veq 
+    \begin{cases} 
+      \interval{\max\{a,c\}}{b} & \text{if } c\leq b\\
+      \bot & \text{if } c > b
+    \end{cases}
+    \\
+    &\truncR{\interval{a}{b}}{c} \veq 
+    \begin{cases}   
+      \interval{a}{\min\{b,c\}} & \text{if } c\geq a\\
+      \bot & \text{if } c < a 
+    \end{cases} 
+  \end{align*}
+  Observe that \(\max(\truncR{\interval{a}{b}}{c})\leq c\) always holds. \qed   
+  %\end{quote}
+\end{definition}
+
+\begin{definition}[Interval addition and subtraction]
+  \label{de:add}
+  For a nonempty interval \(\interval{a}{b} \in \Int\) and \(c \in \Z\) define
+  \(\interval{a}{b} \pm c \veq \interval{a\pm c}{b\pm c}\) (recall that \(\pm \infty + c = \pm\infty - c = \pm\infty\)).  
+  \qed
+\end{definition}
+
+
+Observe that for every interval \(\interval{a}{b} \in \Int\) and
+\(c \in \Z\)
+\begin{center}
+  \(\max(\truncL{\interval{a}{b}}{c}) \leq b\)
+  \qquad and \qquad
+  \(\max(\truncR{\interval{a}{b}}{c}) \leq c\)
+\end{center}
+that trivially holds by 
+defining \(\max (\bot)  \veq 0\) (i.e., \(0\) is the maximum of
+an empty interval).
+%Just observe that the resulting interval could be empty, i.e.\ \(\bot\), and .
+
+
+
+
+The \emph{interval semantics} of \(\imp\) is defined as the strict (i.e., preserving \(\bot\))
+% and co-strict (i.e., preserving \(\top\))
+extension of the following function
+\(\semi{\cdot}: \exp \cup \imp \to \bA \to \bA\). For all \(\eta: \Var \to \Int_*\),
+
+\begin{align*}
+  %
+  \semi{\var \in S}\eta 
+  & \veq  
+  \begin{cases}
+    \eta[\var \mapsto \eta(\var)\sqcap \Int(S)]  & \text{if }\eta(\var)\sqcap \Int(S)\neq \bot \\
+    \bot & \text{otherwise}
+  \end{cases}\\
+  %
+  \semi{\var \in [a,b]}\eta 
+  & \veq  
+  \begin{cases}
+    \eta[\var \mapsto \eta(\var)\sqcap [a,b]]  & \text{if }\eta(\var)\sqcap [a,b]\neq \bot \\
+    \bot & \text{otherwise}
+  \end{cases}\\
+  % boolean
+  %
+  \semi{\var \leq k}\eta 
+  & \veq 
+  \begin{cases}
+    \eta[\var \mapsto \truncR{\eta(\var)}{k}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
+    \bot & \text{otherwise}
+  \end{cases}\\
+  %
+  \semi{\var > k}\eta 
+  & \veq 
+  \begin{cases}
+    \eta[\var \mapsto \truncL{\eta(\var)}{k+1}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
+    \bot & \text{otherwise}
+  \end{cases}\\
+  %
+  \semi{\tru}\eta 
+  & \veq \eta\\
+  %
+  \semi{\ff}\eta 
+  & \veq \bot\\
+  %
+  %\semi{\id}\eta & \veq \eta\\
+  %
+  \semi{\var := k}\eta 
+  & \veq \eta[\var \mapsto \interval{k}{k}]\\
+  % 
+  \semi{\var := \var[y] + k}\eta 
+  & \veq \eta[\var \mapsto \eta (\var[y]) + k]\\
+  % 
+  \semi{\var := \var - k}\eta 
+  & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
+  % \semi{\var := \var[y]}\eta 
+  % & = \eta[\var \mapsto \eta(\var[y])]\\[3mm]
+  %
+  % commands
+  %
+  \semi{\com_1 \ndet \com_2} \eta
+  & \veq \semi{\com_1} \eta \sqcup \semi{\com_2} \eta\\
+  %
+  \semi{\com_1 \seq \com_2} \eta
+  & \veq \semi{\com_2} (\semi{\com_1} \eta)\\
+  %
+  % 
+  \semi{\kleene{\com}} \eta
+  & \veq \textstyle \bigsqcup_{i \in \nat} \semi{\com}^i (\eta)\\
+  %
+  \semi{\fix{\com}} \eta
+  & \veq  \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)}
+\end{align*}
+
+The semantics is well-defined, because of the following lemma:
+
+\begin{lemma}\label{le:monotone}
+   for all \(\com \in \imp\), \[\semi{\com}: \bA \to \bA\] is
+   monotone.
+\end{lemma}
+
+\begin{proof}
+  What we have to proof is that given \(\eta, \theta \in \bA\), with
+  \(\eta \sqsubseteq \theta\) then \(\forall C \in \imp\)
+  \(\semi{C}\eta \sqsubseteq \semi{C}\theta\). We'll work by induction
+  on the grammar of \(C\):
+  
+  \noindent
+  \textbf{Base cases:}\ \\ \ We avoid cases where \(\eta = \bot\) and
+  \(\semi{C}\eta = \bot\) as \(\forall \theta \in \bA\) \(\bot
+  \sqsubseteq \theta\) and it becomes trivially true.
+  \begin{itemize}
+  \item \(\com \equiv \var \in S\). Then
+    \begin{align*}
+      \semi{\var \in S}\eta & = \eta[x\mapsto\eta(x) \sqcap \Int(S)] \\
+      \semi{\var \in S}\theta & = \theta[x\mapsto \theta(x) \sqcap \Int(S)]
+    \end{align*}
+    Since \(\eta(x) \sqcap \Int(S) \neq \bot\) and \(\eta \sqsubseteq
+    \theta\), then \(\theta(x) \sqcap \Int(S) \neq \bot\). We can see
+    that
+    \begin{align*}
+      \eta \sqsubseteq \theta \iff & \concr(\eta) \subseteq \concr(\theta) \\
+      \iff & \{x\in\z \mid x \in \eta(\var)\} \subseteq \{x\in\z \mid x \in \theta(\var)\} \\
+      \iff & \{x\in\z \mid x \in \eta(\var)\} \cap \{x \in \z \mid x \in \Int(S)\} \subseteq \{x\in\z \mid x \in \theta(\var)\} \cap \{x \in \z \mid x \in \Int(S)\} \\
+      \iff & \{x \in \z \mid x \in \eta(\var) \wedge x \in \Int(S)\} \subseteq \{x \in \z \mid x \in \theta(\var) \wedge x \in \Int(S)\} \\
+      \iff & \{x \in \z \mid x \in \eta(\var) \sqcap \Int(S)\} \subseteq \{x \in \z \mid x \in \theta(\var) \sqcap \Int(S)\} \\
+      \iff & \concr[\Int](\eta[x\mapsto \eta(\var) \sqcap \Int(S)](\var)) \subseteq \concr[\Int](\theta[x\mapsto \theta(\var) \sqcap \Int(S)](\var)) \\
+      \iff & \semi{\var \in S}\eta \sqsubseteq \semi{\var \in S}\theta
+    \end{align*}
+  \item for the base cases \(\var \in \interval{a}{b}, \var \leq k,
+    \var > k\) we can use the same proceedings;
+  \item \(\com \equiv \tru\). Then \(\semi{\tru}\eta = \eta
+    \sqsubseteq \theta = \semi{\tru}\theta\);
+  \item \(\com \equiv \ff\). Then \(\semi{\ff}\eta = \bot \sqsubseteq
+    \bot = \semi{\ff}\theta\);
+  \item \(\com \equiv \var := k\). Then
+    \begin{align}\label{eq:implic}
+      \begin{split}
+        \eta \sqsubseteq \theta \iff & \concr[\Int](\eta) \subseteq \concr[\Int](\theta) \\
+        \iff & \{\rho\in\env \mid \forall \var \in \Var \rho(\var) \in \concr(\eta(\var))\} \subseteq \{\rho\in\env \mid \forall \var \in \Var \rho(\var) \in \concr(\theta(\var))\} \\
+        \iff & \forall \var \in \Var, \rho \in \env \quad \rho(\var) \in \concr(\eta(\var)) \Rightarrow \rho(\var) \in \concr(\theta(\var)) \\
+      \end{split}
+    \end{align}
+    Notice that \[\semi{\var := k}\eta =
+    \eta[\var\mapsto\interval{k}{k}]\] \[\semi{\var := k}\theta =
+    \theta[\var\mapsto\interval{k}{k}]\] because of equation
+    \ref{eq:implic} in this case we know that \(\forall \var[y]\in\Var
+    ,\; \var[y] \neq \var \; \rho(\var[y]) \in \concr(\eta(\var[y]))
+    \Rightarrow \rho(\var[y]) \in \concr(\theta(\var[y]))\). For
+    \(\var\) it holds that \(\rho(\var) \in \concr(\interval{k}{k})
+    \Rightarrow \rho(\var) \in \concr(\interval{k}{k})\) and therefore
+    \begin{align*}
+      \forall \var[y] \in \Var, \rho \in \env \quad & \rho(\var[y]) \in \concr(\eta[\var\mapsto\interval{k}{k}](\var[y])) \Rightarrow \rho(\var[y]) \in \concr(\theta[\var\mapsto\interval{k}{k}](\var[y])) \\
+      \iff & \concr[\Int](\semi{\var:=k}\eta) \subseteq \concr[\Int](\semi{\var:=k}\theta) \\
+      \iff & \semi{\var :=k}\eta \sqsubseteq \semi{\var := k}\theta
+    \end{align*}
+  \item For \(\com \equiv \var := \var[y] + k, \var := \var[y] - k\)
+    the procedure is the same.
+  \end{itemize}
+
+  \noindent
+  \textbf{Recusrsive cases:}\ \\ \
+  \begin{itemize}
+  \item \(C \equiv C_1 + C_2\). Then
+    \begin{align*}
+      \semi{C_1 + C_2}\eta & = \semi{C_1}\eta \sqcup \semi{C_2}\eta & \\
+      & \sqsubseteq \semi{C_1}\theta \sqcup \semi{C_2}\theta & \text{by inductive hp.} \\
+      & = \semi{C_1 + C_2}\theta
+    \end{align*}
+  \item \(C \equiv C_1 ; C_2\). Then
+    \begin{align*}
+      \semi{C_1;C_2}\eta = \; & \semi{C_2}(\semi{C_1}\eta) & \\
+      & \alpha = \semi{C_1}\eta \sqsubseteq \semi{C_1}\theta = \beta & \text{by inductive hp.} \\
+      & \semi{C_2}\alpha \sqsubseteq \semi{C_2}\beta & \text{by inductive hp.} \\
+      & \semi{C_2}(\semi{C_1}\eta) \sqsubseteq \semi{C_2}(\semi{C_1}\theta) & \text{by substitution}
+    \end{align*}
+  \item \(C^*\). Then by inductive hypothesis \(\forall i \in \n
+    . \semi{C}^i\eta \sqsubseteq \semi{C}^i\theta\), which means
+    \[\semi{C^*}\eta = \bigsqcup_{i\in\n}\semi{C}^i\eta \sqsubseteq
+    \bigsqcup_{i\in\n}\theta = \semi{C^*}\theta.\]
+  \end{itemize}
+\end{proof}
+
+\begin{theorem}[\textbf{Correctness}]
+  For all \(\com \in \imp\) and \(\eta\in \mathbb{A}\), 
+  \(\sem{\com}\concr(\eta) \subseteq \concr(\semi{\com}\eta)\) holds. 
+\end{theorem}
+
+\begin{proof}
+  
+\end{proof}\todo{Sempre per induzione?}
+
+\begin{remark}
+  Let us remark that in case we were interested in studying
+  termination of the abstract interpreter, we could assume that the
+  input of a program will always be a finite interval in such a way
+  that nontermination can be identified with the impossibility of
+  converging to a finite interval for some variable. In fact, starting
+  from an environment \(\eta\) which maps each variable to a finite
+  interval, \(\semi{\com}\eta\) might be infinite on some variable
+  when \(\com\) includes a either Kleene or fix iteration which does
+  not convernge in finitely many steps.
+\end{remark}
+
+\subsection{Computing the interval semantics} 
+
+In this section we argue that for the language \(\imp\) the interval
+abstract semantics is computable in finite time without widening.
+
+Observe that the exact computation provides, already for our simple
+language, a precision which is not obtainable with (basic) widening
+and narrowing. In the example below the semantics maps \(\var\) and
+\(\var[y]\) to \([0,2]\) and \([6,8]\) resp., while widening/narrowing
+to \([0,\infty]\) and \([6,\infty]\)
+
+\begin{verbatim}
+x:=0;
+y:=0;
+while (x<=5) do
+   if (y=0) then
+      y=y+1;
+   endif;
+   if (x==0) then
+      x:=y+7;
+   endif;
+done;
+end
+\end{verbatim}
+
+Of course, for the collecting semantics this is not the case. Already
+computing a finite upper bound for loop invariants when they are
+finite is impossible as this would allow to decide termination. In
+fact, if the invariant is infinite then the loop diverges. If it is
+finite, then the number of possible states is finite and this
+termination can be decided as non-termination reduces to the presence
+of a cycle, as shown with lemma \ref{le:infiniteness}.
+
+\begin{problem}[Termination of interval analysis]\label{problem1}
+Given \(\com\in \imp\), \(\eta \in \bA\), decide: \(\sem{\com} \eta
+=^? \top\)
+\end{problem}
+
+First, given a program, we associate each variable with a \emph{single
+bound}, which captures both both an \emph{upper bound}, for which the
+rough idea is that, whenever a variable is beyond that bound, the
+behaviour of the program with respect to that variable becomes stable
+and an \emph{increment bound} which captures the largest increment or
+decrement that can affect a variable.
+
+\begin{definition}[\textbf{Program bound}]
+  \label{de:bound}
+  The \emph{bound} associated with a command \(\com\in \imp\) is a
+  natural number, denoted \(\bound{\com}\in \nat\), defined
+  inductively as follows:
+  \begin{align*}
+    %
+    \bound{\var \in S}  
+    & \veq \begin{cases}
+      \min(S) & \text{if } \max(S)=\infty\\
+      \max(S) & \text{if } \max(S)\in \nat
+    \end{cases}
+    \\
+    %
+    \bound{\var \in [a,b]}  
+    & \veq \begin{cases}
+      a & \text{if } b=\infty\\
+      b & \text{if } b\in \nat
+    \end{cases}
+    \\
+    % boolean
+    %
+    \bound{\var \leq k}  
+    & \veq k\\
+    %
+    \bound{\var > k} 
+    & \veq k\\
+    %
+    %
+    \bound{\tru} 
+    & \veq 0\\
+    %
+    \bound{\ff} 
+    & \veq 0\\
+    % \bound{\var > \var[y]}  
+    % & \veq 0\\
+    %
+    %
+    % assignements
+    %
+    \bound{\var := k} 
+    & \veq k\\
+    %
+    \bound{\var := \var[y] + k}
+    & \veq k\\
+    %
+    \bound{\var := \var[y] - k}
+    & \veq k\\
+    % 
+    % \bound{\var := \var[y]} 
+    % & \veq 0\\[3mm]
+    %
+    % commands
+    %
+    \bound{\com_1 \ndet \com_2}
+    & \veq \bound{\com_1} + \bound{\com_2}\\
+    %
+    \bound{\com_1 \seq \com_2}
+    & \veq \bound{\com_1} + \bound{\com_2}\\
+    %% %% 
+    %% \bound{\kleene{\com}}
+    %% & \veq 2 \bound{\com}\\
+    %% %% 
+    \bound{\kleene{\com}}
+    & \veq (|\mathit{vars}(\com)|+1) \bound{\com} \\ 
+  \end{align*}
+  where \(\mathit{vars}(\com)\) denotes the set of variables occurring in 
+  \(\com\).
+\end{definition}
+
+\begin{definition}[\textbf{Bound Environment}]
+  \label{de:boundenv}
+  A bound environment (benv for short) is a total function \(b:\Var \ra \nat\). We define 
+  \(\benv \veq \{ b \mid b:\Var \ra \nat\}\).
+  Each command 
+  \(C\in \imp\) induces a benv transformer \(\boundt{C}:\benv \ra \benv\), which is defined inductively as follows:
+  \begin{align*}
+    %
+    % boolean
+    %
+    \boundt{\var \in S}b  
+    & \veq 
+    \begin{cases} 
+      b[\var[x]\mapsto b(\var[x])+\min(S)]& \text{if }\max(S)=\infty\\
+      b[\var[x]\mapsto b(\var[x])+\max(S)]& \text{if }\max(S)\in \nat
+    \end{cases}
+    \\
+    %
+    % assignments
+    %
+    \boundt{\var := k}b 
+    & \veq  b[\var[x]\mapsto b(\var[x])+k]\\
+    %
+    \boundt{\var := \var[y] + k}b
+    & \veq  b[\var[x]\mapsto b(\var[x])+b(\var[y])+k]\\
+    %
+    \bound{\var := \var[y] - k}b
+    & \veq  b[\var[x]\mapsto b(\var[x])+b(\var[y])+k]\\
+    %
+    % commands
+    %
+    \boundt{\com_1 \ndet \com_2}b
+    & \veq \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b)(\var[x])\\
+    %
+    \boundt{\com_1 \seq \com_2}b
+    & \veq \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b)(\var[x])\\
+    %& \veq \boundt{\com_2}(\boundt{\com_1}b) \\
+    % 
+    \boundt{\fix{\com}}b
+    &\veq  \lambda \var[x]. (|\mathit{vars}(\com)|+1)(\boundt{\com}b)(\var[x])
+  \end{align*}    
+  where \(\mathit{vars}(\com)\) denotes the set of variables occurring
+  in \(\com\).
+\end{definition}
+
+\begin{lemma}
+  For all \(\com \in \imp\), \(\bound{\com}=\sum_{\var\in \vars{\com}}
+  (\boundt{\com}b_0)(\var)\), with \(b_0\veq \lambda x.0\).
+\end{lemma}
+\begin{proof}
+  By induction on \(\com\in \imp\). The base cases are clear. 
+
+  \noindent
+  \((\com_1 \ndet \com_2)\):
+  \begin{align*}
+    \bound{\com_1 \ndet \com_2} =&\\
+    \bound{\com_1} + \bound{\com_2} = & \quad \text{[by inductive hypothesis]}\\
+    \sum_{\var\in \vars{\com_1}} (\boundt{\com}b_0)(\var) + \sum_{\var\in \vars{\com_2}} (\boundt{\com}b_0)(\var) =&\\
+    \sum_{\var\in \vars{\com_1}\cap \vars{\com_2}} (\boundt{\com_1}b_0)(\var)+(\boundt{\com_2}b_0)(\var) +&\\
+    \sum_{\var\in \vars{\com_1}\smallsetminus \vars{\com_2}} (\boundt{\com_1}b_0)(\var) +&\\
+    \sum_{\var\in \vars{\com_2}\smallsetminus \vars{\com_1}} (\boundt{\com_2}b_0)(\var) =&\\
+    \boundt{\com_1 \ndet \com_2}b_0 \phantom{=}&
+  \end{align*}
+
+  \noindent
+  \((\com_1; \com_2)\): identical to \((\com_1 \ndet \com_2)\).
+
+  \medskip
+  \noindent
+  \((\fix{\com})\):
+  \begin{align*}
+    \bound{\fix{\com}} =&\\
+    |\vars{C}+1|\bound{\com} = & \quad \text{[by inductive hypothesis]}\\
+    |\vars{C}+1|\sum_{\var\in \vars{\com}} (\boundt{\com}b_0)(\var)=&\\
+    \sum_{\var\in \vars{\com}} |\vars{C}+1|(\boundt{\com}b_0)(\var)=&\\
+    %\lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b_0)(\var[x]) =&\\
+    \boundt{\fix{\com}}b_0\phantom{=}&
+  \end{align*}
+\end{proof}
+ 
