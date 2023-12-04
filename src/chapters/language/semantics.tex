@@ -13,15 +13,15 @@ of variables to their value.
     \cdot} : \expr \to \env \to \env \cup \{\bot\}\) is inductively
   defined as follows:
   \begin{align*}
-    \bsem{x\in S} \rho & \defin \begin{cases} \rho & \rho(x)\in S \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{x\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(x)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{x \leq k} \rho & \defin \begin{cases} \rho & \rho(x)\leq k \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{x > k} \rho & \defin \begin{cases} \rho & \rho(x) > k \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{\var\in S} \rho & \defin \begin{cases} \rho & \rho(\var)\in S \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{\var\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(\var)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{\var\leq k} \rho & \defin \begin{cases} \rho & \rho(\var)\leq k \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{\var> k} \rho & \defin \begin{cases} \rho & \rho(\var) > k \\ \bot & \text{otherwise} \end{cases} \\
     \bsem{\tru} \rho & \defin \rho \\
     \bsem{\ff} \rho & \defin \bot \\
-    \bsem{x := k} \rho & \defin \rho [x \mapsto k] \\
-    \bsem{x := y + k} \rho & \defin \rho [x \mapsto \rho(y) + k] \\
-    \bsem{x := y - k} \rho & \defin \rho [x \mapsto \rho(y) - k] \\
+    \bsem{\var:= k} \rho & \defin \rho [\var\mapsto k] \\
+    \bsem{\var:= \var[y] + k} \rho & \defin \rho [\var\mapsto \rho(\var[y]) + k] \\
+    \bsem{\var:= \var[y] - k} \rho & \defin \rho [\var\mapsto \rho(\var[y]) - k] \\
   \end{align*}
 \end{definition}
 
@@ -47,13 +47,11 @@ language:
   inductively defined as follows: given \(X \in \poset{\env}\)
 
   \begin{align*}
-    \langle e \rangle X & \defin \{\bsem{ e} \rho \mid \rho \in X,
-    \bsem{ e} \rho \neq \bot\} \\
-    \langle C_1 + C_2 \rangle X & \defin \langle C_1 \rangle X \cup
-    \langle C_2 \rangle X \\
-    \langle C_1 ; C_2 \rangle X & \defin \langle C_2 \rangle (\langle
-    C_1 \rangle X) \\
-    \langle C^* \rangle X & \defin \bigcup_{i \in \n} \langle C \rangle^i X
+    \sem{\cc{e}} X & \defin \{\bsem{\cc{e}} \rho \mid \rho \in X,
+    \bsem{\cc{e}} \rho \neq \bot\} \\
+    \sem{\cc{C_1} + \cc{C_2}} X & \defin \sem{\cc{C_1}} X \cup \sem{\cc{C_2}} X \\
+    \sem{\cc{C_1} ; \cc{C_2}} X & \defin \sem{\cc{C_2}}(\sem{\cc{C_1}} X) \\
+    \sem{\cc{C^*}} X & \defin \bigcup_{i \in \n} \sem{\cc{C}}^i X
   \end{align*}
 \end{definition}
 
@@ -81,84 +79,84 @@ transition relation.
   \cup \env)\) is a small step semantics for the
   \(\imp\) language. It is defined based on the following rules
   \[\infer[\text{expr}]
-          {\stt{e, \rho} \to \sexp{e}\rho}
-          {\sexp{e}\rho \neq \bot}\]
+          {\stt{\cc{e}, \rho} \to \bsem{e}\rho}
+          {\bsem{e}\rho \neq \bot}\]
           
           \[\infer[\text{sum}_1]
-                  {\stt{C_1 + C_2, \rho} \to \stt{C_1, \rho}}
+                  {\stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_1}, \rho}}
                   {} \quad
                   \infer[\text{sum}_2]
-                        {\stt{C_1 + C_2, \rho} \to \stt{C_2, \rho}}
+                        {\stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_2}, \rho}}
                         {}\]
                         
                         \[\infer[\text{comp}_1]
-                                {\stt{C_1; C_2, \rho} \to \stt{C_1'; C_2, \rho'}}
-                                {\stt{C_1, \rho} \to \stt{C_1', \rho'}} \quad
+                                {\stt{\cc{C_1; C_2}, \rho} \to \stt{\cc{C_1'; C_2}, \rho'}}
+                                {\stt{\cc{C_1}, \rho} \to \stt{\cc{C_1'}, \rho'}} \quad
                                 \infer[\text{comp}_2]
-                                      {\stt{C_1; C_2, \rho} \to \stt{C_2, \rho'}}
-                                      {\stt{C_1, \rho} \to \rho'}\]
+                                      {\stt{\cc{C_1; C_2}, \rho} \to \stt{\cc{C_2}, \rho'}}
+                                      {\stt{\cc{C_1}, \rho} \to \rho'}\]
 
                                       \[\infer[\text{star}]
-                                              {\stt{C^*, \rho} \to \stt{C;C^*, \rho}}
+                                              {\stt{\cc{C^*}, \rho} \to \stt{\cc{C;C^*}, \rho}}
                                               {} \quad
                                               \infer[\text{star}_{\text{fix}}]
-                                                    {\stt{C^*, \rho} \to \rho}
+                                                    {\stt{\cc{C^*}, \rho} \to \rho}
                                                     {}\]
 \end{definition}
 
 \begin{lemma}[Collecting and small step link]\label{le:link}
   For any \(C\in\imp, X \in \poset{\env}\) \[\sem{C}X = \{\rho_t \in
-  \env \mid \rho \in X, \stt{C, \rho} \to^* \rho_t\}\]
+  \env \mid \rho \in X, \stt{\cc{C}, \rho} \to^* \rho_t\}\]
 \end{lemma}
 
 Therefore \(\sem{C}X = \emptyset \iff \nexists \rho_t \in \env, \rho
-\in X\) s.t. \(\stt{C, \rho} \to^* \rho_t\).
+\in X\) s.t. \(\stt{\cc{C}, \rho} \to^* \rho_t\).
 
 \begin{proof}
   by induction on \(C\):
   \paragraph*{Base case \(C \equiv e\):\\}
   \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge \bsem{e}\rho \neq
-  \bot \}\), \(\forall \rho \in X . \stt{e, \rho} \to \bsem{e}\rho\)
+  \bot \}\), \(\forall \rho \in X . \stt{\cc{e}, \rho} \to \bsem{e}\rho\)
   if \(\bsem{e}\rho \neq \bot\) because of the expr rule \[\sem{e}X =
   \{\bsem{e}\rho \mid \rho \in X \wedge \bsem{e}\rho \neq \bot \} =
-  \{\rho_t \in\env \mid \rho \in X \stt{e, \rho} \to \rho_t\}\]
+  \{\rho_t \in\env \mid \rho \in X \stt{\cc{e}, \rho} \to \rho_t\}\]
   \paragraph*{Inductive cases:\\}
   \begin{enumerate}
   \item \(C \equiv C_1 + C_2:\) \(\sem{C_1 + C_2}X = \sem{C_1}X \cup
-    \sem{C_2}X\), \(\forall \rho \in X . \stt{C_1 + C_2, \rho} \to
-    \stt{C_1, \rho} \vee \stt{C_1 + C_2, \rho} \to \stt{C_2, \rho}\)
+    \sem{C_2}X\), \(\forall \rho \in X . \stt{\cc{C_1 + C_2}, \rho} \to
+    \stt{\cc{C_1}, \rho} \vee \stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_2}, \rho}\)
     respectively according to rules sum\textsubscript{1} and
     sum\textsubscript{2}. By inductive hypothesis \[\sem{C_1}X =
-    \{\rho_t \in\env \mid \rho \in X , \stt{C_1,\rho} \to^* \rho_t\} \quad
-    \sem{C_2}X = \{\rho_t \in\env \mid \rho \in X , \stt{C_2,\rho} \to^*
+    \{\rho_t \in\env \mid \rho \in X , \stt{\cc{C_1},\rho} \to^* \rho_t\} \quad
+    \sem{C_2}X = \{\rho_t \in\env \mid \rho \in X , \stt{\cc{C_2},\rho} \to^*
     \rho_t\}\] Therefore
     \begin{align*}
       \sem{C_1 + C_2}X & = \sem{C_1}X \cup \sem{C_2}X & \text{(by definition)}\\
-      & = \{\rho_t \in\env \mid \rho \in X , \stt{C_1,\rho} \to^* \rho_t\} \cup \{\rho_t \in\env \mid \rho \in X , \stt{C_2,\rho} \to^* \rho_t\} & \text{(by ind. hp)}\\
-      & = \{\rho_t \in\env \mid \rho \in X, \stt{C_1,\rho} \to^* \rho_t \vee \stt{C_2,\rho} \to^* \rho_t\} \\
-      & = \{\rho_t \in\env \mid \rho \in X, \stt{C_1 + C_2, \rho} \to^* \rho_t\}
+      & = \{\rho_t \in\env \mid \rho \in X , \stt{\cc{C_1},\rho} \to^* \rho_t\} \cup \{\rho_t \in\env \mid \rho \in X , \stt{\cc{C_2},\rho} \to^* \rho_t\} & \text{(by ind. hp)}\\
+      & = \{\rho_t \in\env \mid \rho \in X, \stt{\cc{C_1},\rho} \to^* \rho_t \vee \stt{\cc{C_2},\rho} \to^* \rho_t\} \\
+      & = \{\rho_t \in\env \mid \rho \in X, \stt{\cc{C_1 + C_2}, \rho} \to^* \rho_t\}
     \end{align*}
   \item \(C \equiv C_1;C_2:\) \(\sem{C_1;C_2}X =
     \sem{C_2}(\sem{C_1}X)\). By inductive hp \(\sem{C_1}X = \{\rho_t
-    \in\env \mid \rho \in X, \stt{C_1, \rho} \to^* \rho_t\} = Y\), by inductive
-    hp again \(\sem{C_2}Y = \{\rho_t \in\env \mid \rho \in Y, \stt{C_2, \rho}
+    \in\env \mid \rho \in X, \stt{\cc{C_1}, \rho} \to^* \rho_t\} = Y\), by inductive
+    hp again \(\sem{C_2}Y = \{\rho_t \in\env \mid \rho \in Y, \stt{\cc{C_2}, \rho}
     \to^* \rho_t\}\). Therefore
     \begin{align*}
       \sem{C_1;C_2}X & = \sem{C_2}(\sem{C_1}X) & \text{(by definition)}\\
-      & = \{\rho_t \in\env \mid \rho_x \in \{\rho_x \mid \rho \in X, \stt{C_1, \rho}  \to^* \rho_x\}, \stt{C_2, \rho_x} \to^* \rho_t\} & \text{(by ind. hp)}\\
-      & = \{\rho_t \in\env \mid \rho \in X \stt{C_1, \rho} \to^* \rho_x \wedge \stt{C_2, \rho_x} \to^* \rho_t\} & \text{(by definition)}\\
-      & = \{\rho_t \in\env \mid \rho \in X . \stt{C_1;C_2, \rho} \to^* \rho_t\}
+      & = \{\rho_t \in\env \mid \rho_x \in \{\rho_x \mid \rho \in X, \stt{\cc{C_1}, \rho}  \to^* \rho_x\}, \stt{\cc{C_2}, \rho_x} \to^* \rho_t\} & \text{(by ind. hp)}\\
+      & = \{\rho_t \in\env \mid \rho \in X \stt{\cc{C_1}, \rho} \to^* \rho_x \wedge \stt{\cc{C_2}, \rho_x} \to^* \rho_t\} & \text{(by definition)}\\
+      & = \{\rho_t \in\env \mid \rho \in X . \stt{\cc{C_1;C_2}, \rho} \to^* \rho_t\}
     \end{align*}
   \item \(C \equiv C^*\) : \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^i X\)
     \begin{align*}
       \sem{C^*}X & = X \cup \sem{C}X \cup \sem{C}^2X \cup \dots & \text{(by definition)}\\
-      & = X \cup \{\rho_t \in\env \mid \rho \in X, \stt{C,\rho} \to^* \rho_t\} \cup \{\rho_t \in\poset{\env} \mid \rho \in X, \stt{C;C,\rho} \to^* \rho_t\} \cup \dots & \text{(by ind. hp)}\\
-      & = \cup_{i\in\n} \{\rho_t \in\env \mid \rho \in X, \stt{C^i, \rho} \to^*  \rho_t\} \\
-      & = \{\rho_t \in\env \mid \rho \in X, \vee_{i\in\n} \stt{C^i, \rho} \to^* \rho_t\} \\
-      & = \{\rho_t \in\env \mid \rho \in X, \stt{C^*, \rho} \to^* \rho_t\}
+      & = X \cup \{\rho_t \in\env \mid \rho \in X, \stt{\cc{C},\rho} \to^* \rho_t\} \cup \{\rho_t \in\poset{\env} \mid \rho \in X, \stt{\cc{C;C},\rho} \to^* \rho_t\} \cup \dots & \text{(by ind. hp)}\\
+      & = \cup_{i\in\n} \{\rho_t \in\env \mid \rho \in X, \stt{\cc{C^i}, \rho} \to^*  \rho_t\} \\
+      & = \{\rho_t \in\env \mid \rho \in X, \vee_{i\in\n} \stt{\cc{C^i}, \rho} \to^* \rho_t\} \\
+      & = \{\rho_t \in\env \mid \rho \in X, \stt{\cc{C^*}, \rho} \to^* \rho_t\}
     \end{align*}
   \end{enumerate}
 \end{proof}
 
 We can notice that \(\sem{C}X = \emptyset \iff \nexists \rho_t\in\env,
-\rho \in X \mid \stt{C,\rho} \to^* \rho_t\).
+\rho \in X \mid \stt{\cc{C},\rho} \to^* \rho_t\).
