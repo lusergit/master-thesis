@@ -1,4 +1,6 @@
 aux/
 **/*.synctex.gz
 **/*.old
+**/old/*
+**/discard/*
 punti.org

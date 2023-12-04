@@ -1,0 +1,83 @@
+\section{Transition system}
+
+With the set of states \(\state\), the set of environments \(\env\)
+and the small operational semantics \(\to\) we define a transition
+system:
+
+\begin{definition}[Transition system]
+  \[\tuple{\state \cup \env, \env, \to}\] is a transition system for
+  the language \(\imp\)
+\end{definition}
+
+\begin{definition}[Reductions]
+  Given a program \(\com\in\imp\) we define its reductions
+  \(\red{\com}\) as \[\red{\com} = \{\com' \mid \stt{\com, \rho} \to^*
+  \stt{\com', \rho'} \quad \text{for some } \rho\}\]
+\end{definition}
+
+\begin{lemma}\label{le:tosets}
+  Given a program \(\com\in\imp\), for \(\red{\com}\) it holds that
+  \begin{align*}
+    \red{\cc{e}} & = \emptyset \\
+    \red{\cc{C_1} + \cc{C_2}} & = \{\cc{C_1}, \cc{C_2}\}\cup\red{C_1}\cup\red{C_2} \\
+    \red{\cc{C_1};\cc{C_2}} & = \{\cc{C_2}\}\cup\red{C_2}\cup\{\cc{C_1'};\cc{C_2} \mid \cc{C_1'}\in\red{C_1}\} \\
+    \red{C^*} & = \{\cc{C;C^*}\} \cup \{\cc{C';C^*} \mid \cc{C'}\in\red{\cc{C}}\}
+  \end{align*}
+\end{lemma}
+
+\begin{proof}
+  By definition:
+  \begin{itemize}
+  \item \(\cc{C}\equiv \cc{e}\), and \(\red{\cc{e}} = \{\cc{C'} \mid
+    \stt{\cc{e}, \rho} \to \stt{\cc{C'}, \rho'} \quad \text{for some }
+    \rho\}\). But because of expr rule, either \(\stt{\cc{e}, \rho}
+    \to \bsem{e}\rho\) (if \(\bsem{e}\rho \neq \bot\)) or
+    \(\stt{\cc{e}, \rho} \not\to\) (if \(\bsem{e}\rho = \bot\)),
+    therefore \(\nexists \cc{C'} \mid \stt{\cc{e}, \rho} \to
+    \stt{\cc{C'}, \rho'}\) for some \(\rho\), therefore \[\red{\cc{e}}
+    = \emptyset\]
+  \item \(\com \equiv \cc{C_1 + C_2}\) and \(\red{\cc{C_1 + C_2}} =
+    \{\cc{C'} \mid \stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C'},
+      \rho'}\) for some \(\rho\}\). Because sum\(_1\) and sum\(_2\)
+    \(\stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_1}, \rho}\) and
+    \(\stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_2}, \rho}\)
+    respectively. Therefore \[\red{\cc{C_1 + C_2}} = \{\cc{C_1},
+    \cc{C_2}\}\cup \red{\cc{C_1}} \cup \red{\cc{C_2}}\]
+  \item \(\com \equiv \cc{C_1;C_2}\)
+  \item \(\com \equiv \cc{C^*}\)
+  \end{itemize}
+\end{proof}
+
+\begin{lemma}\label{le:reductionsfinite}
+  \(\forall \com \in \imp\) \(\red{\com}\) is finite.
+\end{lemma}
+
+\begin{proof}
+  We work by induction on \(\com\):
+
+  \noindent
+  \paragraph*{Base case:\\}
+  
+  \(\com \equiv \com[e]\). Because of lemma \ref{le:tosets}
+  \(\red{\cc{e}} = \emptyset\) which is finite.
+
+  \noindent
+  \paragraph*{Inductive cases:\\}
+  \begin{itemize}
+  \item \(\com \equiv \com[C_1 + C_2]\). By lemma \ref{le:tosets}
+    \(\red{\cc{C_1} + \cc{C_2}} = \{\cc{C_1}, \cc{C_2}\} \cup
+    \red{\cc{C_1}} \cup \red{\cc{C_2}}\), which is finite as it is
+    union of finite sets.
+  \item \(\com \equiv \com[C_1;C_2]\) By lemma \ref{le:tosets}
+    \(\red{\cc{C_1}; \cc{C_2}} =
+    \{\cc{C_2}\}\cup\red{C_2}\cup\{\cc{C_1'};\cc{C_2} \mid
+    \cc{C_1'}\in\red{C_1}\}\). Both \(\red{\cc{C_1}}\) and
+    \(\red{\cc{C_2}}\) are finite by inductive hypothesis, and
+    therefore the union of finite sets is finite..
+  \item \(\com \equiv \com[C^*]\). By lemma \ref{le:tosets}
+    \(\red{\cc{C^*}} = \{\cc{C;C^*}\} \cup \{\cc{C';C^*} \mid
+    \cc{C'}\in\red{\cc{C}}\}\). \(\red{\cc{C}}\) is finite by
+    inductive hypothesis, and therefore the union is finite.
+  \end{itemize}
+  
+\end{proof}

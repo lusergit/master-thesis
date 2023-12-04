@@ -1,19 +1,16 @@
 \section{Semantics}
 
-The first building block is that of environments. We'll use
-environments to model the most precise invariant our semantic can
-describe for a program.
+The first building block is that of environments, mapst from the set
+of variables to their value.
 
 \begin{definition}[Environments]
   Environments are (total) maps from variables to (numerical)
   values \[\env \defin \{\rho \mid \rho : \Var \to \z\}\]
-
-  Note: the set of notable variables is assumed to be finite.
 \end{definition}
 
 \begin{definition}[Semantics of Basic Expressions]
   For basic expressions \(e \in \expr\) the concrete semantics \(\bsem{
-    \cdot} : \expr \to \env \to \env \cup \{\bot\}\) is recursively
+    \cdot} : \expr \to \env \to \env \cup \{\bot\}\) is inductively
   defined as follows:
   \begin{align*}
     \bsem{x\in S} \rho & \defin \begin{cases} \rho & \rho(x)\in S \\ \bot & \text{otherwise} \end{cases} \\
@@ -29,13 +26,14 @@ describe for a program.
 \end{definition}
 
 The next building block is the concrete collecting semantics for the
-language, maps each program in \(\imp\) to a function on the \(\dom\)
-complete lattice.
+language, it associates each program in \(\imp\) to a function which,
+given a set of initial environments \(X\) ``collects'' the set of
+terminal states produced by executing the program from \(X\).
 
 \begin{definition}[Concrete collecting domain]
-  The concrete collecting domain for the \(\imp\) language concrete
-  collecting semantics is the complete lattice \[\dom \defin \langle
-  \poset{\env} , \subseteq \rangle \]
+  The concrete domain for the collecting semantics of the \(\imp\)
+  language is the complete lattice \[\dom \defin \langle \poset{\env}
+  , \subseteq \rangle \]
 \end{definition}
 
 We can therefore define the concrete collecting semantics for our
@@ -44,9 +42,9 @@ language:
 \begin{definition}[Concrete collecting semantics]
   The concrete collecting semantics for \(\imp\) is given by the total
   mapping \[\langle \cdot \rangle : \imp \to \dom \to \dom\] which
-  maps each program \(C \in \imp\) to its total mapping \[\langle C
-  \rangle : \dom \to \dom\] on the complete lattice \(\dom\). The
-  semantics is recursively defined as follows: given \(X \in \poset{\env}\)
+  maps each program \(C \in \imp\) to a total mapping over the
+  complete lattice \(\dom\), \[\langle C \rangle : \dom \to \dom\]
+  inductively defined as follows: given \(X \in \poset{\env}\)
 
   \begin{align*}
     \langle e \rangle X & \defin \{\bsem{ e} \rho \mid \rho \in X,
@@ -70,7 +68,7 @@ language:
 %%   \end{align*}
 %% \end{definition}
 
-Along with the collecting semantics we're also defining a one step
+Along with the collecting semantics we also define a one step
 transition relation.
 
 \begin{definition}[Program State]
@@ -113,8 +111,8 @@ transition relation.
   \env \mid \rho \in X, \stt{C, \rho} \to^* \rho_t\}\]
 \end{lemma}
 
-Therefore \(\sem{C}X = \emptyset \iff \forall \rho \in X
-\stt{C,\rho}\) does not reach a final environment \(\rho_t\).
+Therefore \(\sem{C}X = \emptyset \iff \nexists \rho_t \in \env, \rho
+\in X\) s.t. \(\stt{C, \rho} \to^* \rho_t\).
 
 \begin{proof}
   by induction on \(C\):
@@ -164,202 +162,3 @@ Therefore \(\sem{C}X = \emptyset \iff \forall \rho \in X
 
 We can notice that \(\sem{C}X = \emptyset \iff \nexists \rho_t\in\env,
 \rho \in X \mid \stt{C,\rho} \to^* \rho_t\).
-
-\subsection{Functions in Imp}
-
-Since we're usually dealing with a finite number of free variables in
-our programs, we can without loss of generality refer to (input)
-variables as \(x_n\) with \(n\in\n\). Therefore the collections of
-states \(X\in\poset{\env}\) will look like \[\envi{x_1\mapsto v_1, x_2
-  \mapsto v_2, \dots, x_n\mapsto v_n, y \mapsto v_y, z \mapsto v_z,
-  \dots}\] (since we're interested in finite programs, we can have
-only a finite set of free variables per program).
-
-\begin{notation}[Program input]
-  Let \(C\in\imp\) be a program, \((a_1, \dots, a_k) \in \n^\omega\)
-  be a sequence of natural numbers. We indicate the sequence of
-  \(\to\) relations starting from the configuration
-  \(\stt{C,\envi{x_1\mapsto a_1, \dots, x_k\mapsto a_k}}\) as \[C(a_1,
-  \dots, a_k)\]
-\end{notation}
-
-\begin{notation}[Program output]
-  We say \[C(a_1,\dots, a_n)\downarrow b \iff \exists \stt{C,
-    \envi{x_1 \mapsto a_1, \dots, x_k \mapsto a_k}} \to^* \rho_t
-  \text{ s.t. } \rho_t(y) = b\] In this sense we're considering the
-  variable \(y\) as an output register for the program.
-\end{notation}
-
-\begin{observation}
-  notice that this means, by lemma \ref{le:link} that \[C(a_1, \dots,
-  a_k) \downarrow b \iff \exists \rho_t \in \sem{C}\{\envi{x_1 \mapsto
-    a_1, \dots x_k \mapsto a_k}\} \; . \; \rho_t(y) = b\]
-\end{observation}
-
-\begin{notation}[Program termination]
-  We'll also write \[C(a_1, \dots, a_k) \downarrow \iff
-  \sem{C}\envi{\{x_1 \mapsto a_1, \dots x_k \mapsto a_k}\} \neq
-  \emptyset\]
-\end{notation}
-
-\begin{definition}[Imp computability]
-  let \(f : \n^k \to \n\) be a function. \(f\) is Imp computable if
-
-  \[\exists C \in\imp \mid \forall (a_1, \dots, a_k) \in \n^k \wedge
-  b \in \n \] \[C(a_1, \dots, a_k) \downarrow b \iff (a_1, \dots,
-  a_k) \in dom(f) \wedge f(a_1,\dots,a_k) = b\]
-\end{definition}
-
-We argue that the class of function computed by Imp is the same as the
-set of partially recursive functions \(\partialrec\) (as defined in
-\cite{cutland1980computability}). To do that we have to prove that it
-contains the zero, successor and projection functions and is closed
-under composition, primitive recursion and unbounded minimalization.
-
-\begin{lemma}[Imp functions richness]
-  The class of Imp-computable function is rich.
-\end{lemma}
-
-\begin{proof}
-
-  We'll proceed by proving that Imp has each and every one of the
-  basic functions (zero, successor, projection). 
-
-  \begin{itemize}
-  \item The zero function:
-    \begin{align*}
-      z : \; & \n^k \to \n \\
-      & (x_1, \dots, x_k) \mapsto 0
-    \end{align*}
-    is Imp-computable: \[z(a_1,\dots,a_k) \defin y := 0\]
-  \item The successor function
-    \begin{align*}
-      s : \; & \n \to \n \\
-      & x_1 \mapsto x_1 + 1
-    \end{align*}
-    is Imp-computable: \[s(a_1) \defin y := x_1 + 1\]
-  \item The projection function
-    \begin{align*}
-      U_i^k : \; & \n^k \to \n \\
-      & (x_1,\dots,x_k) \mapsto x_i
-    \end{align*}
-    is Imp-computable: \[U_i^k(a_1, \dots, a_k) \defin y := x_i + 0\]
-  \end{itemize}
-
-  We'll then prove that it is closed under composition, primitive
-  recursion and unbounded minimalization.
-
-  \begin{lemma}
-    let \(f : \n^k \to \n\), \(g_1,\dots,g_k : \n^n \to \n\) and
-    consider the composition
-    \begin{align*}
-      h : \; & \n^k \to \n \\
-      & \vec{x} \mapsto f(g_1(\vec{x}), \dots, g_k(\vec{x}))
-    \end{align*}
-    \(h\) is Imp-computable.
-  \end{lemma}
-  \begin{proof}
-    Since by hp \(f, g_n \forall n\in [1,k]\)
-    are computable, we'll consider their programs \(F, G_n\forall n
-    \in [1,k]\). Now consider the program
-    \begin{center}
-      \begin{tabular}{l}
-        \(G_1(\vec{x})\);\\[0pt]
-        \(y_1 := y + 0\);\\[0pt]
-        \(G_2(\vec{x})\);\\[0pt]
-        \(y_2 := y + 0\);\\[0pt]
-        \(\dots\);\\[0pt]
-        \(G_k(\vec{x})\);\\[0pt]
-        \(y_k := y + 0\);\\[0pt]
-        \(F(y_1, y_2,\dots, y_k)\);\\[0pt]
-      \end{tabular}
-    \end{center}
-    Which is exactly \(h\). Therefore Imp is closed under generalised
-    composition.
-  \end{proof}
-
-  \begin{lemma}
-    Given \(f : \n^k \to \n\) and \(g : \n^{k+2} \to \n\) Imp
-    computable, we argue that \(h : \n^{k+1} \to \n\)
-    \[\begin{cases}
-    h(\vec{x}, 0) = f(\vec{x}) \\
-    h(\vec{x}, y+1) = g(\vec{x}, y, h(\vec{x}, y))
-    \end{cases}\]
-    defined trough primitive recursion is Imp-computable.
-  \end{lemma}
-  \begin{proof}
-    We want a program to compute \(h : \n^{k+1} \to \n\). By
-    hypothesis we have programs \(F, G\) to compute respectively \(f:
-    \n^k \to \n\) and \(g : \n^{k+2} \to \n\). Consider the program
-    \(H(\vec{x},x_{k+1})\):
-    \begin{center}
-      \begin{tabular}{l}
-        \(s := 0;\)\\[0pt]
-        \(F(\vec{x});\)\\[0pt]
-        \((x_{k+1} \not\in [0,0]; G(\vec{x},s,y);s:=s+1;x_{k+1}:=x_{k+1}-1)^*;\)\\[0pt]
-        \(x_{k+1} \in [0,0];\)\\[0pt]
-      \end{tabular}
-
-    \end{center}
-
-    which computes exactly \(h\). Therefore Imp is closed under
-    primitive recursion.
-  \end{proof}
-
-  \begin{lemma}
-    Let \(f : \n^{k+1} \to \n\) be a Imp-computable function. Then the
-    function \(h : \n^k \to \n\) defined trough unbounded
-    minimalization
-    \begin{equation}
-      h(\vec{x}) = \mu y . f(\vec{x}, y) = \begin{cases}
-        \text{least } z \text{ s.t. } & \begin{cases}
-          f(\vec{x}, z) = 0 \\
-	  f(\vec{x}, z) \downarrow \quad f(\vec{x},z')\neq 0 \quad \forall z < z' \\
-	\end{cases} \\
-        \uparrow                      & \text{otherwise}
-      \end{cases}
-    \end{equation}
-    is Imp-computable.
-  \end{lemma}
-
-  \begin{proof}
-    Let \(F\) be the program for the computable function \(f\)
-    with ariety \(k+1\), \(\vec{x} = (x_1, x_2, \dots, x_k)\)
-    . Consider the program \(H(\vec{x})\)
-    \begin{center}
-      \begin{tabular}{l}
-        \(z := 0;\)\\[0pt]
-        \(F(\vec{x},z);\)\\[0pt]
-        \((y \not\in [0,0];z := z + 1;F(\vec{x},z))^*;\)\\[0pt]
-        \(y\in [0,0];\)\\[0pt]
-        \(y := z + 0;\)\\[0pt]
-      \end{tabular}
-
-    \end{center}
-    Which outputs the least \(z\) s.t. \(F(\vec{x},z) \downarrow 0\),
-    and loops forever otherwise. Imp is therefore closed under bounded
-    minimalization.
-  \end{proof}
-  Since has the zero function, the successor function, the projections
-  function and is closed under composition, primitive recursion and
-  unbounded minimalization, the class of Imp-computable functions is
-  rich.
-\end{proof}
-
-Since it is rich and \(\partialrec\) is the least class of rich
-functions, \(\partialrec \subseteq \imp_f\) holds. Therefore we can
-say \[f \in \partialrec[k] \Rightarrow \exists C \in \imp \mid C(a_1,
-\dots, a_k)\downarrow b \iff f(a_1, \dots, a_k) \downarrow b\] From
-this we get a couple of facts that derive from well known
-computability results:
-\begin{itemize}
-\item deciding weather \(\sem{C}X \neq \emptyset\) (i.e., \(C(a_1,
-  \dots, a_k) \downarrow\)) is the same as deciding \(x \in dom(f)\)
-  for some \(f \in \partialrec[k]\), which is undecidable (from the
-  input problem in \cite[p.~104]{cutland1980computability})
-\item dually, deciding weather \(\sem{C}X = \emptyset\) (i.e.,
-  \(C(a_1, \dots, a_k)\uparrow\)) is also undecidable. The set of
-  functions \(f\in \partialrec[k]\) s.t. \(f(x) \uparrow \forall x \in
-  \n^k\) is not trivial and saturated, therefore it is not recursive
-  (by Rice's theorem \cite{rice1953classes}).
-\end{itemize}

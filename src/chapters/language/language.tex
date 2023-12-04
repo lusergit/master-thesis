@@ -1,21 +1,23 @@
 \section{The Imp language}
 
-We'll denote by \(\z\) the set of integers with the usual order plus
-two bonus elements \(-\infty\) and \(+\infty\), s.t. \(-\infty \leq z
-\leq +\infty \quad \forall z \in \z\). We also extend addition and
-subtraction by letting, for \(z \in \z \quad +\infty + z = + \infty -
-z = + \infty\) and \(-\infty + z = - \infty -z = - \infty\).
+We denote by \(\z\) the set of integers with the usual order, extended
+with bottom and top elements \(-\infty\) and \(+\infty\),
+s.t. \(-\infty \leq z \leq +\infty \quad \forall z \in \z\). We also
+extend addition and subtraction by letting, for \(z \in \z \quad
++\infty + z = + \infty - z = + \infty\) and \(-\infty + z = - \infty
+-z = - \infty\).
 
-We'll focus on the following non-deterministic language.
+We focus on the following non-deterministic language.
 
 \begin{align*}
-  \expr \ni \cc{e} ::= & \quad x \in S \mid x \in [a,b] \mid x \leq k \mid x > k \mid \tru \mid \ff \mid \\
-  & \quad x := k \mid x := y + k \mid x := y - k \\
+  \expr \ni \cc{e} ::= & \quad \var \in S \mid \var \in \interval{a}{b} \mid \var \leq k \mid \var > k \mid \tru \mid \ff \mid \\
+  & \quad \var := k \mid \var := \var[y] + k \mid \var := \var[y] - k \\
+  \imp_\starless \ni \cc{C} ::= & \quad \cc{e} \mid \cc{C + C} \mid \cc{C ; C} \\
   \imp \ni \cc{C} ::= & \quad \cc{e} \mid \cc{C + C} \mid \cc{C ; C} \mid \cc{C*}
 \end{align*}
 
-where \(x, y \in \Var\) a finite set of variables of interest, i.e.,
-the variables appearing in the considered program, \(S\subseteq \n\)
+where \(\var, \var[y] \in \Var\) a finite set of variables of interest, i.e.,
+the variables appearing in the considered program, \(S\subseteq \z\)
 is (possibly empty) subset of numbers, \(a \in \z\cup \{-\infty\},
 b\in\z\cup\{+\infty\}, a\leq b, k \in \z\) is any finite integer
 constant.
