@@ -38,13 +38,23 @@ system:
     = \emptyset\]
   \item \(\com \equiv \cc{C_1 + C_2}\) and \(\red{\cc{C_1 + C_2}} =
     \{\cc{C'} \mid \stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C'},
-      \rho'}\) for some \(\rho\}\). Because sum\(_1\) and sum\(_2\)
-    \(\stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_1}, \rho}\) and
-    \(\stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_2}, \rho}\)
-    respectively. Therefore \[\red{\cc{C_1 + C_2}} = \{\cc{C_1},
+      \rho'}\) for some \(\rho\}\). By sum\(_1\) \(\stt{\cc{C_1 +
+        C_2}, \rho} \to \stt{\cc{C_1}, \rho}\) and by sum\(_2\)
+    \(\stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_2},
+      \rho}\). Therefore \[\red{\cc{C_1 + C_2}} = \{\cc{C_1},
     \cc{C_2}\}\cup \red{\cc{C_1}} \cup \red{\cc{C_2}}\]
-  \item \(\com \equiv \cc{C_1;C_2}\)
-  \item \(\com \equiv \cc{C^*}\)
+  \item \(\com \equiv \cc{C_1;C_2}\). In this case by comp\(_1\) if
+    \(\stt{\cc{C_1}, \rho}\to \stt{\cc{C_1'}, \rho'}\) then
+    \(\stt{\cc{C_1;C_2},\rho} \to \stt{\cc{C_1';C_2}, \rho'}\). By
+    comp\(_2\) if \(\stt{\cc{C_1}, \rho}\to \rho'\) then
+    \(\stt{\cc{C_1;C_2},\rho} \to \stt{\cc{C_2},
+      \rho'}\). Therefore \[\red{C_1;C_2} = \{\cc{C_2}\}\cup
+    \red{C_2}\cup\{\cc{C_1';C_2} \mid \cc{C_1'}\in\red{C_1}\}\]
+  \item \(\com \equiv \cc{C^*}\). In this case by star
+    \(\stt{\cc{C^*}, \rho} \to \stt{\cc{C;C^*}, \rho}\) or by
+    star\(_{\text{fix}}\) \(\stt{\cc{C^*}, \rho} \to
+    \rho\). therefore \[\red{C^*} = \{\cc{C;C^*}\} \cup
+    \{\cc{C';C^*}\mid \cc{C'}\in\red{C}\}\]
   \end{itemize}
 \end{proof}
 
@@ -77,7 +87,8 @@ system:
   \item \(\com \equiv \com[C^*]\). By lemma \ref{le:tosets}
     \(\red{\cc{C^*}} = \{\cc{C;C^*}\} \cup \{\cc{C';C^*} \mid
     \cc{C'}\in\red{\cc{C}}\}\). \(\red{\cc{C}}\) is finite by
-    inductive hypothesis, and therefore the union is finite.
+    inductive hypothesis, and therefore the union of finite sets is
+    finite.
   \end{itemize}
   
 \end{proof}
