@@ -10,28 +10,34 @@ only a finite set of free variables per program).
 \begin{notation}[Program input]
   Let \(C\in\imp\) be a program, \((a_1, \dots, a_k) \in \n^\omega\)
   be a sequence of natural numbers. We indicate the sequence of
-  \(\to\) relations starting from the configuration
+  \(\to\) transitions starting from the state
   \(\stt{C,\envi{x_1\mapsto a_1, \dots, x_k\mapsto a_k}}\) as \[C(a_1,
   \dots, a_k)\]
 \end{notation}
 
 \begin{notation}[Program output]
-  We say \[C(a_1,\dots, a_n)\downarrow b \iff \exists \stt{C,
-    \envi{x_1 \mapsto a_1, \dots, x_k \mapsto a_k}} \to^* \rho_t
-  \text{ s.t. } \rho_t(y) = b\] In this sense we're considering the
-  variable \(\var[y]\) as an output register for the program.
+  We say \[C(a_1,\dots, a_n)\ehalts[b] \iff \exists \stt{C, \envi{x_1
+      \mapsto a_1, \dots, x_k \mapsto a_k}} \to^* \rho_t \text{ s.t. }
+  \rho_t(y) = b\] We consider the variable \(\var[y]\) as an output
+  register for the program.
 \end{notation}
 
 \begin{observation}
   notice that this means, by lemma \ref{le:link} that \[C(a_1, \dots,
-  a_k) \downarrow b \iff \exists \rho_t \in \sem{C}\{\envi{x_1 \mapsto
+  a_k) \ehalts[b] \iff \exists \rho_t \in \sem{C}\{\envi{x_1 \mapsto
     a_1, \dots x_k \mapsto a_k}\} \; . \; \rho_t(y) = b\]
 \end{observation}
 
-\begin{notation}[Program termination]
-  We'll also write \[C(a_1, \dots, a_k) \downarrow \iff
-  \sem{C}\envi{\{x_1 \mapsto a_1, \dots x_k \mapsto a_k}\} \neq
-  \emptyset\]
+\begin{notation}[Existstential termination]
+  We write \[C(a_1, \dots, a_k) \ehalts \iff \exists \stt{C, \envi{x_1
+      \mapsto a_1, \dots, x_k \mapsto a_k}} \to^* \rho_t \quad
+  \text{for some } \rho_t\in \env\]
+\end{notation}
+
+\begin{notation}[Universal termination]
+  We write \[C(a_1, \dots, a_k) \ahalts \iff \forall \stt{C, \envi{x_1
+      \mapsto a_1, \dots, x_k \mapsto a_k}} \to^* \rho_t \quad
+  \text{for some } \rho_t\in \env\]
 \end{notation}
 
 \begin{definition}[Imp computability]
