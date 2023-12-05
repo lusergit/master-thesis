@@ -1,20 +1,20 @@
 \section{Deciding invariant finiteness}
 
 \begin{lemma}\label{le:finiteness}
-  If \(C\in\imp_\starless\), and a finite \(X \in \poset{env}\)
+  If \(\com\in\imp_\starless\), and a finite \(X \in \poset{env}\)
   then \[\sem{C}X \text{ is finite}\]
 \end{lemma}
 
 \begin{proof}
   By induction on the program \(C\):
   \paragraph*{Base case:\\}
-  \(C \equiv e\), therefore \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in
-  X , \bsem{e}\rho \neq \bot\}\), which is finite, since \(X\) is
+  \(\com \equiv e\), therefore \(\sem{e}X = \{\bsem{e}\rho \mid \rho
+  \in X , \bsem{e}\rho \neq \bot\}\), which is finite, since \(X\) is
   finite.
   
   \paragraph*{Inductive cases:\\}
   \begin{enumerate}
-  \item \(C\equiv C_1 + C_2\), therefore \(\sem{C_1 + C_2} X =
+  \item \(\com\equiv \cc{C_1 + C_2}\), therefore \(\sem{C_1 + C_2} X =
     \sem{C_1}X \cup \sem{C_2}X\). By inductive hypothesis, both
     \(\sem{C_1}X, \sem{C_2}X\) are finite, as they're sub expressions
     of \(C\). Since the union of finite sets is finite, \(\sem{C_1 +
@@ -27,33 +27,35 @@
 \end{proof}
 
 \begin{lemma}\label{le:infiniteness}
-  Given \(C\in\imp_\starless\), and a finite \(X \in \poset{env}\),
+  Given \(\com\in\imp_\starless\), and a finite \(X \in \poset{env}\),
   the predicate "\(\sem{C^*}X\) is finite" is undecidable.
 \end{lemma}
 
 \begin{proof}
   Suppose we can decide wether \(\sem{C^*}X\) is finite. We'll show
-  that in both cases we can decide wether \(C^*(a_1, \dots,
+  that in both cases we can decide wether \(\com^*(a_1, \dots,
   a_k)\downarrow\), which we already show to be undecidable.
   \begin{itemize}
   \item Suppose we can decide wether \(\sem{C^*}X\) is infinite for
-    \(C\in\imp\) and \(X\in\poset{\env}\). Since \(\sem{C^*}X =
+    \(\com\in\imp\) and \(X\in\poset{\env}\). Since \(\sem{C^*}X =
     \bigcup_{i\in\n}\sem{C}^i X\), \(\forall i \in \n \sem{C}^i X
     \equiv \sem{\underbrace{C;C;\dots;C}_{i\text{ times}}}X\) is
     finite because of lemma \ref{le:finiteness}. The only way we could
     end up with an infinite amount of states is by resulting in an
     infinite amount of different collections of environments for each
-    \(C\) application. In other words \(\nexists i,j \in \n \mid
+    \(\com\) application. In other words \(\nexists i,j \in \n \mid
     \sem{C}^i X = \sem{C}^{i+j}X\) and therefore \(\forall i,j\in\n
     \{\rho_t \in \env \mid \rho \in X , \stt{C^i, \rho} \to^* \rho_t\}
     \neq \{\rho_t \in \env \mid \rho \in X , \stt{C^{i+j}, \rho} \to^*
-    \rho_t\}\). Therefore \(C^*(a_1, \dots, a_k)\uparrow\).
+    \rho_t\}\). Therefore \(\com^*(a_1, \dots, a_k)\uparrow\).
   \item If we know instead that \(\sem{C^*}X\) is finite, we know that
     \(\red{\cc{C^*}}\) is finite (lemma \ref{le:reductionsfinite}),
     but we can observe that the set of states \(\{\stt{\cc{C'}, \rho'}
     \mid \stt{\cc{C}, \rho} \to^* \stt{\cc{C'}, \rho'}\}\)
     is \[\cc{C';C^*} \times X\] with \(\cc{C'}\in\red{\cc{C}}\) and
     \(X \subseteq \bigcup_{\cc{C''}\in\red{\cc{C}}} \sem{C''} \{\rho\}
-    \).
+    \). Since \(\com \in \imp_\starless\), \(\red{\com}\) is finite,
+    \(\bigcup_{\cc{C''}\in\red{\cc{C}}} \sem{C''} \{\rho\}\) is finite
+    and therefore \(X\) is finite.
   \end{itemize}
 \end{proof}
