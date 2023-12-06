@@ -5,15 +5,13 @@ with bottom and top elements \(-\infty\) and \(+\infty\),
 s.t. \(-\infty \leq z \leq +\infty \quad \forall z \in \z\). We also
 extend addition and subtraction by letting, for \(z \in \z \quad
 +\infty + z = + \infty - z = + \infty\) and \(-\infty + z = - \infty
--z = - \infty\).
-
-We focus on the following non-deterministic language.
-
+-z = - \infty\).  We focus on the following non-deterministic
+language.
 \begin{align*}
-  \expr \ni \cc{e} ::= & \quad \var \in S \mid \var \in \interval{a}{b} \mid \var \leq k \mid \var > k \mid \tru \mid \ff \mid \\
-  & \quad \var := k \mid \var := \var[y] + k \mid \var := \var[y] - k \\
-  \imp_\starless \ni \cc{C} ::= & \quad \cc{e} \mid \cc{C + C} \mid \cc{C ; C} \\
-  \imp \ni \cc{C} ::= & \quad \cc{e} \mid \cc{C + C} \mid \cc{C ; C} \mid \cc{C*}
+  \expr \ni \com[e] ::= & \; \var \in S \mid \var \in \interval{a}{b} \mid \var \leq k \mid \var > k \mid \tru \mid \ff \mid \\
+  & \; \var := k \mid \var := \var[y] + k \mid \var := \var[y] - k \\
+  \imp_\starless \ni \com[D] ::= & \; \com[e] \mid \com[D + D] \mid \com[D ; D] \\
+  \imp \ni \com[C] ::= & \; \com[D] \mid \com[C^*] \mid \fix{\com[C]}
 \end{align*}
 
 where \(\var, \var[y] \in \Var\) a finite set of variables of interest, i.e.,
@@ -21,3 +19,17 @@ the variables appearing in the considered program, \(S\subseteq \z\)
 is (possibly empty) subset of numbers, \(a \in \z\cup \{-\infty\},
 b\in\z\cup\{+\infty\}, a\leq b, k \in \z\) is any finite integer
 constant.
+
+\subsection{Syntactic sugar}
+\label{subsec:syncsugar}
+We define some sinctactic sugar for the language. In the next chapters
+we'll often use the syntactic sugar instead of its real equivalent for
+the sake of simplicity.
+\begin{align*}
+\var \in S \vee \var \in S & = (\var \in S) + (\var \in S) \\ 
+\var \in S \wedge \var \in S & = (\var \in S);(\var \in S) \\
+\var \not\in S & = \var \in \neg S \\
+\ifte{b}{C_1}{C_2} & = (\com[e];\com_1) + (\com[\neg e];\com_2) \\
+\while{b}{C} & = \fix{\com[e];\com};\neg\com[e] \\
+\pplus{\var} & = \var := \var + 1
+\end{align*}

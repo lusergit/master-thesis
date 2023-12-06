@@ -14,7 +14,7 @@
   
   \paragraph*{Inductive cases:\\}
   \begin{enumerate}
-  \item \(\com\equiv \cc{C_1 + C_2}\), therefore \(\sem{C_1 + C_2} X =
+  \item \(\com\equiv \com[C_1 + C_2]\), therefore \(\sem{C_1 + C_2} X =
     \sem{C_1}X \cup \sem{C_2}X\). By inductive hypothesis, both
     \(\sem{C_1}X, \sem{C_2}X\) are finite, as they're sub expressions
     of \(C\). Since the union of finite sets is finite, \(\sem{C_1 +
@@ -32,30 +32,27 @@
 \end{lemma}
 
 \begin{proof}
-  Suppose we can decide wether \(\sem{C^*}X\) is finite. We'll show
-  that in both cases we can decide wether \(\com^*(a_1, \dots,
-  a_k)\downarrow\), which we already show to be undecidable.
+  Suppose we can decide \(\sem{C^*}X\) is finite. We show that we in
+  that case we would be also able to decide wether \(\com^*(a_1,
+  \dots, a_k)\ahalts\), which is undecidable. Let \(X = \{\envi{x_1
+    \mapsto a_1, \dots, x_k \mapsto a_k}\}\) with \(a_1, \dots, a_k
+  \in \z\).
   \begin{itemize}
-  \item Suppose we can decide wether \(\sem{C^*}X\) is infinite for
-    \(\com\in\imp\) and \(X\in\poset{\env}\). Since \(\sem{C^*}X =
-    \bigcup_{i\in\n}\sem{C}^i X\), \(\forall i \in \n \sem{C}^i X
-    \equiv \sem{\underbrace{C;C;\dots;C}_{i\text{ times}}}X\) is
-    finite because of lemma \ref{le:finiteness}. The only way we could
-    end up with an infinite amount of states is by resulting in an
-    infinite amount of different collections of environments for each
-    \(\com\) application. In other words \(\nexists i,j \in \n \mid
-    \sem{C}^i X = \sem{C}^{i+j}X\) and therefore \(\forall i,j\in\n
-    \{\rho_t \in \env \mid \rho \in X , \stt{C^i, \rho} \to^* \rho_t\}
-    \neq \{\rho_t \in \env \mid \rho \in X , \stt{C^{i+j}, \rho} \to^*
-    \rho_t\}\). Therefore \(\com^*(a_1, \dots, a_k)\uparrow\).
-  \item If we know instead that \(\sem{C^*}X\) is finite, we know that
-    \(\red{\cc{C^*}}\) is finite (lemma \ref{le:reductionsfinite}),
-    but we can observe that the set of states \(\{\stt{\cc{C'}, \rho'}
-    \mid \stt{\cc{C}, \rho} \to^* \stt{\cc{C'}, \rho'}\}\)
-    is \[\cc{C';C^*} \times X\] with \(\cc{C'}\in\red{\cc{C}}\) and
-    \(X \subseteq \bigcup_{\cc{C''}\in\red{\cc{C}}} \sem{C''} \{\rho\}
-    \). Since \(\com \in \imp_\starless\), \(\red{\com}\) is finite,
-    \(\bigcup_{\cc{C''}\in\red{\cc{C}}} \sem{C''} \{\rho\}\) is finite
-    and therefore \(X\) is finite.
+  \item In case \(\sem{\com^*}X\) is infinite, then it must be that
+    \(\forall i \in \n\) \(\sem{C}^{k+1}X \nsubseteq
+    \cup_{i=0}^k\sem{\com}^iX\), otherwise we would reach a fixpoint
+    and \(\sem{\com^*}X\) would be finite. Since each application of
+    \(\com\) must create an unempty set of new environments we can
+    build the inductive sequence of sets of environments
+    \begin{align*}
+      Y_0 & = X \\
+      Y_{k+1} & = (\sem{C}Y_k)\setminus Y_k
+    \end{align*}
+    and \(\forall \rho' \in Y_{k+1} \exists \rho \in Y_k \mid \rho'
+    \in \sem{C}\{\rho\}\) by definition. This means that there is an
+    infinite path in the transition system, and therefore
+    \(\com[C^*](a_1, \dots, a_k) \nehalts\) which means that
+    \(\com[C^*] (a_1, \dots, a_k)\ahalts\) is false.
+  \item In case \(\sem{C^*}X is finite\) then we can notice that
   \end{itemize}
 \end{proof}

@@ -6,10 +6,16 @@
 \newcommand{\expr}{\ensuremath{\mathsf{Exp}}}
 \newcommand{\env}{\ensuremath{\mathsf{Env}}}
 \newcommand{\state}{\ensuremath{\mathsf{State}}}
+\newcommand{\Path}{\ensuremath{\mathsf{Path}}}
+\newcommand{\ppath}[1][\tau]{\ensuremath{#1}}
 \newcommand{\Var}{\ensuremath{\mathit{Var}}}
 \newcommand{\Int}{\ensuremath{\mathit{Int}}}
 \newcommand{\dom}{\ensuremath{\mathbb{C}}}
 \newcommand{\starless}{\ensuremath{{\neq\star}}}
+\newcommand{\ifte}[3]{\ensuremath{\mathsf{if} \; #1 \; \mathsf{then} \; #2 \;\mathsf{else} \; #3}}
+\newcommand{\while}[2]{\ensuremath{\mathsf{while} \; #1 \; \mathsf{do} \; #2}}
+\newcommand{\plusplus}{\mathbin{\text{\ttfamily\upshape ++}}}
+\newcommand{\pplus}[1]{\ensuremath{#1 \plusplus}}
 
 \newcommand{\z}{\ensuremath{\mathbb{Z}}}
 \newcommand{\n}{\ensuremath{\mathbb{N}}}
@@ -32,10 +38,10 @@
 \newcommand{\tto}{\ensuremath{\Rightarrow}}
 
 %% halting
-\newcommand{\ehalts}[1][]{\ensuremath{\downharpoonright #1}}
-\newcommand{\ahalts}[1][]{\ensuremath{\downarrow #1}}
-\newcommand{\nehalts}[1][]{\ensuremath{\upharpoonright #1}}
-\newcommand{\nahalts}[1][]{\ensuremath{\downarrow #1}}
+\newcommand{\ehalts}[1][]{\ensuremath{\downarrow #1}}
+\newcommand{\ahalts}[1][]{\ensuremath{\downdownarrows #1}}
+\newcommand{\nehalts}[1][]{\ensuremath{\uparrow #1}}
+\newcommand{\nahalts}[1][]{\ensuremath{\upuparrows #1}}
 
 
 %% Language expressions & sos

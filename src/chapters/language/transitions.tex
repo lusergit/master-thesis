@@ -18,43 +18,43 @@ system:
 \begin{lemma}\label{le:tosets}
   Given a program \(\com\in\imp\), for \(\red{\com}\) it holds that
   \begin{align*}
-    \red{\cc{e}} & = \emptyset \\
-    \red{\cc{C_1} + \cc{C_2}} & = \{\cc{C_1}, \cc{C_2}\}\cup\red{C_1}\cup\red{C_2} \\
-    \red{\cc{C_1};\cc{C_2}} & = \{\cc{C_2}\}\cup\red{C_2}\cup\{\cc{C_1'};\cc{C_2} \mid \cc{C_1'}\in\red{C_1}\} \\
-    \red{C^*} & = \{\cc{C;C^*}\} \cup \{\cc{C';C^*} \mid \cc{C'}\in\red{\cc{C}}\}
+    \red{\com[e]} & = \emptyset \\
+    \red{\com[C_1] + \com[C_2]} & = \{\com[C_1], \com[C_2]\}\cup\red{C_1}\cup\red{C_2} \\
+    \red{\com[C_1];\com[C_2]} & = \{\com[C_2]\}\cup\red{C_2}\cup\{\com[C_1'];\com[C_2] \mid \com[C_1']\in\red{C_1}\} \\
+    \red{C^*} & = \{\com[C;C^*]\} \cup \{\com[C';C^*] \mid \com[C']\in\red{\com[C]}\}
   \end{align*}
 \end{lemma}
 
 \begin{proof}
   By definition:
   \begin{itemize}
-  \item \(\cc{C}\equiv \cc{e}\), and \(\red{\cc{e}} = \{\cc{C'} \mid
-    \stt{\cc{e}, \rho} \to \stt{\cc{C'}, \rho'} \quad \text{for some }
-    \rho\}\). But because of expr rule, either \(\stt{\cc{e}, \rho}
+  \item \(\com[C]\equiv \com[e]\), and \(\red{\com[e]} = \{\com[C'] \mid
+    \stt{\com[e], \rho} \to \stt{\com[C'], \rho'} \quad \text{for some }
+    \rho\}\). But because of expr rule, either \(\stt{\com[e], \rho}
     \to \bsem{e}\rho\) (if \(\bsem{e}\rho \neq \bot\)) or
-    \(\stt{\cc{e}, \rho} \not\to\) (if \(\bsem{e}\rho = \bot\)),
-    therefore \(\nexists \cc{C'} \mid \stt{\cc{e}, \rho} \to
-    \stt{\cc{C'}, \rho'}\) for some \(\rho\), therefore \[\red{\cc{e}}
+    \(\stt{\com[e], \rho} \not\to\) (if \(\bsem{e}\rho = \bot\)),
+    therefore \(\nexists \com[C'] \mid \stt{\com[e], \rho} \to
+    \stt{\com[C'], \rho'}\) for some \(\rho\), therefore \[\red{\com[e]}
     = \emptyset\]
-  \item \(\com \equiv \cc{C_1 + C_2}\) and \(\red{\cc{C_1 + C_2}} =
-    \{\cc{C'} \mid \stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C'},
-      \rho'}\) for some \(\rho\}\). By sum\(_1\) \(\stt{\cc{C_1 +
-        C_2}, \rho} \to \stt{\cc{C_1}, \rho}\) and by sum\(_2\)
-    \(\stt{\cc{C_1 + C_2}, \rho} \to \stt{\cc{C_2},
-      \rho}\). Therefore \[\red{\cc{C_1 + C_2}} = \{\cc{C_1},
-    \cc{C_2}\}\cup \red{\cc{C_1}} \cup \red{\cc{C_2}}\]
-  \item \(\com \equiv \cc{C_1;C_2}\). In this case by comp\(_1\) if
-    \(\stt{\cc{C_1}, \rho}\to \stt{\cc{C_1'}, \rho'}\) then
-    \(\stt{\cc{C_1;C_2},\rho} \to \stt{\cc{C_1';C_2}, \rho'}\). By
-    comp\(_2\) if \(\stt{\cc{C_1}, \rho}\to \rho'\) then
-    \(\stt{\cc{C_1;C_2},\rho} \to \stt{\cc{C_2},
-      \rho'}\). Therefore \[\red{C_1;C_2} = \{\cc{C_2}\}\cup
-    \red{C_2}\cup\{\cc{C_1';C_2} \mid \cc{C_1'}\in\red{C_1}\}\]
-  \item \(\com \equiv \cc{C^*}\). In this case by star
-    \(\stt{\cc{C^*}, \rho} \to \stt{\cc{C;C^*}, \rho}\) or by
-    star\(_{\text{fix}}\) \(\stt{\cc{C^*}, \rho} \to
-    \rho\). therefore \[\red{C^*} = \{\cc{C;C^*}\} \cup
-    \{\cc{C';C^*}\mid \cc{C'}\in\red{C}\}\]
+  \item \(\com \equiv \com[C_1 + C_2]\) and \(\red{\com[C_1 + C_2]} =
+    \{\com[C'] \mid \stt{\com[C_1 + C_2], \rho} \to \stt{\com[C'],
+      \rho'}\) for some \(\rho\}\). By sum\(_1\) \(\stt{\com[C_1 +
+        C_2], \rho} \to \stt{\com[C_1], \rho}\) and by sum\(_2\)
+    \(\stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_2],
+      \rho}\). Therefore \[\red{\com[C_1 + C_2]} = \{\com[C_1],
+    \com[C_2]\}\cup \red{\com[C_1]} \cup \red{\com[C_2]}\]
+  \item \(\com \equiv \com[C_1;C_2]\). In this case by comp\(_1\) if
+    \(\stt{\com[C_1], \rho}\to \stt{\com[C_1'], \rho'}\) then
+    \(\stt{\com[C_1;C_2],\rho} \to \stt{\com[C_1';C_2], \rho'}\). By
+    comp\(_2\) if \(\stt{\com[C_1], \rho}\to \rho'\) then
+    \(\stt{\com[C_1;C_2],\rho} \to \stt{\com[C_2],
+      \rho'}\). Therefore \[\red{C_1;C_2} = \{\com[C_2]\}\cup
+    \red{C_2}\cup\{\com[C_1';C_2] \mid \com[C_1']\in\red{C_1}\}\]
+  \item \(\com \equiv \com[C^*]\). In this case by star
+    \(\stt{\com[C^*], \rho} \to \stt{\com[C;C^*], \rho}\) or by
+    star\(_{\text{fix}}\) \(\stt{\com[C^*], \rho} \to
+    \rho\). therefore \[\red{C^*} = \{\com[C;C^*]\} \cup
+    \{\com[C';C^*]\mid \com[C']\in\red{C}\}\]
   \end{itemize}
 \end{proof}
 
@@ -69,25 +69,33 @@ system:
   \paragraph*{Base case:\\}
   
   \(\com \equiv \com[e]\). Because of lemma \ref{le:tosets}
-  \(\red{\cc{e}} = \emptyset\) which is finite.
+  \(\red{\com[e]} = \emptyset\) which is finite.
 
   \noindent
   \paragraph*{Inductive cases:\\}
   \begin{itemize}
   \item \(\com \equiv \com[C_1 + C_2]\). By lemma \ref{le:tosets}
-    \(\red{\cc{C_1} + \cc{C_2}} = \{\cc{C_1}, \cc{C_2}\} \cup
-    \red{\cc{C_1}} \cup \red{\cc{C_2}}\), which is finite as it is
+    \(\red{\com[C_1] + \com[C_2]} = \{\com[C_1], \com[C_2]\} \cup
+    \red{\com[C_1]} \cup \red{\com[C_2]}\), which is finite as it is
     union of finite sets.
   \item \(\com \equiv \com[C_1;C_2]\) By lemma \ref{le:tosets}
-    \(\red{\cc{C_1}; \cc{C_2}} =
-    \{\cc{C_2}\}\cup\red{C_2}\cup\{\cc{C_1'};\cc{C_2} \mid
-    \cc{C_1'}\in\red{C_1}\}\). Both \(\red{\cc{C_1}}\) and
-    \(\red{\cc{C_2}}\) are finite by inductive hypothesis, and
+    \(\red{\com[C_1]; \com[C_2]} =
+    \{\com[C_2]\}\cup\red{C_2}\cup\{\com[C_1'];\com[C_2] \mid
+    \com[C_1']\in\red{C_1}\}\). Both \(\red{\com[C_1]}\) and
+    \(\red{\com[C_2]}\) are finite by inductive hypothesis, and
     therefore the union of finite sets is finite..
   \item \(\com \equiv \com[C^*]\). By lemma \ref{le:tosets}
-    \(\red{\cc{C^*}} = \{\cc{C;C^*}\} \cup \{\cc{C';C^*} \mid
-    \cc{C'}\in\red{\cc{C}}\}\). \(\red{\cc{C}}\) is finite by
+    \(\red{\com[C^*]} = \{\com[C;C^*]\} \cup \{\com[C';C^*] \mid
+    \com[C']\in\red{\com[C]}\}\). \(\red{\com[C]}\) is finite by
     inductive hypothesis, and therefore the union of finite sets is
     finite.
   \end{itemize}
 \end{proof}
+
+\begin{definition}[Paths]
+  Let \(\state^\infty \defin \state^+ \cup \state^\omega\) be the set
+  of all infinitary sequences of states (both finite and
+  infinite). Then the set of \emph{paths} in the transition system
+  is \[\Path^\infty = \{\ppath \in \state^\infty \mid \forall i \in [
+    1, | \ppath | ) . \ppath_i \to \ppath_{i+1}\}\]
+\end{definition}

@@ -16,11 +16,10 @@ only a finite set of free variables per program).
 \end{notation}
 
 \begin{notation}[Existstential termination]
-  We write \[\cc{C}(a_1, \dots, a_k) \ehalts \iff \exists \stt{C,
-    \envi{x_1 \mapsto a_1, \dots, x_k \mapsto a_k}} \to^* \rho_t \quad
-  \text{for some } \rho_t\in \env\] meaning that in the transition
-  system at least one path leads to a final environment
-  \(\rho_t\). Dually a programm \(\cc{C}(a_1, \dots, a_k) \nehalts\)
+  We write \[\com[C](a_1, \dots, a_k) \ehalts \iff \sem{C}\{\envi{x_1
+    \mapsto a_1, \dots, x_k \mapsto a_k}\}\] meaning that in the
+  transition system at least one path leads to a final environment
+  \(\rho_t\). Dually a programm \(\com[C](a_1, \dots, a_k) \nehalts\)
   iff there's no path that lead to a final environment \(\rho_t\).
 \end{notation}
 
@@ -29,7 +28,7 @@ only a finite set of free variables per program).
       \mapsto a_1, \dots, x_k \mapsto a_k}} \to^* \rho_t \quad
   \text{for some } \rho_t\in \env\] meaning that in the transition
   system every path leads to a final environment \(\rho_t\). Dually a
-  program \(\cc{C}(a_1, \dots, a_k) \nahalts\) iff at least one path
+  program \(\com[C](a_1, \dots, a_k) \nahalts\) iff at least one path
   does not lead to a final environment \(\rho_t\).
 \end{notation}
 
@@ -203,11 +202,11 @@ this we get a couple of facts that derive from well known
 computability results:
 \begin{itemize}
 \item deciding wether \(\sem{C}X \neq \emptyset\) (i.e., \(C(a_1,
-  \dots, a_k) \downarrow\)) is the same as deciding \(x \in dom(f)\)
+  \dots, a_k) \ahalts\)) is the same as deciding \(x \in dom(f)\)
   for some \(f \in \partialrec[k]\), which is undecidable (from the
   input problem in \cite[p.~104]{cutland1980computability})
 \item dually, deciding wether \(\sem{C}X = \emptyset\) (i.e., \(C(a_1,
-  \dots, a_k)\uparrow\)) is also undecidable. The set of functions
+  \dots, a_k)\nahalts\)) is also undecidable. The set of functions
   \(f\in \partialrec[k]\) s.t. \(f(x) \uparrow \forall x \in \n^k\) is
   not trivial and saturated, therefore it is not recursive (by Rice's
   theorem \cite{rice1953classes}).
