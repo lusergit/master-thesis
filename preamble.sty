@@ -21,6 +21,7 @@
 \RequirePackage{stmaryrd}
 \RequirePackage{amsthm}
 \RequirePackage{mathtools}
+\RequirePackage{multicol}
 \RequirePackage{algorithm}
 \RequirePackage{algpseudocode}
 \RequirePackage{dsfont}
@@ -51,3 +52,51 @@
 }
 
 \usetikzlibrary{positioning}
+
+%% TIKZ config for arrow stars
+\usepgflibrary{plotmarks}
+\tikzset{
+    to*/.style={
+        shorten >=.25em,#1-to,
+        to path={-- node[inner sep=0pt,at end,sloped] {${}^*$} (\tikztotarget) \tikztonodes}
+    },
+    to*/.default=
+}
+\makeatletter
+\pgfarrowsdeclare{to*}{to*}
+{
+  \pgfutil@tempdima=-0.84pt%
+  \advance\pgfutil@tempdima by-1.3\pgflinewidth%
+  \pgfutil@tempdimb=0.21pt%
+  \advance\pgfutil@tempdimb by.625\pgflinewidth%
+  \advance\pgfutil@tempdimb by2.5pt%
+  \pgfarrowsleftextend{+\pgfutil@tempdima}
+  \pgfarrowsrightextend{+\pgfutil@tempdimb}
+}
+{
+  \pgfutil@tempdima=0.28pt%
+  \advance\pgfutil@tempdima by.3\pgflinewidth%
+  \pgfsetlinewidth{0.8\pgflinewidth}
+  \pgfsetdash{}{+0pt}
+  \pgfsetroundcap
+  \pgfsetroundjoin
+  \pgfpathmoveto{\pgfqpoint{-3\pgfutil@tempdima}{4\pgfutil@tempdima}}
+  \pgfpathcurveto
+  {\pgfqpoint{-2.75\pgfutil@tempdima}{2.5\pgfutil@tempdima}}
+  {\pgfqpoint{0pt}{0.25\pgfutil@tempdima}}
+  {\pgfqpoint{0.75\pgfutil@tempdima}{0pt}}
+  \pgfpathcurveto
+  {\pgfqpoint{0pt}{-0.25\pgfutil@tempdima}}
+  {\pgfqpoint{-2.75\pgfutil@tempdima}{-2.5\pgfutil@tempdima}}
+  {\pgfqpoint{-3\pgfutil@tempdima}{-4\pgfutil@tempdima}}
+  \pgfusepathqstroke
+  \begingroup
+    \pgftransformxshift{2.5pt}
+    \pgftransformyshift{2pt}
+    \pgftransformscale{.7}
+    \pgfuseplotmark{asterisk}
+  \endgroup
+%  \pgftext[left,y=2pt]{$\scriptstyle *$}
+}
+\makeatother
+

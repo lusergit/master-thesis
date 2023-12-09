@@ -5,97 +5,135 @@ and the small operational semantics \(\to\) we define a transition
 system:
 
 \begin{definition}[Transition system]
-  \[\tuple{\state \cup \env, \env, \to}\] is a transition system for
-  the language \(\imp\)
-\end{definition}
-
-\begin{definition}[Reductions]
-  Given a program \(\com\in\imp\) we define its reductions
-  \(\red{\com}\) as \[\red{\com} = \{\com' \mid \stt{\com, \rho} \to^*
-  \stt{\com', \rho'} \quad \text{for some } \rho\}\]
-\end{definition}
-
-\begin{lemma}\label{le:tosets}
-  Given a program \(\com\in\imp\), for \(\red{\com}\) it holds that
-  \begin{align*}
-    \red{\com[e]} & = \emptyset \\
-    \red{\com[C_1] + \com[C_2]} & = \{\com[C_1], \com[C_2]\}\cup\red{C_1}\cup\red{C_2} \\
-    \red{\com[C_1];\com[C_2]} & = \{\com[C_2]\}\cup\red{C_2}\cup\{\com[C_1'];\com[C_2] \mid \com[C_1']\in\red{C_1}\} \\
-    \red{C^*} & = \{\com[C;C^*]\} \cup \{\com[C';C^*] \mid \com[C']\in\red{\com[C]}\}
-  \end{align*}
-\end{lemma}
-
-\begin{proof}
-  By definition:
+  \[\tsys \defin \tuple{\state \cup \env, \env, \to}\] is a transition system for
+  the language \(\imp\), where
   \begin{itemize}
-  \item \(\com[C]\equiv \com[e]\), and \(\red{\com[e]} = \{\com[C'] \mid
-    \stt{\com[e], \rho} \to \stt{\com[C'], \rho'} \quad \text{for some }
-    \rho\}\). But because of expr rule, either \(\stt{\com[e], \rho}
-    \to \bsem{e}\rho\) (if \(\bsem{e}\rho \neq \bot\)) or
-    \(\stt{\com[e], \rho} \not\to\) (if \(\bsem{e}\rho = \bot\)),
-    therefore \(\nexists \com[C'] \mid \stt{\com[e], \rho} \to
-    \stt{\com[C'], \rho'}\) for some \(\rho\), therefore \[\red{\com[e]}
-    = \emptyset\]
-  \item \(\com \equiv \com[C_1 + C_2]\) and \(\red{\com[C_1 + C_2]} =
-    \{\com[C'] \mid \stt{\com[C_1 + C_2], \rho} \to \stt{\com[C'],
-      \rho'}\) for some \(\rho\}\). By sum\(_1\) \(\stt{\com[C_1 +
-        C_2], \rho} \to \stt{\com[C_1], \rho}\) and by sum\(_2\)
-    \(\stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_2],
-      \rho}\). Therefore \[\red{\com[C_1 + C_2]} = \{\com[C_1],
-    \com[C_2]\}\cup \red{\com[C_1]} \cup \red{\com[C_2]}\]
-  \item \(\com \equiv \com[C_1;C_2]\). In this case by comp\(_1\) if
-    \(\stt{\com[C_1], \rho}\to \stt{\com[C_1'], \rho'}\) then
-    \(\stt{\com[C_1;C_2],\rho} \to \stt{\com[C_1';C_2], \rho'}\). By
-    comp\(_2\) if \(\stt{\com[C_1], \rho}\to \rho'\) then
-    \(\stt{\com[C_1;C_2],\rho} \to \stt{\com[C_2],
-      \rho'}\). Therefore \[\red{C_1;C_2} = \{\com[C_2]\}\cup
-    \red{C_2}\cup\{\com[C_1';C_2] \mid \com[C_1']\in\red{C_1}\}\]
-  \item \(\com \equiv \com[C^*]\). In this case by star
-    \(\stt{\com[C^*], \rho} \to \stt{\com[C;C^*], \rho}\) or by
-    star\(_{\text{fix}}\) \(\stt{\com[C^*], \rho} \to
-    \rho\). therefore \[\red{C^*} = \{\com[C;C^*]\} \cup
-    \{\com[C';C^*]\mid \com[C']\in\red{C}\}\]
+  \item \(\state \cup \env\) is the set of configurations in the system;
+  \item \(\env\) is the set of terminal states;
+  \item \(\to\) is the small step semantics defined in definition
+    \ref{def:sosem}, which describes the transition relations in the
+    system.
   \end{itemize}
-\end{proof}
-
-\begin{lemma}\label{le:reductionsfinite}
-  \(\forall \com \in \imp\) \(\red{\com}\) is finite.
-\end{lemma}
-
-\begin{proof}
-  We work by induction on \(\com\):
-
-  \noindent
-  \paragraph*{Base case:\\}
-  
-  \(\com \equiv \com[e]\). Because of lemma \ref{le:tosets}
-  \(\red{\com[e]} = \emptyset\) which is finite.
-
-  \noindent
-  \paragraph*{Inductive cases:\\}
-  \begin{itemize}
-  \item \(\com \equiv \com[C_1 + C_2]\). By lemma \ref{le:tosets}
-    \(\red{\com[C_1] + \com[C_2]} = \{\com[C_1], \com[C_2]\} \cup
-    \red{\com[C_1]} \cup \red{\com[C_2]}\), which is finite as it is
-    union of finite sets.
-  \item \(\com \equiv \com[C_1;C_2]\) By lemma \ref{le:tosets}
-    \(\red{\com[C_1]; \com[C_2]} =
-    \{\com[C_2]\}\cup\red{C_2}\cup\{\com[C_1'];\com[C_2] \mid
-    \com[C_1']\in\red{C_1}\}\). Both \(\red{\com[C_1]}\) and
-    \(\red{\com[C_2]}\) are finite by inductive hypothesis, and
-    therefore the union of finite sets is finite..
-  \item \(\com \equiv \com[C^*]\). By lemma \ref{le:tosets}
-    \(\red{\com[C^*]} = \{\com[C;C^*]\} \cup \{\com[C';C^*] \mid
-    \com[C']\in\red{\com[C]}\}\). \(\red{\com[C]}\) is finite by
-    inductive hypothesis, and therefore the union of finite sets is
-    finite.
-  \end{itemize}
-\end{proof}
+\end{definition}
 
 \begin{definition}[Paths]
-  Let \(\state^\infty \defin \state^+ \cup \state^\omega\) be the set
-  of all infinitary sequences of states (both finite and
-  infinite). Then the set of \emph{paths} in the transition system
-  is \[\Path^\infty = \{\ppath \in \state^\infty \mid \forall i \in [
-    1, | \ppath | ) . \ppath_i \to \ppath_{i+1}\}\]
+  Let \((\state \cup \env)^\infty \defin (\state \cup \env)^+ \cup
+  (\state \cup \env)^\omega\) be the set of all infinitary sequences
+  of states and environments (both finite and infinite). Then the set
+  of \emph{paths} in the transition system is \[\Path^\infty \defin
+  \{\ppath \in (\state \cup \env)^\infty \mid \forall i \in [ 1, |
+    \ppath | ) . \ppath_i \to \ppath_{i+1}\}\]
 \end{definition}
+
+\begin{definition}
+  Given \(\com \in \imp, \rho\in\env\) the \emph{paths} in the
+  transition system starting from \(\stt{\com, \rho}\)
+  are \[\trans{\com}{\rho} \defin \{\tau \in \Path^\infty \mid
+  \ppath_0 = \stt{\com, \rho}\}\]
+\end{definition}
+
+%% \begin{notation}
+%%   We use the notation \(\trans{\com}{\rho}\) to denote all the
+%%   transitions starting from \(\stt{\com, \rho}\).
+%% \end{notation}
+
+\begin{definition}[Reductions]
+  Let \(\imp^*\) denotes the set whose elements are finite, eventually
+  empty, ordered sequences of statements in \(\imp\) where the empty
+  sequence is denoted by \(\emptyseq\). Moreover let \(\conc : \imp^*
+  \times \imp^* \to \imp^*\) be the list concatenation. The reduction
+  function \(\mathsf{red} : \imp \to \imp^*\) is recursively defined by the
+  following clauses:
+  \begin{align*}
+    \red{\com[e]} & \defin \sequence{\com[e]} \\
+    \red{\com_1 + \com_2} & \defin \sequence{\com_1 + \com_2} \conc \red{\com_1} \conc \red{\com_2} \\
+    \red{\com_1 ; \com_2} & \defin (\red{\com_1} \star \com_2) \conc \red{\com_2} \\
+    \red{\com^*} & \defin \sequence{\com^*} \conc (\red{\com} \star \com^*)
+  \end{align*}
+  Where the operator \(\star : \imp^* \times \imp \to \imp^*\) is
+  defined by
+  \begin{align*}
+    \emptyseq \star \com & \defin \emptyseq \\
+    \sequence{\com_1, \dots, \com_k} \star \com & \defin \sequence{\com_1;\com, \dots, \com_k;\com}
+  \end{align*}
+\end{definition}
+
+Notice that the set of reduction of any finite program \(\com\in\imp\) is finite.
+
+%% \begin{lemma}\label{le:tosets}
+%%   Given a program \(\com\in\imp\), for \(\red{\com}\) it holds that
+%%   \begin{align*}
+%%     \red{\com[e]} & = \emptyset \\
+%%     \red{\com[C_1] + \com[C_2]} & = \{\com[C_1], \com[C_2]\}\cup\red{C_1}\cup\red{C_2} \\
+%%     \red{\com[C_1];\com[C_2]} & = \{\com[C_2]\}\cup\red{C_2}\cup\{\com[C_1'];\com[C_2] \mid \com[C_1']\in\red{C_1}\} \\
+%%     \red{C^*} & = \{\com[C;C^*]\} \cup \{\com[C';C^*] \mid \com[C']\in\red{\com[C]}\}
+%%   \end{align*}
+%% \end{lemma}
+
+%% \begin{proof}
+%%   By definition:
+%%   \begin{itemize}
+%%   \item \(\com[C]\equiv \com[e]\), and \(\red{\com[e]} = \{\com[C'] \mid
+%%     \stt{\com[e], \rho} \to \stt{\com[C'], \rho'} \quad \text{for some }
+%%     \rho\}\). But because of expr rule, either \(\stt{\com[e], \rho}
+%%     \to \bsem{e}\rho\) (if \(\bsem{e}\rho \neq \bot\)) or
+%%     \(\stt{\com[e], \rho} \not\to\) (if \(\bsem{e}\rho = \bot\)),
+%%     therefore \(\nexists \com[C'] \mid \stt{\com[e], \rho} \to
+%%     \stt{\com[C'], \rho'}\) for some \(\rho\), therefore \[\red{\com[e]}
+%%     = \emptyset\]
+%%   \item \(\com \equiv \com[C_1 + C_2]\) and \(\red{\com[C_1 + C_2]} =
+%%     \{\com[C'] \mid \stt{\com[C_1 + C_2], \rho} \to \stt{\com[C'],
+%%       \rho'}\) for some \(\rho\}\). By sum\(_1\) \(\stt{\com[C_1 +
+%%         C_2], \rho} \to \stt{\com[C_1], \rho}\) and by sum\(_2\)
+%%     \(\stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_2],
+%%       \rho}\). Therefore \[\red{\com[C_1 + C_2]} = \{\com[C_1],
+%%     \com[C_2]\}\cup \red{\com[C_1]} \cup \red{\com[C_2]}\]
+%%   \item \(\com \equiv \com[C_1;C_2]\). In this case by comp\(_1\) if
+%%     \(\stt{\com[C_1], \rho}\to \stt{\com[C_1'], \rho'}\) then
+%%     \(\stt{\com[C_1;C_2],\rho} \to \stt{\com[C_1';C_2], \rho'}\). By
+%%     comp\(_2\) if \(\stt{\com[C_1], \rho}\to \rho'\) then
+%%     \(\stt{\com[C_1;C_2],\rho} \to \stt{\com[C_2],
+%%       \rho'}\). Therefore \[\red{C_1;C_2} = \{\com[C_2]\}\cup
+%%     \red{C_2}\cup\{\com[C_1';C_2] \mid \com[C_1']\in\red{C_1}\}\]
+%%   \item \(\com \equiv \com[C^*]\). In this case by star
+%%     \(\stt{\com[C^*], \rho} \to \stt{\com[C;C^*], \rho}\) or by
+%%     star\(_{\text{fix}}\) \(\stt{\com[C^*], \rho} \to
+%%     \rho\). therefore \[\red{C^*} = \{\com[C;C^*]\} \cup
+%%     \{\com[C';C^*]\mid \com[C']\in\red{C}\}\]
+%%   \end{itemize}
+%% \end{proof}
+
+%% \begin{lemma}\label{le:reductionsfinite}
+%%   \(\forall \com \in \imp\) \(\red{\com}\) is finite.
+%% \end{lemma}
+
+%% \begin{proof}
+%%   We work by induction on \(\com\):
+
+%%   \noindent
+%%   \paragraph*{Base case:\\}
+  
+%%   \(\com \equiv \com[e]\). Because of lemma \ref{le:tosets}
+%%   \(\red{\com[e]} = \emptyset\) which is finite.
+
+%%   \noindent
+%%   \paragraph*{Inductive cases:\\}
+%%   \begin{itemize}
+%%   \item \(\com \equiv \com[C_1 + C_2]\). By lemma \ref{le:tosets}
+%%     \(\red{\com[C_1] + \com[C_2]} = \{\com[C_1], \com[C_2]\} \cup
+%%     \red{\com[C_1]} \cup \red{\com[C_2]}\), which is finite as it is
+%%     union of finite sets.
+%%   \item \(\com \equiv \com[C_1;C_2]\) By lemma \ref{le:tosets}
+%%     \(\red{\com[C_1]; \com[C_2]} =
+%%     \{\com[C_2]\}\cup\red{C_2}\cup\{\com[C_1'];\com[C_2] \mid
+%%     \com[C_1']\in\red{C_1}\}\). Both \(\red{\com[C_1]}\) and
+%%     \(\red{\com[C_2]}\) are finite by inductive hypothesis, and
+%%     therefore the union of finite sets is finite..
+%%   \item \(\com \equiv \com[C^*]\). By lemma \ref{le:tosets}
+%%     \(\red{\com[C^*]} = \{\com[C;C^*]\} \cup \{\com[C';C^*] \mid
+%%     \com[C']\in\red{\com[C]}\}\). \(\red{\com[C]}\) is finite by
+%%     inductive hypothesis, and therefore the union of finite sets is
+%%     finite.
+%%   \end{itemize}
+%% \end{proof}
+

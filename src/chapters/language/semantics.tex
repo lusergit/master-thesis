@@ -20,8 +20,8 @@ of variables to their value.
     \bsem{\tru} \rho & \defin \rho \\
     \bsem{\ff} \rho & \defin \bot \\
     \bsem{\var:= k} \rho & \defin \rho [\var\mapsto k] \\
-    \bsem{\var:= \var[y] + k} \rho & \defin \rho [\var\mapsto \rho(\var[y]) + k] \\
-    \bsem{\var:= \var[y] - k} \rho & \defin \rho [\var\mapsto \rho(\var[y]) - k] \\
+    \bsem{\var:= \var[y] + k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) + k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
+    \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
   \end{align*}
 \end{definition}
 
@@ -82,55 +82,67 @@ transition relation.
   The small step transition relation \(\to : \state \times (\state
   \cup \env)\) is a small step semantics for the
   \(\imp\) language. It is defined based on the following rules
-  \[\infer[\text{expr}]
+  \begin{equation*}
+    \infer[\text{expr}]
           {\stt{\com[e], \rho} \to \bsem{e}\rho}
-          {\bsem{e}\rho \neq \bot}\]
-          
-          \[\infer[\text{sum}_1]
-                  {\stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_1], \rho}}
-                  {} \quad
-                  \infer[\text{sum}_2]
-                        {\stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_2], \rho}}
-                        {}\]
-                        
-                        \[\infer[\text{comp}_1]
-                                {\stt{\com[C_1; C_2], \rho} \to \stt{\com[C_1'; C_2], \rho'}}
-                                {\stt{\com[C_1], \rho} \to \stt{\com[C_1'], \rho'}} \quad
-                                \infer[\text{comp}_2]
-                                      {\stt{\com[C_1; C_2], \rho} \to \stt{\com[C_2], \rho'}}
-                                      {\stt{\com[C_1], \rho} \to \rho'}\]
+          {\bsem{e}\rho \neq \bot}
+          %% \quad
+          %% \infer[\text{bot}]
+          %%       {\stt{\com, \bot} \to \bot}
+          %%       {}
+  \end{equation*}
+  
+  \begin{equation*}
+    \infer[\text{sum}_1]
+    {\stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_1], \rho}}
+    {} \quad
+    \infer[\text{sum}_2]
+          {\stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_2], \rho}}
+          {}
+  \end{equation*}
+  
+  \begin{equation*}
+    \infer[\text{comp}_1]
+          {\stt{\com[C_1; C_2], \rho} \to \stt{\com[C_1'; C_2], \rho'}}
+          {\stt{\com[C_1], \rho} \to \stt{\com[C_1'], \rho'}} \quad
+    \infer[\text{comp}_2]
+          {\stt{\com[C_1; C_2], \rho} \to \stt{\com[C_2], \rho'}}
+          {\stt{\com[C_1], \rho} \to \rho' }
+  \end{equation*}
 
-                                      \[\infer[\text{star}]
-                                              {\stt{\com[C^*], \rho} \to \stt{\com[C;C^*], \rho}}
-                                              {} \quad
-                                              \infer[\text{star}_{\text{fix}}]
-                                                    {\stt{\com[C^*], \rho} \to \rho}
-                                                    {}\]
+  \begin{equation*}
+    \infer[\text{star}]
+          {\stt{\com[C^*], \rho} \to \stt{\com[C;C^*], \rho}}
+          {} \quad
+    \infer[\text{star}_{\text{fix}}]
+          {\stt{\com[C^*], \rho} \to \rho}
+          {}
+  \end{equation*}
 \end{definition}
 
 \begin{notation}
-  We write \(\stt{\com, \rho} \to^* \stt{\com'', \rho''}\)
+  We write \(\stt{\com, \rho} \to^* s \in \state \cup \env\)
   meaning \[\exists k\in\n \mid \underbrace{\stt{\com, \rho} \to \stt{\com',
-    \rho'} \to \dots \to \stt{\com'', \rho''}}_{k \text{ transitions}}\]
+      \rho'} \to \dots \to s}_{k \text{ transitions}}\]
 \end{notation}
 
 \begin{lemma}[Collecting and small step link]\label{le:link}
-  For any \(C\in\imp, X \in \poset{\env}\) \[\sem{C}X = \{\rho_t \in
-  \env \mid \rho \in X, \stt{\com[C], \rho} \to^* \rho_t\}\]
+  For any \(C\in\imp, X \in \poset{\env}\) \[\sem{C}X = \{\rho' \in
+  \env \mid \rho \in X, \stt{\com[C], \rho} \to^* \rho'\}\]
 \end{lemma}
 
-Therefore \(\sem{C}X = \emptyset \iff \nexists \rho_t \in \env, \rho
-\in X\) s.t. \(\stt{\com[C], \rho} \to^* \rho_t\).
+Therefore \(\sem{C}X = \emptyset \iff \nexists \rho' \in \env, \rho
+\in X\) s.t. \(\stt{\com[C], \rho} \to^* \rho'\).
 
 \begin{proof}
   by induction on \(C\):
   \paragraph*{Base case:\\}
-   \(C \equiv e\): \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge
-   \bsem{e}\rho \neq \bot \}\), \(\forall \rho \in X . \stt{\com[e],
-     \rho} \to \bsem{e}\rho\) if \(\bsem{e}\rho \neq \bot\) because of
-   the expr rule \[\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge
-   \bsem{e}\rho \neq \bot \} = \{\rho_t \in\env \mid \rho \in X
-   \stt{\com[e], \rho} \to \rho_t\}\]
+  \(C \equiv e\): \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge
+  \bsem{e}\rho \neq \bot \}\), \(\forall \rho \in X . \stt{\com[e],
+    \rho} \to \bsem{e}\rho\) if \(\bsem{e}\rho \neq \bot\) because of
+  the expr rule \[\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge
+  \bsem{e}\rho \neq \bot \} = \{\rho' \in\env \mid \rho \in X
+  \stt{\com[e], \rho} \to \rho'\}\]
   \paragraph*{Inductive cases:\\}
   \begin{enumerate}
   \item \(C \equiv C_1 + C_2:\) \(\sem{C_1 + C_2}X = \sem{C_1}X \cup
@@ -138,36 +150,36 @@ Therefore \(\sem{C}X = \emptyset \iff \nexists \rho_t \in \env, \rho
     \stt{\com[C_1], \rho} \vee \stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_2], \rho}\)
     respectively according to rules sum\textsubscript{1} and
     sum\textsubscript{2}. By inductive hypothesis \[\sem{C_1}X =
-    \{\rho_t \in\env \mid \rho \in X , \stt{\com[C_1],\rho} \to^* \rho_t\} \quad
-    \sem{C_2}X = \{\rho_t \in\env \mid \rho \in X , \stt{\com[C_2],\rho} \to^*
-    \rho_t\}\] Therefore
+    \{\rho' \in\env \mid \rho \in X , \stt{\com[C_1],\rho} \to^* \rho'\} \quad
+    \sem{C_2}X = \{\rho' \in\env \mid \rho \in X , \stt{\com[C_2],\rho} \to^*
+    \rho'\}\] Therefore
     \begin{align*}
       \sem{C_1 + C_2}X & = \sem{C_1}X \cup \sem{C_2}X & \text{(by definition)}\\
-      & = \{\rho_t \in\env \mid \rho \in X , \stt{\com[C_1],\rho} \to^* \rho_t\} \cup \{\rho_t \in\env \mid \rho \in X , \stt{\com[C_2],\rho} \to^* \rho_t\} & \text{(by ind. hp)}\\
-      & = \{\rho_t \in\env \mid \rho \in X, \stt{\com[C_1],\rho} \to^* \rho_t \vee \stt{\com[C_2],\rho} \to^* \rho_t\} \\
-      & = \{\rho_t \in\env \mid \rho \in X, \stt{\com[C_1 + C_2], \rho} \to^* \rho_t\}
+      & = \{\rho' \in\env \mid \rho \in X , \stt{\com[C_1],\rho} \to^* \rho'\} \cup \{\rho' \in\env \mid \rho \in X , \stt{\com[C_2],\rho} \to^* \rho'\} & \text{(by ind. hp)}\\
+      & = \{\rho' \in\env \mid \rho \in X, \stt{\com[C_1],\rho} \to^* \rho' \vee \stt{\com[C_2],\rho} \to^* \rho'\} \\
+      & = \{\rho' \in\env \mid \rho \in X, \stt{\com[C_1 + C_2], \rho} \to^* \rho'\}
     \end{align*}
   \item \(C \equiv C_1;C_2:\) \(\sem{C_1;C_2}X =
-    \sem{C_2}(\sem{C_1}X)\). By inductive hp \(\sem{C_1}X = \{\rho_t
-    \in\env \mid \rho \in X, \stt{\com[C_1], \rho} \to^* \rho_t\} = Y\), by inductive
-    hp again \(\sem{C_2}Y = \{\rho_t \in\env \mid \rho \in Y, \stt{\com[C_2], \rho}
-    \to^* \rho_t\}\). Therefore
+    \sem{C_2}(\sem{C_1}X)\). By inductive hp \(\sem{C_1}X = \{\rho'
+    \in\env \mid \rho \in X, \stt{\com[C_1], \rho} \to^* \rho'\} = Y\), by inductive
+    hp again \(\sem{C_2}Y = \{\rho' \in\env \mid \rho \in Y, \stt{\com[C_2], \rho}
+    \to^* \rho'\}\). Therefore
     \begin{align*}
       \sem{C_1;C_2}X & = \sem{C_2}(\sem{C_1}X) & \text{(by definition)}\\
-      & = \{\rho_t \in\env \mid \rho_x \in \{\rho_x \mid \rho \in X, \stt{\com[C_1], \rho}  \to^* \rho_x\}, \stt{\com[C_2], \rho_x} \to^* \rho_t\} & \text{(by ind. hp)}\\
-      & = \{\rho_t \in\env \mid \rho \in X \stt{\com[C_1], \rho} \to^* \rho_x \wedge \stt{\com[C_2], \rho_x} \to^* \rho_t\} & \text{(by definition)}\\
-      & = \{\rho_t \in\env \mid \rho \in X . \stt{\com[C_1;C_2], \rho} \to^* \rho_t\}
+      & = \{\rho' \in\env \mid \rho'' \in \{\rho''' \mid \rho \in X, \stt{\com[C_1], \rho}  \to^* \rho'''\}, \stt{\com[C_2], \rho''} \to^* \rho'\} & \text{(by ind. hp)}\\
+      & = \{\rho' \in\env \mid \rho \in X \stt{\com[C_1], \rho} \to^* \rho'' \wedge \stt{\com[C_2], \rho''} \to^* \rho'\} & \text{(by definition)}\\
+      & = \{\rho' \in\env \mid \rho \in X . \stt{\com[C_1;C_2], \rho} \to^* \rho'\}
     \end{align*}
   \item \(C \equiv C^*\) : \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^i X\)
     \begin{align*}
       \sem{C^*}X & = X \cup \sem{C}X \cup \sem{C}^2X \cup \dots & \text{(by definition)}\\
-      & = X \cup \{\rho_t \in\env \mid \rho \in X, \stt{\com[C],\rho} \to^* \rho_t\} \cup \{\rho_t \in\poset{\env} \mid \rho \in X, \stt{\com[C;C],\rho} \to^* \rho_t\} \cup \dots & \text{(by ind. hp)}\\
-      & = \cup_{i\in\n} \{\rho_t \in\env \mid \rho \in X, \stt{\com[C^i], \rho} \to^*  \rho_t\} \\
-      & = \{\rho_t \in\env \mid \rho \in X, \vee_{i\in\n} \stt{\com[C^i], \rho} \to^* \rho_t\} \\
-      & = \{\rho_t \in\env \mid \rho \in X, \stt{\com[C^*], \rho} \to^* \rho_t\}
+      & = X \cup \{\rho' \in\env \mid \rho \in X, \stt{\com[C],\rho} \to^* \rho'\} \cup \{\rho' \in\poset{\env} \mid \rho \in X, \stt{\com[C;C],\rho} \to^* \rho'\} \cup \dots & \text{(by ind. hp)}\\
+      & = \cup_{i\in\n} \{\rho' \in\env \mid \rho \in X, \stt{\com[C^i], \rho} \to^*  \rho'\} \\
+      & = \{\rho' \in\env \mid \rho \in X, \vee_{i\in\n} \stt{\com[C^i], \rho} \to^* \rho'\} \\
+      & = \{\rho' \in\env \mid \rho \in X, \stt{\com[C^*], \rho} \to^* \rho'\}
     \end{align*}
   \end{enumerate}
 \end{proof}
 
-We can notice that \(\sem{C}X = \emptyset \iff \nexists \rho_t\in\env,
-\rho \in X \mid \stt{\com[C],\rho} \to^* \rho_t\).
+We can notice that \(\sem{C}X = \emptyset \iff \nexists \rho'\in\env,
+\rho \in X \mid \stt{\com[C],\rho} \to^* \rho'\).

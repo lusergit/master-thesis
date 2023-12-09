@@ -2,7 +2,8 @@
 
 \begin{lemma}\label{le:finiteness}
   If \(\com\in\imp_\starless\), and a finite \(X \in \poset{env}\)
-  then \[\sem{C}X \text{ is finite}\]
+  then \(\sem{C}X\) is finite and \(\forall \rho \in X\) 
+  \(\trans{\com}{\rho}\ahalts\).
 \end{lemma}
 
 \begin{proof}
@@ -10,15 +11,17 @@
   \paragraph*{Base case:\\}
   \(\com \equiv e\), therefore \(\sem{e}X = \{\bsem{e}\rho \mid \rho
   \in X , \bsem{e}\rho \neq \bot\}\), which is finite, since \(X\) is
-  finite.
+  finite. Moreover, by expr rule \(\forall \rho \in X\) either
+  \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho} \to \bot\). In
+  both cases \(\trans{\com[e]}{\rho} \ahalts\).
   
   \paragraph*{Inductive cases:\\}
   \begin{enumerate}
-  \item \(\com\equiv \com[C_1 + C_2]\), therefore \(\sem{C_1 + C_2} X =
-    \sem{C_1}X \cup \sem{C_2}X\). By inductive hypothesis, both
+  \item \(\com\equiv \com[C_1 + C_2]\), therefore \(\sem{C_1 + C_2} X
+    = \sem{C_1}X \cup \sem{C_2}X\). By inductive hypothesis, both
     \(\sem{C_1}X, \sem{C_2}X\) are finite, as they're sub expressions
     of \(C\). Since the union of finite sets is finite, \(\sem{C_1 +
-      C_2}X\) is finite.
+      C_2}X\) is finite. Moreover by inductive hypothesis again
   \item \(C\equiv C_1; C_2\), therefore \(\sem{C_1;C_2}X =
     \sem{C_2}(\sem{C_1}X)\). By inductive hypothesis \(\sem{C_1}X =
     Y\) is finite. Again by inductive hypothesis \(\sem{C_2}Y\) is
@@ -27,19 +30,20 @@
 \end{proof}
 
 \begin{lemma}\label{le:infiniteness}
-  Given \(\com\in\imp_\starless\), and a finite \(X \in \poset{env}\),
-  the predicate "\(\sem{C^*}X\) is finite" is undecidable.
+  Given \(\com\in\imp_\starless\), and \(\{\rho\} = X \in
+  \poset{env}\), the predicate "\(\sem{C^*}X\) is finite" is
+  undecidable.
 \end{lemma}
 
 \begin{proof}
   Suppose we can decide \(\sem{C^*}X\) is finite. We show that we in
-  that case we would be also able to decide wether \(\com^*(a_1,
-  \dots, a_k)\ahalts\), which is undecidable. Let \(X = \{\envi{x_1
-    \mapsto a_1, \dots, x_k \mapsto a_k}\}\) with \(a_1, \dots, a_k
-  \in \z\).
+  that case we would be also able to decide wether
+  \(\trans{\com^*}{\rho}\ahalts\) for some \(\rho \in X\), which is
+  undecidable.%%  Let \(\rho =\envi{x_1 \mapsto a_1, \dots, x_k \mapsto
+    %% a_k}\) \(X = \{\rho\}\) with \(a_1, \dots, a_k \in \z\).
   \begin{itemize}
   \item In case \(\sem{\com^*}X\) is infinite, then it must be that
-    \(\forall i \in \n\) \(\sem{C}^{k+1}X \nsubseteq
+    \(\forall k \in \n\) \(\sem{C}^{k+1}X \nsubseteq
     \cup_{i=0}^k\sem{\com}^iX\), otherwise we would reach a fixpoint
     and \(\sem{\com^*}X\) would be finite. Since each application of
     \(\com\) must create an unempty set of new environments we can
@@ -48,11 +52,33 @@
       Y_0 & = X \\
       Y_{k+1} & = (\sem{C}Y_k)\setminus Y_k
     \end{align*}
-    and \(\forall \rho' \in Y_{k+1} \exists \rho \in Y_k \mid \rho'
-    \in \sem{C}\{\rho\}\) by definition. This means that there is an
-    infinite path in the transition system, and therefore
-    \(\com[C^*](a_1, \dots, a_k) \nehalts\) which means that
-    \(\com[C^*] (a_1, \dots, a_k)\ahalts\) is false.
-  \item In case \(\sem{C^*}X is finite\) then we can notice that
+    where \(\forall \rho' \in Y_{k+1} \exists \rho \in Y_k \mid \rho'
+    \in \sem{C}\{\rho\}\) by definition. By lemma \ref{le:link}
+    \(\rho' \in \{\rho'' \mid \stt{\com, \rho} \to^* \rho''\}\). This
+    means that there must be at least one \(\rho_1\in X\) that
+    produces an infinite path \[\stt{\com^*, \rho_1}\to^*\stt{\com^*,
+      \rho_2}\to^*\dots \] which produces new environments at each
+    application of \(\com\): \(\rho_1, \rho_2, \dots \mid \forall i,j
+    \in \n\) \(\rho_i \neq \rho_j\) and therefore
+    \(\trans{\com^*}{\rho_1} \nehalts\) which means that
+    \(\trans{\com^*}{\rho_1}\ahalts\) is false.
+  \item In case \(\sem{C^*}X\) is finite, we can notice that the
+    states in \(\trans{\com}{\rho}\) are \[\red{\com^*}\times Y\] with
+    \(Y \subseteq \{\rho'\mid \stt{\com, \rho} \to^* \stt{\com',
+      \rho'} \vee \stt{\com,\rho} \to^* \rho'\}\) with \(\com'\in
+    \red{\com}\). Since there's a finite amount of states total
+    termination reduces to the presence of some cycle. In fact if
+    \begin{itemize}
+    \item \(\exists \rho \in X \mid \stt{\com^*, \rho} \to^*
+      \stt{\com^*, \rho}\) the semantics would still be finite, but
+      there would be an infinite path \[\stt{\com^*, \rho} \to^*
+      \stt{\com^*, \rho} \to^* \dots\] that would imply that
+      \(\trans{\com}{\rho} \nehalts\), and therefore
+      \(\trans{\com}{\rho} \ahalts\) would be false.
+    \item otherwise \(\nexists \rho \in X \mid \stt{\com^*, \rho}
+      \to^* \stt{\com^*, \rho}\), but since there is a finite amount
+      of states each path in \(\trans{\com}{\rho}\) is finite, and
+      therefore \(\trans{\com}{\rho}\ahalts\).
+    \end{itemize}
   \end{itemize}
 \end{proof}
