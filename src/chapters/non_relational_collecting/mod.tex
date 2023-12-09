@@ -1,1 +1,28 @@
 \chapter{Non relational collecting}
+
+Let \[\envnr \veq \{\eta \mid \eta: \Var \to \poset{\Z}\setminus
+\{\emptyset\}\} \cup \{\bot\}.\]
+
+The nonrelational collecting domain is the complete lattice \(\bCnr
+\veq \tuple{\envnr,\dot{\subseteq}}\) where for all \(\eta,\eta':\Var
+\to \wp^{\scriptscriptstyle\neq \varnothing}(\Z)\)
+\begin{align*}
+  &\bot \mathrel{\dot{\subseteq}} \eta\\
+  & \eta \mathrel{\dot{\subseteq}} \eta' \quad\text{ if }\quad \forall \var\in \Var. \eta(\var)\subseteq \eta'(\var)
+\end{align*}
+
+The nonrelation abstraction \(\alpha: \tuple{\poset{\env},\subseteq}
+\to \tuple{\envnr,\dot{\subseteq}}\) is defined as follows:
+\begin{align*}
+  &\alpha(X) \veq 
+  \begin{cases}
+    \bot & \text{if }X=\varnothing\\
+    \lambda \var. \{\rho(\var) \in \Z \mid \rho \in X\} &\text{if }X\neq \varnothing\\
+  \end{cases}
+\end{align*}
+while the concretization \(\gamma: \tuple{\envnr,\dot{\subseteq}} \to
+\tuple{\poset{\env},\subseteq}\) is defined as follows:
+\begin{align*}
+  &\gamma(\bot) \veq \varnothing\\
+  &\gamma(\eta) \veq \{\rho : \Var \to \Z \mid \forall \var \in \Var. \rho(\var)\in \eta(\var)\}
+\end{align*}

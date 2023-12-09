@@ -73,8 +73,8 @@ a program that universally halts.
 
 \begin{example}\label{ex:neverhalts}
   Consider the program \(\com[P]\) \[(\var \geq 0;
-  \pplus{\var})^*;\var < 0\] This program never halts, \(\forall \rho
-  \in \env\) s.t. \(\rho(\var) \geq 0\). In factin these cases it
+  \pplus{\var})^*;\var < 0\] The program never haltsn \(\forall \rho
+  \in \env\) s.t. \(\rho(\var) \geq 0\). In fact in these cases it
   builds the transition system in figure \ref{fig:tsysnhalt}. Which
   does not reach any final state \(\rho'\).
   \begin{figure}
@@ -277,18 +277,18 @@ under composition, primitive recursion and unbounded minimalization.
 
 Since it is rich and \(\partialrec\) is the least class of rich
 functions, \(\partialrec \subseteq \imp_f\) holds. Therefore we can
-say \[f \in \partialrec[k] \Rightarrow \exists C \in \imp \mid C(a_1,
-\dots, a_k)\ahalts b \iff f(a_1, \dots, a_k) \downarrow b\] From
-this we get a couple of facts that derive from well known
+say \[f \in \partialrec[k] \Rightarrow \exists \com \in \imp \mid
+\trans{\com}{\rho}\ahalts b \iff f(a_1, \dots, a_k) \downarrow b\]
+with \(\rho = \envi{\var_1 \mapsto a_1, \dots, \var_k \mapsto a_k}\).
+From this we get a couple of facts that derive from well known
 computability results:
 \begin{itemize}
-\item deciding wether \(\sem{C}X \neq \emptyset\) (i.e.,
-  \(\trans{\com}{\rho}\ahalts\)) is the same as deciding \(x \in
-  dom(f)\) for some \(f \in \partialrec[k]\), which is undecidable
-  (from the input problem in \cite[p.~104]{cutland1980computability})
-\item dually, deciding wether \(\sem{C}X = \emptyset\) (i.e.,
-  \(\trans{\com}{\rho} \nahalts\)) is also undecidable. The set of
-  functions \(f\in \partialrec[k]\) s.t. \(f(x) \uparrow \forall x \in
-  \n^k\) is not trivial and saturated, therefore it is not recursive
-  (by Rice's theorem \cite{rice1953classes}).
+\item \(\sem{C}X = \emptyset\) (i.e., \(\trans{\com}{\rho} \nahalts\))
+  is undecidable. The set of functions \(f\in \partialrec[k]\)
+  s.t. \(f(x) \uparrow \forall x \in \n^k\) is not trivial and
+  saturated, therefore it is not recursive (by Rice's theorem
+  \cite{rice1953classes});
+\item dually, \(\sem{C}X \neq \emptyset\) (i.e., \(\trans{\com}{\rho}
+  \ehalts\)) is undecidable since is the negation of the latter
+  statement;
 \end{itemize}

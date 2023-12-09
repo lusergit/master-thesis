@@ -236,23 +236,23 @@ The semantics is well-defined, because of the following lemma:
   \noindent
   \textbf{Recusrsive cases:}\ \\ \
   \begin{itemize}
-  \item \(C \equiv C_1 + C_2\). Then
+  \item \(\com \equiv \com_1 + \com_2\). Then
     \begin{align*}
-      \semi{C_1 + C_2}\eta & = \semi{C_1}\eta \sqcup \semi{C_2}\eta & \\
-      & \sqsubseteq \semi{C_1}\theta \sqcup \semi{C_2}\theta & \text{by inductive hp.} \\
-      & = \semi{C_1 + C_2}\theta
+      \semi{\com_1 + \com_2}\eta & = \semi{\com_1}\eta \sqcup \semi{\com_2}\eta & \\
+      & \sqsubseteq \semi{\com_1}\theta \sqcup \semi{\com_2}\theta & \text{by inductive hp.} \\
+      & = \semi{\com_1 + \com_2}\theta
     \end{align*}
-  \item \(C \equiv C_1 ; C_2\). Then
+  \item \(\com \equiv \com_1 ; \com_2\). Then
     \begin{align*}
-      \semi{C_1;C_2}\eta = \; & \semi{C_2}(\semi{C_1}\eta) & \\
-      & \alpha = \semi{C_1}\eta \sqsubseteq \semi{C_1}\theta = \beta & \text{by inductive hp.} \\
-      & \semi{C_2}\alpha \sqsubseteq \semi{C_2}\beta & \text{by inductive hp.} \\
-      & \semi{C_2}(\semi{C_1}\eta) \sqsubseteq \semi{C_2}(\semi{C_1}\theta) & \text{by substitution}
+      \semi{\com_1;\com_2}\eta = \; & \semi{\com_2}(\semi{\com_1}\eta) & \\
+      & \alpha = \semi{\com_1}\eta \sqsubseteq \semi{\com_1}\theta = \beta & \text{by inductive hp.} \\
+      & \semi{\com_2}\alpha \sqsubseteq \semi{\com_2}\beta & \text{by inductive hp.} \\
+      & \semi{\com_2}(\semi{\com_1}\eta) \sqsubseteq \semi{\com_2}(\semi{\com_1}\theta) & \text{by substitution}
     \end{align*}
-  \item \(C^*\). Then by inductive hypothesis \(\forall i \in \n
-    . \semi{C}^i\eta \sqsubseteq \semi{C}^i\theta\), which means
-    \[\semi{C^*}\eta = \bigsqcup_{i\in\n}\semi{C}^i\eta \sqsubseteq
-    \bigsqcup_{i\in\n}\theta = \semi{C^*}\theta.\]
+  \item \(\com^*\). Then by inductive hypothesis \(\forall i \in \n
+    . \semi{\com}^i\eta \sqsubseteq \semi{\com}^i\theta\), which means
+    \[\semi{\com^*}\eta = \bigsqcup_{i\in\n}\semi{\com}^i\eta \sqsubseteq
+    \bigsqcup_{i\in\n}\theta = \semi{\com^*}\theta.\]
   \end{itemize}
 \end{proof}
 
@@ -305,11 +305,8 @@ end
 
 Of course, for the collecting semantics this is not the case. Already
 computing a finite upper bound for loop invariants when they are
-finite is impossible as this would allow to decide termination. In
-fact, if the invariant is infinite then the loop diverges. If it is
-finite, then the number of possible states is finite and this
-termination can be decided as non-termination reduces to the presence
-of a cycle, as shown with lemma \ref{le:infiniteness}.
+finite is impossible as this would allow to decide termination, as
+we've seen in section \ref{sec:finiteness}.
 
 \begin{problem}[Termination of interval analysis]\label{problem1}
 Given \(\com\in \imp\), \(\eta \in \bA\), decide: \(\sem{\com} \eta

@@ -1,4 +1,4 @@
-\section{Deciding invariant finiteness}
+\section{Deciding invariant finiteness}\label{sec:finiteness}
 
 \begin{lemma}\label{le:finiteness}
   If \(\com[D]\in\imp_\starless\), and \(X \in \poset{env}\) is
@@ -35,55 +35,56 @@
 \end{proof}
 
 \begin{lemma}\label{le:infiniteness}
-  Given \(\com\in\imp_\starless\), and \(\{\rho\} = X \in
-  \poset{env}\), the predicate "\(\sem{C^*}X\) is finite" is
+  Given \(\com[D]\in\imp_\starless\), and \(\{\rho\} = X \in
+  \poset{env}\), the predicate "\(\sem{D^*}X\) is finite" is
   undecidable.
 \end{lemma}
 
 \begin{proof}
-  Suppose we can decide \(\sem{C^*}X\) is finite. We show that we in
+  Suppose we can decide \(\sem{D^*}X\) is finite. We show that we in
   that case we would be also able to decide wether
-  \(\trans{\com^*}{\rho}\ahalts\) for some \(\rho \in X\), which is
-  undecidable.%%  Let \(\rho =\envi{x_1 \mapsto a_1, \dots, x_k \mapsto
+  \(\trans{\com[D]^*}{\rho}\ahalts\) for some \(\rho \in X\), which is
+  undecidable.%% Let \(\rho =\envi{x_1 \mapsto a_1, \dots, x_k \mapsto
     %% a_k}\) \(X = \{\rho\}\) with \(a_1, \dots, a_k \in \z\).
   \begin{itemize}
-  \item In case \(\sem{\com^*}X\) is infinite, then it must be that
-    \(\forall k \in \n\) \(\sem{C}^{k+1}X \nsubseteq
-    \cup_{i=0}^k\sem{\com}^iX\), otherwise we would reach a fixpoint
-    and \(\sem{\com^*}X\) would be finite. Since each application of
-    \(\com\) must create an unempty set of new environments we can
+  \item In case \(\sem{D^*}X\) is infinite, then it must be that
+    \(\forall k \in \n\) \(\sem{D}^{k+1}X \nsubseteq
+    \cup_{i=0}^k\sem{D}^iX\), otherwise we would reach a fixpoint
+    and \(\sem{D^*}X\) would be finite. Since each application of
+    \(\com[D]\) must create an unempty set of new environments we can
     build the inductive sequence of sets of environments
     \begin{align*}
       Y_0 & = X \\
-      Y_{k+1} & = (\sem{C}Y_k)\setminus Y_k
+      Y_{k+1} & = (\sem{D}Y_k)\setminus Y_k
     \end{align*}
     where \(\forall \rho' \in Y_{k+1} \exists \rho \in Y_k \mid \rho'
-    \in \sem{C}\{\rho\}\) by definition. By lemma \ref{le:link}
-    \(\rho' \in \{\rho'' \mid \stt{\com, \rho} \to^* \rho''\}\). This
-    means that there must be at least one \(\rho_1\in X\) that
-    produces an infinite path \[\stt{\com^*, \rho_1}\to^*\stt{\com^*,
-      \rho_2}\to^*\dots \] which produces new environments at each
-    application of \(\com\): \(\rho_1, \rho_2, \dots \mid \forall i,j
-    \in \n\) \(\rho_i \neq \rho_j\) and therefore
-    \(\trans{\com^*}{\rho_1} \nehalts\) which means that
-    \(\trans{\com^*}{\rho_1}\ahalts\) is false.
-  \item In case \(\sem{C^*}X\) is finite, we can notice that the
-    states in \(\trans{\com}{\rho}\) are \[\red{\com^*}\times Y\] with
-    \(Y \subseteq \{\rho'\mid \stt{\com, \rho} \to^* \stt{\com',
-      \rho'} \vee \stt{\com,\rho} \to^* \rho'\}\) with \(\com'\in
-    \red{\com}\). Since there's a finite amount of states total
-    termination reduces to the presence of some cycle. In fact if
+    \in \sem{D}\{\rho\}\) by definition. By lemma \ref{le:link}
+    \(\rho' \in \{\rho'' \mid \stt{\com[D], \rho} \to^*
+    \rho''\}\). This means that there must be at least one \(\rho_1\in
+    X\) that produces an infinite path \[\stt{\com[D]^*,
+      \rho_1}\to^*\stt{\com[D]^*, \rho_2}\to^*\dots \] which produces
+    new environments at each application of \(\com[D]\): \(\rho_1,
+    \rho_2, \dots \mid \forall i,j \in \n\) \(\rho_i \neq \rho_j\) and
+    therefore \(\trans{\com[D]^*}{\rho_1} \nehalts\) which means that
+    \(\trans{\com[D]^*}{\rho_1}\ahalts\) is false.
+  \item In case \(\sem{D^*}X\) is finite, we can notice that the
+    states in \(\trans{\com[D]}{\rho}\) are \[\red{\com[D]^*}\times
+    Y\] with \(Y \subseteq \{\rho'\mid \stt{\com[D], \rho} \to^*
+    \stt{\com[D]', \rho'} \vee \stt{\com[D],\rho} \to^* \rho'\}\) with
+    \(\com[D]'\in \red{\com[D]}\). Since there's a finite amount of
+    states total termination reduces to the presence of some cycle. In
+    fact if
     \begin{itemize}
-    \item \(\exists \rho \in X \mid \stt{\com^*, \rho} \to^*
-      \stt{\com^*, \rho}\) the semantics would still be finite, but
-      there would be an infinite path \[\stt{\com^*, \rho} \to^*
-      \stt{\com^*, \rho} \to^* \dots\] that would imply that
-      \(\trans{\com}{\rho} \nehalts\), and therefore
-      \(\trans{\com}{\rho} \ahalts\) would be false.
-    \item otherwise \(\nexists \rho \in X \mid \stt{\com^*, \rho}
-      \to^* \stt{\com^*, \rho}\), but since there is a finite amount
-      of states each path in \(\trans{\com}{\rho}\) is finite, and
-      therefore \(\trans{\com}{\rho}\ahalts\).
+    \item \(\exists \rho \in X \mid \stt{\com[D]^*, \rho} \to^*
+      \stt{\com[D]^*, \rho}\) the semantics would still be finite, but
+      there would be an infinite path \[\stt{\com[D]^*, \rho} \to^*
+      \stt{\com[D]^*, \rho} \to^* \dots\] that would imply that
+      \(\trans{\com[D]}{\rho} \nehalts\), and therefore
+      \(\trans{\com[D]}{\rho} \ahalts\) would be false.
+    \item otherwise \(\nexists \rho \in X \mid \stt{\com[D]^*, \rho}
+      \to^* \stt{\com[D]^*, \rho}\), but since there is a finite
+      amount of states each path in \(\trans{\com[D]}{\rho}\) is
+      finite, and therefore \(\trans{\com[D]}{\rho}\ahalts\).
     \end{itemize}
   \end{itemize}
 \end{proof}
