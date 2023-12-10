@@ -11,9 +11,9 @@
   \paragraph*{Base case:\\}
   \(\com[D] \equiv e\), therefore \(\sem{e}X = \{\bsem{e}\rho \mid
   \rho \in X , \bsem{e}\rho \neq \bot\}\), which is finite, since
-  \(X\) is finite. Moreover, by expr rule \(\forall \rho \in X\)
-  either \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho}
-  \not\to\). In both cases \(\trans{\com[e]}{\rho} \ahalts\).
+  \(X\) is finite. %% Moreover, by expr rule \(\forall \rho \in X\)
+  %% either \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho}
+  %% \not\to\). In both cases \(\trans{\com[e]}{\rho} \ahalts\).
   
   \paragraph*{Inductive cases:\\}
   \begin{enumerate}
@@ -21,16 +21,17 @@
     X = \sem{D_1}X \cup \sem{D_2}X\). By inductive hypothesis, both
     \(\sem{D_1}X, \sem{D_2}X\) are finite, as they're sub expressions
     of \(\com[D]\). Since the union of finite sets is finite,
-    \(\sem{D_1 + D_2}X\) is finite. Moreover by inductive hypothesis
-    again \(\forall \rho \in X\) \(\trans{\com[D]_1}{\rho}\ahalts\)
-    and \(\trans{\com[D]_2}{\rho}\ahalts\). Because of sum\(_1\) and
-    sum\(_2\) rules, \(\trans{(\com[D]_1 + \com[D]_2)}{\rho}\ahalts\).
+    \(\sem{D_1 + D_2}X\) is finite. %% Moreover by inductive hypothesis
+    %% again \(\forall \rho \in X\) \(\trans{\com[D]_1}{\rho}\ahalts\)
+    %% and \(\trans{\com[D]_2}{\rho}\ahalts\). Because of sum\(_1\) and
+    %% sum\(_2\) rules, \(\trans{(\com[D]_1 + \com[D]_2)}{\rho}\ahalts\).
   \item \(\com[D]\equiv \com[D_1; D_2]\), therefore \(\sem{D_1;D_2}X =
     \sem{D_2}(\sem{D_1}X)\). By inductive hypothesis \(\sem{D_1}X =
-    Y\) is finite and \(\forall \rho \in X\)
-    \(\trans{\com[D]_1}{\rho}\ahalts\). Again by inductive hypothesis
-    \(\sem{D_2}Y\) is finite and \(\forall \rho \in Y\)
-    \(\trans{\com[D]_2}{\rho}\ahalts\).
+    Y\) is finite%%  and \(\forall \rho \in X\)
+    %% \(\trans{\com[D]_1}{\rho}\ahalts\)
+    . Again by inductive hypothesis
+    \(\sem{D_2}Y\) is finite. %% and \(\forall \rho \in Y\)
+    %% \(\trans{\com[D]_2}{\rho}\ahalts\).
   \end{enumerate}
 \end{proof}
 
@@ -84,7 +85,10 @@
     \item otherwise \(\nexists \rho \in X \mid \stt{\com[D]^*, \rho}
       \to^* \stt{\com[D]^*, \rho}\), but since there is a finite
       amount of states each path in \(\trans{\com[D]}{\rho}\) is
-      finite, and therefore \(\trans{\com[D]}{\rho}\ahalts\).
+      finite, and therefore we can decide if
+      \(\trans{\com[D]}{\rho}\ahalts\), \(\trans{\com[D]}{\rho}\ehalts
+      \wedge \trans{\com[D]}{\rho}\nehalts\) or
+      \(\trans{\com[D]}{\rho}\nahalts\)
     \end{itemize}
   \end{itemize}
 \end{proof}
