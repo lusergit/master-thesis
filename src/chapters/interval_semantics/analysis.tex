@@ -8,7 +8,7 @@ basic expressions in \(\expr\).
   We call
   \[ \Int \defin \{ \interval{a}{b} \mid a \in \z \cup
   \{-\infty\} \wedge b \in \z \cup \{+\infty\} \wedge a\leq b \} \cup
-  \{\bot\} \] set of integer intervals.
+  \{\abstract{\bot}\} \] set of integer intervals.
 \end{definition}
 
 \begin{definition}[Concretization map]
@@ -27,10 +27,10 @@ basic expressions in \(\expr\).
 \end{observation}
 
 \begin{definition}[Abstract integer domain]
-  Let \(\Int_* \defin \Int \setminus \{\bot\}\). The abstract
-  domain \(\bA\) for program analysis is the variable-wise
+  Let \(\Int_* \defin \Int \setminus \{\abstract{\bot}\}\). The
+  abstract domain \(\bA\) for program analysis is the variable-wise
   lifting of \(\Int\): \[ \bA \defin (\Var \to \Int_*) \cup \{
-  \bot \} \]
+  \abstract{\bot} \} \]
 \end{definition}
 
 where the intervals for a given variable are always nonempty, while
@@ -52,6 +52,34 @@ corresponding concretization is defined as follows:
   \iff \concr[\Int](\eta) \subseteq \concr[\Int](\theta)\] then
   \(\tuple{\bA, \sqsubseteq}\) is a complete lattice.
 \end{observation}
+
+\begin{definition}[Interval abstraction]
+    We define the \emph{abstraction map} of some numerical set \(X
+    \subseteq \z\) into the abstract domain \(\bA\): \(\abstr[\Int] :
+    \poset{\z} \to \bA\) as \[\abstr[\Int](X) \defin \begin{cases}
+      \abstract{\bot} & \text{if } X = \emptyset \\ \interval{\min
+        X}{\max X} & \text{otherwise} \end{cases}\]
+\end{definition}
+
+Observe that since we have both a concretization map \(\concr[\Int]\)
+and an abstraction map \(\abstr[\Int]\) we've built the Galois
+Connection \[\tuple{\concr[\Int], \dom, \bA, \abstr[\Int]}\] between
+the concrete domain \(\dom\) and the abstract domain \(\bA\),
+resulting
+
+\begin{definition}[Abstract operations]
+  We define sound abstract operations in the \(\bA\) domain:
+  \begin{align*}
+    \interval{a}{b} \; \abstract{\cup} \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
+    \interval{a}{b} \; \abstract{\cap} \; \interval{c}{d} & \defin \begin{cases} \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
+      \abstract{\bot} & \text{otherwise} \end{cases}
+  \end{align*}
+  And sound abstract aritmetical operations:
+  \begin{align*}
+    \abstract{-}\; \interval{a}{b}  &\defin \interval{-b}{-a} \\
+    \interval{a}{b} 
+  \end{align*}
+\end{definition}
 
 \begin{definition}[Interval sharpening]
   \label{de:trunc}
@@ -106,12 +134,13 @@ extension of the following function \(\semi{\cdot}: \exp \cup \imp \to
   \semi{\var \in S}\eta 
   & \veq  
   \begin{cases}
-    \eta[\var \mapsto \eta(\var)\sqcap \Int(S)]  & \text{if }\eta(\var)\sqcap \Int(S)\neq \bot \\
-    \bot & \text{otherwise}
+    \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if
+    }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
+    \text{otherwise}
   \end{cases}\\
   %
   \semi{\var \in [a,b]}\eta 
-  & \veq  
+  & \veq
   \begin{cases}
     \eta[\var \mapsto \eta(\var)\sqcap [a,b]]  & \text{if }\eta(\var)\sqcap [a,b]\neq \bot \\
     \bot & \text{otherwise}
@@ -257,13 +286,46 @@ The semantics is well-defined, because of the following lemma:
 \end{proof}
 
 \begin{theorem}[\textbf{Correctness}]
-  For all \(\com \in \imp\) and \(\eta\in \mathbb{A}\), 
-  \(\sem{\com}\concr(\eta) \subseteq \concr(\semi{\com}\eta)\) holds. 
+  For all \(\com \in \imp\) and \(\eta\in \bA\),
+  \(\sem{\com}\concr(\eta) \subseteq \concr(\semi{\com}\eta)\) holds.
 \end{theorem}
 
-\todo{Sempre per induzione?}
 \begin{proof}
+  by induction on \(\com\in\imp\):
   
+  \noindent
+  \paragraph*{Base cases:\\}
+  \begin{itemize}
+  \item \(\com \equiv \var \in S\):
+    \begin{itemize}
+    \item \(\sem{\var\in S}\concr[\Int](\eta) = \{\rho \in \env \mid
+      \forall y \in \Var \; \rho(y) \in \concr(\eta(y))\} \cap \{\rho
+      \in \env \mid \rho(\var) \in S\}\)
+    \item \(\concr[\Int](\semi{\var\in S}\eta) = \{\rho \in \env \mid
+      \forall y \in \Var \; \rho(y) \in \concr(\eta(y))\} \cap \{\rho
+      \in \env \mid \rho(\var) \in \Int(S)\}\)
+    \end{itemize}
+    \(S\) is just decidable, not directly an interval, therefore in
+    general \(S \subseteq \Int(S)\), and therefore \[\sem{\var \in
+      S}\concr[\Int](\eta) \subseteq \concr[\Int](\semi{\var\in
+      S}\eta);\]
+  \item \(\com \equiv \var \in \interval{a}{b}, \var \leq k, \var >
+    k\): the reasoning is the same;
+  \item \(\com \equiv \tru\): \(\sem{\tru}\concr[\Int](\eta) =
+    \concr[\Int](\eta)\), \(\concr[\Int](\semi{\tru}\eta) =
+    \concr[\Int](\eta)\), and since \(\concr[\Int](\eta) \subseteq
+    \concr[\Int](\eta)\) \[\sem{\tru}\concr[\Int](\eta) \subseteq
+    \concr[\Int](\semi{\tru}\eta);\]
+  \item \(\com \equiv \ff\): \(\sem{\ff}\concr[\Int](\eta) =
+    \emptyset\), \(\concr[\Int](\semi{\ff}\eta) = \emptyset\) and
+    therefore \[\sem{\ff}\concr[\Int](\eta) \subseteq
+    \concr[\Int](\semi{\ff}\eta);\]
+  \item \(\com \equiv \var := k\) therefore \(\)
+  \item \(\com \equiv \var := \var[y] + k, \var := \var[y] - k\) the
+    reasoning is the same.
+  \end{itemize}  
+  \noindent
+  \paragraph*{Inductive cases:\\}
 \end{proof}
 
 \begin{remark}
