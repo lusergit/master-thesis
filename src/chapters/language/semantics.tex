@@ -52,7 +52,7 @@ terminal states produced by executing the program from \(X\).
 This concrete semantics is additive, meaning that the Kleene star
 (\(\com[C^*]\)) and the fixpoint (\(\fix{C}\)) have the same concrete
 semantics \(\sem{C^*} = \sem{\fix{C}}\).  This will not be the case
-for the abstract semantics (cf. example \ref{ex:fixstar}), where the
+for the abstract semantics (cf. example \ref{ex:fix}), where the
 Kleene star can be more precise than the fixpoint semantics, but
 harder to compute and, as such, less suited for analysis. For the
 concrete semantics, however, since they are the same in the latter
@@ -173,7 +173,8 @@ Therefore \(\sem{C}X = \emptyset \iff \nexists \rho' \in \env, \rho
   \item \(C \equiv C^*\) : \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^i X\)
     \begin{align*}
       \sem{C^*}X & = X \cup \sem{C}X \cup \sem{C}^2X \cup \dots & \text{(by definition)}\\
-      & = X \cup \{\rho' \in\env \mid \rho \in X, \stt{\com[C],\rho} \to^* \rho'\} \cup \{\rho' \in\poset{\env} \mid \rho \in X, \stt{\com[C;C],\rho} \to^* \rho'\} \cup \dots & \text{(by ind. hp)}\\
+      & = X \cup \{\rho' \in\env \mid \rho \in X, \stt{\com[C],\rho} \to^* \rho'\} \cup %% \{\rho' \in\poset{\env} \mid \rho \in X, \stt{\com[C;C],\rho} \to^* \rho'\} \cup
+      \dots & \text{(by ind. hp)}\\
       & = \cup_{i\in\n} \{\rho' \in\env \mid \rho \in X, \stt{\com[C^i], \rho} \to^*  \rho'\} \\
       & = \{\rho' \in\env \mid \rho \in X, \vee_{i\in\n} \stt{\com[C^i], \rho} \to^* \rho'\} \\
       & = \{\rho' \in\env \mid \rho \in X, \stt{\com[C^*], \rho} \to^* \rho'\}

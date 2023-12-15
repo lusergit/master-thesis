@@ -3,12 +3,12 @@
 We define \emph{interval analysis} of the above language \(\imp\) in a
 standard way, taking the best correct approximations (bca) for the
 basic expressions in \(\expr\).
-  
+
 \begin{definition}[Integer intervals]
   We call
   \[ \Int \defin \{ \interval{a}{b} \mid a \in \z \cup
-  \{-\infty\} \wedge b \in \z \cup \{+\infty\} \wedge a\leq b \} \cup
-  \{\abstract{\bot}\} \] set of integer intervals.
+    \{-\infty\} \wedge b \in \z \cup \{+\infty\} \wedge a\leq b \} \cup
+    \{\abstract{\bot}\} \] set of integer intervals.
 \end{definition}
 
 \begin{definition}[Concretization map]
@@ -30,7 +30,7 @@ basic expressions in \(\expr\).
   Let \(\Int_* \defin \Int \setminus \{\abstract{\bot}\}\). The
   abstract domain \(\bA\) for program analysis is the variable-wise
   lifting of \(\Int\): \[ \bA \defin (\Var \to \Int_*) \cup \{
-  \abstract{\bot} \} \]
+    \abstract{\bot} \} \]
 \end{definition}
 
 where the intervals for a given variable are always nonempty, while
@@ -49,16 +49,16 @@ corresponding concretization is defined as follows:
 \begin{observation}
   If we consider the ordering \(\sqsubseteq\) on \(\bA\)
   s.t. \[\forall \eta, \theta \in \bA \quad \eta \sqsubseteq \theta
-  \iff \concr[\Int](\eta) \subseteq \concr[\Int](\theta)\] then
+    \iff \concr[\Int](\eta) \subseteq \concr[\Int](\theta)\] then
   \(\tuple{\bA, \sqsubseteq}\) is a complete lattice.
 \end{observation}
 
 \begin{definition}[Interval abstraction]
-    We define the \emph{abstraction map} of some numerical set \(X
-    \subseteq \z\) into the abstract domain \(\bA\): \(\abstr[\Int] :
-    \poset{\z} \to \bA\) as \[\abstr[\Int](X) \defin \begin{cases}
-      \abstract{\bot} & \text{if } X = \emptyset \\ \interval{\min
-        X}{\max X} & \text{otherwise} \end{cases}\]
+  We define the \emph{abstraction map} of some numerical set \(X
+  \subseteq \z\) into the abstract domain \(\bA\): \(\abstr[\Int] :
+  \poset{\z} \to \bA\) as \[\abstr[\Int](X) \defin \begin{cases}
+    \abstract{\bot} & \text{if } X = \emptyset \\ \interval{\min
+    X}{\max X} & \text{otherwise} \end{cases}\]
 \end{definition}
 
 Observe that since we have both a concretization map \(\concr[\Int]\)
@@ -76,8 +76,10 @@ resulting
   \end{align*}
   And sound abstract aritmetical operations:
   \begin{align*}
-    \abstract{-}\; \interval{a}{b}  &\defin \interval{-b}{-a} \\
-    \interval{a}{b} 
+    \abstract{-}\; \interval{a}{b} & \defin \interval{-b}{-a} \\
+    \interval{a}{b} \abstract{+} \interval{c}{d} & \defin \interval{a+c}{b+d} \\
+    \interval{a}{b} \abstract{-} \interval{c}{d} & \defin \interval{a-c}{b-d} \\
+    \interval{a}{b} \abstract{\times} \interval{c}{d} & \defin \interval{\min(ac,ad,bc,bd)}{\max(ac,ad,bc,bd)} \\
   \end{align*}
 \end{definition}
 
@@ -88,19 +90,19 @@ resulting
   bound to \(c\), respectively:
   \begin{align*}
     &\truncL{\interval{a}{b}}{c} \veq 
-    \begin{cases} 
-      \interval{\max\{a,c\}}{b} & \text{if } c\leq b\\
-      \bot & \text{if } c > b
-    \end{cases}
+      \begin{cases} 
+        \interval{\max\{a,c\}}{b} & \text{if } c\leq b\\
+        \bot & \text{if } c > b
+      \end{cases}
     \\
     &\truncR{\interval{a}{b}}{c} \veq 
-    \begin{cases}   
-      \interval{a}{\min\{b,c\}} & \text{if } c\geq a\\
-      \bot & \text{if } c < a 
-    \end{cases} 
+      \begin{cases}   
+        \interval{a}{\min\{b,c\}} & \text{if } c\geq a\\
+        \bot & \text{if } c < a 
+      \end{cases} 
   \end{align*}
   Observe that \(\max(\truncR{\interval{a}{b}}{c})\leq c\) always holds. \qed   
-  %\end{quote}
+  % \end{quote}
 \end{definition}
 
 \begin{definition}[Interval addition and subtraction]
@@ -121,7 +123,7 @@ Observe that for every interval \(\interval{a}{b} \in \Int\) and
 that trivially holds by 
 defining \(\max (\bot)  \veq 0\) (i.e., \(0\) is the maximum of
 an empty interval).
-%Just observe that the resulting interval could be empty, i.e.\ \(\bot\), and .
+% Just observe that the resulting interval could be empty, i.e.\ \(\bot\), and .
 
 The \emph{interval semantics} of \(\imp\) is defined as the strict
 (i.e., preserving \(\bot\))
@@ -130,45 +132,45 @@ extension of the following function \(\semi{\cdot}: \exp \cup \imp \to
 \bA \to \bA\). For all \(\eta: \Var \to \Int_*\),
 
 \begin{align*}
-  %
+  % 
   \semi{\var \in S}\eta 
   & \veq  
-  \begin{cases}
-    \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if
-    }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
-    \text{otherwise}
-  \end{cases}\\
-  %
+    \begin{cases}
+      \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if
+                                                            }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
+                                                                                                                 \text{otherwise}
+    \end{cases}\\
+    % 
   \semi{\var \in [a,b]}\eta 
   & \veq
-  \begin{cases}
-    \eta[\var \mapsto \eta(\var)\sqcap [a,b]]  & \text{if }\eta(\var)\sqcap [a,b]\neq \bot \\
-    \bot & \text{otherwise}
-  \end{cases}\\
-  % boolean
-  %
+    \begin{cases}
+      \eta[\var \mapsto \eta(\var)\sqcap [a,b]]  & \text{if }\eta(\var)\sqcap [a,b]\neq \bot \\
+      \bot & \text{otherwise}
+    \end{cases}\\
+    % boolean
+    % 
   \semi{\var \leq k}\eta 
   & \veq 
-  \begin{cases}
-    \eta[\var \mapsto \truncR{\eta(\var)}{k}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
-    \bot & \text{otherwise}
-  \end{cases}\\
-  %
+    \begin{cases}
+      \eta[\var \mapsto \truncR{\eta(\var)}{k}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
+      \bot & \text{otherwise}
+    \end{cases}\\
+    % 
   \semi{\var > k}\eta 
   & \veq 
-  \begin{cases}
-    \eta[\var \mapsto \truncL{\eta(\var)}{k+1}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
-    \bot & \text{otherwise}
-  \end{cases}\\
-  %
+    \begin{cases}
+      \eta[\var \mapsto \truncL{\eta(\var)}{k+1}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
+      \bot & \text{otherwise}
+    \end{cases}\\
+    % 
   \semi{\tru}\eta 
   & \veq \eta\\
-  %
+  % 
   \semi{\ff}\eta 
   & \veq \bot\\
-  %
-  %\semi{\id}\eta & \veq \eta\\
-  %
+  % 
+  % \semi{\id}\eta & \veq \eta\\
+  % 
   \semi{\var := k}\eta 
   & \veq \eta[\var \mapsto \interval{k}{k}]\\
   % 
@@ -199,8 +201,8 @@ extension of the following function \(\semi{\cdot}: \exp \cup \imp \to
 The semantics is well-defined, because of the following lemma:
 
 \begin{lemma}\label{le:monotone}
-   for all \(\com \in \imp\), \[\semi{\com}: \bA \to \bA\] is
-   monotone.
+  for all \(\com \in \imp\), \[\semi{\com}: \bA \to \bA\] is
+  monotone.
 \end{lemma}
 
 \begin{proof}
@@ -281,9 +283,88 @@ The semantics is well-defined, because of the following lemma:
   \item \(\com^*\). Then by inductive hypothesis \(\forall i \in \n
     . \semi{\com}^i\eta \sqsubseteq \semi{\com}^i\theta\), which means
     \[\semi{\com^*}\eta = \bigsqcup_{i\in\n}\semi{\com}^i\eta \sqsubseteq
-    \bigsqcup_{i\in\n}\theta = \semi{\com^*}\theta.\]
+    \bigsqcup_{i\in\n}\semi{\com}^i\theta = \semi{\com^*}\theta.\]
   \end{itemize}
 \end{proof}
+
+\begin{example} \label{ex:fix}
+  This is the case, for instance, the following program \(P\)
+  rapresents the difference between the Kleene Star and the Fix
+  operator:
+\begin{verbatim}
+  while x < 8 do
+  if x = 2 then x := x+6;
+  x := x-3
+  if x <= 0 then x:=0
+\end{verbatim}
+starting with the finite interval \(\interval{3}{4}\) we get the
+following loop invariants:
+
+\begin{align*}
+  \text{Kleene: } &\sqcup\{[3,4], [0,1], [0,0], [0,0], \ldots\} = [0,4]\\[5pt]
+  \text{Fix: } & \sqcup\{\bot, [3,4], [0,4], [0,5], [0,5],\ldots\} = [0,5]
+\end{align*}
+
+\noindent
+Both invariants are correct, because they over-approximate the most
+precise concrete invariant \(\{0,1,3,4\}\), however the Kleene
+invariant is strictly more precise than the Fix one.
+\end{example}
+
+\begin{lemma}[\(\fix{\com}\) \textbf{is syntactic sugar}]\label{lemma-ss}
+  For all \(\eta\),
+  \(\semi{\fix{\com}} \eta = \semi{\kleene{(\tru + \com)}} \eta\).
+\end{lemma}
+
+\begin{proof}
+  Let us first show by induction that 
+  \begin{equation}\label{prop2}
+    \forall i\geq 0.\: (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot = (\tru \sqcup \semi{\com})^{i} \eta \tag{\(\sharp\)}
+  \end{equation}
+
+  \noindent
+  \(i=0\): \( (\eta \sqcup \tru \sqcup \semi{\com})^{1} \bot = \eta \sqcup \bot \sqcup \semi{\com}\bot = \eta = 
+  (\tru \sqcup \semi{\com})^{0} \eta\).
+  
+  %\medskip
+  \noindent
+  \(i+1\):  
+  \begin{align*}
+    (\tru \sqcup \semi{\com})^{i+1} \eta & = & \\
+    (\tru \sqcup \semi{\com})((\tru \sqcup \semi{\com})^{i} \eta) & = & \\
+    ((\tru \sqcup \semi{\com})^{i} \eta) \sqcup  \semi{\com}((\tru \sqcup \semi{\com})^{i} \eta) & = & \text{By induction}\\
+    (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot \sqcup \semi{\com}((\eta \sqcup \tru \sqcup \semi{\com})^{i+1}\bot ) &= & \text{As } \eta \sqsubseteq (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot \\
+    \eta \sqcup (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot \sqcup \semi{\com}((\eta \sqcup \tru \sqcup \semi{\com})^{i+1}\bot ) & = & \\
+    (\eta \sqcup \tru \sqcup \semi{\com}) ((\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot) & = & \\
+    (\eta \sqcup \tru \sqcup \semi{\com})^{i+2} \bot & &
+  \end{align*}
+
+  Let us also show that:
+  \begin{equation}\label{prop3}
+    \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} =
+    \lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi{\com} \mu)}\tag{\(\diamond\)}
+  \end{equation}
+  Observe that \(\lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} = \eta \sqcup  \semi{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)})\), so that we have that:
+  \[
+  \eta \sqcup  \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} \sqcup \semi{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)})
+  \sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)}
+  \]
+  As a consequence, \(\lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi{\com} \mu)}\sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)}\) holds. The reverse inequality follows because, for all \(\mu\), 
+  \(\eta \sqcup \semi{\com} \mu \sqsubseteq \eta \sqcup \mu \sqcup \semi{\com} \mu\).
+
+  Then, we have that:
+  \begin{align*}
+    \semi{\fix{\com}} \eta & =\\
+    \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} &= \quad\text{[By \eqref{prop3}]}\\
+    \lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi{\com} \mu)} &= \quad\text{[By Knaster-Tarski Theorem]} \\
+    \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi{\com})^i \bot & = \\
+    \bot \sqcup \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot & = \quad\text{[By \eqref{prop2}]}\\
+    \bigsqcup_{i \in \nat} (\tru \sqcup \semi{\com})^{i} \eta & = \\
+    \semi{\kleene{(\tru + \com)}} \eta &. \qedhere
+  \end{align*}
+  
+\end{proof}
+
 
 \begin{theorem}[\textbf{Correctness}]
   For all \(\com \in \imp\) and \(\eta\in \bA\),
@@ -310,7 +391,7 @@ The semantics is well-defined, because of the following lemma:
       S}\concr[\Int](\eta) \subseteq \concr[\Int](\semi{\var\in
       S}\eta);\]
   \item \(\com \equiv \var \in \interval{a}{b}, \var \leq k, \var >
-    k\): the reasoning is the same;
+    k\): is the same as the latter case;
   \item \(\com \equiv \tru\): \(\sem{\tru}\concr[\Int](\eta) =
     \concr[\Int](\eta)\), \(\concr[\Int](\semi{\tru}\eta) =
     \concr[\Int](\eta)\), and since \(\concr[\Int](\eta) \subseteq
@@ -320,12 +401,41 @@ The semantics is well-defined, because of the following lemma:
     \emptyset\), \(\concr[\Int](\semi{\ff}\eta) = \emptyset\) and
     therefore \[\sem{\ff}\concr[\Int](\eta) \subseteq
     \concr[\Int](\semi{\ff}\eta);\]
-  \item \(\com \equiv \var := k\) therefore \(\)
-  \item \(\com \equiv \var := \var[y] + k, \var := \var[y] - k\) the
-    reasoning is the same.
+  \item \(\com \equiv \var := k\) therefore \(\sem{\var := k}
+    \concr[\Int](\eta) = \{\rho \in \env \mid \forall y\in \Var . y
+    \neq \var \Rightarrow \rho(y) \in \concr(\eta(y)), \rho(\var) \in
+    \concr(\eta(\var) + k)\} = \concr[\Int](\semi{\var := k}\eta)\)
+    therefore \[\sem{\var := k} \concr[\Int](\eta) \subseteq
+    \concr[\Int](\semi{\var := k}\eta);\]
+  \item \(\com \equiv \var := \var[y] + k, \var := \var[y] - k\) is
+    the same as the latter case.
   \end{itemize}  
   \noindent
   \paragraph*{Inductive cases:\\}
+  \begin{itemize}
+  \item \(\com \equiv \com_1 + \com_2\), therefore \[\sem{\com_1 +
+        \com_2}\concr[\Int](\eta) = \sem{\com_1}\concr[\Int](\eta) \cup
+      \sem{\com_2}\concr[\Int](\eta)\] and \[\concr[\Int](\semi{\com_1 +
+        \com_2}\eta) = \concr[\Int](\semi{\com_1}\eta \sqcup
+      \semi{\com_2}\eta) = \concr[\Int](\semi{\com_1}\eta) \cup
+      \concr[\Int](\semi{\com_2}\eta).\] By inductive hypothesis both
+    \(\sem{\com_1}\concr[\Int](\eta) \subseteq
+    \concr[\Int](\semi{\com_1}\eta)\) and
+    \(\sem{\com_2}\concr[\Int](\eta) \subseteq
+    \concr[\Int](\semi{\com_2}\eta)\), therefore \[\sem{\com_1 +
+        \com_2}\concr[\Int](\eta) \subseteq \concr[\Int](\semi{\com_1 +
+        \com_2}\eta);\]
+  \item \(\com \equiv \com_1 ; \com_2\), therefore
+    \(\sem{\com_1;\com_2}\concr[\Int](\eta) =
+    \sem{\com_2}(\sem{\com_1}\concr[\Int](\eta))\), while
+    \[\concr[\Int](\semi{\com_1; \com_2}\eta) =
+      \concr[\Int] (\semi{\com_2}( \semi{\com_1}\eta)).\]
+  \item \(\com \equiv \com^*\), therefore
+    \(\sem{\com^*}\concr[\Int](\eta) =
+    \bigcup_{i\in\n}\sem{\com}^i\concr[\Int](\eta)\), while
+    \(\concr[\Int](\semi{\com^*}\eta) =
+    \concr[\Int](\bigsqcup_{i\in\n}\semi{\com^*}\eta)\)
+  \end{itemize}
 \end{proof}
 
 \begin{remark}
@@ -339,196 +449,3 @@ The semantics is well-defined, because of the following lemma:
   when \(\com\) includes a either Kleene or fix iteration which does
   not convernge in finitely many steps.
 \end{remark}
-
-\subsection{Computing the interval semantics} 
-
-In this section we argue that for the language \(\imp\) the interval
-abstract semantics is computable in finite time without widening.
-
-Observe that the exact computation provides, already for our simple
-language, a precision which is not obtainable with (basic) widening
-and narrowing. In the example below the semantics maps \(\var\) and
-\(\var[y]\) to \([0,2]\) and \([6,8]\) resp., while widening/narrowing
-to \([0,\infty]\) and \([6,\infty]\)
-
-\begin{verbatim}
-x:=0;
-y:=0;
-while (x<=5) do
-   if (y=0) then
-      y=y+1;
-   endif;
-   if (x==0) then
-      x:=y+7;
-   endif;
-done;
-end
-\end{verbatim}
-
-Of course, for the collecting semantics this is not the case. Already
-computing a finite upper bound for loop invariants when they are
-finite is impossible as this would allow to decide termination, as
-we've seen in section \ref{sec:finiteness}.
-
-\begin{problem}[Termination of interval analysis]\label{problem1}
-Given \(\com\in \imp\), \(\eta \in \bA\), decide: \(\sem{\com} \eta
-=^? \top\)
-\end{problem}
-
-First, given a program, we associate each variable with a \emph{single
-bound}, which captures both both an \emph{upper bound}, for which the
-rough idea is that, whenever a variable is beyond that bound, the
-behaviour of the program with respect to that variable becomes stable
-and an \emph{increment bound} which captures the largest increment or
-decrement that can affect a variable.
-
-\begin{definition}[\textbf{Program bound}]
-  \label{de:bound}
-  The \emph{bound} associated with a command \(\com\in \imp\) is a
-  natural number, denoted \(\bound{\com}\in \nat\), defined
-  inductively as follows:
-  \begin{align*}
-    %
-    \bound{\var \in S}  
-    & \veq \begin{cases}
-      \min(S) & \text{if } \max(S)=\infty\\
-      \max(S) & \text{if } \max(S)\in \nat
-    \end{cases}
-    \\
-    %
-    \bound{\var \in [a,b]}  
-    & \veq \begin{cases}
-      a & \text{if } b=\infty\\
-      b & \text{if } b\in \nat
-    \end{cases}
-    \\
-    % boolean
-    %
-    \bound{\var \leq k}  
-    & \veq k\\
-    %
-    \bound{\var > k} 
-    & \veq k\\
-    %
-    %
-    \bound{\tru} 
-    & \veq 0\\
-    %
-    \bound{\ff} 
-    & \veq 0\\
-    % \bound{\var > \var[y]}  
-    % & \veq 0\\
-    %
-    %
-    % assignements
-    %
-    \bound{\var := k} 
-    & \veq k\\
-    %
-    \bound{\var := \var[y] + k}
-    & \veq k\\
-    %
-    \bound{\var := \var[y] - k}
-    & \veq k\\
-    % 
-    % \bound{\var := \var[y]} 
-    % & \veq 0\\[3mm]
-    %
-    % commands
-    %
-    \bound{\com_1 \ndet \com_2}
-    & \veq \bound{\com_1} + \bound{\com_2}\\
-    %
-    \bound{\com_1 \seq \com_2}
-    & \veq \bound{\com_1} + \bound{\com_2}\\
-    %% %% 
-    %% \bound{\kleene{\com}}
-    %% & \veq 2 \bound{\com}\\
-    %% %% 
-    \bound{\kleene{\com}}
-    & \veq (|\mathit{vars}(\com)|+1) \bound{\com} \\ 
-  \end{align*}
-  where \(\mathit{vars}(\com)\) denotes the set of variables occurring in 
-  \(\com\).
-\end{definition}
-
-\begin{definition}[\textbf{Bound Environment}]
-  \label{de:boundenv}
-  A bound environment (benv for short) is a total function \(b:\Var \ra \nat\). We define 
-  \(\benv \veq \{ b \mid b:\Var \ra \nat\}\).
-  Each command 
-  \(C\in \imp\) induces a benv transformer \(\boundt{C}:\benv \ra \benv\), which is defined inductively as follows:
-  \begin{align*}
-    %
-    % boolean
-    %
-    \boundt{\var \in S}b  
-    & \veq 
-    \begin{cases} 
-      b[\var[x]\mapsto b(\var[x])+\min(S)]& \text{if }\max(S)=\infty\\
-      b[\var[x]\mapsto b(\var[x])+\max(S)]& \text{if }\max(S)\in \nat
-    \end{cases}
-    \\
-    %
-    % assignments
-    %
-    \boundt{\var := k}b 
-    & \veq  b[\var[x]\mapsto b(\var[x])+k]\\
-    %
-    \boundt{\var := \var[y] + k}b
-    & \veq  b[\var[x]\mapsto b(\var[x])+b(\var[y])+k]\\
-    %
-    \bound{\var := \var[y] - k}b
-    & \veq  b[\var[x]\mapsto b(\var[x])+b(\var[y])+k]\\
-    %
-    % commands
-    %
-    \boundt{\com_1 \ndet \com_2}b
-    & \veq \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b)(\var[x])\\
-    %
-    \boundt{\com_1 \seq \com_2}b
-    & \veq \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b)(\var[x])\\
-    %& \veq \boundt{\com_2}(\boundt{\com_1}b) \\
-    % 
-    \boundt{\fix{\com}}b
-    &\veq  \lambda \var[x]. (|\mathit{vars}(\com)|+1)(\boundt{\com}b)(\var[x])
-  \end{align*}    
-  where \(\mathit{vars}(\com)\) denotes the set of variables occurring
-  in \(\com\).
-\end{definition}
-
-\begin{lemma}
-  For all \(\com \in \imp\), \(\bound{\com}=\sum_{\var\in \vars{\com}}
-  (\boundt{\com}b_0)(\var)\), with \(b_0\veq \lambda x.0\).
-\end{lemma}
-\begin{proof}
-  By induction on \(\com\in \imp\). The base cases are clear. 
-
-  \noindent
-  \((\com_1 \ndet \com_2)\):
-  \begin{align*}
-    \bound{\com_1 \ndet \com_2} =&\\
-    \bound{\com_1} + \bound{\com_2} = & \quad \text{[by inductive hypothesis]}\\
-    \sum_{\var\in \vars{\com_1}} (\boundt{\com}b_0)(\var) + \sum_{\var\in \vars{\com_2}} (\boundt{\com}b_0)(\var) =&\\
-    \sum_{\var\in \vars{\com_1}\cap \vars{\com_2}} (\boundt{\com_1}b_0)(\var)+(\boundt{\com_2}b_0)(\var) +&\\
-    \sum_{\var\in \vars{\com_1}\smallsetminus \vars{\com_2}} (\boundt{\com_1}b_0)(\var) +&\\
-    \sum_{\var\in \vars{\com_2}\smallsetminus \vars{\com_1}} (\boundt{\com_2}b_0)(\var) =&\\
-    \boundt{\com_1 \ndet \com_2}b_0 \phantom{=}&
-  \end{align*}
-
-  \noindent
-  \((\com_1; \com_2)\): identical to \((\com_1 \ndet \com_2)\).
-
-  \medskip
-  \noindent
-  \((\fix{\com})\):
-  \begin{align*}
-    \bound{\fix{\com}} =&\\
-    |\vars{C}+1|\bound{\com} = & \quad \text{[by inductive hypothesis]}\\
-    |\vars{C}+1|\sum_{\var\in \vars{\com}} (\boundt{\com}b_0)(\var)=&\\
-    \sum_{\var\in \vars{\com}} |\vars{C}+1|(\boundt{\com}b_0)(\var)=&\\
-    %\lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b_0)(\var[x]) =&\\
-    \boundt{\fix{\com}}b_0\phantom{=}&
-  \end{align*}
-\end{proof}
- 
