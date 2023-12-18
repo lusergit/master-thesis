@@ -72,11 +72,17 @@ a program that universally halts.
 \end{example}
 
 \begin{example}\label{ex:neverhalts}
-  Consider the program \(\com[P]\) \[(\var \geq 0;
-  \pplus{\var})^*;\var < 0\] The program never haltsn \(\forall \rho
-  \in \env\) s.t. \(\rho(\var) \geq 0\). In fact in these cases it
-  builds the transition system in figure \ref{fig:tsysnhalt}. Which
-  does not reach any final state \(\rho'\).
+  Consider the program \(\com[P]\)
+  \[(\var \geq 0; \pplus{\var})^*;\var < 0\] The program never haltsn
+  \(\forall \rho \in \env\) s.t. \(\rho(\var) \geq 0\). In fact in
+  these cases it builds the transition system in figure
+  \ref{fig:tsysnhalt}, where the infinite path
+  \[\stt{(\var \geq 0; \pplus{\var})^*; x < 0, \rho} \to^* \stt{(\var
+      \geq 0; \pplus{\var})^*; x < 0, \rho[\var \mapsto \rho(\var) +
+      1]} \to^* \dots\]
+  
+  \[\dots \to^* \stt{(\var \geq 0; \pplus{\var})^*; x < 0, \rho[\var
+      \mapsto \rho(\var) + k]} \to^* \dots \] is always present.
   \begin{figure}
     \begin{tikzpicture}[->,>=stealth]
       \tikzset{node distance = .5cm}
