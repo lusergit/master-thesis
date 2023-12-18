@@ -60,6 +60,33 @@ system:
 
 Notice that the set of reduction of any finite program \(\com\in\imp\) is finite.
 
+\noindent
+Other useful lemmas in the system are the composition and
+decomposition lemma.
+
+\begin{lemma}[Decomposition lemma]\label{le:decomp}
+  If \(\stt{\com_1;\com_2, \rho} \to^k \rho''\), then there exists a
+  state \(\rho'\) and a natural number \(k_1, k_2\)
+  s.t. \(\stt{\com_1, \rho} \to^{k_1} \rho'\) and
+  \(\stt{\com_2, \rho'} \to^{k_2}\rho''\), where \(k_1 + k_2 = k\)
+\end{lemma}
+
+\begin{corollary}\label{co:decomp}
+  If \(\stt{\com_1;\com_2, \rho} \to^* \rho''\) then \(\exists \rho'\)
+  s.t. \(\stt{\com_1, \rho} \to^* \rho'\) and
+  \(\stt{\com_2, \rho'}\to^* \rho''\).
+\end{corollary}
+
+\begin{lemma}[Composition lemma]\label{le:comp}
+  If \(\stt{\com_1, \rho} \to^k \rho'\) then
+  \(\stt{\com_1; \com_2, \rho} \to^k \stt{\com_2, \rho'}\)
+\end{lemma}
+
+\begin{corollary}\label{co:comp}
+  If \(\stt{\com_1, \rho} \to^* \rho'\) then
+  \(\stt{\com_1;\com_2, \rho}\to^* \stt{\com_2, \rho'}\).
+\end{corollary}
+
 %% \begin{lemma}\label{le:tosets}
 %%   Given a program \(\com\in\imp\), for \(\red{\com}\) it holds that
 %%   \begin{align*}

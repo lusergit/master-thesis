@@ -20,11 +20,11 @@ basic expressions in \(\expr\).
   \end{align*}
 \end{definition}
 
-\begin{observation}
-  \(\tuple{\Int,\sqsubseteq}\) is a complete lattice where for all
-  \(I,J\in \Int\), \(I\sqsubseteq J\) iff \(\gamma(I) \subseteq
-  \gamma(J)\).
-\end{observation}
+\noindent
+Observe that \(\tuple{\Int,\sqsubseteq}\) is a complete lattice where
+for all \(I,J\in \Int\), \(I\sqsubseteq J\) iff
+\(\gamma(I) \subseteq \gamma(J)\).
+
 
 \begin{definition}[Abstract integer domain]
   Let \(\Int_* \defin \Int \setminus \{\abstract{\bot}\}\). The
@@ -34,15 +34,15 @@ basic expressions in \(\expr\).
 \end{definition}
 
 where the intervals for a given variable are always nonempty, while
-\(\bot\) represents the empty set of environments.  Thus, the
-corresponding concretization is defined as follows:
+\(\abstract{\bot}\) represents the empty set of environments.  Thus,
+the corresponding concretization is defined as follows:
 
 \begin{definition}[Interval concretization]
   We define the \emph{concretization map} for the abstract domain
   \(\bA\) \(\concr[\Int] : \bA \to \poset{\env}\) as
   \begin{align*}
-    \concr[\Int](\bot) &\defin \emptyset\\
-    \forall \eta\neq \bot \quad \concr[\Int](\eta) &\defin \{\rho \in \env \mid \forall x\in \Var \: \rho(x) \in \gamma(\eta(x))\} 
+    \concr[\Int](\bot) & \defin \emptyset \\
+    \forall \eta\neq \bot \quad \concr[\Int](\eta) & \defin \{\rho \in \env \mid \forall x\in \Var \: \rho(x) \in \gamma(\eta(x))\} 
   \end{align*}
 \end{definition}
 
@@ -354,15 +354,14 @@ invariant is strictly more precise than the Fix one.
 
   Then, we have that:
   \begin{align*}
-    \semi{\fix{\com}} \eta & =\\
-    \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} &= \quad\text{[By \eqref{prop3}]}\\
-    \lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi{\com} \mu)} &= \quad\text{[By Knaster-Tarski Theorem]} \\
+    \semi{\fix{\com}} \eta & = \\
+    \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} & = &  \text{By \eqref{prop3}}\\
+    \lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi{\com} \mu)} & = & \text{By Knaster-Tarski Theorem} \\
     \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi{\com})^i \bot & = \\
-    \bot \sqcup \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot & = \quad\text{[By \eqref{prop2}]}\\
+    \bot \sqcup \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot & = & \text{By \eqref{prop2}}\\
     \bigsqcup_{i \in \nat} (\tru \sqcup \semi{\com})^{i} \eta & = \\
-    \semi{\kleene{(\tru + \com)}} \eta &. \qedhere
-  \end{align*}
-  
+    \semi{\kleene{(\tru + \com)}} \eta. &
+  \end{align*}  
 \end{proof}
 
 
