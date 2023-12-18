@@ -68,27 +68,30 @@
     \rho_2, \dots \mid \forall i,j \in \n\) \(\rho_i \neq \rho_j\) and
     therefore \(\trans{\com[D]^*}{\rho_1} \nehalts\) which means that
     \(\trans{\com[D]^*}{\rho_1}\ahalts\) is false.
-  \item In case \(\sem{D^*}X\) is finite, we can notice that the
-    states in \(\trans{\com[D]}{\rho}\) are \[\red{\com[D]^*}\times
-    Y\] with \(Y \subseteq \{\rho'\mid \stt{\com[D], \rho} \to^*
-    \stt{\com[D]', \rho'} \vee \stt{\com[D],\rho} \to^* \rho'\}\) with
+  \item In case \(\sem{D^*}X\) is finite, we can notice that for all
+    the \(\rho \in X\), the states in \(\trans{\com[D]}{\rho}\)
+    are \[\red{\com[D]^*}\times Y\] with
+    \(Y \subseteq \{\rho'\mid \stt{\com[D], \rho} \to^* \stt{\com[D]',
+      \rho'} \vee \stt{\com[D],\rho} \to^* \rho'\}\) with
     \(\com[D]'\in \red{\com[D]}\). Since there's a finite amount of
     states total termination reduces to the presence of some cycle. In
     fact if
     \begin{itemize}
-    \item \(\exists \rho \in X \mid \stt{\com[D]^*, \rho} \to^*
-      \stt{\com[D]^*, \rho}\) the semantics would still be finite, but
-      there would be an infinite path \[\stt{\com[D]^*, \rho} \to^*
-      \stt{\com[D]^*, \rho} \to^* \dots\] that would imply that
+    \item
+      \(\exists \rho \in X \mid \stt{\com[D]^*, \rho} \to^*
+      \stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho'}\) for some
+      \(\rho'\in \sem{\com[D]^*}X\). In this case the semantics would
+      still be finite, but there would be an infinite path
+      \[\stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^*
+        \stt{\com[D]^*, \rho'} \to^* \dots\] that would imply that
       \(\trans{\com[D]}{\rho} \nehalts\), and therefore
       \(\trans{\com[D]}{\rho} \ahalts\) would be false.
-    \item otherwise \(\nexists \rho \in X \mid \stt{\com[D]^*, \rho}
-      \to^* \stt{\com[D]^*, \rho}\), but since there is a finite
+    \item otherwise
+      \(\nexists \rho \in X \mid \stt{\com[D]^*, \rho} \to^*
+      \stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho'}\) for some
+      \(\rho'\in \sem{\com[D]^*}X\), but since there is a finite
       amount of states each path in \(\trans{\com[D]}{\rho}\) is
-      finite, and therefore we can decide if
-      \(\trans{\com[D]}{\rho}\ahalts\), \(\trans{\com[D]}{\rho}\ehalts
-      \wedge \trans{\com[D]}{\rho}\nehalts\) or
-      \(\trans{\com[D]}{\rho}\nahalts\)
+      finite, and therefore \(\trans{\com[D]}{\rho}\ahalts\).
     \end{itemize}
   \end{itemize}
 \end{proof}
