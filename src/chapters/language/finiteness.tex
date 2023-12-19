@@ -2,36 +2,71 @@
 
 \begin{lemma}\label{le:finiteness}
   If \(\com[D]\in\imp_\starless\), and \(X \in \poset{env}\) is
-  finite, then \(\sem{D}X\) is finite and \(\forall \rho \in X\)
-  \(\trans{\com[D]}{\rho}\ahalts\).
+  finite, then
+  \begin{enumerate}[label=(\roman*).]
+  \item \(\sem{D}X\) is finite;
+  \item \(\forall \rho \in X\) \(\trans{\com[D]}{\rho}\ahalts\)
+  \item \(\sizeof{\trans{\com[D]}{\rho}} < \infty\) for all
+    \(\rho \in X\).
+  \end{enumerate}
 \end{lemma}
 
 \begin{proof}
   By induction on the program \(\com[D]\):
   \paragraph*{Base case:\\}
-  \(\com[D] \equiv e\), therefore \(\sem{e}X = \{\bsem{e}\rho \mid
-  \rho \in X , \bsem{e}\rho \neq \bot\}\), which is finite, since
-  \(X\) is finite. %% Moreover, by expr rule \(\forall \rho \in X\)
-  %% either \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho}
-  %% \not\to\). In both cases \(\trans{\com[e]}{\rho} \ahalts\).
+  \(\com[D] \equiv e\), therefore
+  \begin{enumerate}[label=(\roman*).]
+  \item \label{it:1}
+    \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X , \bsem{e}\rho \neq
+    \bot\}\), which is finite, since \(X\) is finite;
+  \item \label{it:2} by expr rule \(\forall \rho \in X\) either
+    \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho} \not\to\). In
+    both cases there are no infinite paths, and therefore
+    \(\trans{\com[e]}{\rho} \ahalts\);
+  \item Notice that
+    \(\trans{\com[e]}{\rho} = \{\tau \in \Path^\infty \mid \tau_0 =
+    \stt{\com[e], \rho}\}\) for all \(\rho \in X\), therefore
+    \(\sizeof{\trans{\com[e]}{\rho}} = \sizeof{X} < \infty\) because
+    of \ref{it:1}
+  \end{enumerate}
   
   \paragraph*{Inductive cases:\\}
   \begin{enumerate}
-  \item \(\com[D]\equiv \com[D_1 + D_2]\), therefore \(\sem{D_1 + D_2}
-    X = \sem{D_1}X \cup \sem{D_2}X\). By inductive hypothesis, both
-    \(\sem{D_1}X, \sem{D_2}X\) are finite, as they're sub expressions
-    of \(\com[D]\). Since the union of finite sets is finite,
-    \(\sem{D_1 + D_2}X\) is finite. %% Moreover by inductive hypothesis
-    %% again \(\forall \rho \in X\) \(\trans{\com[D]_1}{\rho}\ahalts\)
-    %% and \(\trans{\com[D]_2}{\rho}\ahalts\). Because of sum\(_1\) and
-    %% sum\(_2\) rules, \(\trans{(\com[D]_1 + \com[D]_2)}{\rho}\ahalts\).
-  \item \(\com[D]\equiv \com[D_1; D_2]\), therefore \(\sem{D_1;D_2}X =
-    \sem{D_2}(\sem{D_1}X)\). By inductive hypothesis \(\sem{D_1}X =
-    Y\) is finite%%  and \(\forall \rho \in X\)
-    %% \(\trans{\com[D]_1}{\rho}\ahalts\)
-    . Again by inductive hypothesis
-    \(\sem{D_2}Y\) is finite. %% and \(\forall \rho \in Y\)
-    %% \(\trans{\com[D]_2}{\rho}\ahalts\).
+  \item \(\com[D]\equiv \com[D_1 + D_2]\), therefore
+    \begin{enumerate}[label=(\roman*).]
+    \item \(\sem{D_1 + D_2} X = \sem{D_1}X \cup \sem{D_2}X\). By
+      inductive hypothesis, both \(\sem{D_1}X, \sem{D_2}X\) are
+      finite, as they're sub expressions of \(\com[D]\). Since the
+      union of finite sets is finite, \(\sem{D_1 + D_2}X\) is finite;
+    \item by inductive hypothesis again \(\forall \rho \in X\)
+      \(\trans{\com[D]_1}{\rho}\ahalts\) and
+      \(\trans{\com[D]_2}{\rho}\ahalts\). Notice that
+      \(\trans{\com[D]_1 + \com[D]_2}{\rho} = \{\com[D]_1 + \com[D]_2
+      \circ \tau \mid \tau \in \trans{\com[D]_1}{\rho} \}\cup \{
+      \com[D]_1 + \com[D]_2 \circ \tau \mid \tau \in
+      \trans{\com[D]_2}{\rho} \}\) where
+      \(\circ : \imp \times \Path^\infty \to \Path^\infty\) is the
+      appending operator. Since we're just appending
+      \(\stt{\com[D]_1 + \com[D]_2, \rho}\) in each path of the
+      transition systems of \(\com[D]_1\) and \(\com[D]_2\), by
+      inductive hypothesis
+      \(\trans{\com[D]_1 + \com[D]_2}{\rho} \ahalts\) for all
+      \(\rho \in X\).
+    \item For the latter argument, since both
+      \(\trans{\com[D_1]}{\rho}\) and \(\trans{\com[D_2]}{\rho}\) are
+      finite and composed of finite paths
+      \(\sizeof{\trans{(\com[D]_1 + \com[D]_2)}{\rho}} < \infty\).
+    \end{enumerate}
+  \item \(\com[D]\equiv \com[D_1; D_2]\), therefore
+    \begin{enumerate}[label=(\roman*).]
+    \item \(\sem{D_1;D_2}X = \sem{D_2}(\sem{D_1}X)\). By inductive
+      hypothesis \(\sem{D_1}X = Y\). By inductive hypothesis again
+      \(\sem{D_2}Y\) is finite;
+    \item by inductive hypothesis \(\forall \rho \in X\)
+      \(\trans{\com[D]_1}{\rho}\ahalts\) and again
+      \(\forall \rho \in Y\) \(\trans{\com[D]_2}{\rho}\ahalts\);
+    \item 
+    \end{enumerate}
   \end{enumerate}
 \end{proof}
 
@@ -73,9 +108,15 @@
     are \[\red{\com[D]^*}\times Y\] with
     \(Y \subseteq \{\rho'\mid \stt{\com[D], \rho} \to^* \stt{\com[D]',
       \rho'} \vee \stt{\com[D],\rho} \to^* \rho'\}\) with
-    \(\com[D]'\in \red{\com[D]}\). Since there's a finite amount of
-    states total termination reduces to the presence of some cycle. In
-    fact if
+    \(\com[D]'\in \red{\com[D]}\). Notice that the reductions of some
+    commanad \(\com\) are always finite, while \(Y\) is also finite:
+    \(\com[D] \in \imp_\starless\), therefore by lemma
+    \ref{le:finiteness} \(\forall \rho \in \env\)
+    \(\trans{\com[D]}{\rho} \ahalts\) and
+    \(\sizeof{\trans{\com[D]}{\rho}} < \infty\). Since \(\com[D]\)
+    produces a finite amount of finite paths, there is a finite amount
+    of states, and therefore total termination reduces to the presence
+    of some cycle. In fact if
     \begin{itemize}
     \item
       \(\exists \rho \in X \mid \stt{\com[D]^*, \rho} \to^*
