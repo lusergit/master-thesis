@@ -55,17 +55,17 @@ final states produced by executing the program from \(X\).
 \end{definition}
 
 This concrete semantics is additive, this implies that the Kleene star
-(\(\com[C^*]\)) and the fixpoint (\(\fix{C}\)) have the same concrete
-semantics \(\sem{C^*} = \sem{\fix{C}}\).  This will not be the case
-for the abstract semantics (cf. example \ref{ex:fix}), where the
+(\(\com^*\)) and the fixpoint (\(\fix{\com}\)) have the same concrete
+semantics \(\sem{\com^*} = \sem{\fix{\com}}\).  This will not be the
+case for the abstract semantics (cf. example \ref{ex:fix}), where the
 Kleene star can be more precise than the fixpoint semantics, but
 harder to compute and, as such, less suited for analysis. For the
-concrete semantics, however, since they are the same in the latter
-proofs we only explore the case \(C^*\) since it captures also
-\(\fix{C}\). Since for a given program \(\com\) and a set of initial
-states \(X \in \dom\) the collecting semantics \(\sem{\com}X\)
+concrete semantics, however, since they are the same in the next
+proofs we only explore the case \(\com^*\) since it captures also
+\(\fix{\com}\). Since for a given program \(\com\) and a set of
+initial states \(X \in \dom\) the collecting semantics \(\sem{\com}X\)
 expresses properties that hold at the end of the execution of \(\com\)
-we will in the following chapters usually refer to \(\sem{\dom}X\) as
+we will in the following chapters usually refer to \(\sem{\com}X\) as
 program \emph{invariant}.
 
 \begin{notation}[Singleton shorthand]
@@ -105,9 +105,9 @@ for the sake of simplicity.
 
 Now that we have defined the collecting semantics to express program
 properties, we need the small step semantics to talk about program
-execution. We start by defining \emph{program states}, tuples of
-programs and program environments: \(\state \defin \imp \times \env\)
-with states we can define our small step semantics:
+execution. We start by defining \emph{program states}:
+\(\state \defin \imp \times \env\) tuples of programs and program
+environments.  With states we can define our small step semantics:
 
 \begin{definition}[Small step semantics]\label{def:sosem}
   The small step transition relation for the language \(\imp\)
@@ -221,10 +221,10 @@ Notice that
 \stt{\com[C],\rho} \to^* \rho'\), in other words the collecting
 semantics of some program \(\com\) starting from some states
 \(X\in\dom\) is empty iff the program never halts on some state
-\(\rho'\). This already implies that termination is not unique. Due to
-non-determinism, in fact, a program can either end up in some final
-state \(\rho'\) and therefore halt after a finite number of
-transitions for every possible execution or loop indefinitely for some
-executions, producing an infinite sequence of \(\to\) transitions. We
-better explain what this means and its consequences in the next
-section.
+\(\rho'\). Another observation is that due to non-determinism a
+program can halt on multiple final states, or have one branch of
+execution that halts on some final state, while the other never halts
+on any final state. Non-determinism implies that there are two
+different types of termination, intuitively a program can
+\emph{always} halt or \emph{partially} halt. We will better explore
+this concept in the next chapter.

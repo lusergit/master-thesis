@@ -25,15 +25,22 @@ relations starting from some state.
   Let \((\state \cup \env)^\infty \defin (\state \cup \env)^+ \cup
   (\state \cup \env)^\omega\) be the set of all infinitary sequences
   of states and environments (both finite and infinite). Then the set
-  of \emph{paths} in the transition system is \[\Path^\infty \defin
-  \{\ppath \in (\state \cup \env)^\infty \mid \forall i \in [ 1, |
-    \ppath | ) . \ppath_i \to \ppath_{i+1}\}\]
+  of \emph{paths} in the transition system is
+  \begin{equation*}
+    \Path^\infty \defin
+    \{\ppath \in (\state \cup \env)^\infty \mid \forall i \in [ 1, |
+    \ppath | ) . \ppath_i \to \ppath_{i+1}\}
+  \end{equation*}
+  Where by \(X^+\) we mean all the finite sequences of (possibly
+  repeating) elements of \(X\), while with \(X^\omega\) we mean all
+  the infinite sequences of (possibly repeating) elements of \(X\).
+
 \end{definition}
 \noindent
-However, we are more interested in paths starting from some known
-state \(\stt{\com, \rho}\) for some program \(\com\in\imp\) and some
-initial state \(\rho \in \env\). We express this by overloading the
-\(\trans{\com}{\rho}\) notation:
+In this context we are more interested in paths starting from some
+known state \(\stt{\com, \rho}\) for some program \(\com\in\imp\) and
+some initial state \(\rho \in \env\). We express this by overloading
+the \(\trans{\com}{\rho}\) notation:
 \begin{definition}
   Given \(\com \in \imp, \rho\in\env\) the \emph{paths} in the
   transition system starting from \(\stt{\com, \rho}\)
@@ -44,16 +51,18 @@ initial state \(\rho \in \env\). We express this by overloading the
 %%   We use the notation \(\trans{\com}{\rho}\) to denote all the
 %%   transitions starting from \(\stt{\com, \rho}\).
 %% \end{notation}
+% Notice that the nondeterminism in \(\imp\) induces two different
+% notions of termination:
+% \begin{itemize}
+% \item \emph{universal termination}, where \emph{every} path in the
+%   transition system for a program \(\com\) and some state \(\rho\) is
+%   finite;
+% \item \emph{partial termination}, where \emph{some} path in the
+%   transition system is finite.
+% \end{itemize}
 \noindent
-Notice that the nondeterminism in \(\imp\) induces two different
-notions of termination:
-\begin{itemize}
-\item \emph{universal termination}, where \emph{every} path in the
-  transition system for a program \(\com\) and some state \(\rho\) is
-  finite;
-\item \emph{partial termination}, where \emph{some} path in the
-  transition system is finite.
-\end{itemize}
+With the concept of paths we can define what we mean for
+\emph{partial} and \emph{universal} termination.
 \begin{definition}[Partial termination]
   Let \(\com \in \imp, \rho \in \env\). \(\com\) \emph{partially
     halts} on \(\rho\) when there's at least one path of finite length

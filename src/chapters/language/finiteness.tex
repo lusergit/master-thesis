@@ -82,13 +82,12 @@
     \(\forall k \in \n\)
     \[\sem{D}^{k+1}X \nsubseteq \bigcup_{i=0}^k\sem{D}^iX\] otherwise if
     for some \(k\) \(\sem{D}^{k+1}X \subseteq \cup_{i=0}^k\sem{D}^iX\)
-    it would mean that 
-
-
-    we
-    would reach a fixpoint and \(\sem{D^*}X\) would be finite. Since
-    each application of \(\com[D]\) must create an nonempty set of new
-    environments, we can build the inductive sequence
+    it would mean that  todo
+    
+    we would reach a fixpoint and \(\sem{D^*}X\) would be
+    finite. Since each application of \(\com[D]\) must create an
+    nonempty set of new environments, we can build the inductive
+    sequence
     \begin{align*}
       Y_0 & = X \\
       Y_{k+1} & = (\sem{D}Y_k)\setminus Y_k

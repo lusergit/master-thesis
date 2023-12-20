@@ -2,7 +2,7 @@
 In the following section we argue that the set of functions is at
 least a superset of the partially recursive functions described in
 \cite{cutland1980computability}. This way we can derive some results
-from well known computability results, without proving them by
+from well known computability results, without proving them from
 scratch. We can do this by encoding partial recursive functions into
 Imp programs.  Partial recursive functions are functions
 \(\partialrec[k]\) with airity \(k\):
@@ -80,7 +80,7 @@ variables.
 %%     \dots, x_k\mapsto a_k}\). We indicate the sequence of \(\to\)
 %%   transitions starting from the state \(\stt{C,\rho}\) as \[\trans{C}{\rho}\]
 %% \end{notation}
-
+We also need to define what we mean by program output.
 \begin{notation}[Program output]
   Let \(\env \ni \rho = \envi{\var_1\mapsto a_1, \dots, \var_n \mapsto
     a_n}\). We say
@@ -88,6 +88,10 @@ variables.
     \trans{\com}{\rho}\ahalts[b] \iff & \forall \rho' \mid \stt{\com, \rho} \to^* \rho' \quad \rho'(\var[y]) = b \\
     \trans{\com}{\rho}\ehalts[b] \iff & \exists \rho' \mid \stt{\com, \rho} \to^* \rho' \quad \rho'(\var[y]) = b
   \end{align*}
+  \(\com\) universally (partially) halts on \(b\) whenever for every
+  (for some) final state \(\rho\) \(\rho(\var[y]) = b\). In other
+  words we are using the special variable \(\var[y]\) as an output
+  register.
 \end{notation}
 
 %% \begin{observation}
