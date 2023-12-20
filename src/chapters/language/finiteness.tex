@@ -40,18 +40,10 @@
       union of finite sets is finite, \(\sem{D_1 + D_2}X\) is finite;
     \item by inductive hypothesis again \(\forall \rho \in X\)
       \(\trans{\com[D]_1}{\rho}\ahalts\) and
-      \(\trans{\com[D]_2}{\rho}\ahalts\). Notice that
-      \(\trans{\com[D]_1 + \com[D]_2}{\rho} = \{\com[D]_1 + \com[D]_2
-      \circ \tau \mid \tau \in \trans{\com[D]_1}{\rho} \}\cup \{
-      \com[D]_1 + \com[D]_2 \circ \tau \mid \tau \in
-      \trans{\com[D]_2}{\rho} \}\) where
-      \(\circ : \imp \times \Path^\infty \to \Path^\infty\) is the
-      appending operator. Since we are just appending
-      \(\stt{\com[D]_1 + \com[D]_2, \rho}\) in each path of the
-      transition systems of \(\com[D]_1\) and \(\com[D]_2\), by
-      inductive hypothesis
-      \(\trans{\com[D]_1 + \com[D]_2}{\rho} \ahalts\) for all
-      \(\rho \in X\).
+      \(\trans{\com[D]_2}{\rho}\ahalts\). By sum\(_1\) rule
+      \(\stt{\com_1 + \com_2, rho} \to \stt{\com_1, \rho}\) and by
+      sum\(_2\) \(\stt{\com_1 + \com_2, rho} \to \stt{\com_2,
+        \rho}\). Therefore \(\trans{\com_1 + \com_2}{\rho}\ahalts\).
     \item For the latter argument, since both
       \(\trans{\com[D_1]}{\rho}\) and \(\trans{\com[D_2]}{\rho}\) are
       finite and composed of finite paths
@@ -62,18 +54,21 @@
     \item \(\sem{D_1;D_2}X = \sem{D_2}(\sem{D_1}X)\). By inductive
       hypothesis \(\sem{D_1}X = Y\). By inductive hypothesis again
       \(\sem{D_2}Y\) is finite;
-    \item by inductive hypothesis \(\forall \rho \in X\)
-      \(\trans{\com[D]_1}{\rho}\ahalts\) and again
-      \(\forall \rho' \in Y\) \(\trans{\com[D]_2}{\rho'}\ahalts\);
-    \item todo
+    \item by inductive hypothesis both \(\forall \rho \in X\)
+      \(\trans{\com[D]_1}{\rho}\ahalts\) and \(\forall \rho' \in Y\)
+      \(\trans{\com[D]_2}{\rho'}\ahalts\), therefore by composition
+      lemma \(\trans{\com[D]_1;\com[D]_2}{\rho} \ahalts\)
+    \item by inductive hypothesis both
+      \(\sizeof{\trans{\com_1}{\rho}} < \infty\) and
+      \(\sizeof{\trans{\com_2}{\rho'}} < \infty\)
+      \(\forall \rho \in X, \rho'\in \sem{\com_1}X\), todo
     \end{enumerate}
   \end{enumerate}
 \end{proof}
 
 \begin{lemma}\label{le:infiniteness}
-  Given \(\com[D]\in\imp\starless\), and \(\{\rho\} = X \in
-  \poset{env}\), the predicate "\(\sem{D^*}X\) is finite" is
-  undecidable.
+  Given \(\com[D]\in\imp\starless\), and \(X \in \poset{env}\), the
+  predicate "\(\sem{D^*}X\) is finite" is undecidable.
 \end{lemma}
 
 \begin{proof}
@@ -85,7 +80,12 @@
   \begin{itemize}
   \item In case \(\sem{D^*}X\) is infinite, then it must be that
     \(\forall k \in \n\)
-    \(\sem{D}^{k+1}X \nsubseteq \cup_{i=0}^k\sem{D}^iX\), otherwise we
+    \[\sem{D}^{k+1}X \nsubseteq \bigcup_{i=0}^k\sem{D}^iX\] otherwise if
+    for some \(k\) \(\sem{D}^{k+1}X \subseteq \cup_{i=0}^k\sem{D}^iX\)
+    it would mean that 
+
+
+    we
     would reach a fixpoint and \(\sem{D^*}X\) would be finite. Since
     each application of \(\com[D]\) must create an nonempty set of new
     environments, we can build the inductive sequence
@@ -93,15 +93,15 @@
       Y_0 & = X \\
       Y_{k+1} & = (\sem{D}Y_k)\setminus Y_k
     \end{align*}
-    where \(\forall \rho' \in Y_{k+1} \exists \rho \in Y_k \mid \rho'
-    \in \sem{D}\{\rho\}\) by definition. By lemma \ref{le:link}
-    \(\rho' \in \{\rho'' \mid \stt{\com[D], \rho} \to^*
-    \rho''\}\). This means that there must be at least one \(\rho_1\in
-    X\) that produces an infinite path \[\stt{\com[D]^*,
-      \rho_1}\to^*\stt{\com[D]^*, \rho_2}\to^*\dots \] which produces
-    new environments at each application of \(\com[D]\): \(\rho_1,
-    \rho_2, \dots \mid \forall i,j \in \n\) \(\rho_i \neq \rho_j\) and
-    therefore \(\trans{\com[D]^*}{\rho_1} \nehalts\) which means that
+    where
+    \(\forall \rho' \in Y_{k+1} \exists \rho \in Y_k \mid \rho' \in
+    \sem{D}\rho\) by definition. This means that there must be at
+    least one \(\rho_1\in X\) that produces an infinite path
+    \[\stt{\com[D]^*, \rho_1}\to^*\stt{\com[D]^*, \rho_2}\to^*\dots \]
+    which produces new environments at each application of
+    \(\com[D]\): \(\rho_1, \rho_2, \dots \mid \forall i,j \in \n\)
+    \(\rho_i \neq \rho_j\) and therefore
+    \(\trans{\com[D]^*}{\rho_1} \nehalts\) which means that
     \(\trans{\com[D]^*}{\rho_1}\ahalts\) is false.
   \item In case \(\sem{D^*}X\) is finite we can search for infinite
     paths in \(\trans{\com[D]^*}{\rho}\). Since
