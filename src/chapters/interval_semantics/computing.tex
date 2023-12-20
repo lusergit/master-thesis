@@ -835,18 +835,21 @@ a finite path in \(\langle X,\to\rangle\)
   + \Sigma_{i=0}^m h_i\] as desired.
 \end{proof}
 
-Lemma~\ref{le:inc} provides an effective algorithm for computing the interval
-semantics of commands. More precisely, given  a command \(\com\), the corresponding
-finite set of variables \(\Var_{\com} \veq \mathit{vars}(\com)\), and an interval environment
-\(\rho : \Var_{\com}  \to \Int\),  we define
-\[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}  \}.\]
+Lemma~\ref{le:inc} provides an effective algorithm for computing the
+interval semantics of commands. More precisely, given a command
+\(\com\), the corresponding finite set of variables
+\(\Var_{\com} \veq \mathit{vars}(\com)\), and an interval environment
+\(\rho : \Var_{\com} \to \Int\), we define
+\[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
+  \}.\]
 %
-Then, when computing \(\sem{\kleene{\com}} \rho\) on such \(\rho\) having a finite domain, we can
-restrict to a bounded interval domain
-\(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup \{ \top, \bot \}\) where
+Then, when computing \(\sem{\kleene{\com}} \rho\) on such \(\rho\)
+having a finite domain, we can restrict to a bounded interval domain
+\(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
+\{ \top, \bot \}\) where
 \[
-\Int_{\com,\rho} \veq  \{ \interval{a}{b} \mid a, b \in \nat\ \land\ a \leq b
-\leq \max\{\max(\rho), 2 \bound{\com}\}\}.
+  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \nat\ \land\
+  a \leq b \leq \max\{\max(\rho), 2 \bound{\com}\}\}.
 \]
 
 % We could also operate uniformly on all commands, defining the
@@ -856,12 +859,13 @@ restrict to a bounded interval domain
 \begin{lemma}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
   \(\rho : \Var \to \Int\), the abstract semantics
-  \(\sem{\kleene{\com}} \rho
-  = \textstyle \bigsqcup_{i \in \nat} \sem{\com}^i (\rho)\)
+  \(\sem{\kleene{\com}} \rho = \textstyle \bigsqcup_{i \in \nat}
+  \sem{\com}^i (\rho)\)
   % 
-  %    \sem{\fix{\com}} \rho
-  %    & =  \lfp{\lambda \rho'. (\sem{\com} \rho') \sqcup \rho} 
-  computed in \(\mathbb{A}\) and in \(\mathbb{A}_{\com,\rho}\) coincide.
+  % \sem{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\sem{\com} \rho')
+  % \sqcup \rho}
+  computed in \(\mathbb{A}\) and in \(\mathbb{A}_{\com,\rho}\)
+  coincide.
 \end{lemma}
 
 \begin{proof}

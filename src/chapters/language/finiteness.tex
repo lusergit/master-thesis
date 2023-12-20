@@ -103,36 +103,26 @@
     \rho_2, \dots \mid \forall i,j \in \n\) \(\rho_i \neq \rho_j\) and
     therefore \(\trans{\com[D]^*}{\rho_1} \nehalts\) which means that
     \(\trans{\com[D]^*}{\rho_1}\ahalts\) is false.
-  \item In case \(\sem{D^*}X\) is finite, we can notice that for all
-    the \(\rho \in X\), the states in \(\trans{\com[D]}{\rho}\)
-    are \[\red{\com[D]^*}\times Y\] with
-    \(Y \subseteq \{\rho'\mid \stt{\com[D], \rho} \to^* \stt{\com[D]',
-      \rho'} \vee \stt{\com[D],\rho} \to^* \rho'\}\) with
-    \(\com[D]'\in \red{\com[D]}\). Notice that the reductions of some
-    command \(\com\) are always finite, while \(Y\) is also finite:
-    \(\com[D] \in \imp\starless\), therefore by lemma
-    \ref{le:finiteness} \(\forall \rho \in \env\)
-    \(\trans{\com[D]}{\rho} \ahalts\) and
-    \(\sizeof{\trans{\com[D]}{\rho}} < \infty\). Since \(\com[D]\)
-    produces a finite amount of finite paths, there is a finite amount
-    of states, and therefore total termination reduces to the presence
-    of some cycle. In fact if
+  \item In case \(\sem{D^*}X\) is finite we can search for infinite
+    paths in \(\trans{\com[D]^*}{\rho}\). Since
+    \(\sem{\com[D]^*}X = \bigcup_{\rho\in X}\sem{\com[D]^*}\{\rho\}\),
+    for every \(\rho' \in X\), \(\sem{\com[D]}\{\rho\}\) is
+    finite. Consider the states in \(\sem{\com[D]}\{\rho\}\). For each
+    one of them either
     \begin{itemize}
     \item
-      \(\exists \rho \in X \mid \stt{\com[D]^*, \rho} \to^*
-      \stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho'}\) for some
-      \(\rho'\in \sem{\com[D]^*}X\). In this case the semantics would
-      still be finite, but there would be an infinite path
-      \[\stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^*
-        \stt{\com[D]^*, \rho'} \to^* \dots\] that would imply that
-      \(\trans{\com[D]}{\rho} \nehalts\), and therefore
-      \(\trans{\com[D]}{\rho} \ahalts\) would be false.
-    \item otherwise
-      \(\nexists \rho \in X \mid \stt{\com[D]^*, \rho} \to^*
-      \stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho'}\) for some
-      \(\rho'\in \sem{\com[D]^*}X\), but since there is a finite
-      amount of states each path in \(\trans{\com[D]}{\rho}\) is
-      finite, and therefore \(\trans{\com[D]}{\rho}\ahalts\).
+      \(\stt{\com[D], \rho'} \to^* \stt{\com[D'], \rho''} \not\to\),
+      for every \(\to\) step we can apply the comp\(_1\) rule and
+      therefore we would build
+      \[\stt{\com[D];\com[D]^*, \rho'} \to^* \stt{\com[D']; \com[D]^*,
+          \rho''} \not\to\] which is a finite path, therefore is not
+      interesting.
+    \item or \(\stt{\com[D], \rho'} \to^* \rho''\) then by composition
+      lemma
+      \(\stt{\com[D]; \com[D]^*, \rho'} \to^* \stt{\com[D]^*,
+        \rho''}\) and by star\(_{\text{fix}}\)
+      \(\stt{\com[D]^*, \rho''} \to \rho''\) and so
+      \(\rho'' \in \sem{\com[D]^*}\{\rho\}\).
     \end{itemize}
   \end{itemize}
 \end{proof}
