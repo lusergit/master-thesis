@@ -25,8 +25,8 @@ end
 
 Of course, for the collecting semantics this is not the case. Already
 computing a finite upper bound for loop invariants when they are
-finite is impossible as this would allow to decide termination, as
-we've seen in section \ref{sec:finiteness}.
+finite is impossible as this would allow to decide termination, as we
+have seen in section \ref{sec:finiteness}.
 
 \begin{problem}[Termination of interval analysis]\label{problem1}
   Given \(\com\in \imp\), \(\eta \in \bA\), decide: \(\semi{\com} \eta
@@ -36,7 +36,7 @@ we've seen in section \ref{sec:finiteness}.
 First, given a program, we associate each variable with a \emph{single
 bound}, which captures both both an \emph{upper bound}, for which the
 rough idea is that, whenever a variable is beyond that bound, the
-behaviour of the program with respect to that variable becomes stable
+behavior of the program with respect to that variable becomes stable
 and an \emph{increment bound} which captures the largest increment or
 decrement that can affect a variable.
 
@@ -524,7 +524,7 @@ a finite path in \(\langle X,\to\rangle\)
   Thus
   \(\max(\semi{\com_1 \ndet \com_2}\eta \var[y]) =
   \max(\semi{\com_i}\eta \var[y])\) for some \(i \in \{1,2\}\). We can
-  assume, without loss of generality, that the maximum is realised
+  assume, without loss of generality, that the maximum is realized
   by the first component, i.e.,
   \(\max(\semi{\com_1 \ndet \com_2}\eta \var[y]) =
   \max(\semi{\com_1}\eta \var[y])\). Hence, by inductive hypothesis on

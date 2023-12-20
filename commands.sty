@@ -12,14 +12,15 @@
 \newcommand{\Var}{\ensuremath{\mathit{Var}}}
 \newcommand{\Int}{\ensuremath{\mathit{Int}}}
 \newcommand{\dom}{\ensuremath{\mathbb{C}}}
-\newcommand{\starless}{\ensuremath{{\neq\star}}}
+\newcommand{\starless}{\ensuremath{_{\neq\star}}}
 \newcommand{\ifte}[3]{\ensuremath{\mathsf{if} \; #1 \; \mathsf{then} \; #2 \;\mathsf{else} \; #3}}
 \newcommand{\while}[2]{\ensuremath{\mathsf{while} \; #1 \; \mathsf{do} \; #2}}
 \newcommand{\plusplus}{\mathbin{\text{\ttfamily\upshape ++}}}
 \newcommand{\pplus}[1]{\ensuremath{#1 \plusplus}}
-\newcommand{\trans}[2]{\ensuremath{{#1}_{#2}}}
+\newcommand{\trans}[2]{\ensuremath{\la {#1}, {#2} \ra}}
 \newcommand{\abstract}[1]{\ensuremath{{#1}^\sharp}}
 \newcommand{\varsof}[1]{\ensuremath{\mathit{vars}({#1})}}
+\newcommand{\smashed}[1]{\ensuremath{{#1}_\bot}}
 
 \newcommand{\z}{\ensuremath{\mathbb{Z}}}
 \newcommand{\n}{\ensuremath{\mathbb{N}}}
@@ -87,7 +88,8 @@
 
 \theoremstyle{theorem}
 \newtheorem{theorem}{Theorem}
-\newtheorem{lemma}{Lemma}[chapter]
+\newtheorem{lemma}{Lemma}[theorem]
+\newtheorem{corollary}{Corollary}[theorem]
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]

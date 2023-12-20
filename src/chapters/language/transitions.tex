@@ -2,11 +2,13 @@
 
 With the set of states \(\state\), the set of environments \(\env\)
 and the small operational semantics \(\to\) we define a transition
-system:
+system, this will be useful to define universal and partial
+termination and to reason about program properties in the next
+chapters.
 
-\begin{definition}[Transition system]
-  \[\tsys \defin \tuple{\state \cup \env, \env, \to}\] is a transition system for
-  the language \(\imp\), where
+\begin{definition}[Transition system] The transition system for the
+  language Imp is
+  \[\tsys \defin \tuple{\state \cup \env, \env, \to}\] where
   \begin{itemize}
   \item \(\state \cup \env\) is the set of configurations in the system;
   \item \(\env\) is the set of terminal states;
@@ -15,6 +17,9 @@ system:
     system.
   \end{itemize}
 \end{definition}
+\noindent
+In such a system we define \emph{paths}, sequences of \(\to\)
+relations starting from some state.
 
 \begin{definition}[Paths]
   Let \((\state \cup \env)^\infty \defin (\state \cup \env)^+ \cup
@@ -24,41 +29,129 @@ system:
   \{\ppath \in (\state \cup \env)^\infty \mid \forall i \in [ 1, |
     \ppath | ) . \ppath_i \to \ppath_{i+1}\}\]
 \end{definition}
-
+\noindent
+However, we are more interested in paths starting from some known
+state \(\stt{\com, \rho}\) for some program \(\com\in\imp\) and some
+initial state \(\rho \in \env\). We express this by overloading the
+\(\trans{\com}{\rho}\) notation:
 \begin{definition}
   Given \(\com \in \imp, \rho\in\env\) the \emph{paths} in the
   transition system starting from \(\stt{\com, \rho}\)
   are \[\trans{\com}{\rho} \defin \{\tau \in \Path^\infty \mid
   \ppath_0 = \stt{\com, \rho}\}\]
 \end{definition}
-
 %% \begin{notation}
 %%   We use the notation \(\trans{\com}{\rho}\) to denote all the
 %%   transitions starting from \(\stt{\com, \rho}\).
 %% \end{notation}
-
-\begin{definition}[Reductions]
-  Let \(\imp^*\) denotes the set whose elements are finite, eventually
-  empty, ordered sequences of statements in \(\imp\) where the empty
-  sequence is denoted by \(\emptyseq\). Moreover let \(\conc : \imp^*
-  \times \imp^* \to \imp^*\) be the list concatenation. The reduction
-  function \(\mathsf{red} : \imp \to \imp^*\) is recursively defined by the
-  following clauses:
-  \begin{align*}
-    \red{\com[e]} & \defin \sequence{\com[e]} \\
-    \red{\com_1 + \com_2} & \defin \sequence{\com_1 + \com_2} \conc \red{\com_1} \conc \red{\com_2} \\
-    \red{\com_1 ; \com_2} & \defin (\red{\com_1} \star \com_2) \conc \red{\com_2} \\
-    \red{\com^*} & \defin \sequence{\com^*} \conc (\red{\com} \star \com^*)
-  \end{align*}
-  Where the operator \(\star : \imp^* \times \imp \to \imp^*\) is
-  defined by
-  \begin{align*}
-    \emptyseq \star \com & \defin \emptyseq \\
-    \sequence{\com_1, \dots, \com_k} \star \com & \defin \sequence{\com_1;\com, \dots, \com_k;\com}
-  \end{align*}
+\noindent
+Notice that the nondeterminism in \(\imp\) induces two different
+notions of termination:
+\begin{itemize}
+\item \emph{universal termination}, where \emph{every} path in the
+  transition system for a program \(\com\) and some state \(\rho\) is
+  finite;
+\item \emph{partial termination}, where \emph{some} path in the
+  transition system is finite.
+\end{itemize}
+\begin{definition}[Partial termination]
+  Let \(\com \in \imp, \rho \in \env\). \(\com\) \emph{partially
+    halts} on \(\rho\) when there's at least one path of finite length
+  in the transition system \(\trans{\com}{\rho}\) ending up in some
+  state \(\rho'\):
+  \[ \trans{\com}{\rho} \ehalts \iff \exists k \in \n \mid \stt{\com,
+      \rho} \to^k \rho'.\] Dually
+  \[ \trans{\com}{\rho} \nahalts \iff \neg \; \trans{\com}{\rho}
+    \ehalts \] a program \emph{always loops} if there's no finite path
+  in its transition system that leads to a final environment.
+\end{definition}
+\begin{definition}[Universal termination]
+  Let \(\com \in \imp, \rho \in \env\). \(\com\) \emph{partially
+    loops} on \(\rho\) when there's at least one path of infinite
+  length in the transition system \(\trans{\com}{\rho}\):
+  \[ \trans{\com}{\rho} \nehalts \iff \forall k \in \n \; \stt{\com,
+      \rho} \to^k \stt{\com', \rho'} \quad \text{for some }
+    \com'\in\imp, \rho'\in\env.\] Dually
+  \begin{equation*}
+    \trans{\com}{\rho} \ahalts \iff \neg \; \trans{\com}{\rho}
+    \nehalts
+  \end{equation*}
+  a program \emph{universally halts} iff there's no infinite path in
+  the transition systems.
 \end{definition}
 
-Notice that the set of reduction of any finite program \(\com\in\imp\) is finite.
+Example \ref{ex:partial} shows a program that partially halts, while
+example \ref{ex:neverhalts} shows a program that always loops.  Notice
+that the absence of infinite paths implies that \(\trans{\com}{\rho}\)
+is finite.  Example \ref{ex:partial} shows a program that partially
+loops, while example \ref{ex:alwayshalt} shows a program that
+universally halts.
+
+%% Let's consider the following examples to better understand what this
+%% means. The example \ref{ex:alwayshalt} shows a program that always
+%% halts, and what it means for its transition system. Example
+%% \ref{ex:neverhalts} shows a program that never halts. Finally example
+%% \ref{ex:partial} shows a program that partially halts and partially
+%% loops due to the presence of both a path that ends up in some state
+%% \(\rho'\) and an infinite path.
+
+\begin{example}\label{ex:alwayshalt}
+  Consider the program
+  \begin{equation*}
+    \var := 0;
+  \end{equation*}
+  always halts, since \(\forall\rho \in \env, \rho \neq \bot\) builds
+  the transition system \[\stt{\var := 0, \rho} \to \rho[\var \mapsto
+    0]\] according to the expr rule in definition
+  \ref{def:sosem}. Therefore \(\trans{(\var := 0)}{\rho} \ahalts\)
+  \(\forall \rho \in \env\setminus\{\bot\}\).
+\end{example}
+
+\begin{example}\label{ex:neverhalts}
+  Consider the program \(\com[P]\)
+  \[(\var \geq 0; \pplus{\var})^*;\var < 0\] The program never halts on
+  \(\forall \rho \in \env\) s.t. \(\rho(\var) \geq 0\). In fact in
+  these cases it builds the transition system in figure
+  \ref{fig:tsysnhalt}, where the infinite path
+  \[\stt{(\var \geq 0; \pplus{\var})^*; x < 0, \rho} \to^* \stt{(\var
+      \geq 0; \pplus{\var})^*; x < 0, \rho[\var \mapsto \rho(\var) +
+      1]} \to^* \dots\]
+  
+  \[\dots \to^* \stt{(\var \geq 0; \pplus{\var})^*; x < 0, \rho[\var
+      \mapsto \rho(\var) + k]} \to^* \dots \] is always present.
+  \begin{figure}
+    \begin{tikzpicture}[->,>=stealth]
+      \tikzset{node distance = .5cm}
+      \node (P) {\(\stt{(\var \geq 0; \pplus{\var})^*;\var < 0, \rho}\)};
+      \node (zero)   [right=of P] {\(\stt{\var < 0, \rho} \not\to\)};
+      \node (appzero) [below=of P] {\(\stt{\var \geq; 0\pplus{\var};(\var \geq 0; \pplus{\var})^*;\var < 0, \rho}\)};
+      \node (appone) [below=of appzero] {\(\stt{(\var \geq 0; \pplus{\var})^*;\var < 0, \rho[\var \mapsto \rho(\var) + 1]}\)};
+      \node (one) [right=of appone] {\(\stt{\var < 0, \rho[\var \mapsto \rho(\var) + 1]} \not\to\)};
+      \node (appk) [below=of appone] {\(\stt{(\var \geq 0; \pplus{\var})^*;\var < 0, \rho[\var \mapsto \rho(\var) + k]}\)};
+      \node (kei) [right=of appk] {\(\stt{\var < 0, \rho[\var \mapsto \rho(\var) + k]} \not\to\)};
+
+      \draw
+      (P) edge (zero) edge (appzero)
+      (appzero) edge[to*] (appone)
+      (appone) edge (one) edge[to*] (appk)
+      (appk) edge (kei);
+    \end{tikzpicture}
+    \caption{Transition system of \((\var \geq 0; \pplus{\var})^*;\var
+      < 0\)}\label{fig:tsysnhalt}
+  \end{figure}
+\end{example}
+
+\begin{example}\label{ex:partial}
+  Consider the program \[(\pplus{\var})^*\] it partially halts
+  (\(\trans{(\pplus{\var})^*}{\rho}\ehalts\)), as according to the
+  transition rule star\(_{\text{fix}}\) \(\exists \rho \in \env\) s.t.
+  \[\infer[\text{star}_{\text{fix}}]{\stt{(\pplus{\var})^*, \rho} \to
+    \rho}{\rho \neq \bot}\] But it also partially loops
+  (\(\trans{(\pplus{\var})^*}{\rho}\nehalts\)). In fact we can build
+  the infinite path\[\stt{(\pplus{\var})^*, \rho[\var\mapsto 0]} \to^*
+  \stt{(\pplus{\var})^*, \rho[\var\mapsto 1]} \to^*
+  \stt{(\pplus{\var})^*, \rho[\var\mapsto 2]} \to^* \dots\]
+\end{example}
 
 %% \begin{lemma}\label{le:tosets}
 %%   Given a program \(\com\in\imp\), for \(\red{\com}\) it holds that
@@ -136,4 +229,25 @@ Notice that the set of reduction of any finite program \(\com\in\imp\) is finite
 %%     finite.
 %%   \end{itemize}
 %% \end{proof}
-
+In order to better talk about the intermediate states in the execution
+of a program we also introduce the notion of reducts:
+\begin{definition}[Reducts]
+  Let \(\imp^*\) denotes the set whose elements are statements in
+  \(\imp\). The reduction function \(\mathsf{red} : \imp \to \imp^*\)
+  is recursively defined by the following clauses:
+  \begin{align*}
+    \red{\com[e]} & \defin \{\com[e]\} \\
+    \red{\com_1 + \com_2} & \defin \{\com_1 + \com_2\} \cup \red{\com_1} \cup \red{\com_2} \\
+    \red{\com_1 ; \com_2} & \defin (\red{\com_1} ; \com_2) \cup \red{\com_2} \\
+    \red{\com^*} & \defin \{\com^*\} \cup (\red{\com} ; \com^*)
+  \end{align*}
+  Where we overload the symbol \(\mathds{;}\) with the operator
+  \(; : \imp^* \times \imp \to \imp^*\) defined by
+  \begin{align*}
+    \emptyset ; \com & \defin \emptyset \\
+    \{\com_1, \dots, \com_k\} ; \com & \defin \{\com_1;\com, \dots, \com_k;\com\}
+  \end{align*}
+\end{definition}
+\noindent
+Notice that the set of reduction of any finite program \(\com\in\imp\)
+is finite.

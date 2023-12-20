@@ -1,43 +1,48 @@
 \section{Semantics}
 
-The first building block is that of environments, mapst from the set
-of variables to their value.
-
-\begin{definition}[Environments]
-  Environments are (total) maps from variables to (numerical)
-  values \[\env \defin \{\rho \mid \rho : \Var \to \z\}\]
-\end{definition}
+In order to talk about program properties in our language, we first
+need to define its \emph{semantics}. In the following section we
+introduce both a collecting semantics in order to reason about program
+\emph{invariants} and a small step semantics, in order to reason about
+program \emph{execution}.% The first building block are
+% \emph{environments}, maps from the set of variables to their numerical
+% value: \[\] With
+% environments we can describe the semantics of basic expressions, and
+% later the semantics of comman \(\com\) in the \(\imp\) language.
 
 \begin{definition}[Semantics of Basic Expressions]
-  For basic expressions \(e \in \expr\) the concrete semantics \(\bsem{
-    \cdot} : \expr \to \env \to \env \cup \{\bot\}\) is inductively
-  defined as follows:
+  Let \emph{environments} be the maps from the set of variables to
+  their numerical value:
+  \(\env \defin \{\rho \mid \rho : \Var \to \z\}\). For basic
+  expressions \(e \in \expr\) the \emph{concrete semantics}
+  \(\bsem{ \cdot} : \expr \to \env \to \smashed{\env}\) is
+  inductively defined by:
   \begin{align*}
     \bsem{\var\in S} \rho & \defin \begin{cases} \rho & \rho(\var)\in S \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{\var\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(\var)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{\var\leq k} \rho & \defin \begin{cases} \rho & \rho(\var)\leq k \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{\var> k} \rho & \defin \begin{cases} \rho & \rho(\var) > k \\ \bot & \text{otherwise} \end{cases} \\
+    % \bsem{\var\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(\var)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
+    % \bsem{\var\leq k} \rho & \defin \begin{cases} \rho & \rho(\var)\leq k \\ \bot & \text{otherwise} \end{cases} \\
+    % \bsem{\var> k} \rho & \defin \begin{cases} \rho & \rho(\var) > k \\ \bot & \text{otherwise} \end{cases} \\
     \bsem{\tru} \rho & \defin \rho \\
     \bsem{\ff} \rho & \defin \bot \\
     \bsem{\var:= k} \rho & \defin \rho [\var\mapsto k] \\
     \bsem{\var:= \var[y] + k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) + k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
-    \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
+    % \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
   \end{align*}
 \end{definition}
 
 The next building block is the concrete collecting semantics for the
 language, it associates each program in \(\imp\) to a function which,
 given a set of initial environments \(X\) ``collects'' the set of
-terminal states produced by executing the program from \(X\).
+final states produced by executing the program from \(X\).
 
 \begin{definition}[Concrete collecting semantics]
   Let \(\dom \defin \langle \poset{\env} , \subseteq \rangle\) be a
   complete lattice called \emph{concrete collecting domain}. The
-  concrete collecting semantics for \(\imp\) is given by the total
-  mapping \[\langle \cdot \rangle : \imp \to \dom \to \dom\] which
-  maps each program \(\com \in \imp\) to a total mapping over the
-  complete lattice \(\dom\), \[\langle C \rangle : \dom \to \dom\]
-  inductively defined as follows: given \(X \in \poset{\env}\)
+  \emph{concrete collecting semantics} for \(\imp\) is given by the
+  total function \(\sem{\cdot} : \imp \to \dom \to \dom\) which maps
+  each program \(\com \in \imp\) to a total function over the complete
+  lattice \(\dom\), inductively defined as follows: given
+  \(X \in \dom\)
 
   \begin{align*}
     \sem{\com[e]} X & \defin \{\bsem{\com[e]} \rho \mid \rho \in X,
@@ -49,15 +54,25 @@ terminal states produced by executing the program from \(X\).
   \end{align*}
 \end{definition}
 
-This concrete semantics is additive, meaning that the Kleene star
+This concrete semantics is additive, this implies that the Kleene star
 (\(\com[C^*]\)) and the fixpoint (\(\fix{C}\)) have the same concrete
 semantics \(\sem{C^*} = \sem{\fix{C}}\).  This will not be the case
 for the abstract semantics (cf. example \ref{ex:fix}), where the
 Kleene star can be more precise than the fixpoint semantics, but
 harder to compute and, as such, less suited for analysis. For the
 concrete semantics, however, since they are the same in the latter
-proofs we'll only explore the case \(C^*\) since it captures also
-\(\fix{C}\).
+proofs we only explore the case \(C^*\) since it captures also
+\(\fix{C}\). Since for a given program \(\com\) and a set of initial
+states \(X \in \dom\) the collecting semantics \(\sem{\com}X\)
+expresses properties that hold at the end of the execution of \(\com\)
+we will in the following chapters usually refer to \(\sem{\dom}X\) as
+program \emph{invariant}.
+
+\begin{notation}[Singleton shorthand]
+  Sometimes we need to consider the semantics over the singleton set
+  \(\{\rho\}\). In these cases we will write \(\sem{\com}\rho\)
+  meaning \(\sem{\com}\{\rho\}\).
+\end{notation}
 
 %% \begin{definition}[Program length]
 %%   Given a program \(C\in\imp\) its length is recursively defined as
@@ -70,26 +85,38 @@ proofs we'll only explore the case \(C^*\) since it captures also
 %%   \end{align*}
 %% \end{definition}
 
-Along with the collecting semantics we also define a one step
-transition relation.
+\subsection{Syntactic sugar}\label{sub:sugar}
+We define some syntactic sugar for the language. In the next chapters
+we will often use the syntactic sugar instead of its real equivalent
+for the sake of simplicity.
+\begin{align*}
+  \var \in \interval{a}{b} & = \var \in S & \text{with } S = \interval{a}{b}, \text{ decidable}\\
+  \var \leq k & = \var \in (-\infty, k]\\
+  \var > k & = \var \in [k+1, + \infty) \\
+  \var \in S_1 \vee \var \in S_2 & = (\var \in S_1) + (\var \in S_2) \\ 
+  \var \in S_1 \wedge \var \in S_2 & = (\var \in S_1);(\var \in S_2) \\
+  \var \not\in S & = \var \in \neg S \\
+  \ifte{b}{C_1}{C_2} & = (\com[e];\com_1) + (\com[\neg e];\com_2) \\
+  \while{b}{C} & = \fix{\com[e];\com};\neg\com[e] \\
+  \pplus{\var} & = \var := \var + 1
+\end{align*}
 
-\begin{definition}[Program State]
-  Program states are tuples of programs and program
-  environments: \[\state \defin \imp \times \env\]
-\end{definition}
+\subsection{Small step semantics}\label{sub:sos}
+
+Now that we have defined the collecting semantics to express program
+properties, we need the small step semantics to talk about program
+execution. We start by defining \emph{program states}, tuples of
+programs and program environments: \(\state \defin \imp \times \env\)
+with states we can define our small step semantics:
 
 \begin{definition}[Small step semantics]\label{def:sosem}
-  The small step transition relation \(\to : \state \times (\state
-  \cup \env)\) is a small step semantics for the
-  \(\imp\) language. It is defined based on the following rules
+  The small step transition relation for the language \(\imp\)
+  \(\to : \state \times (\state \cup \env)\) is defined by the
+  following rules:
   \begin{equation*}
     \infer[\text{expr}]
           {\stt{\com[e], \rho} \to \bsem{e}\rho}
           {\bsem{e}\rho \neq \bot}
-          %% \quad
-          %% \infer[\text{bot}]
-          %%       {\stt{\com, \bot} \to \bot}
-          %%       {}
   \end{equation*}
   
   \begin{equation*}
@@ -120,67 +147,84 @@ transition relation.
   \end{equation*}
 \end{definition}
 
-\begin{notation}
-  We write \(\stt{\com, \rho} \to^* s\) where \(s \in \state \cup
-  \env\) meaning \[\exists k\in\n \mid \underbrace{\stt{\com, \rho}
-    \to \stt{\com', \rho'} \to \dots \to s}_{k \text{ transitions}}\]
-\end{notation}
+With the following lemma we introduce a link between the small step
+semantics and the concrete collecting semantics: the invariant of a
+program is the collection of all the environments the program halts on
+when executing.
 
-\begin{lemma}[Collecting and small step link]\label{le:link}
-  For any \(C\in\imp, X \in \poset{\env}\) \[\sem{C}X = \{\rho' \in
-  \env \mid \rho \in X, \stt{\com[C], \rho} \to^* \rho'\}\]
+\begin{lemma}\label{le:link}
+  For any \(\com\in\imp, X \in \poset{\env}\)
+  \[\sem{\com}X = \{\rho' \in \env \mid \rho \in X, \stt{\com, \rho}
+    \to^* \rho'\}\]
 \end{lemma}
 
-Therefore \(\sem{C}X = \emptyset \iff \nexists \rho' \in \env, \rho
-\in X\) s.t. \(\stt{\com[C], \rho} \to^* \rho'\).
+where \(\to^*\) is the reflexive and transitive closure of the \(\to\)
+relation.
 
 \begin{proof}
-  by induction on \(C\):
+  by induction on \(\com\):
   \paragraph*{Base case:\\}
-  \(C \equiv e\): \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge
-  \bsem{e}\rho \neq \bot \}\), \(\forall \rho \in X . \stt{\com[e],
-    \rho} \to \bsem{e}\rho\) if \(\bsem{e}\rho \neq \bot\) because of
-  the expr rule \[\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge
-  \bsem{e}\rho \neq \bot \} = \{\rho' \in\env \mid \rho \in X
-  \stt{\com[e], \rho} \to \rho'\}\]
+  \(\com \equiv \com[e]\) \newline
+  \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge \bsem{e}\rho \neq
+  \bot \}\),
+  \(\forall \rho \in X . \stt{\com[e], \rho} \to \bsem{e}\rho\) if
+  \(\bsem{e}\rho \neq \bot\), and because of the expr rule
+  \[\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge \bsem{e}\rho \neq
+    \bot \} = \{\rho' \in\env \mid \rho \in X \stt{\com[e], \rho} \to
+    \rho'\}\]
   \paragraph*{Inductive cases:\\}
-  \begin{enumerate}
-  \item \(C \equiv C_1 + C_2:\) \(\sem{C_1 + C_2}X = \sem{C_1}X \cup
-    \sem{C_2}X\), \(\forall \rho \in X . \stt{\com[C_1 + C_2], \rho} \to
-    \stt{\com[C_1], \rho} \vee \stt{\com[C_1 + C_2], \rho} \to \stt{\com[C_2], \rho}\)
-    respectively according to rules sum\textsubscript{1} and
-    sum\textsubscript{2}. By inductive hypothesis \[\sem{C_1}X =
-    \{\rho' \in\env \mid \rho \in X , \stt{\com[C_1],\rho} \to^* \rho'\} \quad
-    \sem{C_2}X = \{\rho' \in\env \mid \rho \in X , \stt{\com[C_2],\rho} \to^*
-    \rho'\}\] Therefore
+  \begin{itemize}
+  \item \(\com \equiv \com_1 + \com_2\) \newline
+    \(\sem{\com_1 + \com_2}X = \sem{\com_1}X \cup \sem{\com_2}X\),
+    \(\forall \rho \in X . \stt{\com_1 + \com_2, \rho} \to
+    \stt{\com_1, \rho} \vee \stt{\com_1 + \com_2, \rho} \to
+    \stt{\com_2, \rho}\) respectively according to rules
+    sum\textsubscript{1} and sum\textsubscript{2}. By inductive
+    hypothesis
+    \[\sem{\com_1}X = \{\rho' \in\env \mid \rho \in X ,
+      \stt{\com_1,\rho} \to^* \rho'\} \quad \sem{\com_2}X = \{\rho'
+      \in\env \mid \rho \in X , \stt{\com_2,\rho} \to^* \rho'\}\]
+    Therefore
     \begin{align*}
-      \sem{C_1 + C_2}X & = \sem{C_1}X \cup \sem{C_2}X & \text{(by definition)}\\
-      & = \{\rho' \in\env \mid \rho \in X , \stt{\com[C_1],\rho} \to^* \rho'\} \cup \{\rho' \in\env \mid \rho \in X , \stt{\com[C_2],\rho} \to^* \rho'\} & \text{(by ind. hp)}\\
-      & = \{\rho' \in\env \mid \rho \in X, \stt{\com[C_1],\rho} \to^* \rho' \vee \stt{\com[C_2],\rho} \to^* \rho'\} \\
-      & = \{\rho' \in\env \mid \rho \in X, \stt{\com[C_1 + C_2], \rho} \to^* \rho'\}
+      \sem{\com_1 + \com_2}X & = \sem{\com_1}X \cup \sem{\com_2}X & \text{(by definition)}\\
+      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1,\rho} \to^* \rho'\} \cup \{\rho' \in\env \mid \rho \in X , \stt{\com_2,\rho} \to^* \rho'\} & \text{(by ind. hp)}\\
+      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1,\rho} \to^* \rho' \vee \stt{\com_2,\rho} \to^* \rho'\} \\
+      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1 + \com_2, \rho} \to^* \rho'\}
     \end{align*}
-  \item \(C \equiv C_1;C_2:\) \(\sem{C_1;C_2}X =
-    \sem{C_2}(\sem{C_1}X)\). By inductive hp \(\sem{C_1}X = \{\rho'
-    \in\env \mid \rho \in X, \stt{\com[C_1], \rho} \to^* \rho'\} = Y\), by inductive
-    hp again \(\sem{C_2}Y = \{\rho' \in\env \mid \rho \in Y, \stt{\com[C_2], \rho}
-    \to^* \rho'\}\). Therefore
+  \item \(\com \equiv \com_1;\com_2\) \newline
+    \(\sem{\com_1;\com_2}X = \sem{\com_2}(\sem{\com_1}X)\). By inductive hp
+    \(\sem{\com_1}X = \{\rho' \in\env \mid \rho \in X, \stt{\com_1,
+      \rho} \to^* \rho'\} = Y\), by inductive hp again
+    \(\sem{\com_2}Y = \{\rho' \in\env \mid \rho \in Y, \stt{\com_2,
+      \rho} \to^* \rho'\}\). Therefore
     \begin{align*}
-      \sem{C_1;C_2}X & = \sem{C_2}(\sem{C_1}X) & \text{(by definition)}\\
-      & = \{\rho' \in\env \mid \rho'' \in \{\rho''' \mid \rho \in X, \stt{\com[C_1], \rho}  \to^* \rho'''\}, \stt{\com[C_2], \rho''} \to^* \rho'\} & \text{(by ind. hp)}\\
-      & = \{\rho' \in\env \mid \rho \in X \stt{\com[C_1], \rho} \to^* \rho'' \wedge \stt{\com[C_2], \rho''} \to^* \rho'\} & \text{(by definition)}\\
-      & = \{\rho' \in\env \mid \rho \in X . \stt{\com[C_1;C_2], \rho} \to^* \rho'\}
+      \sem{\com_1;\com_2}X & = \sem{\com_2}(\sem{\com_1}X) & \text{(by definition)}\\
+      & = \{\rho' \in\env \mid \rho'' \in \{\rho''' \mid \rho \in X, \stt{\com_1, \rho}  \to^* \rho'''\}, \stt{\com_2, \rho''} \to^* \rho'\} & \text{(by ind. hp)}\\
+      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1, \rho} \to^* \rho'' \wedge \stt{\com_2, \rho''} \to^* \rho'\} & \text{(by composition lemma)}\\
+      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1;\com_2, \rho} \to^* \rho'\}
     \end{align*}
-  \item \(C \equiv C^*\) : \(\sem{C^*}X = \cup_{i\in\n}\sem{C}^i X\)
+  \item \(\com \equiv \com^*\) \newline
+    \(\sem{\com^*}X = \cup_{i\in\n}\sem{\com}^i X\)
     \begin{align*}
-      \sem{C^*}X & = X \cup \sem{C}X \cup \sem{C}^2X \cup \dots & \text{(by definition)}\\
-      & = X \cup \{\rho' \in\env \mid \rho \in X, \stt{\com[C],\rho} \to^* \rho'\} \cup %% \{\rho' \in\poset{\env} \mid \rho \in X, \stt{\com[C;C],\rho} \to^* \rho'\} \cup
+      \sem{\com^*}X & = X \cup \sem{\com}X \cup \sem{\com}^2X \cup \dots & \text{(by definition)}\\
+      & = X \cup \{\rho' \in\env \mid \rho \in X . \stt{\com,\rho} \to^* \rho'\} \cup %% \{\rho' \in\poset{\env} \mid \rho \in X, \stt{\com;\com,\rho} \to^* \rho'\} \cup
       \dots & \text{(by ind. hp)}\\
-      & = \cup_{i\in\n} \{\rho' \in\env \mid \rho \in X, \stt{\com[C^i], \rho} \to^*  \rho'\} \\
-      & = \{\rho' \in\env \mid \rho \in X, \vee_{i\in\n} \stt{\com[C^i], \rho} \to^* \rho'\} \\
-      & = \{\rho' \in\env \mid \rho \in X, \stt{\com[C^*], \rho} \to^* \rho'\}
-    \end{align*}
-  \end{enumerate}
+      & = \cup_{i\in\n} \{\rho' \in\env \mid \rho \in X . \stt{\com^i, \rho} \to^*  \rho'\} \\
+      & = \{\rho' \in\env \mid \rho \in X . \vee_{i\in\n} \stt{\com^i, \rho} \to^* \rho'\} \\
+      & = \{\rho' \in\env \mid \rho \in X . \stt{\com^*, \rho} \to^* \rho'\}
+    \end{align*} \qedhere
+  \end{itemize}
 \end{proof}
 
-We can notice that \(\sem{C}X = \emptyset \iff \nexists \rho'\in\env,
-\rho \in X \mid \stt{\com[C],\rho} \to^* \rho'\).
+Notice that
+\(\sem{C}X = \emptyset \iff \nexists \rho'\in\env, \rho \in X \mid
+\stt{\com[C],\rho} \to^* \rho'\), in other words the collecting
+semantics of some program \(\com\) starting from some states
+\(X\in\dom\) is empty iff the program never halts on some state
+\(\rho'\). This already implies that termination is not unique. Due to
+non-determinism, in fact, a program can either end up in some final
+state \(\rho'\) and therefore halt after a finite number of
+transitions for every possible execution or loop indefinitely for some
+executions, producing an infinite sequence of \(\to\) transitions. We
+better explain what this means and its consequences in the next
+section.

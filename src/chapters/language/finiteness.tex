@@ -1,7 +1,7 @@
 \section{Deciding invariant finiteness}\label{sec:finiteness}
 
 \begin{lemma}\label{le:finiteness}
-  If \(\com[D]\in\imp_\starless\), and \(X \in \poset{env}\) is
+  If \(\com[D]\in\imp\starless\), and \(X \in \poset{env}\) is
   finite, then
   \begin{enumerate}[label=(\roman*).]
   \item \(\sem{D}X\) is finite;
@@ -36,7 +36,7 @@
     \begin{enumerate}[label=(\roman*).]
     \item \(\sem{D_1 + D_2} X = \sem{D_1}X \cup \sem{D_2}X\). By
       inductive hypothesis, both \(\sem{D_1}X, \sem{D_2}X\) are
-      finite, as they're sub expressions of \(\com[D]\). Since the
+      finite, as they are sub expressions of \(\com[D]\). Since the
       union of finite sets is finite, \(\sem{D_1 + D_2}X\) is finite;
     \item by inductive hypothesis again \(\forall \rho \in X\)
       \(\trans{\com[D]_1}{\rho}\ahalts\) and
@@ -46,7 +46,7 @@
       \com[D]_1 + \com[D]_2 \circ \tau \mid \tau \in
       \trans{\com[D]_2}{\rho} \}\) where
       \(\circ : \imp \times \Path^\infty \to \Path^\infty\) is the
-      appending operator. Since we're just appending
+      appending operator. Since we are just appending
       \(\stt{\com[D]_1 + \com[D]_2, \rho}\) in each path of the
       transition systems of \(\com[D]_1\) and \(\com[D]_2\), by
       inductive hypothesis
@@ -64,31 +64,31 @@
       \(\sem{D_2}Y\) is finite;
     \item by inductive hypothesis \(\forall \rho \in X\)
       \(\trans{\com[D]_1}{\rho}\ahalts\) and again
-      \(\forall \rho \in Y\) \(\trans{\com[D]_2}{\rho}\ahalts\);
-    \item 
+      \(\forall \rho' \in Y\) \(\trans{\com[D]_2}{\rho'}\ahalts\);
+    \item todo
     \end{enumerate}
   \end{enumerate}
 \end{proof}
 
 \begin{lemma}\label{le:infiniteness}
-  Given \(\com[D]\in\imp_\starless\), and \(\{\rho\} = X \in
+  Given \(\com[D]\in\imp\starless\), and \(\{\rho\} = X \in
   \poset{env}\), the predicate "\(\sem{D^*}X\) is finite" is
   undecidable.
 \end{lemma}
 
 \begin{proof}
   Suppose we can decide \(\sem{D^*}X\) is finite. We show that we in
-  that case we would be also able to decide wether
+  that case we would be also able to decide whether
   \(\trans{\com[D]^*}{\rho}\ahalts\) for some \(\rho \in X\), which is
   undecidable.%% Let \(\rho =\envi{x_1 \mapsto a_1, \dots, x_k \mapsto
     %% a_k}\) \(X = \{\rho\}\) with \(a_1, \dots, a_k \in \z\).
   \begin{itemize}
   \item In case \(\sem{D^*}X\) is infinite, then it must be that
-    \(\forall k \in \n\) \(\sem{D}^{k+1}X \nsubseteq
-    \cup_{i=0}^k\sem{D}^iX\), otherwise we would reach a fixpoint
-    and \(\sem{D^*}X\) would be finite. Since each application of
-    \(\com[D]\) must create an unempty set of new environments we can
-    build the inductive sequence of sets of environments
+    \(\forall k \in \n\)
+    \(\sem{D}^{k+1}X \nsubseteq \cup_{i=0}^k\sem{D}^iX\), otherwise we
+    would reach a fixpoint and \(\sem{D^*}X\) would be finite. Since
+    each application of \(\com[D]\) must create an nonempty set of new
+    environments, we can build the inductive sequence
     \begin{align*}
       Y_0 & = X \\
       Y_{k+1} & = (\sem{D}Y_k)\setminus Y_k
@@ -109,8 +109,8 @@
     \(Y \subseteq \{\rho'\mid \stt{\com[D], \rho} \to^* \stt{\com[D]',
       \rho'} \vee \stt{\com[D],\rho} \to^* \rho'\}\) with
     \(\com[D]'\in \red{\com[D]}\). Notice that the reductions of some
-    commanad \(\com\) are always finite, while \(Y\) is also finite:
-    \(\com[D] \in \imp_\starless\), therefore by lemma
+    command \(\com\) are always finite, while \(Y\) is also finite:
+    \(\com[D] \in \imp\starless\), therefore by lemma
     \ref{le:finiteness} \(\forall \rho \in \env\)
     \(\trans{\com[D]}{\rho} \ahalts\) and
     \(\sizeof{\trans{\com[D]}{\rho}} < \infty\). Since \(\com[D]\)

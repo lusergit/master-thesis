@@ -62,7 +62,7 @@ corresponding concretization is defined as follows:
 \end{definition}
 
 Observe that since we have both a concretization map \(\concr[\Int]\)
-and an abstraction map \(\abstr[\Int]\) we've built the Galois
+and an abstraction map \(\abstr[\Int]\) we have built the Galois
 Connection \[\tuple{\concr[\Int], \dom, \bA, \abstr[\Int]}\] between
 the concrete domain \(\dom\) and the abstract domain \(\bA\),
 resulting
@@ -74,7 +74,7 @@ resulting
     \interval{a}{b} \; \abstract{\cap} \; \interval{c}{d} & \defin \begin{cases} \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
       \abstract{\bot} & \text{otherwise} \end{cases}
   \end{align*}
-  And sound abstract aritmetical operations:
+  And sound abstract arithmetical operations:
   \begin{align*}
     \abstract{-}\; \interval{a}{b} & \defin \interval{-b}{-a} \\
     \interval{a}{b} \abstract{+} \interval{c}{d} & \defin \interval{a+c}{b+d} \\
@@ -207,13 +207,13 @@ The semantics is well-defined, because of the following lemma:
 
 \begin{proof}
   What we have to proof is that given \(\eta, \theta \in \bA\), with
-  \(\eta \sqsubseteq \theta\) then \(\forall C \in \imp\)
-  \(\semi{C}\eta \sqsubseteq \semi{C}\theta\). We'll work by induction
-  on the grammar of \(C\):
+  \(\eta \sqsubseteq \theta\) then \(\forall \com \in \imp\)
+  \(\semi{\com}\eta \sqsubseteq \semi{\com}\theta\). We will work by
+  induction on the grammar of \(\com\):
   
   \noindent
   \textbf{Base cases:}\ \\ \ We avoid cases where \(\eta = \bot\) and
-  \(\semi{C}\eta = \bot\) as \(\forall \theta \in \bA\) \(\bot
+  \(\semi{\com}\eta = \bot\) as \(\forall \theta \in \bA\) \(\bot
   \sqsubseteq \theta\) and it becomes trivially true.
   \begin{itemize}
   \item \(\com \equiv \var \in S\). Then
@@ -265,7 +265,7 @@ The semantics is well-defined, because of the following lemma:
   \end{itemize}
 
   \noindent
-  \textbf{Recusrsive cases:}\ \\ \
+  \textbf{Recursive cases:}\ \\ \
   \begin{itemize}
   \item \(\com \equiv \com_1 + \com_2\). Then
     \begin{align*}
@@ -289,7 +289,7 @@ The semantics is well-defined, because of the following lemma:
 
 \begin{example} \label{ex:fix}
   This is the case, for instance, the following program \(P\)
-  rapresents the difference between the Kleene Star and the Fix
+  represents the difference between the Kleene Star and the Fix
   operator:
 \begin{verbatim}
   while x < 8 do
@@ -442,10 +442,10 @@ invariant is strictly more precise than the Fix one.
   Let us remark that in case we were interested in studying
   termination of the abstract interpreter, we could assume that the
   input of a program will always be a finite interval in such a way
-  that nontermination can be identified with the impossibility of
+  that non termination can be identified with the impossibility of
   converging to a finite interval for some variable. In fact, starting
   from an environment \(\eta\) which maps each variable to a finite
   interval, \(\semi{\com}\eta\) might be infinite on some variable
   when \(\com\) includes a either Kleene or fix iteration which does
-  not convernge in finitely many steps.
+  not converge in finitely many steps.
 \end{remark}

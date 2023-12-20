@@ -1,10 +1,76 @@
-\section{Functions in Imp}
-Since we usually deal with a finite number of free variables in our
-programs, we can without loss of generality refer to (input) variables
-as \(\var_n\) with \(n\in\n\). Therefore the collections of states
-\(X\in\poset{\env}\) will look like \[\envi{\var_1\mapsto v_1, \var_2
-  \mapsto v_2, \dots, \var_n\mapsto v_n, \var[y] \mapsto v_y, \var[z]
-  \mapsto v_z, \dots}.\] Observe that since we're interested in finite
+\section{Functions in Imp}\label{sec:functionsimp}
+In the following section we argue that the set of functions is at
+least a superset of the partially recursive functions described in
+\cite{cutland1980computability}. This way we can derive some results
+from well known computability results, without proving them by
+scratch. We can do this by encoding partial recursive functions into
+Imp programs.  Partial recursive functions are functions
+\(\partialrec[k]\) with airity \(k\):
+\begin{definition}[Partially recursive functions]
+  The class \(\partialrec[k]\) of \emph{partially recursive functions}
+  is the least class of functions on the natural numbers which
+  contains
+  \begin{enumerate}[label=(\alph*)]
+  \item\label{parec:a} the zero function:
+    \begin{align*}
+      z : \; & \n^k \to \n \\
+      & (x_1, \dots, x_k) \mapsto 0
+    \end{align*}
+  \item\label{parec:b} the successor function
+    \begin{align*}
+      s : \; & \n \to \n \\
+      & x_1 \mapsto x_1 + 1
+    \end{align*}
+  \item\label{parec:c} the projection function
+    \begin{align*}
+      U_i^k : \; & \n^k \to \n \\
+      & (x_1,\dots,x_k) \mapsto x_i
+    \end{align*}
+  \end{enumerate}
+  and is closed under
+  \begin{enumerate}[label=(\arabic*)]
+  \item\label{parec:1} composition: given a function
+    \(f : \partialrec[k]\) and functions
+    \(g_1, \dots, g_k : \partialrec[n]\) the \emph{composition}
+    \(h : \partialrec[n]\) is defined by
+    \begin{equation*}
+      h(\vec{x}) =
+      \begin{cases}
+        f(g_1(\vec{x}), \dots, g_k(\vec{x})) & \text{if } g_1(\vec{x}) \downarrow, \dots, g_k(\vec{x}) \downarrow \text{ and } f(g_1(\vec{x}), \dots, g_k(\vec{x})) \downarrow \\
+        \uparrow & \text{otherwise}
+      \end{cases}
+    \end{equation*}
+  \item\label{parec:2} primitive recursion: given
+    \(f : \partialrec[k]\) and \(g : \partialrec[k+2]\) we define
+    \(h : \partialrec[k+1]\) by \emph{primitive recursion} by
+    \begin{equation*}
+      \begin{cases}
+        h(\vec{x}, 0) & = f(\vec{x}) \\
+        h(\vec{x}, y + 1) & = g(\vec{x}, y, h(\vec{x}, y))
+      \end{cases}
+    \end{equation*}
+  \item\label{parec:3} minimalization: given \(f : \partialrec[k+1]\),
+    \(h : \partialrec[k]\) defined trough \emph{unbounded
+      minimalization} is
+    \begin{equation*}
+      h(\vec{x}) = \mu y . f(\vec{x}, y) = \begin{cases}
+        \text{least } z \text{ s.t. } & \begin{cases}
+          f(\vec{x}, z) = 0 \\
+	  f(\vec{x}, z) \downarrow \quad f(\vec{x},z')\neq 0 \quad \forall z < z' \\
+	\end{cases} \\
+        \uparrow                      & \text{otherwise}
+      \end{cases}
+    \end{equation*}
+  \end{enumerate}
+\end{definition}
+\noindent
+We also need to define what it means providing \((a_1, \dots, a_k)\)
+as input for an Imp program. We do this by special input states and
+variables: we can consider initial states
+\(\rho = \envi{\var_1 \mapsto a_1, \dots, \var_k \mapsto a_k}\) where
+each special variable \(\var_k\) maps to its initial value \(a_k\),
+this way we can encode partial functions input into initial states for
+a program \(\com\). Observe that since we are interested in finite
 programs, it makes sense to consider only finite collections of free
 variables.
 
@@ -14,109 +80,6 @@ variables.
 %%     \dots, x_k\mapsto a_k}\). We indicate the sequence of \(\to\)
 %%   transitions starting from the state \(\stt{C,\rho}\) as \[\trans{C}{\rho}\]
 %% \end{notation}
-
-\begin{notation}[Partial termination]
-  Let \(\rho = \envi{\var_1 \mapsto a_1, \var_2\mapsto a_2, \dots,
-    \var_k\mapsto a_k}\). We say that a program \(\com\)
-  \emph{partially halts} on some state \(\rho\) when there's at least
-  one path of finite length in the transition system
-  \(\trans{\com}{\rho}\) ending up in some state \(\rho'\): \[
-  \trans{\com}{\rho} \ehalts \iff \exists k \in \n \mid \stt{\com,
-    \rho} \to^k \rho'.\] Dually
-  \[ \trans{\com}{\rho} \nahalts \iff \neg \; \trans{\com}{\rho} \ehalts \]
-  a program always loops if there's no finite path in its transition
-  system that leads to a final environment.
-\end{notation}
- Example \ref{ex:partial} shows a program that partially halts, while
- example \ref{ex:neverhalts} shows a program that always loops.
-
-\begin{notation}[Universal termination]
-  Let \(\rho = \envi{\var_1 \mapsto a_1, \var_2\mapsto a_2, \dots,
-    \var_k\mapsto a_k}\). We say that a program \(\com\)
-  \emph{partially loops} on some state \(\rho\) when there's at least
-  one path of infinite length in the transition system
-  \(\trans{\com}{\rho}\): \[ \trans{\com}{\rho} \nehalts \iff \forall
-  k \in \n \; \stt{\com, \rho} \to^k \stt{\com', \rho'} \quad
-  \text{for some } \com'\in\imp, \rho'\in\env.\] Dually
-  \begin{equation*}
-    \trans{\com}{\rho} \ahalts \iff \neg \; \trans{\com}{\rho}
-    \nehalts
-  \end{equation*}
-  a program \emph{universally halts} iff there's no infinite path in
-  the transition systems.
-\end{notation}
-
-Notice that the absence of infinite paths implies that
-\(\trans{\com}{\rho}\) is finite.  Example \ref{ex:partial} shows a
-program that partially loops, while example \ref{ex:alwayshalt} shows
-a program that universally halts.
-
-%% Let's consider the following examples to better understand what this
-%% means. The example \ref{ex:alwayshalt} shows a program that always
-%% halts, and what it means for its transition system. Example
-%% \ref{ex:neverhalts} shows a program that never halts. Finally example
-%% \ref{ex:partial} shows a program that partially halts and partially
-%% loops due to the presence of both a path that ends up in some state
-%% \(\rho'\) and an infinite path.
-
-\begin{example}\label{ex:alwayshalt}
-  Consider the program
-  \begin{equation*}
-    \var := 0;
-  \end{equation*}
-  always halts, since \(\forall\rho \in \env, \rho \neq \bot\) builds
-  the transition system \[\stt{\var := 0, \rho} \to \rho[\var \mapsto
-    0]\] according to the expr rule in definition
-  \ref{def:sosem}. Therefore \(\trans{(\var := 0)}{\rho} \ahalts\)
-  \(\forall \rho \in \env\setminus\{\bot\}\).
-\end{example}
-
-\begin{example}\label{ex:neverhalts}
-  Consider the program \(\com[P]\)
-  \[(\var \geq 0; \pplus{\var})^*;\var < 0\] The program never haltsn
-  \(\forall \rho \in \env\) s.t. \(\rho(\var) \geq 0\). In fact in
-  these cases it builds the transition system in figure
-  \ref{fig:tsysnhalt}, where the infinite path
-  \[\stt{(\var \geq 0; \pplus{\var})^*; x < 0, \rho} \to^* \stt{(\var
-      \geq 0; \pplus{\var})^*; x < 0, \rho[\var \mapsto \rho(\var) +
-      1]} \to^* \dots\]
-  
-  \[\dots \to^* \stt{(\var \geq 0; \pplus{\var})^*; x < 0, \rho[\var
-      \mapsto \rho(\var) + k]} \to^* \dots \] is always present.
-  \begin{figure}
-    \begin{tikzpicture}[->,>=stealth]
-      \tikzset{node distance = .5cm}
-      \node (P) {\(\stt{(\var \geq 0; \pplus{\var})^*;\var < 0, \rho}\)};
-      \node (zero)   [right=of P] {\(\stt{\var < 0, \rho} \not\to\)};
-      \node (appzero) [below=of P] {\(\stt{\var \geq; 0\pplus{\var};(\var \geq 0; \pplus{\var})^*;\var < 0, \rho}\)};
-      \node (appone) [below=of appzero] {\(\stt{(\var \geq 0; \pplus{\var})^*;\var < 0, \rho[\var \mapsto \rho(\var) + 1]}\)};
-      \node (one) [right=of appone] {\(\stt{\var < 0, \rho[\var \mapsto \rho(\var) + 1]} \not\to\)};
-      \node (appk) [below=of appone] {\(\stt{(\var \geq 0; \pplus{\var})^*;\var < 0, \rho[\var \mapsto \rho(\var) + k]}\)};
-      \node (kei) [right=of appk] {\(\stt{\var < 0, \rho[\var \mapsto \rho(\var) + k]} \not\to\)};
-
-      \draw
-      (P) edge (zero) edge (appzero)
-      (appzero) edge[to*] (appone)
-      (appone) edge (one) edge[to*] (appk)
-      (appk) edge (kei);
-    \end{tikzpicture}
-    \caption{Transition system of \((\var \geq 0; \pplus{\var})^*;\var
-      < 0\)}\label{fig:tsysnhalt}
-  \end{figure}
-\end{example}
-
-\begin{example}\label{ex:partial}
-  Consider the program \[(\pplus{\var})^*\] it partially halts
-  (\(\trans{(\pplus{\var})^*}{\rho}\ehalts\)), as according to the
-  transition rule star\(_{\text{fix}}\) \(\exists \rho \in \env\) s.t.
-  \[\infer[\text{star}_{\text{fix}}]{\stt{(\pplus{\var})^*, \rho} \to
-    \rho}{\rho \neq \bot}\] But it also partially loops
-  (\(\trans{(\pplus{\var})^*}{\rho}\nehalts\)). In fact we can build
-  the infinite path\[\stt{(\pplus{\var})^*, \rho[\var\mapsto 0]} \to^*
-  \stt{(\pplus{\var})^*, \rho[\var\mapsto 1]} \to^*
-  \stt{(\pplus{\var})^*, \rho[\var\mapsto 2]} \to^* \dots\]
-\end{example}
-
 
 \begin{notation}[Program output]
   Let \(\env \ni \rho = \envi{\var_1\mapsto a_1, \dots, \var_n \mapsto
@@ -147,9 +110,15 @@ a program that universally halts.
 
 We argue that the class of function computed by Imp is the same as the
 set of partially recursive functions \(\partialrec\) (as defined in
-\cite{cutland1980computability}). To do that we have to prove that it
-contains the zero, successor and projection functions and it is closed
-under composition, primitive recursion and unbounded minimalization.
+\cite{cutland1980computability}). To do that we have to prove that the
+class of functions computed by the \(\imp\) language is a \emph{rich}
+, i.e.
+
+\begin{definition}[Rich class]
+  A class of functions \(\mathcal{A}\) is said to be rich if it
+  includes \ref{parec:a},\ref{parec:b} and \ref{parec:c} and it is
+  closed under \ref{parec:1}, \ref{parec:2} and \ref{parec:3}.
+\end{definition}
 
 \begin{lemma}[Imp functions richness]
   The class of Imp-computable function is rich.
@@ -157,8 +126,8 @@ under composition, primitive recursion and unbounded minimalization.
 
 \begin{proof}
 
-  We'll proceed by proving that Imp has each and every one of the
-  basic functions (zero, successor, projection). 
+  We proceed by proving that Imp has each and every one of the basic
+  functions (zero, successor, projection).
 
   \begin{itemize}
   \item The zero function:
@@ -181,7 +150,7 @@ under composition, primitive recursion and unbounded minimalization.
     is Imp-computable: \[U_i^k(a_1, \dots, a_k) \defin y := x_i + 0\]
   \end{itemize}
 
-  We'll then prove that it is closed under composition, primitive
+  We then prove that it is closed under composition, primitive
   recursion and unbounded minimalization.
 
   \begin{lemma}
@@ -194,9 +163,9 @@ under composition, primitive recursion and unbounded minimalization.
     \(h\) is Imp-computable.
   \end{lemma}
   \begin{proof}
-    Since by hp \(f, g_n \forall n\in [1,k]\)
-    are computable, we'll consider their programs \(F, G_n\forall n
-    \in [1,k]\). Now consider the program
+    Since by hp \(f, g_n \forall n\in [1,k]\) are computable, we
+    consider their programs \(F, G_n\forall n \in [1,k]\). Now
+    consider the program
     \begin{center}
       \begin{tabular}{l}
         \(G_1(\vec{x})\);\\[0pt]
@@ -209,7 +178,7 @@ under composition, primitive recursion and unbounded minimalization.
         \(F(y_1, y_2,\dots, y_k)\);\\[0pt]
       \end{tabular}
     \end{center}
-    Which is exactly \(h\). Therefore Imp is closed under generalised
+    Which is exactly \(h\). Therefore Imp is closed under generalized
     composition.
   \end{proof}
 
@@ -259,7 +228,7 @@ under composition, primitive recursion and unbounded minimalization.
 
   \begin{proof}
     Let \(F\) be the program for the computable function \(f\)
-    with ariety \(k+1\), \(\vec{x} = (x_1, x_2, \dots, x_k)\)
+    with arity \(k+1\), \(\vec{x} = (x_1, x_2, \dots, x_k)\)
     . Consider the program \(H(\vec{x})\)
     \begin{center}
       \begin{tabular}{l}
@@ -288,13 +257,24 @@ say \[f \in \partialrec[k] \Rightarrow \exists \com \in \imp \mid
 with \(\rho = \envi{\var_1 \mapsto a_1, \dots, \var_k \mapsto a_k}\).
 From this we get a couple of facts that derive from well known
 computability results:
-\begin{itemize}
-\item \(\sem{C}X = \emptyset\) (i.e., \(\trans{\com}{\rho} \nahalts\))
-  is undecidable. The set of functions \(f\in \partialrec[k]\)
-  s.t. \(f(x) \uparrow \forall x \in \n^k\) is not trivial and
-  saturated, therefore it is not recursive (by Rice's theorem
-  \cite{rice1953classes});
-\item dually, \(\sem{C}X \neq \emptyset\) (i.e., \(\trans{\com}{\rho}
-  \ehalts\)) is undecidable since is the negation of the latter
-  statement;
-\end{itemize}
+\begin{corollary}
+  \(\trans{\com}{\rho} \nahalts\) (i.e., \(\sem{C}X = \emptyset\)) is
+  undecidable.
+\end{corollary}
+
+\begin{proof}
+  The set of functions \(f\in \partialrec[k]\) s.t.
+  \(f(x) \uparrow \forall x \in \n^k\) is not trivial and saturated,
+  therefore it is not recursive by Rice's theorem
+  \cite{rice1953classes}
+\end{proof}
+
+\begin{corollary}
+  \(\trans{\com}{\rho} \ahalts\) is undecidable.
+\end{corollary}
+\begin{proof}
+  The set of functions \(f\in \partialrec[k]\) s.t.
+  \(f(x) \downarrow \forall x \in \n^k\) is not trivial and saturated,
+  therefore it is not recursive by Rice's theorem
+  \cite{rice1953classes};
+\end{proof}
