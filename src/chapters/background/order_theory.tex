@@ -1,0 +1,148 @@
+\section{Order theory}
+
+Within Theoretical Computer Science, especially in the field of
+semantics, partial orders hold significant importance. They are
+extensively employed in Abstract Interpretation, as highlighted in
+\cite{mine:course}, serving different levels of the theory to model
+core notions. These notions include the idea of approximation, where
+certain analysis results may be less precise than others, creating a
+partial order where some results are incomparable. Moreover, partial
+orders are fundamental in conveying the concept of soundness: an
+analysis is deemed sound if its result is more general than the actual
+behavior. These mathematical notions, essential for discussions
+surrounding the Abstract Interpretation formalism, primarily involve
+order and lattice theory.
+
+\begin{definition}[Partiall ordered set]
+  Let \(X\) be a non-empty set, \(\sqsubseteq \subseteq X \times X\)
+  be a reflexive, antisymmetric and transitive relation on that set,
+  i.e., \(\forall x,y,z \in X\):
+
+  \begin{enumerate}
+  \item \(x \sqsubseteq x\) (reflexivity)
+  \item \(x \sqsubseteq y \wedge y \sqsubseteq x \Rightarrow x = y\)
+    (antisymmetry)
+  \item \(x \sqsubseteq y \wedge y \sqsubseteq z \Rightarrow x
+    \sqsubseteq z\) (transitivity)
+  \end{enumerate}
+
+  Then the tuple \(\langle X, \sqsubseteq\rangle\) is a
+  \emph{partially ordered set} (POSet).
+\end{definition}
+
+\begin{definition}[Least upper bound]
+  Let \(\langle X, \sqsubseteq \rangle\) be a POSet and let \(Z
+  \subseteq X\). We say that \(\overline{z}\) is an \emph{upper bound}
+  on \(Z\) if \(\forall z \in Z\) \(z \sqsubseteq \overline{z}\). It
+  is the \emph{least upper bound} of \(Z\) (denoted as
+  \(\lubof[X]{Z}\)) if \(\forall z' \in Z\) upper bounds on \(Z\),
+  \(\overline{z} \sqsubseteq z'\).
+\end{definition}
+
+\begin{definition}[Greatest lower bound]
+  Let \(\langle X, \sqsubseteq \rangle\) be a POSet and let \(Z
+  \subseteq X\). We say that \(\overline{z}\) is a \emph{lower bound}
+  on \(Z\) if \(\forall z \in Z\) \(\overline{z} \sqsubseteq z\). It
+  is the \emph{greatest lower bound} of \(Z\) (denoted as
+  \(\glbof[X]{Z}\)) if \(\forall z' \in Z\) upper bounds on \(Z\), \(z'
+  \sqsubseteq \overline{z}\).
+\end{definition}
+
+Usually then we're talking about least and greatest lower bound the
+bigger set is often implicit, and we therefore simply write
+\(\lubof{Z}\) and \(\glbof{Z}\).  In abstract interpretation we often
+rely on special kinds of POSets, where the existance of the greatest
+lower bound and the least upper bound is ensured for each subset of
+the original POSet. These sets are called complete lattices
+
+\begin{definition}[Complete lattice]
+  A POSet \(\langle X, \sqsubseteq\rangle\) is called a \emph{complete
+  lattice} if \[\forall Y \subseteq X \quad \exists \lubof{Y} \wedge
+  \exists \glbof{Y}\]
+\end{definition}
+
+Complete lattices are a subset of the class of chain complete partial
+ordered sets. These kinds of partial orders are defined using the
+concept of chains:
+
+\begin{definition}[Chain]
+  Let \(\tuple{D, \sqsubseteq}\) be a partially ordered set. Then
+  \(Y\subseteq D\) is a chain if for any \(y_1, y_2 \in Y\) it holds
+  that
+  \begin{equation*}
+    y_1 \sqsubseteq y_2 \vee y_2 \sqsubseteq y_1
+  \end{equation*}
+\end{definition}
+
+\begin{definition}
+  \(\tuple{D, \sqsubseteq}\) is a chain complete partially ordered set
+  (ccpo) if every chain of \(D\) has a least upper bound.
+\end{definition}
+
+% We're also interested in join morphisms
+
+% \begin{definition}[Join Morphism]
+%   Let \(\langle X, \sqsubseteq_X \rangle, \langle Y, \sqsubseteq_Y
+%   \rangle\) be two lattices. Let \(f : X \to Y\) be a mappging from
+%   \(X\) to \(Y\). \(F\) is a \emph{join morphism} if \(\forall x_1,
+%   x_2 \in X\) \(f(x_1 \vee x_2) = f(x_1) \vee f(x_2)\). In this case
+%   we can also say that \(f\) \emph{preserves the joins}.
+% \end{definition}
+
+The last building block we will use in the following chapters is the
+Kleene-Knaster-Tarski theorem. This theorem is a fundamental result in
+order theory and provides a powerful tool for analyzing and
+establishing the existence of fixed points in complete lattices. To
+state it we need to first link functions and order theory with some
+definitions
+
+\begin{definition}[Monotone functions]
+  Let \(\tuple{D, \sqsubseteq}\) and \(\tuple{D', \sqsubseteq'}\) be
+  complete lattices. The total function \(f : D \to D'\) is
+  \emph{monotone} if
+  \begin{equation*}
+    d_1 \sqsubseteq d_2 \Rightarrow f(d_1) \sqsubseteq' f(d_2)
+  \end{equation*}
+\end{definition}
+
+% More than monotonicity we are interested in continuous functions on a
+% complete lattice
+
+Monotonicity however does not preserve upper bounds, just orders. In
+particular if we take a chain \(Y \subseteq D\) of some ccpo
+\(\tuple{D, \subseteq}\) and some monotone function \(f : D \to D\),
+in general \(\sqcup\{f(d) \mid d \in Y\} \sqsubseteq f(\sqcup Y)\),
+but not \(\sqcup\{f(d) \mid d \in Y\} = f(\sqcup Y)\). Therefore we
+introduce the concept of continuity, functions that preserve both
+order and upper bounds
+
+\begin{definition}[Continuous functions]
+  Let \(\tuple{X}{\sqsubseteq}\) and \(\tuple{X'}{\sqsubseteq'}\) be
+  complete lattices. The total function \(f : D \to D'\) is
+  \emph{continuous} if
+  \begin{itemize}
+  \item \(f\) is monotone;
+  \item \(\sqcup'\{f(d) \mid d \in D\} = f(\sqcup X)\)
+  \end{itemize}
+\end{definition}
+
+Continuous functions over ccpos are important for the Kleene
+fixed-point theorem, usually attributed to Tarski from
+\cite{tarski1955lattice}, which is also called kleene iteration. It
+gives us an iteration strategy to find the least fixpoint of a
+function over a ccpo, provided that the function is continuous.
+
+\begin{theorem}[Kleene fixed-point]\label{th:fixpoint}
+  Let \(f : D \to D\) be a continuous function over a chain complete
+  partial order \(\tuple{D , \sqsubseteq}\) with the lest element
+  \(\bot\). Then
+  \begin{equation*}
+    \fix{f} = \sqcup\{f^n(\bot) \mid n \in \n\}
+  \end{equation*}
+  where
+  \begin{itemize}
+  \item \(f^0 = id\)
+  \item \(f^{n+1} = f \circ f^n \quad \forall n \in \n\)
+  \end{itemize}
+  is the least fix point of \(f\).
+\end{theorem}

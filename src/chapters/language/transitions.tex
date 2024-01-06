@@ -31,10 +31,19 @@ relations starting from some state.
     \{\ppath \in (\state \cup \env)^\infty \mid \forall i \in [ 1, |
     \ppath | ) . \ppath_i \to \ppath_{i+1}\}
   \end{equation*}
-  Where by \(X^+\) we mean all the finite sequences of (possibly
-  repeating) elements of \(X\), while with \(X^\omega\) we mean all
-  the infinite sequences of (possibly repeating) elements of \(X\).
-
+  Where
+  \begin{itemize}
+  \item \(X^+\) is the set of all finite sequences of (possibly
+    repeating) elements of \(X\);
+  \item \(X^\omega\) is the set of all infinite sequences of (possibly
+    repeating) elements of \(X\).
+  \item \(\tau_i\) is the projection operation on the path, meaning
+    the \(i\)-th element in the sequence.
+  \item given a path \(\ppath\) and indices \(i,j \in \n\) s.t.
+    \(i < j\), \(\ppath_{i,j}\) denotes the subpath of \(\ppath\)
+    given by \(\ppath_i \to \ppath_{i+1} \to \dots \to
+    \ppath_j\). \(\ppath_{i,j}\) is a cycle if \(\ppath_i = \ppath_j\).
+  \end{itemize}
 \end{definition}
 \noindent
 In this context we are more interested in paths starting from some

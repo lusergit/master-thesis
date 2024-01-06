@@ -1,5 +1,15 @@
 \section{Deciding invariant finiteness}\label{sec:finiteness}
 
+In this section we argue that even the finiteness of the semantics of
+some program on some initial states is undecidable. We show that by
+knowing wether \(\sem{\com}X\) is finite for some program
+\(\com\in\imp\) and some initial states \(X\in \dom\), we can decide
+wether \(\trans{\com}{\rho}\ahalts\) for all \(\rho \in X\). The first
+step is showing that fi we have a program where the \(^*\) operator
+does not appear, then the program can only produce a finite amount of
+finite paths. In other words its transition system is a tree for every
+initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
+
 \begin{lemma}\label{le:finiteness}
   If \(\com[D]\in\imp\starless\), and \(X \in \poset{env}\) is
   finite, then
@@ -67,61 +77,217 @@
 \end{proof}
 
 \begin{lemma}\label{le:infiniteness}
-  Given \(\com[D]\in\imp\starless\), and \(X \in \poset{env}\), the
-  predicate "\(\sem{D^*}X\) is finite" is undecidable.
+  Given \(\com[D]\in\imp\starless\), and \(\rho \in \env\), the
+  predicate "\(\sem{D^*}\rho\) is finite" is undecidable.
 \end{lemma}
 
 \begin{proof}
-  Suppose we can decide \(\sem{D^*}X\) is finite. We show that we in
-  that case we would be also able to decide whether
-  \(\trans{\com[D]^*}{\rho}\ahalts\) for some \(\rho \in X\), which is
-  undecidable.%% Let \(\rho =\envi{x_1 \mapsto a_1, \dots, x_k \mapsto
-    %% a_k}\) \(X = \{\rho\}\) with \(a_1, \dots, a_k \in \z\).
+  We work by contraddiction, showing that if we know wether
+  \(\sem{\com}\rho\) is finite or infinite we can decide
+  \(\trans{\com}{\rho}\ahalts\).
   \begin{itemize}
-  \item In case \(\sem{D^*}X\) is infinite, then it must be that
-    \(\forall k \in \n\)
-    \[\sem{D}^{k+1}X \nsubseteq \bigcup_{i=0}^k\sem{D}^iX\] otherwise if
-    for some \(k\) \(\sem{D}^{k+1}X \subseteq \cup_{i=0}^k\sem{D}^iX\)
-    it would mean that  todo
-    
-    we would reach a fixpoint and \(\sem{D^*}X\) would be
-    finite. Since each application of \(\com[D]\) must create an
-    nonempty set of new environments, we can build the inductive
-    sequence
+  \item In case \(\sem{D^*}\rho\) is infinite, then we make the
+    following observation:
+
+    \begin{observation}\label{obs:noncontained}
+      \begin{equation*}
+        \forall k \in \n \quad \sem{D}^{k+1}\rho \nsubseteq \bigcup_{i=0}^k\sem{D}^i\rho
+      \end{equation*} 
+    \end{observation}
+    The latter observation follows from the following lemma:
+    \begin{lemma}\label{le:contain}
+      Let \(\com[D] \in \imp\starless\) \(\rho \in \env\). If
+      \begin{equation}\label{eq:hp}
+        \sem{D}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho \quad \text{for some } k \in \n
+      \end{equation}
+      then
+      \begin{equation}\label{eq:what}
+        \forall j \in \n \quad \sem{D}^{k+1+j}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho
+      \end{equation}
+      and therefore
+      \(\sem{\com[D]^*}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\)
+    \end{lemma}
+    \begin{proof}
+      We can show \eqref{eq:what} by induction on \(j\):
+      \begin{itemize}
+      \item if \(j=0\) then we want to show that
+        \(\sem{D}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\), which is
+        true by hypothesis \eqref{eq:hp};
+        
+      \item In the inductive case we have to show that if the
+        statement holds for \(j\), it also holds for \(j+1\). We know
+        that
+        \begin{align*}
+          \bigcup_{i=0}^k\sem{\com[D]}^i\rho & = \bigcup_{i=0}^{k+1}\sem{\com[D]}^i\rho & \text{since by \eqref{eq:hp} } \sem{\com[D]}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{\com[D]}^i\rho \\
+                                          & = \rho \cup \bigcup _{i=1}^{k+1}\sem{\com[D]}^i \rho \\
+                                          & = \rho \cup \sem{\com[D]}\left( \bigcup _{i=0}^k\sem{\com[D]}^i \rho\right) & \text{by additivity}
+        \end{align*}
+        By inductive hypothesis
+        \begin{equation*}
+          \sem{\com[D]}^{k+1+j}\rho \subseteq \bigcup_{i=0}^k\sem{\com[D]}^i\rho
+        \end{equation*}
+        so, by monotonicity of \(\sem{\com[D]}\)
+        \begin{equation*}
+          \sem{\com[D]}\left( \sem{\com[D]}^{k+1+j}\rho\right) \subseteq \sem{\com[D]}\left(\bigcup_{i=0}^k\sem{\com[D]}^i\rho \right)
+        \end{equation*}
+        and therefore
+        \begin{equation*}
+          \sem{\com[D]}^{(k+1)+(j+1)}\rho \subseteq \left(\bigcup_{i=1}^{k+1}\sem{\com[D]}^i\rho \right) \subseteq \rho \cup \left(\bigcup_{i=1}^{k+1}\sem{\com[D]}^i\rho \right) = \bigcup_{i=0}^{k+1}\sem{\com[D]}^i\rho = \bigcup_{i=0}^{k}\sem{\com[D]}^i\rho
+        \end{equation*}
+      \end{itemize}
+    \end{proof}
+
+    % quindi lo statement deve essere falso
+    therefore \(\forall k \in \n\)
+    \(\sem{\com[D]}^{k+1}\rho \not\subseteq \bigcup_{i=0}^k
+    \sem{\com[D]}^i\rho\), otherwise
+    \(\sem{\com[D]^*}\rho \subseteq \bigcup_{i=0}^k\sem{\com[D]}\rho\) which
+    is impossible since the right term is a finite quantity.
+    % No , definiamo l'albero dove ogni livello è composto dai
+    % seguenti stati
+    With this observation we build the tree \(\tuple{\env, \to^D}\),
+    where \(\to^D \subseteq \env \times \env\) and if
+    \(\rho' \to^D \rho''\) then \(\stt{\com[D], \rho'} \to^*
+    \rho''\). We define by the following rule the levels of the tree:
     \begin{align*}
-      Y_0 & = X \\
-      Y_{k+1} & = (\sem{D}Y_k)\setminus Y_k
+      Y_0 & = \{\rho\} \\
+      Y_{k+1} & = \left(\sem{\com[D]}^{k+1}\rho\right) \setminus \left( \bigcup_{i=0}^k \sem{\com[D]}\rho \right)
     \end{align*}
-    where
-    \(\forall \rho' \in Y_{k+1} \exists \rho \in Y_k \mid \rho' \in
-    \sem{D}\rho\) by definition. This means that there must be at
-    least one \(\rho_1\in X\) that produces an infinite path
-    \[\stt{\com[D]^*, \rho_1}\to^*\stt{\com[D]^*, \rho_2}\to^*\dots \]
-    which produces new environments at each application of
-    \(\com[D]\): \(\rho_1, \rho_2, \dots \mid \forall i,j \in \n\)
-    \(\rho_i \neq \rho_j\) and therefore
-    \(\trans{\com[D]^*}{\rho_1} \nehalts\) which means that
-    \(\trans{\com[D]^*}{\rho_1}\ahalts\) is false.
-  \item In case \(\sem{D^*}X\) is finite we can search for infinite
-    paths in \(\trans{\com[D]^*}{\rho}\). Since
-    \(\sem{\com[D]^*}X = \bigcup_{\rho\in X}\sem{\com[D]^*}\{\rho\}\),
-    for every \(\rho' \in X\), \(\sem{\com[D]}\{\rho\}\) is
-    finite. Consider the states in \(\sem{\com[D]}\{\rho\}\). For each
-    one of them either
+    Where \(Y_0\) is the singleton set containing the root \(\rho\)
+    and the \(k\)-th level is made of the environments in the \(Y_k\)
+    set. Figure \ref{fig:tree} shows a tree of \(\to^D\) relations and
+    visualizes the levels \(Y_k\). We can therefore make the following
+    observations:
+    \begin{enumerate}[label=(\roman*)]
+    \item The tree is rooted in \(\rho \in Y_0\). In fact
+      \(\forall \rho' \in Y_1\) \(\rho \to^D \rho'\) by definition and
+      \(\forall \rho'''\in Y_{k+1} \exists \rho'' \in Y_k \mid \rho''
+      \to^D \rho'''\);
+    \item because of observation \ref{obs:noncontained} each level
+      \(Y_k\) is non empty and finite, therefore there is an infinite
+      quantity of levels, where each node has a finite quantity of
+      children;
+    \item\label{it:three} for all \(\rho', \rho''\in\env\)
+      s.t. \(\rho' \to^D \rho''\) since
+      \(\stt{\com[D], \rho'} \to^* \rho''\) we can apply the corollary
+      (\ref{co:comp}) of the composition lemma (\ref{le:comp}) and
+      state that
+      \(\stt{\com[D];\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''}\)
+      and because of the star rule
+      \(\stt{\com[D]^*, \rho'} \to \stt{\com[D];\com[D]^*, \rho'}\) We
+      can therefore say that
+      \begin{equation*}
+        \stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''}
+      \end{equation*}
+    \end{enumerate}
+
+    what is left to do is show that there's a path from
+    \(\stt{\com[D]^*, \rho}\) of infinite length.  To do so we need
+    König's Lemma from \cite{konig1926lemma}:
+    
+    \begin{lemma}[König's Lemma]\label{le:konig}
+      Let \(T\) be a rooted tree with an infinite number of nodes,
+      each with a finite number of children.  Then \(T\) has a branch
+      of infinite length.
+    \end{lemma}
+
+    \begin{figure}
+      \centering
+      \begin{tikzpicture}[->,>=stealth]
+        \tikzset{node distance = .7cm}
+
+        \node (rho)                     {\(\rho\)};
+        \node (dots1)  [below=of rho]   {\(\dots\)};
+        \node (rho11)  [left=of dots1]  {\(\rho'\)};
+        \node (rho12)  [right=of dots1] {\(\rho''\)};
+        \node (dots2)  [below=of dots1] {\(\dots\)};
+        \node (phan2)  [right=of dots2] {\(\phantom{\rho''}\)};
+        \node (rho21)  [left=of dots2]  {\(\rho'''\)};
+        \node (vdot1)  [below=of rho21] {\(\vdots\)};
+        \node (vdot2)  [below=of dots2] {\(\vdots\)};
+        \node (phan3)  [right=of vdot2] {\(\phantom{\rho''}\)};
+
+        \draw[red, thick, rounded corners]
+        (rho11.south west) rectangle (rho12.north east);
+        \draw[red, thick, rounded corners]
+        (rho21.south west) rectangle (phan2.north east);
+        \draw[red, thick, rounded corners]
+        (vdot1.south west) rectangle (phan3.north east);
+        \node[right=of rho12] at (rho12) {\(Y_1\)};
+        \node[right=of phan2] at (phan2) {\(Y_2\)};
+        \node[right=of phan3] at (phan3) {\(Y_k\)};
+
+        \draw
+        (rho) edge (rho11) edge (dots1) edge (rho12)
+        (rho11) edge (rho21)
+        (dots1) edge (dots2)
+        (rho12) edge (dots2)
+        (rho21) edge (vdot1)
+        (dots2) edge (vdot2);
+      \end{tikzpicture}
+      \caption{Example of \(\to^D\) relations between elements of
+        \(\env\).}\label{fig:tree}
+    \end{figure}
+
+    We can therefore use König's Lemma (\ref{le:konig}) and deduce
+    that there exists an infinite path from \(\rho\) of \(\to^D\)
+    relations
+    \begin{equation*}
+      \rho \to^D \rho' \to^D \rho'' \to^D \dots
+    \end{equation*}
+    Where each element belongs to a different level \(Y_k\), and
+    therefore is different from every other evnironment appearing in
+    the sequence. Because of observation \ref{it:three} there exists a
+    path
+    \begin{equation*}
+      \stt{\com[D]^*, \rho} \to^*\stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''} \to^* \dots
+    \end{equation*}
+    which is infinite, which means \(\trans{\com[D]^*}{\rho}\nehalts\)
+    and therefore \(\trans{\com[D]^*}{\rho} \ahalts\) is false.
+    
+  \item In case \(\sem{D^*}\rho\) is finite we can reduce total
+    termination to the presence of some cycle in one of the paths
+    starting from \(\trans{\com[D]^*}{\rho}\). The statement we want
+    to prove is
+    \begin{equation*}
+      \text{if }\sem{\com[D]^*}\rho \text{ is finite, then } \trans{\com[D]^*}{\rho} \ahalts \iff \trans{\com[D]^*}{\rho} \text{ is acyclic}
+    \end{equation*}
     \begin{itemize}
-    \item
-      \(\stt{\com[D], \rho'} \to^* \stt{\com[D'], \rho''} \not\to\),
-      for every \(\to\) step we can apply the comp\(_1\) rule and
-      therefore we would build
-      \[\stt{\com[D];\com[D]^*, \rho'} \to^* \stt{\com[D']; \com[D]^*,
-          \rho''} \not\to\] which is a finite path, therefore is not
-      interesting.
-    \item or \(\stt{\com[D], \rho'} \to^* \rho''\) then by composition
-      lemma
-      \(\stt{\com[D]; \com[D]^*, \rho'} \to^* \stt{\com[D]^*,
-        \rho''}\) and by star\(_{\text{fix}}\)
-      \(\stt{\com[D]^*, \rho''} \to \rho''\) and so
-      \(\rho'' \in \sem{\com[D]^*}\{\rho\}\).
+    \item[\((\Rightarrow)\)] In this case we want to prove that if
+      \(\sem{\com[D]^*}\) is finite and
+      \(\trans{\com[D]}{\rho} \ahalts\) then there are no cycles in
+      any path starting from \(\stt{\com[D], \rho}\). To do so we work
+      by contraddiction. Suppose there is some path starting from
+      \(\trans{\com[D]^*}{\rho}\) with some cycle
+      \begin{equation*}
+        \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^* \rho''
+      \end{equation*}
+      with \(\rho''\neq \rho, \rho'\), then we can notice that also
+      the infinite path
+      \begin{equation*}
+        \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^+ \dots
+      \end{equation*}
+      is part of the transition systsem for \(\stt{\com[D], \rho}\),
+      and therefore \(\trans{\com[D]^*}{\rho} \ahalts\) is false which
+      is absurd.
+    \item[\((\Leftarrow)\)] In this case we want to prove that if
+      \(\sem{\com[D]^*}\rho\) is finite and there are no cycles in any
+      path starting from \(\stt{\com[D], \rho}\) then
+      \(\trans{\com[D]}{\rho} \ahalts\). We work again by
+      contraddiction. Suppose that we have an infinite path starting
+      from \(\trans{\com[D]^*}{\rho}\). It must be that
+      \(\forall i,j \in \n\) \(i \neq j\), \(\rho_i \neq \rho_j\) with
+      \(\rho_0 = \rho\), otherwise there would be a cycle, which is
+      not the case by hypothesis. Therefore the path would have the
+      shape
+      \begin{equation*}
+        \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho_1} \to^* \stt{\com[D]^*, \rho_2} \to^* \stt{\com[D]^*, \rho_3} \to^* \dots
+      \end{equation*}
+      We can notice that for all \(\rho' \in \{\rho, \rho_1, \dots\}\)
+      and for the star\(_{\text{fix}}\) rule,
+      \(\stt{\com[D]^*, \rho'} \to \rho'\) and therefore
+      \(\rho'\in \sem{\com[D]}\rho\). This would mean that
+      \(\sem{\com[D]^*}\rho\) is infinite, which is absurd.
     \end{itemize}
   \end{itemize}
 \end{proof}
