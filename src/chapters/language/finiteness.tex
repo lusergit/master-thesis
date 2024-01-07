@@ -2,10 +2,10 @@
 
 In this section we argue that even the finiteness of the semantics of
 some program on some initial states is undecidable. We show that by
-knowing wether \(\sem{\com}X\) is finite for some program
+knowing whether \(\sem{\com}X\) is finite for some program
 \(\com\in\imp\) and some initial states \(X\in \dom\), we can decide
-wether \(\trans{\com}{\rho}\ahalts\) for all \(\rho \in X\). The first
-step is showing that fi we have a program where the \(^*\) operator
+whether \(\trans{\com}{\rho}\ahalts\) for all \(\rho \in X\). The first
+step is showing that if we have a program where the \(^*\) operator
 does not appear, then the program can only produce a finite amount of
 finite derivation sequences. In other words its transition system is a tree for every
 initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
@@ -82,7 +82,7 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
 \end{lemma}
 
 \begin{proof}
-  We work by contraddiction, showing that if we know wether
+  We work by contradiction, showing that if we know whether
   \(\sem{\com}\rho\) is finite or infinite we can decide
   \(\trans{\com}{\rho}\ahalts\).
   \begin{itemize}
@@ -235,7 +235,7 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
       \rho \to^D \rho' \to^D \rho'' \to^D \dots
     \end{equation*}
     Where each element belongs to a different level \(Y_k\), and
-    therefore is different from every other evnironment appearing in
+    therefore is different from every other environment appearing in
     the sequence. Because of observation \ref{it:three} there exists a
     derivation sequence
     \begin{equation*}
@@ -257,7 +257,7 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
       \(\sem{\com[D]^*}\) is finite and
       \(\trans{\com[D]}{\rho} \ahalts\) then there are no cycles in
       any derivation sequence starting from \(\stt{\com[D],
-        \rho}\). To do so we work by contraddiction. Suppose there is
+        \rho}\). To do so we work by contradiction. Suppose there is
       some derivation sequence starting from
       \(\trans{\com[D]^*}{\rho}\) with some cycle
       \begin{equation*}
@@ -268,14 +268,14 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
       \begin{equation*}
         \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^+ \dots
       \end{equation*}
-      is part of the transition systsem for \(\stt{\com[D], \rho}\),
+      is part of the transition system for \(\stt{\com[D], \rho}\),
       and therefore \(\trans{\com[D]^*}{\rho} \ahalts\) is false which
       is absurd.
     \item[\((\Leftarrow)\)] In this case we want to prove that if
       \(\sem{\com[D]^*}\rho\) is finite and there are no cycles in any
       derivation sequence starting from \(\stt{\com[D], \rho}\) then
       \(\trans{\com[D]}{\rho} \ahalts\). We work again by
-      contraddiction. Suppose that we have an infinite derivation
+      contradiction. Suppose that we have an infinite derivation
       sequence starting from \(\trans{\com[D]^*}{\rho}\). It must be
       that \(\forall i,j \in \n\) \(i \neq j\), \(\rho_i \neq \rho_j\)
       with \(\rho_0 = \rho\), otherwise there would be a cycle, which
