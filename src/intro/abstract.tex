@@ -3,7 +3,28 @@
 \begingroup
 
 \chapter*{Abstract}
-Abstract
+This thesis explores program verification trough abstract
+interpretation in the context of computability theory. Abstract
+Interpretation is a program analysis technique, based on approximating
+the semantics of programs over so-called \emph{abstract domains},
+usually rapresented as complete lattices, whose elements rapresent
+program properties. These approximations rely on some abstract
+operators, which usually include fixpoint iterations. Traditionally,
+to ensure convergence of such iterations, and therefore ensuring the
+terination of the analyzer, the literature relied on two important
+operators: the \emph{widening} and the \emph{narrowing} operators,
+first defined in \cite{patrickradiha:one}: the first one to compute an
+upper bound on some chain in the complete lattice, and the second one
+to recover some additional information from the program and refine the
+upper bound provided by the widening. This thesis focuses on a special
+abstract domain, called the \emph{intervals} domain, where each
+variable of program is assigned to an interval over the integer
+numbers. The thesis argues that in such a context widening and
+narrowing operators can be replaced by another method, that relies on
+deciding program divergence by looking at the behavior of variables in
+the context of the program. The idea is that every program has some
+certain \emph{bound}, pre-determined by its variables and constants
+and that if some variable overcomes such bound, the program diverges. 
 
 \endgroup
 

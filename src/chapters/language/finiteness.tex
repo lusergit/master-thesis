@@ -7,7 +7,7 @@ knowing wether \(\sem{\com}X\) is finite for some program
 wether \(\trans{\com}{\rho}\ahalts\) for all \(\rho \in X\). The first
 step is showing that fi we have a program where the \(^*\) operator
 does not appear, then the program can only produce a finite amount of
-finite paths. In other words its transition system is a tree for every
+finite derivation sequences. In other words its transition system is a tree for every
 initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
 
 \begin{lemma}\label{le:finiteness}
@@ -31,7 +31,7 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
     \bot\}\), which is finite, since \(X\) is finite;
   \item \label{it:2} by expr rule \(\forall \rho \in X\) either
     \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho} \not\to\). In
-    both cases there are no infinite paths, and therefore
+    both cases there are no infinite derivation sequences, and therefore
     \(\trans{\com[e]}{\rho} \ahalts\);
   \item Notice that
     \(\trans{\com[e]}{\rho} = \{\tau \in \Path^\infty \mid \tau_0 =
@@ -56,7 +56,7 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
         \rho}\). Therefore \(\trans{\com_1 + \com_2}{\rho}\ahalts\).
     \item For the latter argument, since both
       \(\trans{\com[D_1]}{\rho}\) and \(\trans{\com[D_2]}{\rho}\) are
-      finite and composed of finite paths
+      finite and composed of finite derivation sequences
       \(\sizeof{\trans{(\com[D]_1 + \com[D]_2)}{\rho}} < \infty\).
     \end{enumerate}
   \item \(\com[D]\equiv \com[D_1; D_2]\), therefore
@@ -86,9 +86,8 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
   \(\sem{\com}\rho\) is finite or infinite we can decide
   \(\trans{\com}{\rho}\ahalts\).
   \begin{itemize}
-  \item In case \(\sem{D^*}\rho\) is infinite, then we make the
-    following observation:
-
+  \item Suppose we can decide that \(\sem{D^*}\rho\) is infinite, then
+    we make the following observation:
     \begin{observation}\label{obs:noncontained}
       \begin{equation*}
         \forall k \in \n \quad \sem{D}^{k+1}\rho \nsubseteq \bigcup_{i=0}^k\sem{D}^i\rho
@@ -181,7 +180,7 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
       \end{equation*}
     \end{enumerate}
 
-    what is left to do is show that there's a path from
+    what is left to do is show that there's a derivation sequence from
     \(\stt{\com[D]^*, \rho}\) of infinite length.  To do so we need
     König's Lemma from \cite{konig1926lemma}:
     
@@ -230,7 +229,7 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
     \end{figure}
 
     We can therefore use König's Lemma (\ref{le:konig}) and deduce
-    that there exists an infinite path from \(\rho\) of \(\to^D\)
+    that there exists an infinite derivation sequence from \(\rho\) of \(\to^D\)
     relations
     \begin{equation*}
       \rho \to^D \rho' \to^D \rho'' \to^D \dots
@@ -238,32 +237,34 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
     Where each element belongs to a different level \(Y_k\), and
     therefore is different from every other evnironment appearing in
     the sequence. Because of observation \ref{it:three} there exists a
-    path
+    derivation sequence
     \begin{equation*}
       \stt{\com[D]^*, \rho} \to^*\stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''} \to^* \dots
     \end{equation*}
     which is infinite, which means \(\trans{\com[D]^*}{\rho}\nehalts\)
     and therefore \(\trans{\com[D]^*}{\rho} \ahalts\) is false.
     
-  \item In case \(\sem{D^*}\rho\) is finite we can reduce total
-    termination to the presence of some cycle in one of the paths
-    starting from \(\trans{\com[D]^*}{\rho}\). The statement we want
-    to prove is
+  \item Suppose we can decide \(\sem{D^*}\rho\) is finite, then we can
+    reduce total termination to the presence of some cycle in one of
+    the derivation sequences starting from
+    \(\trans{\com[D]^*}{\rho}\). The statement we want to prove is the
+    following:
     \begin{equation*}
-      \text{if }\sem{\com[D]^*}\rho \text{ is finite, then } \trans{\com[D]^*}{\rho} \ahalts \iff \trans{\com[D]^*}{\rho} \text{ is acyclic}
+      \text{if }\sem{\com[D]^*}\rho \text{ is finite, then } \trans{\com[D]^*}{\rho} \ahalts \iff \text{ no derivation sequence starting from } \trans{\com[D]^*}{\rho} \text{ has cycles}
     \end{equation*}
     \begin{itemize}
     \item[\((\Rightarrow)\)] In this case we want to prove that if
       \(\sem{\com[D]^*}\) is finite and
       \(\trans{\com[D]}{\rho} \ahalts\) then there are no cycles in
-      any path starting from \(\stt{\com[D], \rho}\). To do so we work
-      by contraddiction. Suppose there is some path starting from
+      any derivation sequence starting from \(\stt{\com[D],
+        \rho}\). To do so we work by contraddiction. Suppose there is
+      some derivation sequence starting from
       \(\trans{\com[D]^*}{\rho}\) with some cycle
       \begin{equation*}
         \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^* \rho''
       \end{equation*}
       with \(\rho''\neq \rho, \rho'\), then we can notice that also
-      the infinite path
+      the infinite derivation sequence
       \begin{equation*}
         \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^+ \dots
       \end{equation*}
@@ -272,14 +273,14 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
       is absurd.
     \item[\((\Leftarrow)\)] In this case we want to prove that if
       \(\sem{\com[D]^*}\rho\) is finite and there are no cycles in any
-      path starting from \(\stt{\com[D], \rho}\) then
+      derivation sequence starting from \(\stt{\com[D], \rho}\) then
       \(\trans{\com[D]}{\rho} \ahalts\). We work again by
-      contraddiction. Suppose that we have an infinite path starting
-      from \(\trans{\com[D]^*}{\rho}\). It must be that
-      \(\forall i,j \in \n\) \(i \neq j\), \(\rho_i \neq \rho_j\) with
-      \(\rho_0 = \rho\), otherwise there would be a cycle, which is
-      not the case by hypothesis. Therefore the path would have the
-      shape
+      contraddiction. Suppose that we have an infinite derivation
+      sequence starting from \(\trans{\com[D]^*}{\rho}\). It must be
+      that \(\forall i,j \in \n\) \(i \neq j\), \(\rho_i \neq \rho_j\)
+      with \(\rho_0 = \rho\), otherwise there would be a cycle, which
+      is not the case by hypothesis. Therefore the derivation sequence
+      would have the shape
       \begin{equation*}
         \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho_1} \to^* \stt{\com[D]^*, \rho_2} \to^* \stt{\com[D]^*, \rho_3} \to^* \dots
       \end{equation*}

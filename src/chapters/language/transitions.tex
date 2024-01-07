@@ -18,74 +18,22 @@ chapters.
   \end{itemize}
 \end{definition}
 \noindent
-In such a system we define \emph{paths}, sequences of \(\to\)
-relations starting from some state.
-
-\begin{definition}[Paths]
-  Let \((\state \cup \env)^\infty \defin (\state \cup \env)^+ \cup
-  (\state \cup \env)^\omega\) be the set of all infinitary sequences
-  of states and environments (both finite and infinite). Then the set
-  of \emph{paths} in the transition system is
-  \begin{equation*}
-    \Path^\infty \defin
-    \{\ppath \in (\state \cup \env)^\infty \mid \forall i \in [ 1, |
-    \ppath | ) . \ppath_i \to \ppath_{i+1}\}
-  \end{equation*}
-  Where
-  \begin{itemize}
-  \item \(X^+\) is the set of all finite sequences of (possibly
-    repeating) elements of \(X\);
-  \item \(X^\omega\) is the set of all infinite sequences of (possibly
-    repeating) elements of \(X\).
-  \item \(\tau_i\) is the projection operation on the path, meaning
-    the \(i\)-th element in the sequence.
-  \item given a path \(\ppath\) and indices \(i,j \in \n\) s.t.
-    \(i < j\), \(\ppath_{i,j}\) denotes the subpath of \(\ppath\)
-    given by \(\ppath_i \to \ppath_{i+1} \to \dots \to
-    \ppath_j\). \(\ppath_{i,j}\) is a cycle if \(\ppath_i = \ppath_j\).
-  \end{itemize}
-\end{definition}
-\noindent
-In this context we are more interested in paths starting from some
-known state \(\stt{\com, \rho}\) for some program \(\com\in\imp\) and
-some initial state \(\rho \in \env\). We express this by overloading
-the \(\trans{\com}{\rho}\) notation:
-\begin{definition}
-  Given \(\com \in \imp, \rho\in\env\) the \emph{paths} in the
-  transition system starting from \(\stt{\com, \rho}\)
-  are \[\trans{\com}{\rho} \defin \{\tau \in \Path^\infty \mid
-  \ppath_0 = \stt{\com, \rho}\}\]
-\end{definition}
-%% \begin{notation}
-%%   We use the notation \(\trans{\com}{\rho}\) to denote all the
-%%   transitions starting from \(\stt{\com, \rho}\).
-%% \end{notation}
-% Notice that the nondeterminism in \(\imp\) induces two different
-% notions of termination:
-% \begin{itemize}
-% \item \emph{universal termination}, where \emph{every} path in the
-%   transition system for a program \(\com\) and some state \(\rho\) is
-%   finite;
-% \item \emph{partial termination}, where \emph{some} path in the
-%   transition system is finite.
-% \end{itemize}
-\noindent
-With the concept of paths we can define what we mean for
+With the concept of derivation sequences we can define what we mean for
 \emph{partial} and \emph{universal} termination.
 \begin{definition}[Partial termination]
   Let \(\com \in \imp, \rho \in \env\). \(\com\) \emph{partially
-    halts} on \(\rho\) when there's at least one path of finite length
+    halts} on \(\rho\) when there's at least one derivation sequence of finite length
   in the transition system \(\trans{\com}{\rho}\) ending up in some
   state \(\rho'\):
   \[ \trans{\com}{\rho} \ehalts \iff \exists k \in \n \mid \stt{\com,
       \rho} \to^k \rho'.\] Dually
   \[ \trans{\com}{\rho} \nahalts \iff \neg \; \trans{\com}{\rho}
-    \ehalts \] a program \emph{always loops} if there's no finite path
+    \ehalts \] a program \emph{always loops} if there's no finite derivation sequence
   in its transition system that leads to a final environment.
 \end{definition}
 \begin{definition}[Universal termination]
   Let \(\com \in \imp, \rho \in \env\). \(\com\) \emph{partially
-    loops} on \(\rho\) when there's at least one path of infinite
+    loops} on \(\rho\) when there's at least one derivation sequence of infinite
   length in the transition system \(\trans{\com}{\rho}\):
   \[ \trans{\com}{\rho} \nehalts \iff \forall k \in \n \; \stt{\com,
       \rho} \to^k \stt{\com', \rho'} \quad \text{for some }
@@ -94,13 +42,13 @@ With the concept of paths we can define what we mean for
     \trans{\com}{\rho} \ahalts \iff \neg \; \trans{\com}{\rho}
     \nehalts
   \end{equation*}
-  a program \emph{universally halts} iff there's no infinite path in
+  a program \emph{universally halts} iff there's no infinite derivation sequence in
   the transition systems.
 \end{definition}
 
 Example \ref{ex:partial} shows a program that partially halts, while
 example \ref{ex:neverhalts} shows a program that always loops.  Notice
-that the absence of infinite paths implies that \(\trans{\com}{\rho}\)
+that the absence of infinite derivation sequences implies that \(\trans{\com}{\rho}\)
 is finite.  Example \ref{ex:partial} shows a program that partially
 loops, while example \ref{ex:alwayshalt} shows a program that
 universally halts.
@@ -110,8 +58,8 @@ universally halts.
 %% halts, and what it means for its transition system. Example
 %% \ref{ex:neverhalts} shows a program that never halts. Finally example
 %% \ref{ex:partial} shows a program that partially halts and partially
-%% loops due to the presence of both a path that ends up in some state
-%% \(\rho'\) and an infinite path.
+%% loops due to the presence of both a derivation sequence that ends up in some state
+%% \(\rho'\) and an infinite derivation sequence.
 
 \begin{example}\label{ex:alwayshalt}
   Consider the program
@@ -130,7 +78,7 @@ universally halts.
   \[(\var \geq 0; \pplus{\var})^*;\var < 0\] The program never halts on
   \(\forall \rho \in \env\) s.t. \(\rho(\var) \geq 0\). In fact in
   these cases it builds the transition system in figure
-  \ref{fig:tsysnhalt}, where the infinite path
+  \ref{fig:tsysnhalt}, where the infinite derivation sequence
   \[\stt{(\var \geq 0; \pplus{\var})^*; x < 0, \rho} \to^* \stt{(\var
       \geq 0; \pplus{\var})^*; x < 0, \rho[\var \mapsto \rho(\var) +
       1]} \to^* \dots\]
@@ -165,8 +113,9 @@ universally halts.
   transition rule star\(_{\text{fix}}\) \(\exists \rho \in \env\) s.t.
   \[\infer[\text{star}_{\text{fix}}]{\stt{(\pplus{\var})^*, \rho} \to
     \rho}{\rho \neq \bot}\] But it also partially loops
-  (\(\trans{(\pplus{\var})^*}{\rho}\nehalts\)). In fact we can build
-  the infinite path\[\stt{(\pplus{\var})^*, \rho[\var\mapsto 0]} \to^*
+(\(\trans{(\pplus{\var})^*}{\rho}\nehalts\)). In fact we can build the
+infinite derivation
+sequence\[\stt{(\pplus{\var})^*, \rho[\var\mapsto 0]} \to^*
   \stt{(\pplus{\var})^*, \rho[\var\mapsto 1]} \to^*
   \stt{(\pplus{\var})^*, \rho[\var\mapsto 2]} \to^* \dots\]
 \end{example}

@@ -73,15 +73,18 @@ sets.
 
 \begin{proof}
   \(f : A \tor B\) total recursive function over a recursive set
-  \(A\). We can write the function \[\bigx_B = \lambda x . sg(\mu z
-  . |f(z) - x|)\] which is computable as it is composition of
-  computable functions. In other terms, this is function
-  \[\bigx_B(x)
-  = \begin{cases}
-    1 & x \in B \\
-    \uparrow & \text{otherwise}
-  \end{cases}\]
-  which is the semi-decision function for \(B\)
+  \(A\). We can write the function
+  \[\bigx_B = \lambda x . sg(\mu z . |f(z) - x|)\] which is computable
+  as it is composition of computable functions. In other terms, this
+  function
+  \begin{equation*}
+    \bigx_B(x) =
+    \begin{cases}
+      1 & x \in B \\
+      \uparrow & \text{otherwise}
+    \end{cases}
+  \end{equation*}
+  is the semi-decision function for \(B\)
 \end{proof}
 
 \begin{observation}\label{obs:comprec}
