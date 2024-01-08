@@ -4,11 +4,10 @@ In this section we argue that even the finiteness of the semantics of
 some program on some initial states is undecidable. We show that by
 knowing whether \(\sem{\com}X\) is finite for some program
 \(\com\in\imp\) and some initial states \(X\in \dom\), we can decide
-whether \(\trans{\com}{\rho}\ahalts\) for all \(\rho \in X\). The first
-step is showing that if we have a program where the \(^*\) operator
-does not appear, then the program can only produce a finite amount of
-finite derivation sequences. In other words its transition system is a tree for every
-initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
+whether \(\trans{\com}{\rho}\ahalts\) for all \(\rho \in X\). The
+first step is showing that if we have a program where the \(^*\)
+operator does not appear, then the program can only produce a finite
+amount of finite derivation sequences.
 
 \begin{lemma}\label{le:finiteness}
   If \(\com[D]\in\imp\starless\), and \(X \in \poset{env}\) is
@@ -19,6 +18,9 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
   \item \(\sizeof{\trans{\com[D]}{\rho}} < \infty\) for all
     \(\rho \in X\).
   \end{enumerate}
+
+  where by \(\sizeof{\trans{\com[D]}{\rho}}\) we mean the number of
+  derivation sequences starting from \(\stt{\com[D], \rho}\).
 \end{lemma}
 
 \begin{proof}
@@ -33,11 +35,10 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
     \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho} \not\to\). In
     both cases there are no infinite derivation sequences, and therefore
     \(\trans{\com[e]}{\rho} \ahalts\);
-  \item Notice that
-    \(\trans{\com[e]}{\rho} = \{\tau \in \Path^\infty \mid \tau_0 =
-    \stt{\com[e], \rho}\}\) for all \(\rho \in X\), therefore
-    \(\sizeof{\trans{\com[e]}{\rho}} = \sizeof{X} < \infty\) because
-    of \ref{it:1}
+  \item Notice that \(\forall \rho \in X\) either by the expr rule
+    \(\stt{\com[e], \rho} \to \seme{\com[e]}\rho\) or
+    \(\stt{\com[e], \rho}\not\to\) therefore
+    \[\sizeof{\trans{\com[e]}{\rho}} \leq \sizeof{X} < \infty\]
   \end{enumerate}
   
   \paragraph*{Inductive cases:\\}
@@ -51,8 +52,9 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
     \item by inductive hypothesis again \(\forall \rho \in X\)
       \(\trans{\com[D]_1}{\rho}\ahalts\) and
       \(\trans{\com[D]_2}{\rho}\ahalts\). By sum\(_1\) rule
-      \(\stt{\com_1 + \com_2, rho} \to \stt{\com_1, \rho}\) and by
-      sum\(_2\) \(\stt{\com_1 + \com_2, rho} \to \stt{\com_2,
+      \(\stt{\com_1 + \com_2, \rho} \to \stt{\com_1, \rho}\) and by
+      sum\(_2\)
+      \(\stt{\com_1 + \com_2, \rho} \to \stt{\com_2,
         \rho}\). Therefore \(\trans{\com_1 + \com_2}{\rho}\ahalts\).
     \item For the latter argument, since both
       \(\trans{\com[D_1]}{\rho}\) and \(\trans{\com[D_2]}{\rho}\) are
@@ -69,9 +71,17 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
       \(\trans{\com[D]_2}{\rho'}\ahalts\), therefore by composition
       lemma \(\trans{\com[D]_1;\com[D]_2}{\rho} \ahalts\)
     \item by inductive hypothesis both
-      \(\sizeof{\trans{\com_1}{\rho}} < \infty\) and
-      \(\sizeof{\trans{\com_2}{\rho'}} < \infty\)
-      \(\forall \rho \in X, \rho'\in \sem{\com_1}X\), todo
+      \(\sizeof{\trans{\com[D]_1}{\rho}} < \infty\) and
+      \(\sizeof{\trans{\com[D]_2}{\rho'}} < \infty\)
+      \(\forall \rho \in X, \rho'\in \sem{\com[D]_1}X\). For all
+      derivation sequences starting from \(\stt{\com[D]_1, \rho}\)
+      where \[\stt{\com[D]_1, \rho} \to^* \rho'\] with
+      \(\rho'\in \sem{\com[D]_1}X\) we can apply the composition lemma
+      and state that
+      \[\stt{\com[D]_1;\com[D]_2, \rho} \to^* \stt{\com[D]_2, \rho'} \quad
+        \forall \rho \in X\] from there we can notice that since
+      \(\sizeof{\stt{\com[D]_2, \rho'}} < \infty\) then
+      \(\sizeof{\stt{\com[D]_1;\com[D]_2, \rho'}} < \infty\)
     \end{enumerate}
   \end{enumerate}
 \end{proof}
@@ -287,7 +297,7 @@ initial state \(\stt{\com[D], \rho}\) for all \(\rho \in X\).
       We can notice that for all \(\rho' \in \{\rho, \rho_1, \dots\}\)
       and for the star\(_{\text{fix}}\) rule,
       \(\stt{\com[D]^*, \rho'} \to \rho'\) and therefore
-      \(\rho'\in \sem{\com[D]}\rho\). This would mean that
+      \(\rho'\in \sem{\com[D]^*}\rho\). This would mean that
       \(\sem{\com[D]^*}\rho\) is infinite, which is absurd.
     \end{itemize}
   \end{itemize}

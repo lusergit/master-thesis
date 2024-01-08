@@ -124,10 +124,10 @@ We observe that the semantics we described is additive:
 We can also observe that a program induces a monotone function in the
 concrete domain \(\dom\):
 
-\begin{observation}
+\begin{lemma}
   Given a program \(\com\in\imp\), the semantics function
   \(\sem{\com} : \dom \to \dom\) is monotone.
-\end{observation}
+\end{lemma}
 
 \begin{proof}
   We can prove this by induction on the program \(\com\in\imp\). Let
@@ -145,7 +145,7 @@ concrete domain \(\dom\):
     \(X\subseteq Y\) therefore \(\rho \in X \Rightarrow \rho \in Y\)
     which also means that
     \(\rho' \in \sem{\com[e]}X \Rightarrow \rho' \in \sem{\com[e]}Y\),
-    which is a shorthand for
+    therefore
     \(\sem{\com[e]}X \subseteq \sem{\com[e]}Y\)
   \end{itemize}
 
@@ -173,7 +173,7 @@ concrete domain \(\dom\):
     hypothesis again
     \(\sem{\com_2}(\sem{\com_1} X) \subseteq \sem{\com_2}(\sem{\com_1}
     Y)\) which means
-    \(\sem{\com_1 + \com_2} X \subseteq \sem{\com_1 + \com_2}Y\).
+    \(\sem{\com_1 ; \com_2} X \subseteq \sem{\com_1 ; \com_2}Y\).
   \item \(\com \equiv \com^*\) therefore we need to show that
     \(\sem{\com^*}X \subseteq \sem{\com^*}Y \).
     \begin{align*}
@@ -225,8 +225,8 @@ the fixpoint (\(\fix{\com}\)) have the same concrete semantics
 \(f^{n+1} X = X \cup \sem{\com}\left(f^n X\right)\).
 \begin{align*}
   \sem{\fix{\com}}X = \lfp(f) & = \bigcup \{ f^n \; \bot \mid n \in \n \} & \text{by Knaster-Tarsky theorem} \\
-                              & = \bigcup_{i\in\n} \left( X \cup \sem{\com}^iX \right) & \text{by latter observation} \\
-                              & = X \cup \left( X \cup \sem{\com}X \right) \cup \left( X \cup \sem{\com}^2X \right) \cup \dots \\
+                              & = \bigcup_{i\in\n} \left( X \cup \sem{\com}^iX \right) & \text{by definition} \\
+                              & = X \cup \left( X \cup \sem{\com}X \right) \cup \left( X \cup \sem{\com}X \cup \sem{\com}^2X \right) \cup \dots \\
                               & = \bigcup_{i\in\n} \sem{\com}^i X \\
                               & = \sem{\com^*}X
 \end{align*}

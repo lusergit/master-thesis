@@ -70,8 +70,8 @@ resulting
 \begin{definition}[Abstract operations]
   We define sound abstract operations in the \(\bA\) domain:
   \begin{align*}
-    \interval{a}{b} \; \abstract{\cup} \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
-    \interval{a}{b} \; \abstract{\cap} \; \interval{c}{d} & \defin \begin{cases} \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
+    \interval{a}{b} \; \acup \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
+    \interval{a}{b} \; \acap \; \interval{c}{d} & \defin \begin{cases} \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
       \abstract{\bot} & \text{otherwise} \end{cases}
   \end{align*}
   And sound abstract arithmetical operations:
@@ -128,7 +128,7 @@ an empty interval).
 The \emph{interval semantics} of \(\imp\) is defined as the strict
 (i.e., preserving \(\bot\))
 % and co-strict (i.e., preserving \(\top\))
-extension of the following function \(\semi{\cdot}: \exp \cup \imp \to
+extension of the following function \(\semi{\cdot}: \imp \to
 \bA \to \bA\). For all \(\eta: \Var \to \Int_*\),
 
 \begin{align*}
@@ -209,7 +209,7 @@ The semantics is well-defined, because of the following lemma:
   What we have to proof is that given \(\eta, \theta \in \bA\), with
   \(\eta \sqsubseteq \theta\) then \(\forall \com \in \imp\)
   \(\semi{\com}\eta \sqsubseteq \semi{\com}\theta\). We will work by
-  induction on the grammar of \(\com\):
+  induction on \(\com\):
   
   \noindent
   \textbf{Base cases:}\ \\ \ We avoid cases where \(\eta = \bot\) and
@@ -233,8 +233,6 @@ The semantics is well-defined, because of the following lemma:
       \iff & \concr[\Int](\eta[x\mapsto \eta(\var) \sqcap \Int(S)](\var)) \subseteq \concr[\Int](\theta[x\mapsto \theta(\var) \sqcap \Int(S)](\var)) \\
       \iff & \semi{\var \in S}\eta \sqsubseteq \semi{\var \in S}\theta
     \end{align*}
-  \item for the base cases \(\var \in \interval{a}{b}, \var \leq k,
-    \var > k\) we can use the same proceedings;
   \item \(\com \equiv \tru\). Then \(\semi{\tru}\eta = \eta
     \sqsubseteq \theta = \semi{\tru}\theta\);
   \item \(\com \equiv \ff\). Then \(\semi{\ff}\eta = \bot \sqsubseteq
@@ -260,8 +258,8 @@ The semantics is well-defined, because of the following lemma:
       \iff & \concr[\Int](\semi{\var:=k}\eta) \subseteq \concr[\Int](\semi{\var:=k}\theta) \\
       \iff & \semi{\var :=k}\eta \sqsubseteq \semi{\var := k}\theta
     \end{align*}
-  \item For \(\com \equiv \var := \var[y] + k, \var := \var[y] - k\)
-    the procedure is the same.
+  \item For \(\com \equiv \var := \var[y] + k\) the procedure is the
+    same.
   \end{itemize}
 
   \noindent
@@ -280,10 +278,45 @@ The semantics is well-defined, because of the following lemma:
       & \semi{\com_2}\alpha \sqsubseteq \semi{\com_2}\beta & \text{by inductive hp.} \\
       & \semi{\com_2}(\semi{\com_1}\eta) \sqsubseteq \semi{\com_2}(\semi{\com_1}\theta) & \text{by substitution}
     \end{align*}
-  \item \(\com^*\). Then by inductive hypothesis \(\forall i \in \n
-    . \semi{\com}^i\eta \sqsubseteq \semi{\com}^i\theta\), which means
-    \[\semi{\com^*}\eta = \bigsqcup_{i\in\n}\semi{\com}^i\eta \sqsubseteq
-    \bigsqcup_{i\in\n}\semi{\com}^i\theta = \semi{\com^*}\theta.\]
+  \item \(\com^*\). What we first want to prove is that
+    \begin{equation*}
+      \forall i \in \n . \semi{\com}^i\eta \sqsubseteq
+      \semi{\com}^i\theta
+    \end{equation*}
+    To do so we can work by induction on \(i\):
+    \begin{itemize}
+    \item with \(i=0\) we have to prove that
+      \begin{equation*}
+        \semi{\com}^0 \eta \sqsubseteq \semi{\com}^0 \theta
+      \end{equation*}
+      since \(\semi{\com}^0 = id\) the statement is true by
+      hypothesis.
+    \item the inductive step is to prove the statement for \(i+1\)
+      with the hypothesis that it holds for \(i\).
+      \begin{align*}
+        \semi{\com}^{i+1} \eta & = \semi{\com}\left(\semi{\com}^{i} \eta \right) \\
+        \semi{\com}^{i+1} \theta & = \semi{\com}\left(\semi{\com}^{i} \theta \right)
+      \end{align*}
+      By inductive hypothesis on \(i\)
+      \(\semi{\com}^{i} \eta \sqsubseteq \semi{\com}^{i} \theta\),
+      while by inductive hypothesis on \(\com\)
+      \begin{equation*}
+        \semi{\com}\left( \semi{\com}^i\eta \right) \sqsubseteq
+        \semi{\com}\left( \semi{\com}^i\theta \right)
+      \end{equation*}
+      therefore
+      \begin{equation*}
+        \semi{\com}^{i+1} \eta = \semi{\com}\left( \semi{\com}^i\eta \right) \sqsubseteq \semi{\com}\left( \semi{\com}^i\theta \right) = \semi{\com}^{i+1} \theta
+      \end{equation*}
+      finally we can notice that \(\forall k\in\n\)
+      \begin{equation*}
+        \bigsqcup_{i=0}^k\semi{\com}^i\eta \sqsubseteq \bigsqcup_{i=0}^k\semi{\com}^i\theta
+      \end{equation*}
+      and therefore
+      \begin{equation*}
+        \semi{\com^*}\eta = \bigsqcup_{i\in\n}\semi{\com}^i\eta \sqsubseteq \bigsqcup_{i\in\n}\semi{\com}^i\theta = \semi{\com^*}\theta
+      \end{equation*}
+    \end{itemize}
   \end{itemize}
 \end{proof}
 
