@@ -1,0 +1,48 @@
+\section{Non Relational Collecting analysis}
+\label{sec:nonrel}
+
+We first define \emph{non-relational collecting} analysis the the
+\(\imp\) language in a standard way.
+
+\begin{definition}
+  Let
+  \begin{equation*}
+    \envnr \veq \{\eta \mid \eta: \Var \to \poset{\n}\setminus
+    \{\emptyset\}\} \cup \{\bot\}
+  \end{equation*}
+  The nonrelational collecting domain is the complete lattice
+  \(\bCnr \veq \tuple{\envnr,\dot{\subseteq}}\) where for all
+  \(\eta,\eta':\Var \to \poset{\n} \setminus \{\emptyset\}\)
+  \begin{align*}
+    \bot & \mathrel{\dot{\subseteq}} \eta\\
+    \eta & \mathrel{\dot{\subseteq}} \eta' & \text{ if }\quad \forall
+      \var\in \Var. \eta(\var)\subseteq \eta'(\var)
+  \end{align*}
+\end{definition}
+
+We also define the least upper bound and greatest lower bound in the
+complete lattice \(\bCnr\):
+
+\begin{definition}
+  Let \(\eta, \theta \in \bCnr\). We define
+  \(\sigma = \eta \sqcup \theta\) as
+  \begin{equation*}
+    \eta \sqcup \theta = \sigma \defin \var \mapsto \eta(\var) \cup \theta(\var) \quad \forall \var \in \Var
+  \end{equation*}
+\end{definition}
+
+The nonrelation abstraction \(\alpha: \tuple{\poset{\env},\subseteq}
+\to \tuple{\envnr,\dot{\subseteq}}\) is defined as follows:
+\begin{align*}
+  &\alpha(X) \veq 
+  \begin{cases}
+    \bot & \text{if }X=\varnothing\\
+    \lambda \var. \{\rho(\var) \in \n \mid \rho \in X\} &\text{if }X\neq \varnothing\\
+  \end{cases}
+\end{align*}
+while the concretization \(\gamma: \tuple{\envnr,\dot{\subseteq}} \to
+\tuple{\poset{\env},\subseteq}\) is defined as follows:
+\begin{align*}
+  &\gamma(\bot) \veq \varnothing\\
+  &\gamma(\eta) \veq \{\rho : \Var \to \n \mid \forall \var \in \Var. \rho(\var)\in \eta(\var)\}
+\end{align*}

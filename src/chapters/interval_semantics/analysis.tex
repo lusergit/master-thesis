@@ -6,16 +6,16 @@ basic expressions in \(\expr\).
 
 \begin{definition}[Integer intervals]
   We call
-  \[ \Int \defin \{ \interval{a}{b} \mid a \in \z \cup
-    \{-\infty\} \wedge b \in \z \cup \{+\infty\} \wedge a\leq b \} \cup
-    \{\abstract{\bot}\} \] set of integer intervals.
+  \[ \Int \defin \{ \interval{a}{b} \mid a \in \n \wedge b \in \n \cup
+    \{+\infty\} \wedge a\leq b \} \cup \{\abstract{\bot}\} \] set of
+  integer intervals.
 \end{definition}
 
 \begin{definition}[Concretization map]
   We define the \emph{concretization map} \(\gamma:\Int \to
-  \poset{\z}\) as
+  \poset{\n}\) as
   \begin{align*}
-    \gamma(\interval{a}{b}) & \defin \{x\in \z \mid a \leq x \leq b\} \\
+    \gamma(\interval{a}{b}) & \defin \{x\in \n \mid a \leq x \leq b\} \\
     \gamma(\bot) & \defin \emptyset
   \end{align*}
 \end{definition}
@@ -54,11 +54,12 @@ the corresponding concretization is defined as follows:
 \end{observation}
 
 \begin{definition}[Interval abstraction]
-  We define the \emph{abstraction map} of some numerical set \(X
-  \subseteq \z\) into the abstract domain \(\bA\): \(\abstr[\Int] :
-  \poset{\z} \to \bA\) as \[\abstr[\Int](X) \defin \begin{cases}
-    \abstract{\bot} & \text{if } X = \emptyset \\ \interval{\min
-    X}{\max X} & \text{otherwise} \end{cases}\]
+  We define the \emph{abstraction map} of some numerical set
+  \(X \subseteq \n\) into the abstract domain \(\bA\):
+  \(\abstr[\Int] : \poset{\n} \to \bA\) as
+  \[\abstr[\Int](X) \defin \begin{cases} \abstract{\bot} & \text{if }
+      X = \emptyset \\ \interval{\min(X)}{\max(X)} &
+      \text{otherwise} \end{cases}\]
 \end{definition}
 
 Observe that since we have both a concretization map \(\concr[\Int]\)
@@ -85,7 +86,7 @@ resulting
 
 \begin{definition}[Interval sharpening]
   \label{de:trunc}
-  For a nonempty interval \(\interval{a}{b} \in \Int\) and \(c \in \Z\), we define
+  For a nonempty interval \(\interval{a}{b} \in \Int\) and \(c \in \n\), we define
   two operations raising \(\uparrow\) the lower bound to \(c\) and lowering \(\downarrow\) the upper
   bound to \(c\), respectively:
   \begin{align*}
@@ -107,14 +108,14 @@ resulting
 
 \begin{definition}[Interval addition and subtraction]
   \label{de:add}
-  For a nonempty interval \(\interval{a}{b} \in \Int\) and \(c \in \Z\) define
+  For a nonempty interval \(\interval{a}{b} \in \Int\) and \(c \in \n\) define
   \(\interval{a}{b} \pm c \veq \interval{a\pm c}{b\pm c}\) (recall that \(\pm \infty + c = \pm\infty - c = \pm\infty\)).  
   \qed
 \end{definition}
 
 
 Observe that for every interval \(\interval{a}{b} \in \Int\) and
-\(c \in \Z\)
+\(c \in \n\)
 \begin{center}
   \(\max(\truncL{\interval{a}{b}}{c}) \leq b\)
   \qquad and \qquad
@@ -141,28 +142,28 @@ extension of the following function \(\semi{\cdot}: \imp \to
                                                                                                                  \text{otherwise}
     \end{cases}\\
     % 
-  \semi{\var \in [a,b]}\eta 
-  & \veq
-    \begin{cases}
-      \eta[\var \mapsto \eta(\var)\sqcap [a,b]]  & \text{if }\eta(\var)\sqcap [a,b]\neq \bot \\
-      \bot & \text{otherwise}
-    \end{cases}\\
-    % boolean
-    % 
-  \semi{\var \leq k}\eta 
-  & \veq 
-    \begin{cases}
-      \eta[\var \mapsto \truncR{\eta(\var)}{k}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
-      \bot & \text{otherwise}
-    \end{cases}\\
-    % 
-  \semi{\var > k}\eta 
-  & \veq 
-    \begin{cases}
-      \eta[\var \mapsto \truncL{\eta(\var)}{k+1}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
-      \bot & \text{otherwise}
-    \end{cases}\\
-    % 
+  % \semi{\var \in [a,b]}\eta 
+  % & \veq
+  %   \begin{cases}
+  %     \eta[\var \mapsto \eta(\var)\sqcap [a,b]]  & \text{if }\eta(\var)\sqcap [a,b]\neq \bot \\
+  %     \bot & \text{otherwise}
+  %   \end{cases}\\
+  %   % boolean
+  %   % 
+  % \semi{\var \leq k}\eta 
+  % & \veq 
+  %   \begin{cases}
+  %     \eta[\var \mapsto \truncR{\eta(\var)}{k}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
+  %     \bot & \text{otherwise}
+  %   \end{cases}\\
+  %   % 
+  % \semi{\var > k}\eta 
+  % & \veq 
+  %   \begin{cases}
+  %     \eta[\var \mapsto \truncL{\eta(\var)}{k+1}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
+  %     \bot & \text{otherwise}
+  %   \end{cases}\\
+  %   
   \semi{\tru}\eta 
   & \veq \eta\\
   % 
@@ -177,8 +178,8 @@ extension of the following function \(\semi{\cdot}: \imp \to
   \semi{\var := \var[y] + k}\eta 
   & \veq \eta[\var \mapsto \eta (\var[y]) + k]\\
   % 
-  \semi{\var := \var - k}\eta 
-  & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
+  % \semi{\var := \var - k}\eta 
+  % & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
   % \semi{\var := \var[y]}\eta 
   % & = \eta[\var \mapsto \eta(\var[y])]\\[3mm]
   %
@@ -195,7 +196,7 @@ extension of the following function \(\semi{\cdot}: \imp \to
   & \veq \textstyle \bigsqcup_{i \in \nat} \semi{\com}^i (\eta)\\
   %
   \semi{\fix{\com}} \eta
-  & \veq  \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)}
+  & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi{\com} \mu))
 \end{align*}
 
 The semantics is well-defined, because of the following lemma:
@@ -226,10 +227,10 @@ The semantics is well-defined, because of the following lemma:
     that
     \begin{align*}
       \eta \sqsubseteq \theta \iff & \concr(\eta) \subseteq \concr(\theta) \\
-      \iff & \{x\in\z \mid x \in \eta(\var)\} \subseteq \{x\in\z \mid x \in \theta(\var)\} \\
-      \iff & \{x\in\z \mid x \in \eta(\var)\} \cap \{x \in \z \mid x \in \Int(S)\} \subseteq \{x\in\z \mid x \in \theta(\var)\} \cap \{x \in \z \mid x \in \Int(S)\} \\
-      \iff & \{x \in \z \mid x \in \eta(\var) \wedge x \in \Int(S)\} \subseteq \{x \in \z \mid x \in \theta(\var) \wedge x \in \Int(S)\} \\
-      \iff & \{x \in \z \mid x \in \eta(\var) \sqcap \Int(S)\} \subseteq \{x \in \z \mid x \in \theta(\var) \sqcap \Int(S)\} \\
+      \iff & \{x\in\n \mid x \in \eta(\var)\} \subseteq \{x\in\n \mid x \in \theta(\var)\} \\
+      \iff & \{x\in\n \mid x \in \eta(\var)\} \cap \{x \in \n \mid x \in \Int(S)\} \subseteq \{x\in\n \mid x \in \theta(\var)\} \cap \{x \in \n \mid x \in \Int(S)\} \\
+      \iff & \{x \in \n \mid x \in \eta(\var) \wedge x \in \Int(S)\} \subseteq \{x \in \n \mid x \in \theta(\var) \wedge x \in \Int(S)\} \\
+      \iff & \{x \in \n \mid x \in \eta(\var) \sqcap \Int(S)\} \subseteq \{x \in \n \mid x \in \theta(\var) \sqcap \Int(S)\} \\
       \iff & \concr[\Int](\eta[x\mapsto \eta(\var) \sqcap \Int(S)](\var)) \subseteq \concr[\Int](\theta[x\mapsto \theta(\var) \sqcap \Int(S)](\var)) \\
       \iff & \semi{\var \in S}\eta \sqsubseteq \semi{\var \in S}\theta
     \end{align*}

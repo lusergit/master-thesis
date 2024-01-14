@@ -13,7 +13,7 @@ program \emph{execution}.% The first building block are
 \begin{definition}[Semantics of Basic Expressions]
   Let \emph{environments} be the maps from the set of variables to
   their numerical value:
-  \(\env \defin \{\rho \mid \rho : \Var \to \z\}\). For basic
+  \(\env \defin \{\rho \mid \rho : \Var \to \n\}\). For basic
   expressions \(e \in \expr\) the \emph{concrete semantics}
   \(\bsem{ \cdot} : \expr \to \env \to \smashed{\env}\) is
   inductively defined by:
@@ -26,7 +26,7 @@ program \emph{execution}.% The first building block are
     \bsem{\ff} \rho & \defin \bot \\
     \bsem{\var:= k} \rho & \defin \rho [\var\mapsto k] \\
     \bsem{\var:= \var[y] + k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) + k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
-    % \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
+    \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
   \end{align*}
 \end{definition}
 

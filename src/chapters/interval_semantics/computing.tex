@@ -305,14 +305,15 @@ a finite path in \(\langle X,\to\rangle\)
 
 \begin{lemma}
   \label{le:inc}
-  Let \(\com\in \imp\) and \(\var[y] \in \Var\).
-  
+  Let \(\com\in \imp\). % and \(\var[y] \in \Var\)
+    
   \noindent
   For all \(\eta \in \mathbb{A}\) and \(\var[y] \in \Var\), if
   \(\max(\semi{\com} \eta \var[y]) \neq \infty\) and
   \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\) then there exist a
-  variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\) such
-  that \(|h| \leq \bound{\com}\) and the following two properties hold:
+  variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
+  such that \(|h| \leq \bound{\com}\) and the following two properties
+  hold:
   \begin{enumerate}[label=(\roman*).]
   \item \(\max(\semi{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); \label{point1}
   \item  for all \(\eta' \in \mathbb{A}\), if \(\eta' \sqsupseteq \eta\)
@@ -672,11 +673,11 @@ a finite path in \(\langle X,\to\rangle\)
   \[ 
   \semi{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
   \]
-  Since \(\semi{\fix{\com}} \eta \var[y] \neq \infty\), we have that for
-  all \(i\in \nat\), \(\eta_i \var[y] \neq \infty\). Moreover, the lub
-  \(\textstyle\bigsqcup_{i \in \nat} \eta_i\) on \(\var[y]\) is finitely
-  reached in the chain \(\{\eta_i\}_{i\in \nat}\), i.e., there exists
-  \(m \in \mathbb{N}\) such that for all \(i \geq m+1\)
+  Since \(\semi{\fix{\com}} \eta \var[y] \neq \infty\), we have that
+  for all \(i\in \nat\), \(\eta_i \var[y] \neq \infty\). Moreover,
+  \(\textstyle\bigsqcup_{i \in \nat} \eta_i\) on \(\var[y]\) is
+  finitely reached in the chain \(\{\eta_i\}_{i\in \nat}\), i.e.,
+  there exists \(m \in \mathbb{N}\) such that for all \(i \geq m+1\)
   \[
   \semi{\fix{\com}} \eta \var[y] = \eta_{i} \var[y].
   \]
@@ -854,13 +855,14 @@ interval semantics of commands. More precisely, given a command
 \[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
   \}.\]
 %
-Then, when computing \(\sem{\kleene{\com}} \rho\) on such \(\rho\)
+Then, when computing \(\semi{\fix{\com}} \rho\) on such \(\rho\)
 having a finite domain, we can restrict to a bounded interval domain
 \(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
 \{ \top, \bot \}\) where
 \[
   \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \nat\ \land\
-  a \leq b \leq \max\{\max(\rho), 2 \bound{\com}\}\}.
+  a \leq b \leq \max\{\max(\rho), \left(\left| \Var_{\com}\right| + 1
+  \right) \bound{\com}\}\}.
 \]
 
 % We could also operate uniformly on all commands, defining the
@@ -870,15 +872,26 @@ having a finite domain, we can restrict to a bounded interval domain
 \begin{lemma}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
   \(\rho : \Var \to \Int\), the abstract semantics
-  \(\sem{\kleene{\com}} \rho = \textstyle \bigsqcup_{i \in \nat}
-  \sem{\com}^i (\rho)\)
+  \(\semi{\fix{\com}} \rho = \lfp(\lambda \mu . (\eta \sqcup
+  \semi{\com}\mu))\)
   % 
-  % \sem{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\sem{\com} \rho')
+  % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
   % \sqcup \rho}
   computed in \(\mathbb{A}\) and in \(\mathbb{A}_{\com,\rho}\)
   coincide.
 \end{lemma}
 
 \begin{proof}
-  Todo: consequence of Lemma~\ref{le:inc}.
+  %% Todo: consequence of Lemma~\ref{le:inc}.
+  because of Lemma~\ref{le:inc},
+  \(\forall \eta \in \bA, \var[y] \in \Var\) if
+  \(\max{\semi{\com}}\eta\var[y]\) and
+  \(\max{\semi{\com}\eta\var[y]} > \bound{\com}\) then
+  \(\exists\var[z] \in \var, h \in \n \mid |h| \leq \bound{\com}\) and
+  both
+  \begin{enumerate}[label=(\roman*).]
+  \item \(\max{\semi{\com}\eta\var[y]} = \max{\eta\var[z]} + h\)
+  \item 
+  \end{enumerate}
+  hold
 \end{proof}

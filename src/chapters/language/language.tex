@@ -3,13 +3,12 @@
 In order to talk about program properties we need a language to
 express such programs. We define the \(\imp\) language, made of
 regular commands and based on Kozen’s Kleene algebra with tests,
-described in \cite{kozen1997kleene}.  We denote by \(\z\) the set of
-integers with the usual order, extended with bottom and top elements
-\(-\infty\) and \(+\infty\), s.t.
-\(-\infty \leq z \leq +\infty \quad \forall z \in \z\). We also extend
-addition and subtraction by letting, for
-\(z \in \z \quad +\infty + z = + \infty - z = + \infty\) and
-\(-\infty + z = - \infty -z = - \infty\).  We focus on the following
+described in \cite{kozen1997kleene}.  We denote by \(\n\) the set of
+naturals with the usual order, extended with the top element
+\(+\infty\), s.t.  \(n \leq +\infty \quad \forall n \in \n\). We also
+extend addition and subtraction by letting, for
+\(z \in \n \quad +\infty + z = + \infty - z = + \infty\) and if
+\(n \leq m\) \(n - m = 0\).  We focus on the following
 non-deterministic language.
 \begin{align*}
   \expr \ni \com[e] ::= & \; \var \in S \mid \tru \mid \ff \mid \var := k \mid \var := \var[y] + k \\
@@ -20,6 +19,6 @@ non-deterministic language.
 
 where \(\var, \var[y] \in \Var\) a finite set of variables of
 interest, i.e., the variables appearing in the considered program,
-\(S\subseteq \z\) is (possibly empty) \emph{decidable} set of numbers,
-\(a \in \z\cup \{-\infty\}, b\in\z\cup\{+\infty\}, a\leq b, k \in \z\)
+\(S\subseteq \n\) is (possibly empty) \emph{decidable} set of numbers,
+\(a \in \n, b\in\n\cup\{+\infty\}, a\leq b, k \in \n\)
 is any finite integer constant.
