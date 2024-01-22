@@ -41,15 +41,14 @@ want to solve is therefore the following:
 To do so we present a novel technique, based on the idea of
 \emph{bounds}. Each program is associated to a bound, an ideal value
 above which for each variable we cannot guarantee convergence, and
-therefore we can safely assume that the program diverges.
-
-First, given a program, we associate each variable with a \emph{single
+therefore we can safely assume that the program diverges.  First,
+given a program, we associate each variable with a \emph{single
   bound}, which captures both both an \emph{upper bound} and a
 \emph{lower bound} for the variable. The rough idea is that, whenever
 a variable is within its bound, the behavior of the program with
-respect to that variable becomes stable. We also introduce an
-\emph{increment bound} which captures the largest increment or
-decrement that can affect a variable.
+respect to that variable becomes stable. % We also introduce an
+% \emph{increment bound} which captures the largest increment or
+% decrement that can affect a variable.
 
 \begin{definition}[\textbf{Program bound}]
   \label{de:bound}
@@ -120,6 +119,8 @@ decrement that can affect a variable.
   where \(\varsof{\com}\) denotes the set of variables occurring in 
   \(\com\).
 \end{definition}
+
+Bounds 
 
 \begin{definition}[\textbf{Bound Environment}]
   \label{de:boundenv}
@@ -314,7 +315,7 @@ a finite path in \(\langle X,\to\rangle\)
   variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
   such that \(|h| \leq \bound{\com}\) and the following two properties
   hold:
-  \begin{enumerate}[label=(\roman*).]
+  \begin{enumerate}[label=(\roman*)]
   \item \(\max(\semi{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); \label{point1}
   \item  for all \(\eta' \in \mathbb{A}\), if \(\eta' \sqsupseteq \eta\)
     % and \(\semi{\com}\eta' \neq \top\)
@@ -331,15 +332,18 @@ a finite path in \(\langle X,\to\rangle\)
   % In fact, if \(\eta = \top\) then \(\semi{\com} \eta = \top\), so that the
   % hypothesis \(\semi{\com} \eta \neq \top\) would not
   % be satisfied.
-  In fact, if \(\eta = \bot\) then
-  \(\semi{\com} \bot = \bot\) and thus
-  \(\max(\semi{\com} \eta \var[y]) = 0 \leq \bound{\com}\), against the hypothesis \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\). Moreover, when
-  quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\) in \eqref{point1}, if \(\max(\semi{\com}\eta' \var[y]) = \infty\) holds, then \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\) trivially holds, hence we will sometimes silently omit to consider this case.
-
-
-
-  \medskip
+  In fact, if \(\eta = \bot\) then \(\semi{\com} \bot = \bot\) and
+  thus \(\max(\semi{\com} \eta \var[y]) = 0 \leq \bound{\com}\),
+  against the hypothesis
+  \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\). Moreover, when
+  quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\) in
+  \ref{point1}, if \(\max(\semi{\com}\eta' \var[y]) = \infty\)
+  holds, then
+  \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\)
+  trivially holds, hence we will sometimes silently omit to consider
+  this case.
   
+  \medskip
   
   \noindent
   \textbf{Case} (\(\var \in S\))\\
@@ -872,7 +876,7 @@ having a finite domain, we can restrict to a bounded interval domain
 \begin{lemma}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
   \(\rho : \Var \to \Int\), the abstract semantics
-  \(\semi{\fix{\com}} \rho = \lfp(\lambda \mu . (\eta \sqcup
+  \(\semi{\fix{\com}} \eta = \lfp(\lambda \mu . (\eta \sqcup
   \semi{\com}\mu))\)
   % 
   % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
@@ -882,16 +886,18 @@ having a finite domain, we can restrict to a bounded interval domain
 \end{lemma}
 
 \begin{proof}
-  %% Todo: consequence of Lemma~\ref{le:inc}.
-  because of Lemma~\ref{le:inc},
-  \(\forall \eta \in \bA, \var[y] \in \Var\) if
-  \(\max{\semi{\com}}\eta\var[y]\) and
-  \(\max{\semi{\com}\eta\var[y]} > \bound{\com}\) then
-  \(\exists\var[z] \in \var, h \in \n \mid |h| \leq \bound{\com}\) and
-  both
-  \begin{enumerate}[label=(\roman*).]
-  \item \(\max{\semi{\com}\eta\var[y]} = \max{\eta\var[z]} + h\)
-  \item 
-  \end{enumerate}
-  hold
+  Todo: consequence of Lemma~\ref{le:inc}.
+  % because of Lemma~\ref{le:inc},
+  % \(\forall \eta \in \bA, \var[y] \in \Var\) if
+  % \(\max(\semi{\com})\eta\var[y]\) and
+  % \(\max(\semi{\com}\eta\var[y]) > \bound{\com}\) then
+  % \(\exists\var[z] \in \var, h \in \n \mid |h| \leq \bound{\com}\) and
+  % both the following statements hold:
+  % \begin{enumerate}[label=(\roman*).]
+  % \item \(\max(\semi{\com}\eta\var[y]) = \max{\eta\var[z]} + h\)
+  % \item for all \(\eta' \in \mathbb{A}\), if
+  %   \(\eta' \sqsupseteq \eta\) then
+  %   \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) +
+  %   h\).
+  % \end{enumerate}
 \end{proof}

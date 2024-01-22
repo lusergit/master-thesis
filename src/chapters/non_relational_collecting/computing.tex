@@ -1,0 +1,591 @@
+\section{Computing Non-relational collecting}
+\label{sec:label}
+
+\begin{lemma}
+  \label{le:incnr}
+  Let \(\com\in \imp\). % and \(\var[y] \in \Var\)
+    
+  \noindent
+  For all \(\eta \in \mathbb{A}\) and \(\var[y] \in \Var\), if
+  \(\max(\semnr{\com} \eta \var[y]) \neq \infty\) and
+  \(\max(\semnr{\com}\eta \var[y]) > \bound{\com}\) then there exist a
+  variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
+  such that \(|h| \leq \bound{\com}\) and the following two properties
+  hold:
+  \begin{enumerate}[label=(\roman*)]
+  \item \(\max(\semnr{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); \label{point1nr}
+  \item  for all \(\eta' \in \mathbb{A}\), if \(\eta' \sqsupseteq \eta\)
+    % and \(\semnr{\com}\eta' \neq \top\)
+    then
+    \(\max(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\). \label{point2nr}
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  The proof is by structural induction on the command \(\com\in \imp\).
+  %
+  We preliminarly observe that we can safely assume
+  \(\eta \neq \bot\).
+  % In fact, if \(\eta = \top\) then \(\semnr{\com} \eta = \top\), so that the
+  % hypothesis \(\semnr{\com} \eta \neq \top\) would not
+  % be satisfied.
+  In fact, if \(\eta = \bot\) then \(\semnr{\com} \bot = \bot\) and
+  thus \(\max(\semnr{\com} \eta \var[y]) = 0 \leq \bound{\com}\),
+  against the hypothesis
+  \(\max(\semnr{\com}\eta \var[y]) > \bound{\com}\). Moreover, when
+  quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\) in
+  \ref{point1nr}, if \(\max(\semnr{\com}\eta' \var[y]) = \infty\)
+  holds, then
+  \(\max(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\)
+  trivially holds, hence we will sometimes silently omit to consider
+  this case.
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\var \in S\))\\
+  % 
+  Take \(\eta \in \mathbb{A}\) and assume
+  \(\infty\neq\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
+  %
+  Clearly \(\semnr{\var \in S}\eta \neq \bot\), otherwise we would get the contradiction
+  \(\max(\semnr{\var \in S}\eta \var[y]) =0 \leq \bound{\var \in S}\).
+  
+  We distinguish two cases:
+  \begin{itemize}
+    
+  \item If \(\var[y] \neq \var\), then for all \(\eta' \in \mathbb{A}\)
+    such that \(\eta \sqsubseteq \eta'\) it holds
+    \(\bot \neq \semnr{\var \in S}\eta' = \eta'[\var \mapsto \eta\var
+      \cap S]\) and thus
+    \[
+    \max(\semnr{\var \in S}\eta' \var[y]) = \max(\eta' \var[y]) = \max(\eta' \var[y]) + 0
+    \]
+    hence the thesis follows with \(\var[z]=\var[y]\) and \(h = 0\).
+
+  \item If \(\var[y] = \var[x]\) then  \(\eta\var \subseteq \n\) and
+    \begin{equation*}
+      \max(\semnr{\var \in S}\eta \var[y]) = \max (\eta\var \cap S)
+    \end{equation*}
+    Note that it cannot be \(\max(S)\in \nat\). Otherwise, by
+    Definition~\ref{de:bound},
+    \(\max (\eta\var \cap S) \leq \max(S)= \bound{\var \in
+      S}\), violating the assumption \(\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
+    Hence, \(\max(S) = \infty\) must hold and therefore
+    \(\max (\eta(\var) \sqcap S) = \max(\eta(\var))=
+    \max(\eta(\var))+0\). It is immediate to check that the same holds
+    for all
+    \(\eta' \sqsupseteq \eta\), i.e.,
+    \[
+    \max (\eta'\var \cap S) = \max(\eta'\var)=
+    \max(\eta'\var)+0
+    \]
+    and thus the thesis follows with  \(\var[z]=\var[y]=\var[x]\) and \(h=0\).
+  \end{itemize}  
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\tru\))
+  A consequence of the fact that \(\tru \equiv x\in \nat\). 
+
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\ff\))
+  A consequence of the fact that \(\ff \equiv x\in \varnothing\). 
+  %
+  %  Since \(\semnr{\ff}\eta = \bot\) and thus
+  %  \begin{center}
+  %    \(\max(\semnr{\ff}\eta \var[y]) = \max(\bot \var[y]) =0 \leq \bound{\ff}\).
+  %  \end{center}
+  %  the thesis vacuosly holds
+
+
+  % ----------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\var := k\))
+  % 
+  Take \(\eta \in \mathbb{A}\) and assume
+  \(\max(\semnr{\var := k}\eta \var[y]) > \bound{\var := k} = k\).
+
+  Observe that it cannot be \(\var = \var[y]\). In fact, since
+  \(\semnr{\var := k}\eta = \eta[\var \mapsto \{k\}]\), we would have
+  \(\semnr{\var := k}\eta \var[y] = \{k\}\) and thus
+  \begin{center}
+    \(\max(\semnr{\var := k}\eta \var[y]) = k  = \bound{\var := k}\).
+  \end{center}
+  violating the assumption.
+  %
+  Therefore, it must be \(\var[y] \neq \var\). Now, for all
+  \(\eta' \sqsupseteq \eta\), we have
+  \(\semnr{\var := k}\eta' \var[y] = \eta' \var[y]\) and thus
+  \begin{center}
+    \(\max(\semnr{\var := k}\eta' \var[y]) = \max(\eta' \var[y]) =
+    \max(\eta' \var[y]) + 0\),
+  \end{center}
+  hence the thesis holds with \(h =0 \leq \bound{\var :=k}\) and \(\var[z] = \var[y]\).
+  
+
+  % ----------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\var := \var[w] + k\))
+  % 
+  Take \(\eta \in \mathbb{A}\) and assume
+  \(\max(\semnr{\var := \var[w] + k}\eta \var[y]) > \bound{\var := \var[w] + k} = k\).
+  %
+  Recall that
+  \(\semnr{\var := \var[w] + k}\eta = \eta[\var \mapsto \eta \var[w] + k]\).
+  
+  We distinguish two cases:
+  \begin{itemize}
+    
+  \item If \(\var[y] \neq \var\), then for all \(\eta' \sqsupseteq \eta\), we have
+    \(\semnr{\var := \var[w] + k}\eta' \var[y] = \eta' \var[y]\) and thus
+    \begin{center}
+      \(\max(\semnr{\var := \var[w] + k}\eta' \var[y]) = \max(\eta' \var[y])\).
+    \end{center}
+    hence the thesis follows with
+    \(h =0 \leq \bound{\var := \var[w] + k}\) and \(\var[z] = \var[y]\).
+    
+  \item 
+    If \(\var = \var[y]\) then  for all \(\eta' \sqsupseteq \eta\), we have
+    \(\semnr{\var := \var[w] + k}\eta' \var[y] = \eta' \var[w] +
+    k\) and thus
+    \begin{center}
+      \(\max(\semnr{\var := \var[w] + k}\eta' \var[y]) = \max(\eta' \var[w]) +
+      k\).
+    \end{center}
+    
+    Hence, the thesis follows with \(h = k \leq \bound{\var := \var[w] + k}\)
+    and \(\var[z] = \var[w]\).
+  \end{itemize}
+  
+
+  % ----------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\var := \var[w] - k\))
+  % 
+  Take \(\eta \in \mathbb{A}\) and assume
+  \(\max(\semnr{\var := \var[w] - k}\eta \var[y]) > \bound{\var := \var[w] - k} = k\).
+  %
+  Recall that
+  \(\semnr{\var := \var[w] - k}\eta = \eta[\var \mapsto \eta \var[w] - k]\).
+  
+  We distinguish two cases:
+  \begin{itemize}
+    
+  \item If \(\var[y] \neq \var\), then for all
+    \(\eta' \in \mathbb{A}\) such that
+    \(\eta \sqsubseteq \eta'\), we have
+    \(\semnr{\var := \var[w] - k}\eta' \var[y] = \eta' \var[y]\) and thus
+    \begin{center}
+      \(\max(\semnr{\var := \var[w] - k}\eta' \var[y]) = \max(\eta' \var[y])\).
+    \end{center}
+    hence the thesis holds, with
+    \(h =0 \leq \bound{\var := \var[w] - k}\) and \(\var[z] = \var[y]\).
+    
+  \item If \(\var = \var[y]\) then for all \(\eta' \in \mathbb{A}\) such
+    that \(\eta \sqsubseteq \eta'\), we have
+    \(\semnr{\var := \var[w] - k}\eta' \var[y] = \eta' \var[w] - k\) and
+    thus
+    \begin{center}
+      \(\max(\semnr{\var := \var[w] - k}\eta' \var[y]) = \max(\eta' \var[w]) -
+      k\).
+    \end{center}
+    Note that the assumption \(\max(\semnr{\var := \var[w] - k}\eta \var[y]) > k\) and thus
+    \(\max(\semnr{\var := \var[w] - k}\eta' \var[y]) > k\) ensures that subtraction is not
+    truncated on the maximum.
+    
+    Hence the thesis holds, with \(h = -k\), hence \(|h| = \bound{\var := \var[w] - k}\),
+    and \(\var[z] = \var[w]\).
+  \end{itemize}
+  
+  % ----------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\com_1 \ndet \com_2\))
+  % 
+  Take \(\eta \in \mathbb{A}\) and assume
+  \(\max(\semnr{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2} =
+  \bound{\com_1} + \bound{\com_2}\).
+
+  Recall that
+  \(\semnr{\com_1 \ndet \com_2} \eta = \semnr{\com_1}\eta \sqcup \semnr{\com_2}\eta\).
+  % 
+  Hence, since
+  \(\max(\semnr{\com_1 \ndet \com_2} \eta \var[y]) \neq \infty\), we
+  have that
+  \(\max(\semnr{\com_1} \eta \var[y]) \neq \infty \neq
+  \max(\semnr{\com_2}\eta \var[y])\).
+
+  Moreover
+  \begin{align*}
+    \max(\semnr{\com_1 \ndet \com_2}\eta \var[y])& =  \max(\semnr{\com_1}\eta \var[y] \sqcup \semnr{\com_2}\eta \var[y]) \\ 
+    & = \max \{ \max(\semnr{\com_1}\eta \var[y]), \max(\semnr{\com_2}\eta \var[y])\}
+  \end{align*}
+
+  Thus
+  \(\max(\semnr{\com_1 \ndet \com_2}\eta \var[y]) =
+  \max(\semnr{\com_i}\eta \var[y])\) for some \(i \in \{1,2\}\). We can
+  assume, without loss of generality, that the maximum is realized
+  by the first component, i.e.,
+  \(\max(\semnr{\com_1 \ndet \com_2}\eta \var[y]) =
+  \max(\semnr{\com_1}\eta \var[y])\). Hence, by inductive hypothesis on
+  \(\com_1\), we have that there exists \(h \in \mathbb{Z}\) with
+  \(|h| \leq \bound{\com_1}\) and \(\var[z] \in \Var\) such that
+  \(\max(\semnr{\com_1}\eta \var[y]) = \max(\eta \var[z]) + h\) and for
+  all \(\eta' \in \mathbb{A}\), \(\eta \sqsubseteq \eta'\),
+  \[
+  \max(\semnr{\com_1}\eta' \var[y]) \geq \max(\eta' \var[z]) + h
+  \]
+
+  Therefore 
+  \[
+  \max(\semnr{\com_1 \ndet \com_2}\eta \var[y])
+  = \max(\semnr{\com_1}\eta \var[y]) = \max(\eta \var[z]) + h
+  \]
+  %
+  and and for
+  all \(\eta' \in \mathbb{A}\), \(\eta \sqsubseteq \eta'\),
+  \begin{align*}
+    \max(\semnr{\com_1 \ndet \com_2}\eta' \var[y])
+    &= \max\{ \max(\semnr{\com_1}\eta' \var[y]),  \max(\semnr{\com_2}\eta' \var[y])\}\\
+    % 
+    & \geq \max(\semnr{\com_1\eta'} \var[y])\\
+    %
+    & \geq \max(\eta' \var[z]) + h
+  \end{align*}
+  with \(|h| \leq \bound{\com_1} \leq \bound{\com_1 \ndet \com_2}\), as desired.
+
+
+  % ----------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\com_1 \seq \com_2\))
+  % 
+  Take \(\eta \in \mathbb{A}\) and assume
+  \(\max(\semnr{\com_1 \seq \com_2}\eta) > \bound{\com_1 \seq \com_2} =
+  \bound{\com_1} + \bound{\com_2}\).
+  
+  Recall that
+  \(\semnr{\com_1 \seq \com_2} \eta = \semnr{\com_2}(\semnr{\com_1}\eta)\).
+  %
+  If we define
+  \begin{center}
+    \(\semnr{\com_1} \eta = \eta_1\)
+  \end{center}
+  since \(\max(\semnr{\com_2} \eta_1 \var[y]) \neq \infty\) and
+  \(\max(\semnr{\com_2} \eta_1 \var[y]) > \bound{\com_1 \seq \com_2}
+  \geq \bound{\com_2}\), by inductive hypothesis on \(\com_2\), there
+  are \(|h_2| \leq \bound{\com_2}\) and \(\var[w] \in \Var\) such that
+  \(\max(\semnr{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2\)
+  and for all \(\eta_1' \in \mathbb{A}\) with
+  \(\eta_1 \sqsubseteq \eta_1'\)
+  \begin{equation}
+    \label{eq:seq2nr}
+    \max(\semnr{\com_2} \eta_1' \var[y]) \geq \max(\eta_1' \var[w]) + h_2
+    \tag{\dag}
+  \end{equation}
+  
+  Now observe that
+  \(\max(\semnr{\com_1}\eta \var[w]) = \max(\eta_1 \var[w]) >
+  \bound{\com_1}\). Otherwise, if it were \(\max(\eta_1 \var[w]) \leq
+  \bound{\com_1}\) we would have
+  \begin{center}
+    \(\max(\semnr{\com_2}\eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2 \leq
+    \bound{\com_1} + \bound{\com_2} = \bound{\com_1 \seq \com_2}\),
+  \end{center}
+  violating the hypotheses. Moreover,
+  \(\max(\semnr{\com_1}\eta \var[w]) \neq \infty\), otherwise we would
+  have
+  \(\max(\semnr{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2 =
+  \infty\), contradicting the hypotheses.  Therefore we can apply the
+  inductive hypothesis also to \(\com_1\) and deduce that there are
+  \(|h_1| \leq \bound{\com_1}\) and \(\var[w]' \in \Var\) such that
+  \(\max(\semnr{\com_1} \eta \var[w]) = \max(\eta \var[w]') + h_1\)
+  and for all \(\eta' \in \mathbb{A}\) with \(\eta \sqsubseteq \eta'\)
+  \begin{equation}
+    \label{eq:seq1nr}
+    \max(\semnr{\com_1} \eta' \var[w]) \geq \max(\eta' \var[w]') + h_1
+    \tag{\ddag}
+  \end{equation}
+
+  Now, for all \(\eta' \in \mathbb{A}\) with \(\eta \sqsubseteq \eta'\) we have that:
+  \begin{align*}
+    \max(\semnr{\com_1 \seq \com_2}\eta \var[y])
+    &= \max(\semnr{\com_2}(\semnr{\com_1}\eta) \var[y])\\
+    %
+    & = \max(\semnr{\com_2}\eta_1 \var[y])\\
+    %
+    & = \max(\eta_1 \var[w]) + h_2\\
+    %
+    & = \max(\semnr{\com_1}\eta \var[w]) + h_2\\
+    %
+    &= \max(\eta \var[w]')+h_1 + h_2
+  \end{align*}
+  %
+  and
+  \begin{align*}
+    \max(\semnr{\com_1 \seq \com_2}\eta' \var[y]) & = & \\ 
+    \max(\semnr{\com_2}(\semnr{\com_1}\eta') \var[w]) & \geq & \\ 
+    \max(\semnr{\com_1}\eta' \var[w]') + h_2 & \geq & 
+    \text{by \eqref{eq:seq2}, since } \eta_1 = \semnr{\com_1}\eta \sqsubseteq \semnr{\com_1}\eta' \text{ , by monotonicity} \\
+    (\max(\eta' \var[y]) +h_1) + h_2 & & \text{by \eqref{eq:seq1}}\
+  \end{align*}
+
+  Thus, the thesis holds with \(h= h_1+h_2\), as
+  \(|h| =|h_1 +h_2| \leq |h_1| + |h_2| \leq \bound{\com_1} +
+  \bound{\com_2} = \bound{\com_1 \seq \com_2}\), as needed.
+
+
+
+  % ----------------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\fix{\com}\)) 
+  %
+  Let \(\eta \in \mathbb{A}\) such that
+  \(\semnr{\fix{\com}} \eta \var[y] \neq \infty\). Recall that
+  \(\semnr{\fix{\com}} \eta = \lfp(\lambda \mu. (\semnr{\com}
+    \mu \sqcup\eta))\). Observe that the least fixpoint of
+  \(\lambda \mu. (\semnr{\com}
+  \mu \sqcup\eta)\) coincides with the least
+  fixpoint of
+  \(\lambda \mu. (\semnr{\com} \mu  \sqcup \mu) = \lambda \mu. \semnr{ \com\ndet \tru} \mu\) above \(\eta\). Hence, if
+  \begin{itemize}
+  \item \(\eta_0 \veq \eta\),
+  \item for all \(i\in \nat\),
+    \(\eta_{i+1} \veq \semnr{\com} \eta_i \sqcup \eta_i= \semnr{\com \ndet
+    \tru} \eta_i \sqsupseteq \eta_i\),
+  \end{itemize}
+  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \mathbb{A}\) such that
+  \[ 
+  \semnr{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
+  \]
+  Since \(\semnr{\fix{\com}} \eta \var[y] \neq \infty\), we have that
+  for all \(i\in \nat\), \(\eta_i \var[y] \neq \infty\). Moreover,
+  \(\textstyle\bigsqcup_{i \in \nat} \eta_i\) on \(\var[y]\) is
+  finitely reached in the chain \(\{\eta_i\}_{i\in \nat}\), i.e.,
+  there exists \(m \in \mathbb{N}\) such that for all \(i \geq m+1\)
+  \[
+  \semnr{\fix{\com}} \eta \var[y] = \eta_{i} \var[y].
+  \]
+  %\(\eta_m \neq \eta_{m+1}\) and 
+
+  The inductive hypothesis holds for \(\com\) and \(\tru\), hence for
+  \(\com \ndet \tru\), therefore for all \(\var \in \Var\) and
+  \(j \in \{0,1, \ldots, m\}\), if \(\max(\eta_{j+1} \var) >\bound{\com\ndet \tru} =\bound{\com}\) then
+  there exist \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\) such that \(|h| \leq \bound{\com}\) and 
+  \begin{enumerate}[label=(\alph*)]
+  \item \(\infty \neq \max(\eta_{j+1} \var) = \max(\eta_j \var[z]) + h\),
+  \item \(\forall \eta' \sqsupseteq \eta_j.
+    \max(\semnr{\com \ndet \tru}\eta'\var) \geq \max(\eta' \var[z]) + h\).
+  \end{enumerate}
+  To shortly denote that the two conditions (a) and (b) hold, we write
+  \[
+  (\var[z],j) \to_{h} (\var, j+1)
+  \]
+  %   when 
+  %  \(j\in  \{0, \ldots, m \}\), \(\var\in \Var\) and 
+  %  %\(\max(\eta_{j+1} \var) >\bound{\com}\) hold, so that the existence of
+  %   \(h \in \mathbb{Z}\) and \(\var[z] \in \Var\) such that 
+  %   \(\max(\eta_{j+1} \var) = \max(\eta_j \var[z]) + h\) follows.
+  %   
+  %  
+  
+  Now, assume that for some variable \(\var[y] \in \Var\)
+  \[\max(\semnr{\fix{\com}} \eta \var[y]) = \max(\eta_{m+1} \var[y]) >
+  \bound{\fix{\com}} = (n+1) \bound{\com}\]
+  where \(n=|\mathit{vars}(\com)|\). 
+  We want to show that the thesis holds, i.e., that there exist
+  \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\) with
+  \(|h| \leq \bound{\fix{\com}}\) such that:
+  \begin{equation}\label{eq:maxendmaxstartnr}
+    \max(\semnr{\fix{\com}} \eta \var[y]) = \max(\eta \var[z]) + h
+    \tag{i}
+  \end{equation}
+  and for all \(\eta' \sqsupseteq \eta\),
+  \begin{equation}\label{eq:maxmiddlemaxendnr}
+    \max(\semnr{\fix{\com}} \eta' \var[y]) \geq \max(\eta' \var[z]) + h
+    \tag{ii}
+  \end{equation}
+  
+  Let us consider \eqref{eq:maxendmaxstart}. We first observe that we
+  can define a path
+  \begin{equation}
+    \label{eq:fixnr}
+    \sigma \veq (\var[y]_0, 0) \to_{h_0} (\var[y]_1, 1) \to_{h_1}
+    \ldots \to_{h_m} (\var[y]_{m+1}, m+1)
+  \end{equation}
+  such that \(\var[y]_{m+1}=\var[y]\) and for all \(j \in \{0,\ldots, m+1\}\), 
+  \(\var[y]_j\in \Var\)  and
+  \(\max(\eta_{j} \var[y]_{j}) > \bound{C}\).
+  %, so that for \(j\neq m+1\), \(|h_j|\leq \bound{\com}\).
+  In fact, if, by contradiction, this is not the case, there  would exist an index \(i \in \{0,\ldots, m\}\) (as \(\max(\eta_{m+1} \var[y]_{m+1}) > \bound{C}\) already holds)
+  such that \(\max(\eta_{i} \var[y]_{i}) \leq
+  \bound{C}\), while for all
+  \(j \in \{i+1,\ldots, m+1\}\), \(\max(\eta_{j} \var[y]_j) > \bound{C}\).
+  Thus, in such a case, 
+  we consider the nonempty path:
+  \[\pi \veq (\var[y]_i, i) \to_{h_i} (\var[y]_{i+1}, i+1) \to_{h_{i+1}} \ldots
+  \to_{h_m} (\var[y]_{m+1}, m+1)\]
+  and we have that:
+  \begin{align*}
+    &\Sigma_{j=i}^m h_j =\\ 
+    &\Sigma_{j=i}^m \max(\eta_{j+1} \var[y]_{j+1}) - \max(\eta_j \var[y]_{j}) =\\
+    &\max(\eta_{m+1} \var[y]_{m+1}) - \max(\eta_i \var[y]_{i}) =\\
+    &\max(\eta_{m+1} \var[y]) - \max(\eta_i \var[y]_{i})>\\
+    &  (n+1) \bound{\com} - \bound{\com} = n \bound{\com}
+  \end{align*}
+  with \(|h_j| \leq \bound{\com}\) for \(j \in \{i,\ldots, m\}\). Hence
+  we can apply Lemma~\ref{le:cycles} to the projection \(\pi_p\) of the nodes
+  of this path \(\pi\) to the variable
+  component 
+  to deduce that \(\pi_p\) has a subpath which is a cycle with a strictly positive weight. 
+  More precisely, there
+  exist \(i \leq k_1 < k_2 \leq m+1\) such that
+  \(\var[y]_{k_1} = \var[y]_{k_2}\) and
+  \(h = \Sigma_{j=k_1}^{k_2-1} h_j > 0\). If we denote 
+  \(\var[w] = \var[y]_{k_1} = \var[y]_{k_2}\), then we
+  have  that   
+  \begin{align*}
+    \max(\eta_{k_2} \var[w]) & =  h_{k_2-1}  + \max(\eta_{k_2-1} \var[w]) \\
+                             & =  h_{k_2-1} + h_{k_2-2} + \max(\eta_{k_2-2} \var[w])  \\
+                             & = \Sigma_{j=k_1}^{k_2-1} h_j + \max(\eta_{k_1} \var[w])  \\
+                             & = h +  \max(\eta_{k_1} \var[w])  
+  \end{align*}
+  Thus,
+  \[\max(\semnr{\com \ndet \tru}^{k_2-k_1} \eta_{k_1} \var[w]) = \max(\eta_{k_1}
+  \var[w]) + h\] 
+  Observe that for all \(\eta' \sqsupseteq \eta_{k_1}\)
+  \begin{equation}\label{prop2nr}
+    \max(\semnr{\com \ndet \tru}^{k_2-k_1} \eta' \var[w]) \geq \max(\eta'
+    \var[w]) + h
+  \end{equation}
+  This property \eqref{prop2} can be shown by induction on \(k_2-k_1 \geq 1\).
+  
+  \noindent    
+  Then, an inductive argument allows us to show that for all \(r \in \mathbb{N}\):
+  \begin{equation}\label{noppnr}
+    \max(\semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) \geq \max(\eta_{k_1}
+    \var[w]) + r h
+  \end{equation}  
+  In fact, for \(r=0\) the claim trivially holds. Assuming the validity for \(r\geq 0\) then we have that
+  \begin{align*}    
+    & \max(\semnr{\com \ndet \tru}^{(r+1)(k_2-k_1)} \eta_{k_1} \var[w]) =\\
+    &\max(\semnr{\com \ndet \tru}^{k_2-k_1} ( \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{by \eqref{prop2} as }\eta_{k_1} \sqsubseteq \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\\
+    &\max(\semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) + h \geq & \mbox{by inductive hypothesis}\\
+    &  \max(\eta_{k_1}\var[w])  + rh + h
+    \geq 
+    \max(\eta_{k_1}\var[w])  + (r+1)h
+  \end{align*}
+
+  \noindent
+  However,
+  This would contradict the hypothesis \(\semnr{\fix{\com}} \eta \var[y] \neq \infty\). In fact the inequality \eqref{nopp} would imply
+  \begin{align*}
+    \semnr{\fix{\com}} \eta \var[w]
+    & = \bigsqcup_{i \in \mathbb{N}} \semnr{\com
+      \ndet \tru}^i \eta \var[w] =\\ 
+    & =  \bigsqcup_{i \in \mathbb{N}} \semnr{\com \ndet
+      \tru}^i \eta_{k_1} \var[w]\\ 
+    & = \bigsqcup_{r \in \mathbb{N}} \semnr{\com \ndet
+      \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]\\
+    & = \infty
+  \end{align*}
+
+
+  Now, from \eqref{eq:fix} we deduce that for all \(\eta' \sqsupseteq \eta_{k_1}\), for 
+  \(j \in \{ k_1, \ldots, m\}\), if we let \(\mu_{k_1} = \eta'\) and
+  \(\mu_{j+1} = \semnr{\com \ndet \tru} \mu_j\), we have that \(\max(\mu_{j+1} \var[y]_{j+1}) \geq \max(\mu_{j+1} \var[y]_{j}) + h_j\) and thus 
+  \[
+  \semnr{\com \ndet \tru}^{m-k_1+1} \eta' \var[y] = \mu_{m+1}
+  \var[y]_{m+1} \geq 
+  \max(\var[y]_{k_1}) + \Sigma_{i=k_1}^m h_i = \max(\eta' \var[w]) + \Sigma_{i=k_1}^m h_i
+  \]
+  Since \(\eta' = \semnr{\fix{\com}} \eta \sqsupseteq \eta_{k_1}\) we conclude
+  \begin{align*}
+    \semnr{\fix{\com}} \eta \var[y]
+    & = \semnr{\com \ndet \tru}^{m-k_1+1} \semnr{\fix{\com}} \eta \var[y]\\
+    & \geq \infty + \Sigma_{i=k_1}^m h_i = \infty
+  \end{align*}
+  contradicting the assumption.
+  
+  \noindent
+  Therefore, the path \(\sigma\) of \eqref{eq:fix} must exist, and consequently
+  \[\max(\semnr{\fix{\com}} \eta \var[y]) = \max(\eta_{m+1} \var[y]) = \max(\eta  \var[y]_0) + \Sigma_{i=0}^m h_i\]
+  and
+  \(\Sigma_{i=0}^m h_i \leq \bound{\fix{\com}}=(n+1)\bound{\com}\),
+  otherwise we could use the same argument above for inferring the
+  contradiction \(p\semnr{\fix{\com}} \eta \var[y] = \infty\).
+
+  \medskip
+
+  Let us now show \eqref{eq:maxmiddlemaxend}. Given
+  \(\eta' \sqsupseteq \eta\) from \eqref{eq:fix} we deduce that for
+  all \(j \in \{ 0, \ldots, m\}\), if we let \(\mu_0 = \eta'\) and
+  \(\mu_{j+1} = \semnr{\com \ndet \tru} \mu_j\), we have that
+  \[
+  \max(\mu_{j+1} \var[y]_{j+1}) \geq \max(\mu_{j+1} \var[y]_{j}) + h_j.
+  \]
+  Therefore, since \(\semnr{\fix{\com}} \eta' \sqsupseteq \mu_{m+1}\)
+  (observe that the convergence of \(\semnr{\fix{\com}} \eta' \) could
+  be at an index greater than \(m+1\)), we conclude that:
+  \[\max(\semnr{\fix{\com}} \eta' \var[y]) \geq \max(\mu_{m+1}
+  \var[y]) = \max(\mu_{m+1} \var[y]_{m+1}) \geq \max(\eta' \var[y]_0)
+  + \Sigma_{i=0}^m h_i\] as desired.
+\end{proof}
+
+Lemma~\ref{le:incnr} provides an effective algorithm for computing the
+interval semantics of commands. More precisely, given a command
+\(\com\), the corresponding finite set of variables
+\(\Var_{\com} \veq \mathit{vars}(\com)\), and an interval environment
+\(\rho : \Var_{\com} \to \Int\), we define
+\[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
+  \}.\]
+%
+Then, when computing \(\semnr{\fix{\com}} \rho\) on such \(\rho\)
+having a finite domain, we can restrict to a bounded interval domain
+\(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
+\{ \top, \bot \}\) where
+\[
+  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \nat\ \land\
+  a \leq b \leq \max\{\max(\rho), \left(\left| \Var_{\com}\right| + 1
+  \right) \bound{\com}\}\}.
+\]
+
+% We could also operate uniformly on all commands, defining the
+% semantics for \(\com\) in a domain with intervals bounded by
+% \(\max(\rho) +\bound{\com}\)
+
+\begin{lemma}
+  Let \(\com\in \imp\) be a command. Then, for all finitely supported
+  \(\eta : \Var \to \Int\), the abstract semantics
+  \(\semnr{\fix{\com}} \eta = \lfp(\lambda \mu . (\eta \sqcup
+  \semnr{\com}\mu))\)
+  % 
+  % \semnr{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semnr{\com} \rho')
+  % \sqcup \rho}
+  computed in \(\mathbb{A}\) and in \(\mathbb{A}_{\com,\rho}\)
+  coincide.
+\end{lemma}
+
+\begin{proof}
+  %% Todo: consequence of Lemma~\ref{le:incnr}.
+\end{proof}

@@ -69,7 +69,8 @@ the concrete domain \(\dom\) and the abstract domain \(\bA\),
 resulting
 
 \begin{definition}[Abstract operations]
-  We define sound abstract operations in the \(\bA\) domain:
+  We define sound abstract lub and glb operations in the \(\bA\)
+  domain:
   \begin{align*}
     \interval{a}{b} \; \acup \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
     \interval{a}{b} \; \acap \; \interval{c}{d} & \defin \begin{cases} \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
@@ -126,200 +127,46 @@ defining \(\max (\bot)  \veq 0\) (i.e., \(0\) is the maximum of
 an empty interval).
 % Just observe that the resulting interval could be empty, i.e.\ \(\bot\), and .
 
-The \emph{interval semantics} of \(\imp\) is defined as the strict
-(i.e., preserving \(\bot\))
-% and co-strict (i.e., preserving \(\top\))
-extension of the following function \(\semi{\cdot}: \imp \to
-\bA \to \bA\). For all \(\eta: \Var \to \Int_*\),
+\begin{definition}[Interval semantics]\label{de:intervalsem}
+  The \emph{interval semantics} of \(\imp\) is the strict (i.e.,
+  preserving \(\bot\))
+  % and co-strict (i.e., preserving \(\top\))
+  extension of the following function \(\semi{\cdot}: \imp \to
+  \bA \to \bA\). For all \(\eta: \Var \to \Int_*\),
+  \begin{align*}
+    \semi{\var \in S}\eta 
+    & \veq  
+      \begin{cases}
+        \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if
+                                                              }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
+                                                                                                                   \text{otherwise}
+      \end{cases}\\
+    \semi{\tru}\eta 
+    & \veq \eta\\
+    \semi{\ff}\eta 
+    & \veq \bot\\
+    \semi{\var := k}\eta 
+    & \veq \eta[\var \mapsto \interval{k}{k}]\\
+    \semi{\var := \var[y] + k}\eta 
+    & \veq \eta[\var \mapsto \eta (\var[y]) + k]\\
+    \semi{\var := \var[y] - k}\eta 
+    & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
+    \semi{\com_1 \ndet \com_2} \eta
+    & \veq \semi{\com_1} \eta \sqcup \semi{\com_2} \eta\\
+    \semi{\com_1 \seq \com_2} \eta
+    & \veq \semi{\com_2} (\semi{\com_1} \eta)\\
+    \semi{\kleene{\com}} \eta
+    & \veq \textstyle \bigsqcup_{i \in \nat} \semi{\com}^i (\eta)\\
+    \semi{\fix{\com}} \eta
+    & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi{\com} \mu))
+  \end{align*}
+\end{definition}
 
-\begin{align*}
-  % 
-  \semi{\var \in S}\eta 
-  & \veq  
-    \begin{cases}
-      \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if
-                                                            }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
-                                                                                                                 \text{otherwise}
-    \end{cases}\\
-    % 
-  % \semi{\var \in [a,b]}\eta 
-  % & \veq
-  %   \begin{cases}
-  %     \eta[\var \mapsto \eta(\var)\sqcap [a,b]]  & \text{if }\eta(\var)\sqcap [a,b]\neq \bot \\
-  %     \bot & \text{otherwise}
-  %   \end{cases}\\
-  %   % boolean
-  %   % 
-  % \semi{\var \leq k}\eta 
-  % & \veq 
-  %   \begin{cases}
-  %     \eta[\var \mapsto \truncR{\eta(\var)}{k}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
-  %     \bot & \text{otherwise}
-  %   \end{cases}\\
-  %   % 
-  % \semi{\var > k}\eta 
-  % & \veq 
-  %   \begin{cases}
-  %     \eta[\var \mapsto \truncL{\eta(\var)}{k+1}] & \text{if }\truncR{\eta(\var)}{k}\neq \bot \\
-  %     \bot & \text{otherwise}
-  %   \end{cases}\\
-  %   
-  \semi{\tru}\eta 
-  & \veq \eta\\
-  % 
-  \semi{\ff}\eta 
-  & \veq \bot\\
-  % 
-  % \semi{\id}\eta & \veq \eta\\
-  % 
-  \semi{\var := k}\eta 
-  & \veq \eta[\var \mapsto \interval{k}{k}]\\
-  % 
-  \semi{\var := \var[y] + k}\eta 
-  & \veq \eta[\var \mapsto \eta (\var[y]) + k]\\
-  % 
-  % \semi{\var := \var - k}\eta 
-  % & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
-  % \semi{\var := \var[y]}\eta 
-  % & = \eta[\var \mapsto \eta(\var[y])]\\[3mm]
-  %
-  % commands
-  %
-  \semi{\com_1 \ndet \com_2} \eta
-  & \veq \semi{\com_1} \eta \sqcup \semi{\com_2} \eta\\
-  %
-  \semi{\com_1 \seq \com_2} \eta
-  & \veq \semi{\com_2} (\semi{\com_1} \eta)\\
-  %
-  % 
-  \semi{\kleene{\com}} \eta
-  & \veq \textstyle \bigsqcup_{i \in \nat} \semi{\com}^i (\eta)\\
-  %
-  \semi{\fix{\com}} \eta
-  & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi{\com} \mu))
-\end{align*}
-
-The semantics is well-defined, because of the following lemma:
-
-\begin{lemma}\label{le:monotone}
-  for all \(\com \in \imp\), \[\semi{\com}: \bA \to \bA\] is
-  monotone.
-\end{lemma}
-
-\begin{proof}
-  What we have to proof is that given \(\eta, \theta \in \bA\), with
-  \(\eta \sqsubseteq \theta\) then \(\forall \com \in \imp\)
-  \(\semi{\com}\eta \sqsubseteq \semi{\com}\theta\). We will work by
-  induction on \(\com\):
-  
-  \noindent
-  \textbf{Base cases:}\ \\ \ We avoid cases where \(\eta = \bot\) and
-  \(\semi{\com}\eta = \bot\) as \(\forall \theta \in \bA\) \(\bot
-  \sqsubseteq \theta\) and it becomes trivially true.
-  \begin{itemize}
-  \item \(\com \equiv \var \in S\). Then
-    \begin{align*}
-      \semi{\var \in S}\eta & = \eta[x\mapsto\eta(x) \sqcap \Int(S)] \\
-      \semi{\var \in S}\theta & = \theta[x\mapsto \theta(x) \sqcap \Int(S)]
-    \end{align*}
-    Since \(\eta(x) \sqcap \Int(S) \neq \bot\) and \(\eta \sqsubseteq
-    \theta\), then \(\theta(x) \sqcap \Int(S) \neq \bot\). We can see
-    that
-    \begin{align*}
-      \eta \sqsubseteq \theta \iff & \concr(\eta) \subseteq \concr(\theta) \\
-      \iff & \{x\in\n \mid x \in \eta(\var)\} \subseteq \{x\in\n \mid x \in \theta(\var)\} \\
-      \iff & \{x\in\n \mid x \in \eta(\var)\} \cap \{x \in \n \mid x \in \Int(S)\} \subseteq \{x\in\n \mid x \in \theta(\var)\} \cap \{x \in \n \mid x \in \Int(S)\} \\
-      \iff & \{x \in \n \mid x \in \eta(\var) \wedge x \in \Int(S)\} \subseteq \{x \in \n \mid x \in \theta(\var) \wedge x \in \Int(S)\} \\
-      \iff & \{x \in \n \mid x \in \eta(\var) \sqcap \Int(S)\} \subseteq \{x \in \n \mid x \in \theta(\var) \sqcap \Int(S)\} \\
-      \iff & \concr[\Int](\eta[x\mapsto \eta(\var) \sqcap \Int(S)](\var)) \subseteq \concr[\Int](\theta[x\mapsto \theta(\var) \sqcap \Int(S)](\var)) \\
-      \iff & \semi{\var \in S}\eta \sqsubseteq \semi{\var \in S}\theta
-    \end{align*}
-  \item \(\com \equiv \tru\). Then \(\semi{\tru}\eta = \eta
-    \sqsubseteq \theta = \semi{\tru}\theta\);
-  \item \(\com \equiv \ff\). Then \(\semi{\ff}\eta = \bot \sqsubseteq
-    \bot = \semi{\ff}\theta\);
-  \item \(\com \equiv \var := k\). Then
-    \begin{align}\label{eq:implic}
-      \begin{split}
-        \eta \sqsubseteq \theta \iff & \concr[\Int](\eta) \subseteq \concr[\Int](\theta) \\
-        \iff & \{\rho\in\env \mid \forall \var \in \Var \rho(\var) \in \concr(\eta(\var))\} \subseteq \{\rho\in\env \mid \forall \var \in \Var \rho(\var) \in \concr(\theta(\var))\} \\
-        \iff & \forall \var \in \Var, \rho \in \env \quad \rho(\var) \in \concr(\eta(\var)) \Rightarrow \rho(\var) \in \concr(\theta(\var)) \\
-      \end{split}
-    \end{align}
-    Notice that \[\semi{\var := k}\eta =
-    \eta[\var\mapsto\interval{k}{k}]\] \[\semi{\var := k}\theta =
-    \theta[\var\mapsto\interval{k}{k}]\] because of equation
-    \ref{eq:implic} in this case we know that \(\forall \var[y]\in\Var
-    ,\; \var[y] \neq \var \; \rho(\var[y]) \in \concr(\eta(\var[y]))
-    \Rightarrow \rho(\var[y]) \in \concr(\theta(\var[y]))\). For
-    \(\var\) it holds that \(\rho(\var) \in \concr(\interval{k}{k})
-    \Rightarrow \rho(\var) \in \concr(\interval{k}{k})\) and therefore
-    \begin{align*}
-      \forall \var[y] \in \Var, \rho \in \env \quad & \rho(\var[y]) \in \concr(\eta[\var\mapsto\interval{k}{k}](\var[y])) \Rightarrow \rho(\var[y]) \in \concr(\theta[\var\mapsto\interval{k}{k}](\var[y])) \\
-      \iff & \concr[\Int](\semi{\var:=k}\eta) \subseteq \concr[\Int](\semi{\var:=k}\theta) \\
-      \iff & \semi{\var :=k}\eta \sqsubseteq \semi{\var := k}\theta
-    \end{align*}
-  \item For \(\com \equiv \var := \var[y] + k\) the procedure is the
-    same.
-  \end{itemize}
-
-  \noindent
-  \textbf{Recursive cases:}\ \\ \
-  \begin{itemize}
-  \item \(\com \equiv \com_1 + \com_2\). Then
-    \begin{align*}
-      \semi{\com_1 + \com_2}\eta & = \semi{\com_1}\eta \sqcup \semi{\com_2}\eta & \\
-      & \sqsubseteq \semi{\com_1}\theta \sqcup \semi{\com_2}\theta & \text{by inductive hp.} \\
-      & = \semi{\com_1 + \com_2}\theta
-    \end{align*}
-  \item \(\com \equiv \com_1 ; \com_2\). Then
-    \begin{align*}
-      \semi{\com_1;\com_2}\eta = \; & \semi{\com_2}(\semi{\com_1}\eta) & \\
-      & \alpha = \semi{\com_1}\eta \sqsubseteq \semi{\com_1}\theta = \beta & \text{by inductive hp.} \\
-      & \semi{\com_2}\alpha \sqsubseteq \semi{\com_2}\beta & \text{by inductive hp.} \\
-      & \semi{\com_2}(\semi{\com_1}\eta) \sqsubseteq \semi{\com_2}(\semi{\com_1}\theta) & \text{by substitution}
-    \end{align*}
-  \item \(\com^*\). What we first want to prove is that
-    \begin{equation*}
-      \forall i \in \n . \semi{\com}^i\eta \sqsubseteq
-      \semi{\com}^i\theta
-    \end{equation*}
-    To do so we can work by induction on \(i\):
-    \begin{itemize}
-    \item with \(i=0\) we have to prove that
-      \begin{equation*}
-        \semi{\com}^0 \eta \sqsubseteq \semi{\com}^0 \theta
-      \end{equation*}
-      since \(\semi{\com}^0 = id\) the statement is true by
-      hypothesis.
-    \item the inductive step is to prove the statement for \(i+1\)
-      with the hypothesis that it holds for \(i\).
-      \begin{align*}
-        \semi{\com}^{i+1} \eta & = \semi{\com}\left(\semi{\com}^{i} \eta \right) \\
-        \semi{\com}^{i+1} \theta & = \semi{\com}\left(\semi{\com}^{i} \theta \right)
-      \end{align*}
-      By inductive hypothesis on \(i\)
-      \(\semi{\com}^{i} \eta \sqsubseteq \semi{\com}^{i} \theta\),
-      while by inductive hypothesis on \(\com\)
-      \begin{equation*}
-        \semi{\com}\left( \semi{\com}^i\eta \right) \sqsubseteq
-        \semi{\com}\left( \semi{\com}^i\theta \right)
-      \end{equation*}
-      therefore
-      \begin{equation*}
-        \semi{\com}^{i+1} \eta = \semi{\com}\left( \semi{\com}^i\eta \right) \sqsubseteq \semi{\com}\left( \semi{\com}^i\theta \right) = \semi{\com}^{i+1} \theta
-      \end{equation*}
-      finally we can notice that \(\forall k\in\n\)
-      \begin{equation*}
-        \bigsqcup_{i=0}^k\semi{\com}^i\eta \sqsubseteq \bigsqcup_{i=0}^k\semi{\com}^i\theta
-      \end{equation*}
-      and therefore
-      \begin{equation*}
-        \semi{\com^*}\eta = \bigsqcup_{i\in\n}\semi{\com}^i\eta \sqsubseteq \bigsqcup_{i\in\n}\semi{\com}^i\theta = \semi{\com^*}\theta
-      \end{equation*}
-    \end{itemize}
-  \end{itemize}
-\end{proof}
+We can immediately see how in the abstract interval domain, the
+semantics of the Kleene star and the fixpoint operator is not the
+same. This intuitively happens because the kleene star is the least
+opper bound of a chain of interals, while the fix operator keeps
+iterating over least upper bounds.
 
 \begin{example} \label{ex:fix}
   This is the case, for instance, the following program \(P\)
@@ -345,7 +192,7 @@ precise concrete invariant \(\{0,1,3,4\}\), however the Kleene
 invariant is strictly more precise than the Fix one.
 \end{example}
 
-\begin{lemma}[\(\fix{\com}\) \textbf{is syntactic sugar}]\label{lemma-ss}
+\begin{lemma}[\(\fix{\com}\) \textbf{is syntactic sugar}]\label{le:sugar}
   For all \(\eta\),
   \(\semi{\fix{\com}} \eta = \semi{\kleene{(\tru + \com)}} \eta\).
 \end{lemma}
@@ -396,79 +243,6 @@ invariant is strictly more precise than the Fix one.
     \bigsqcup_{i \in \nat} (\tru \sqcup \semi{\com})^{i} \eta & = \\
     \semi{\kleene{(\tru + \com)}} \eta. &
   \end{align*}  
-\end{proof}
-
-
-\begin{theorem}[\textbf{Correctness}]
-  For all \(\com \in \imp\) and \(\eta\in \bA\),
-  \(\sem{\com}\concr(\eta) \subseteq \concr(\semi{\com}\eta)\) holds.
-\end{theorem}
-
-\begin{proof}
-  by induction on \(\com\in\imp\):
-  
-  \noindent
-  \paragraph*{Base cases:\\}
-  \begin{itemize}
-  \item \(\com \equiv \var \in S\):
-    \begin{itemize}
-    \item \(\sem{\var\in S}\concr[\Int](\eta) = \{\rho \in \env \mid
-      \forall y \in \Var \; \rho(y) \in \concr(\eta(y))\} \cap \{\rho
-      \in \env \mid \rho(\var) \in S\}\)
-    \item \(\concr[\Int](\semi{\var\in S}\eta) = \{\rho \in \env \mid
-      \forall y \in \Var \; \rho(y) \in \concr(\eta(y))\} \cap \{\rho
-      \in \env \mid \rho(\var) \in \Int(S)\}\)
-    \end{itemize}
-    \(S\) is just decidable, not directly an interval, therefore in
-    general \(S \subseteq \Int(S)\), and therefore \[\sem{\var \in
-      S}\concr[\Int](\eta) \subseteq \concr[\Int](\semi{\var\in
-      S}\eta);\]
-  \item \(\com \equiv \var \in \interval{a}{b}, \var \leq k, \var >
-    k\): is the same as the latter case;
-  \item \(\com \equiv \tru\): \(\sem{\tru}\concr[\Int](\eta) =
-    \concr[\Int](\eta)\), \(\concr[\Int](\semi{\tru}\eta) =
-    \concr[\Int](\eta)\), and since \(\concr[\Int](\eta) \subseteq
-    \concr[\Int](\eta)\) \[\sem{\tru}\concr[\Int](\eta) \subseteq
-    \concr[\Int](\semi{\tru}\eta);\]
-  \item \(\com \equiv \ff\): \(\sem{\ff}\concr[\Int](\eta) =
-    \emptyset\), \(\concr[\Int](\semi{\ff}\eta) = \emptyset\) and
-    therefore \[\sem{\ff}\concr[\Int](\eta) \subseteq
-    \concr[\Int](\semi{\ff}\eta);\]
-  \item \(\com \equiv \var := k\) therefore \(\sem{\var := k}
-    \concr[\Int](\eta) = \{\rho \in \env \mid \forall y\in \Var . y
-    \neq \var \Rightarrow \rho(y) \in \concr(\eta(y)), \rho(\var) \in
-    \concr(\eta(\var) + k)\} = \concr[\Int](\semi{\var := k}\eta)\)
-    therefore \[\sem{\var := k} \concr[\Int](\eta) \subseteq
-    \concr[\Int](\semi{\var := k}\eta);\]
-  \item \(\com \equiv \var := \var[y] + k, \var := \var[y] - k\) is
-    the same as the latter case.
-  \end{itemize}  
-  \noindent
-  \paragraph*{Inductive cases:\\}
-  \begin{itemize}
-  \item \(\com \equiv \com_1 + \com_2\), therefore \[\sem{\com_1 +
-        \com_2}\concr[\Int](\eta) = \sem{\com_1}\concr[\Int](\eta) \cup
-      \sem{\com_2}\concr[\Int](\eta)\] and \[\concr[\Int](\semi{\com_1 +
-        \com_2}\eta) = \concr[\Int](\semi{\com_1}\eta \sqcup
-      \semi{\com_2}\eta) = \concr[\Int](\semi{\com_1}\eta) \cup
-      \concr[\Int](\semi{\com_2}\eta).\] By inductive hypothesis both
-    \(\sem{\com_1}\concr[\Int](\eta) \subseteq
-    \concr[\Int](\semi{\com_1}\eta)\) and
-    \(\sem{\com_2}\concr[\Int](\eta) \subseteq
-    \concr[\Int](\semi{\com_2}\eta)\), therefore \[\sem{\com_1 +
-        \com_2}\concr[\Int](\eta) \subseteq \concr[\Int](\semi{\com_1 +
-        \com_2}\eta);\]
-  \item \(\com \equiv \com_1 ; \com_2\), therefore
-    \(\sem{\com_1;\com_2}\concr[\Int](\eta) =
-    \sem{\com_2}(\sem{\com_1}\concr[\Int](\eta))\), while
-    \[\concr[\Int](\semi{\com_1; \com_2}\eta) =
-      \concr[\Int] (\semi{\com_2}( \semi{\com_1}\eta)).\]
-  \item \(\com \equiv \com^*\), therefore
-    \(\sem{\com^*}\concr[\Int](\eta) =
-    \bigcup_{i\in\n}\sem{\com}^i\concr[\Int](\eta)\), while
-    \(\concr[\Int](\semi{\com^*}\eta) =
-    \concr[\Int](\bigsqcup_{i\in\n}\semi{\com^*}\eta)\)
-  \end{itemize}
 \end{proof}
 
 \begin{remark}

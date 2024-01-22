@@ -5,14 +5,13 @@ express such programs. We define the \(\imp\) language, made of
 regular commands and based on Kozen’s Kleene algebra with tests,
 described in \cite{kozen1997kleene}.  We denote by \(\n\) the set of
 naturals with the usual order, extended with the top element
-\(+\infty\), s.t.  \(n \leq +\infty \quad \forall n \in \n\). We also
-extend addition and subtraction by letting, for
-\(z \in \n \quad +\infty + z = + \infty - z = + \infty\) and if
-\(n \leq m\) \(n - m = 0\).  We focus on the following
-non-deterministic language.
+\(+\infty\), s.t.  \(n \leq +\infty\) for all \(n \in \n\). We also
+extend addition and subtraction by letting, for \(z \in \n\) it holds
+that \(+\infty + z = + \infty - z = + \infty\) and if \(n \leq m\)
+then \(n - m = 0\).  We focus on the following non-deterministic
+language.
 \begin{align*}
-  \expr \ni \com[e] ::= & \; \var \in S \mid \tru \mid \ff \mid \var := k \mid \var := \var[y] + k \\
-                        %% & \;  \mid \var := \var[y] - k \\
+  \expr \ni \com[e] ::= & \; \var \in S \mid \tru \mid \ff \mid \var := k \mid \var := \var[y] + k \mid \var := \var[y] - k \\
   \imp\starless \ni \com[D] ::= & \; \com[e] \mid \com[D + D] \mid \com[D ; D] \\
   \imp \ni \com[C] ::= & \; \com[D] \mid \com + \com \mid \com ; \com \mid \com^* \mid \fix{\com}
 \end{align*}

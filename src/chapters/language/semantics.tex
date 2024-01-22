@@ -28,6 +28,8 @@ program \emph{execution}.% The first building block are
     \bsem{\var:= \var[y] + k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) + k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
     \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
   \end{align*}
+  where with \(\smashed{\env}\) we mean \(\env \cup \{\bot\}\), the
+  smashed bottom in the \(\env\) lattice.
 \end{definition}
 
 The next building block is the concrete collecting semantics for the
@@ -35,7 +37,7 @@ language, it associates each program in \(\imp\) to a function which,
 given a set of initial environments \(X\) ``collects'' the set of
 final states produced by executing the program from \(X\).
 
-\begin{definition}[Concrete collecting semantics]
+\begin{definition}[Concrete collecting semantics]\label{de:concretesem}
   Let \(\dom \defin \langle \poset{\env} , \subseteq \rangle\) be a
   complete lattice called \emph{concrete collecting domain}. The
   \emph{concrete collecting semantics} for \(\imp\) is given by the
@@ -224,7 +226,7 @@ the fixpoint (\(\fix{\com}\)) have the same concrete semantics
   \sem{\com}Y\right)\) and recall that \(f^0 X = X\) and 
 \(f^{n+1} X = X \cup \sem{\com}\left(f^n X\right)\).
 \begin{align*}
-  \sem{\fix{\com}}X = \lfp(f) & = \bigcup \{ f^n \; \bot \mid n \in \n \} & \text{by Knaster-Tarsky theorem} \\
+  \sem{\fix{\com}}X = \lfp(f) & = \bigcup \{ f^n \; \bot \mid n \in \n \} & \text{by fixpoint theorem (\ref{th:fixpoint})} \\
                               & = \bigcup_{i\in\n} \left( X \cup \sem{\com}^iX \right) & \text{by definition} \\
                               & = X \cup \left( X \cup \sem{\com}X \right) \cup \left( X \cup \sem{\com}X \cup \sem{\com}^2X \right) \cup \dots \\
                               & = \bigcup_{i\in\n} \sem{\com}^i X \\

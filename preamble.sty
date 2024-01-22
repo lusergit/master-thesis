@@ -18,6 +18,9 @@
 \RequirePackage[normalem]{ulem}
 \RequirePackage{amssymb}
 \RequirePackage{capt-of}
+% \let\originallhook\lhook
+% \RequirePackage{MnSymbol}
+% \let\lhook\originallhook
 \RequirePackage{stmaryrd}
 \RequirePackage{amsthm}
 \RequirePackage{mathtools}
@@ -101,3 +104,10 @@
 }
 \makeatother
 
+\makeatletter
+\newsavebox{\@brx}
+\newcommand{\lla}[1][]{\savebox{\@brx}{\(\m@th{#1\langle}\)}%
+  \mathopen{\copy\@brx\kern-0.5\wd\@brx\usebox{\@brx}}}
+\newcommand{\rra}[1][]{\savebox{\@brx}{\(\m@th{#1\rangle}\)}%
+  \mathclose{\copy\@brx\kern-0.5\wd\@brx\usebox{\@brx}}}
+\makeatother

@@ -1,11 +1,14 @@
 \section{Functions in Imp}\label{sec:functionsimp}
-In the following section we argue that the set of functions is at
-least a superset of the partially recursive functions described in
-\cite{cutland1980computability}. This way we can derive some results
-from well known computability results, without proving them from
-scratch. We can do this by encoding partial recursive functions into
-Imp programs.  Partial recursive functions are functions
-\(\partialrec[k]\) with arity \(k\):
+Last section defined the language we are working with (the \(\imp\)
+language), its semantics and its transition system. Building upon
+those elements, we now present the first properties of the
+language. More in detail, in the following section we argue that the
+set of functions is at least a superset of the partially recursive
+functions described in \cite{cutland1980computability}. This way we
+can derive some properties from well known computability results,
+without proving them from scratch. We can do this by encoding partial
+recursive functions into Imp programs.  We therefore start by better
+describing what we mean by partially recursive functions:
 \begin{definition}[Partially recursive functions]
   The class \(\partialrec[k]\) of \emph{partially recursive functions}
   is the least class of functions on the natural numbers which
@@ -259,8 +262,32 @@ functions, \(\partialrec \subseteq \imp_f\) holds. Therefore we can
 say \[f \in \partialrec[k] \Rightarrow \exists \com \in \imp \mid
 \trans{\com}{\rho}\ahalts b \iff f(a_1, \dots, a_k) \downarrow b\]
 with \(\rho = \envi{\var_1 \mapsto a_1, \dots, \var_k \mapsto a_k}\).
-From this we get a couple of facts that derive from well known
-computability results:
+
+The final step is to recall the Rice theorem from
+\cite{rice1953classes} and the definition of saturated sets:
+
+\begin{definition}[Saturated set]
+  \(A \subseteq \n\) is \emph{saturated} (or \emph{extensional}) is
+  for all \(x,y\in\n\)
+  \begin{equation*}
+    x \in A \wedge \varphi_x = \varphi_y \Rightarrow y \in A
+  \end{equation*}
+\end{definition}
+
+In other words a set is saturated if it contains all the numbers that
+encode for programs that compute functions with some
+properties. Rice's theorem links extensional sets and decidability:
+
+\begin{theorem}[Rice's theorem]
+  Let \(A\subseteq \n\), \(A\neq \emptyset, A \neq \n\) be a saturated
+  set. Then \(A\) is not recursive.
+\end{theorem}
+
+Meaning that deciding weather a program is in some saturaed set, i.e.,
+the program has some extensional property, is impossible.  From this
+we get a couple of facts that derive from well known computability
+results:
+
 \begin{corollary}
   \(\trans{\com}{\rho} \nahalts\) (i.e., \(\sem{C}\rho = \emptyset\)) is
   undecidable.

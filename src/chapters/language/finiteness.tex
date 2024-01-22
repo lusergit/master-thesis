@@ -107,11 +107,11 @@ amount of finite derivation sequences.
     \begin{lemma}\label{le:contain}
       Let \(\com[D] \in \imp\starless\) \(\rho \in \env\). If
       \begin{equation}\label{eq:hp}
-        \sem{D}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho \quad \text{for some } k \in \n
+        \sem{D}^{k+1}\rho \subseteq \bigcup_{i=0}^k\sem{D}^i\rho \quad \text{for some } k \in \n
       \end{equation}
       then
       \begin{equation}\label{eq:what}
-        \forall j \in \n \quad \sem{D}^{k+1+j}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho
+        \forall j \in \n \quad \sem{D}^{k+1+j}\rho \subseteq \bigcup_{i=0}^k\sem{D}^i\rho
       \end{equation}
       and therefore
       \(\sem{\com[D]^*}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\)
@@ -289,8 +289,8 @@ amount of finite derivation sequences.
       sequence starting from \(\trans{\com[D]^*}{\rho}\). It must be
       that \(\forall i,j \in \n\) \(i \neq j\), \(\rho_i \neq \rho_j\)
       with \(\rho_0 = \rho\), otherwise there would be a cycle, which
-      is not the case by hypothesis. Therefore the derivation sequence
-      would have the shape
+      would contraddict the hypothesis. Therefore the derivation
+      sequence has the shape
       \begin{equation*}
         \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho_1} \to^* \stt{\com[D]^*, \rho_2} \to^* \stt{\com[D]^*, \rho_3} \to^* \dots
       \end{equation*}
@@ -300,5 +300,44 @@ amount of finite derivation sequences.
       \(\rho'\in \sem{\com[D]^*}\rho\). This would mean that
       \(\sem{\com[D]^*}\rho\) is infinite, which is absurd.
     \end{itemize}
+
+    To conclude we can observe that there is a finite amount of
+    reachable states from \(\stt{\com[D]^*, \rho}\). Where by reachable
+    we mean that there exists some derivation sequence ending up in
+    that state.
+
+    We can notice that starting from any state
+    \(\stt{\com[D]^*, \rho'}\) with \(\rho'\in \sem{\com[D]^*}\rho\)
+    we have 2 possibilities:
+    \begin{itemize}
+    \item we either apply the \starfix rule, resulting in a finite
+      derivation sequence
+      \begin{equation*}
+        \stt{\com[D]^*, \rho'} \to \rho'
+      \end{equation*}
+      and therefore in a finite number of reached states;
+    \item or we apply the star rule
+      \begin{equation*}
+        \stt{\com[D]^*, \rho'} \to \stt{\com[D];\com[D]^*, \rho'}
+      \end{equation*}
+      by lemma~\ref{le:finiteness} we know that
+      \(\trans{\com[D]}{\rho'}\ahalts\) and
+      \(\sizeof{\trans{\com[D]}{\rho'}} < \infty\), therefore there is
+      a finite number of environments \(\rho''\)
+      s.t. \(\stt{\com[D],\rho'} \to^* \rho''\). For each one of them
+      we can use the composition lemma and observe that
+      \begin{equation*}
+        \stt{\com[D];\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''}
+      \end{equation*}
+      Ending up in a state \(\stt{\com[D]^*, \rho''}\) where we can
+      apply the same reasoning
+    \end{itemize}
+    Therefore starting from any state \(\stt{\com[D]^*, \rho'}\) with
+    \(\rho'\in \sem{\com[D]^*}\rho\) (in particular \(\rho\)), we
+    either terminate our derivation sequence or we end up in some
+    state \(\stt{\com[D]^*, \rho'}\) again, with
+    \(\rho'\in\sem{\com[D]^*}\rho\). Since there is a finite amount of
+    states \(\rho'\in\sem{\com[D]^*}\rho\), the number of reachable
+    states from \(\trans{\com[D]^*}{\rho}\) is finite.
   \end{itemize}
 \end{proof}

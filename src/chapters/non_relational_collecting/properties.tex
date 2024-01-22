@@ -1,0 +1,109 @@
+\section{Properties}
+\label{sec:NRPorperties}
+
+We can notice that the semantics we just defined has some properties
+similar to the interval semantics but also the concrete collecting
+semantics from Definition \ref{de:concretesem}. The main property is
+additivity, which we lost with the interval semantics and got back
+with the non-relational collecting:
+
+\begin{lemma}[Additivity]
+  Let \(\eta, \theta \in \bCnr\), \(\com\in\imp\) then
+  \begin{equation*}
+    \semnr{\com}\left(\eta \sqcup \theta\right) = \left(\semnr{\com}\eta\right) \sqcup \left(\semnr{\com}\theta\right)
+  \end{equation*}
+\end{lemma}
+
+\begin{proof}
+  We can work by induction on \(\com\):
+  \paragraph*{Base cases: \\}
+  \noindent
+  \begin{itemize}
+  \item \(\com \equiv \var \in S\). Then
+    \begin{align*}
+      \semnr{\var \in S}(\eta \sqcup \theta) & = (\eta \sqcup \theta)[\var \mapsto (\eta \sqcup \theta)\var \cap S] \\
+                                             & = (\eta \sqcup \theta)[\var \mapsto (\eta\var \cap S) \cup (\theta\var \cap S)] \\
+                                             & = (\eta[\var \mapsto (\eta\var \cap S)]) \sqcup (\theta[\var \mapsto \theta\var \cap S]) \\
+                                             & = \semnr{\var \in S}\eta \sqcup \semnr{\var \in S}\theta
+    \end{align*}
+    
+  \item \(\com \equiv \tru\). Then observe that
+    \(\semnr{\tru}(\eta \sqcup \theta) = \eta \sqcup \theta =
+    \semnr{\tru}\eta \sqcup \semnr{\tru}\theta\)
+  \item \(\com \equiv \tru\). Then observe that
+    \(\semnr{\ff}(\eta \sqcup \theta) = \bot = \semnr{\ff}\eta \sqcup
+    \semnr{\ff}\theta\)
+  \item \(\com \equiv \var := k\). Then
+    \begin{align*}
+      \semnr{\var := k}(\eta \sqcup \theta) & = (\eta \sqcup \theta)[\var \mapsto \{k\}] \\
+                                            & = (\eta[\var \mapsto \{k\}]) \sqcup (\theta[\var \mapsto \{k\}]) \\
+                                            & = \semnr{\var := k}\eta \sqcup \semnr{\var := k}\theta
+    \end{align*}
+  \item \(\com \equiv \var := \var[y] + k\). Then
+    \begin{align*}
+      \semnr{\var := \var[y] + k}(\eta \sqcup \theta) & = (\eta \sqcup \theta)[\var \mapsto \var[y] + k] \\
+                                                      & = (\eta[\var \mapsto \var[y] + k]) \sqcup (\theta \mapsto \var[y] + k) \\
+                                                      & \semnr{\var := \var[y] + k}\eta \sqcup \semnr{\var := \var[y] + k}\theta
+    \end{align*}
+  \item \(\com \equiv \var := \var[y] - k\). Is analogous to the
+    latter case.
+  \end{itemize}
+
+  \paragraph*{Recursive cases: \\}
+  \begin{itemize}
+  \item \(\com \equiv \com_1 + \com_2\). Then
+    \begin{align*}
+      \semnr{\com_1 + \com_2}(\eta \sqcup \sigma) & = \semnr{\com_1}(\eta \sqcup \sigma) \sqcup \semnr{\com_2}(\eta \sqcup \sigma) & \text{by definition}\\
+                                                  & = \semnr{\com_1}\eta \sqcup \semnr{\cup_1}\theta \sqcup \semnr{\com_2}\eta \sqcup \semnr{\cup_2}\theta & \text{by inductive hypothesis} \\
+                                                  & = \semnr{\com_1 + \com_2}\eta \sqcup \semnr{\com_1 + \com_2}\theta
+    \end{align*}
+  \item \(\com \equiv \com_1 ; \com_2\). Then
+    \begin{align*}
+      \semnr{\com_1 ; \com_2}(\eta \sqcup \sigma) & = \semnr{\com_2}(\semnr{\com_1}(\eta \sqcup \theta)) \\
+                                                  & = \semnr{\com_2}\left(\semnr{\com_1}\eta \sqcup \semnr{\cup_1}\theta\right) & \text{by inductive hypothesis} \\
+                                                  & = \semnr{\com_2}(\semnr{\com_1}\eta) \sqcup \semnr{\com_2}(\semnr{\com_1}\theta) & \text{by inductive hypothesis}
+    \end{align*}
+  \item \(\com \equiv \com^*\). Then
+    \begin{equation*}
+      \semnr{\com^*}(\eta\sqcup\theta) = \textstyle \bigsqcup_{i\in\n} \semnr{\com}^i(\eta \sqcup \theta) \\
+    \end{equation*}
+    What we have to show now is that \(\forall i \in \n\)
+    \(\semnr{\com}^i(\eta \sqcup \theta) = \semnr{\com}^i \eta \sqcup
+    \semnr{\com}^i\theta\). We can show this by induction on \(i\):
+    \begin{itemize}
+    \item \(i=0\). Then
+      \begin{equation*}
+        \semnr{\com}^0(\eta\sqcup\theta) = \eta\sqcup\theta = \semnr{\com}^0\eta \sqcup \semnr{\com}^0\theta
+      \end{equation*}
+      and the statement holds.
+    \item \(i \Rightarrow i + 1\). Notice that
+      \begin{align*}
+        \semnr{\com}^{i+1}(\eta \sqcup \theta) & = \semnr{\com}\left(\semnr{\com}^i(\eta \sqcup \theta)\right) \\
+                                               & = \semnr{\com}(\semnr{\com}^i\eta \sqcup \semnr{\com}^i\theta) & \text{by inductive hypothesis} \\
+        & = \semnr{\com}^{i+1}\eta \sqcup \semnr{\com}^{i+1}\theta & \text{by additivity}
+      \end{align*}
+    \end{itemize}
+    Therefore
+    \begin{align*}
+      \semnr{\com^*}(\eta\sqcup\theta) & = \textstyle \bigsqcup_{i\in\n} \semnr{\com}^i(\eta \sqcup \theta) \\
+                                       & = \textstyle \bigsqcup_{i\in\n}\semnr{\com}^i(\eta \sqcup \theta) \\
+                                       & = \textstyle \bigsqcup_{i\in\n}\semnr{\com}^i\eta \sqcup \semnr{\com}^i\theta \\
+                                       & = \left(\textstyle \bigsqcup_{i\in\n} \semnr{\com}^i\eta\right) \sqcup \left(\textstyle \bigsqcup_{i\in\n} \semnr{\com}^i\theta\right) \\
+      & = \semnr{\com^*} \eta \sqcup \semnr{\com^*}\theta
+    \end{align*}
+  \end{itemize}
+\end{proof}
+
+Again, because of additivity we can notice that the analysis of the
+fixpoint and the kleene star is the same. Let
+\(f = \lambda \mu . (\eta \sqcup \semnr{\com}\mu)\)
+\begin{align*}
+  \semnr{\fix{\com}}\eta & = \lfp(f) \\
+                         & = \bigsqcup_{i\in\n}\{f^n\bot \mid n \in \n\} & \text{by fixpoint theorem \ref{th:fixpoint}}\\
+                         & = \eta \sqcup (\eta \sqcup \semnr{\com}\eta) \sqcup \dots & \text{by definition}\\
+                         & = \bigsqcup_{i\in\n}\semnr{\com}^i\eta \\
+                         & = \semnr{\com^*}\eta
+\end{align*}
+
+therefore we will omit one of the two cases based on preference and
+ease of reading, but in reality they are the same
