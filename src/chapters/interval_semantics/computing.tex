@@ -1,4 +1,5 @@
 \section{Computing the interval semantics} 
+\label{sec:computingint}
 
 In this section we argue that for the language \(\imp\) the interval
 abstract semantics is computable in finite time without widening.
@@ -120,7 +121,8 @@ respect to that variable becomes stable. % We also introduce an
   \(\com\).
 \end{definition}
 
-Bounds 
+In order to compute the bound of a program we introduce bounded
+environments, that we'll later use for lemma~\ref{le:computebounds}
 
 \begin{definition}[\textbf{Bound Environment}]
   \label{de:boundenv}
@@ -168,7 +170,7 @@ Bounds
   in \(\com\).
 \end{definition}
 
-\begin{lemma}
+\begin{lemma}\label{le:computebounds}
   For all \(\com \in \imp\), \(\bound{\com}=\sum_{\var\in \vars{\com}}
   (\boundt{\com}b_0)(\var)\), with \(b_0\veq \lambda x.0\).
 \end{lemma}

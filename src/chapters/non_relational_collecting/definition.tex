@@ -5,14 +5,13 @@ We first define \emph{non-relational collecting} analysis the the
 \(\imp\) language in a standard way.
 
 \begin{definition}
-  Let
+  Let \(\Int_c \defin \poset{\n} \setminus \{\emptyset\}\) and
   \begin{equation*}
-    \envnr \defin \{\eta \mid \eta: \Var \to \poset{\n}\setminus
-    \{\emptyset\}\} \cup \{\bot\}
+    \envnr \defin \{\eta \mid \eta: \Var \to \Int_c\} \cup \{\bot\}
   \end{equation*}
   The nonrelational collecting domain is the complete lattice
   \(\bCnr \defin \tuple{\envnr,\dot{\subseteq}}\) where for all
-  \(\eta,\eta':\Var \to \poset{\n} \setminus \{\emptyset\}\)
+  \(\eta,\eta':\Var \to \Int_c\)
   \begin{align*}
     \bot & \mathrel{\dot{\subseteq}} \eta\\
     \eta & \mathrel{\dot{\subseteq}} \eta' & \text{ if }\quad \forall
@@ -63,7 +62,7 @@ elements of \(\bCnr\):
 
 finally we can define non relational collecting analysis.
 
-\begin{definition}[Non-Relational collecting semantics]
+\begin{definition}[Non-Relational collecting semantics]\label{def:nonrel}
   The \emph{Non-Relational collecting semantics} of \(\imp\), is the
   strict (i.e., preserving \(\bot\))
   % and co-strict (i.e., preserving \(\top\))
@@ -75,9 +74,7 @@ finally we can define non relational collecting analysis.
     \semnr{\var \in S}\eta 
     & \defin  
       \begin{cases}
-        \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if
-                                                              }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
-                                                                                                                   \text{otherwise}
+        \eta[\var \mapsto \eta(\var)\cap S] & \text{if }\eta(\var)\cap S\neq \bot \\ \bot & \text{otherwise}
       \end{cases}\\
     \semnr{\tru}\eta 
     & \defin \eta\\

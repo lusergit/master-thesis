@@ -9,7 +9,8 @@ can derive some properties from well known computability results,
 without proving them from scratch. We can do this by encoding partial
 recursive functions into Imp programs.  We therefore start by better
 describing what we mean by partially recursive functions:
-\begin{definition}[Partially recursive functions]
+\begin{definition}[Partially recursive
+  functions]\label{def:partialrec}
   The class \(\partialrec[k]\) of \emph{partially recursive functions}
   is the least class of functions on the natural numbers which
   contains
@@ -88,8 +89,8 @@ We also need to define what we mean by program output.
   Let \(\env \ni \rho = \envi{\var_1\mapsto a_1, \dots, \var_n \mapsto
     a_n}\). We say
   \begin{align*}
-    \trans{\com}{\rho}\ahalts[b] \iff & \forall \rho' \mid \stt{\com, \rho} \to^* \rho' \quad \rho'(\var[y]) = b \\
-    \trans{\com}{\rho}\ehalts[b] \iff & \exists \rho' \mid \stt{\com, \rho} \to^* \rho' \quad \rho'(\var[y]) = b
+    \stt{\com, \rho}\ahalts[b] \iff & \forall \rho' \mid \stt{\com, \rho} \to^* \rho' \quad \rho'(\var[y]) = b \\
+    \stt{\com, \rho}\ehalts[b] \iff & \exists \rho' \mid \stt{\com, \rho} \to^* \rho' \quad \rho'(\var[y]) = b
   \end{align*}
   \(\com\) universally (partially) halts on \(b\) whenever for every
   (for some) final state \(\rho\) \(\rho(\var[y]) = b\). In other
@@ -124,7 +125,8 @@ class of functions computed by the \(\imp\) language is a \emph{rich}
 \begin{definition}[Rich class]
   A class of functions \(\mathcal{A}\) is said to be rich if it
   includes \ref{parec:a},\ref{parec:b} and \ref{parec:c} and it is
-  closed under \ref{parec:1}, \ref{parec:2} and \ref{parec:3}.
+  closed under \ref{parec:1}, \ref{parec:2} and \ref{parec:3} from
+  Definition~\ref{def:partialrec}.
 \end{definition}
 
 \begin{lemma}[Imp functions richness]
@@ -260,7 +262,7 @@ class of functions computed by the \(\imp\) language is a \emph{rich}
 Since it is rich and \(\partialrec\) is the least class of rich
 functions, \(\partialrec \subseteq \imp_f\) holds. Therefore we can
 say \[f \in \partialrec[k] \Rightarrow \exists \com \in \imp \mid
-\trans{\com}{\rho}\ahalts b \iff f(a_1, \dots, a_k) \downarrow b\]
+\stt{\com, \rho}\ahalts b \iff f(a_1, \dots, a_k) \downarrow b\]
 with \(\rho = \envi{\var_1 \mapsto a_1, \dots, \var_k \mapsto a_k}\).
 
 The final step is to recall the Rice theorem from
@@ -289,7 +291,7 @@ we get a couple of facts that derive from well known computability
 results:
 
 \begin{corollary}
-  \(\trans{\com}{\rho} \nahalts\) (i.e., \(\sem{C}\rho = \emptyset\)) is
+  \(\stt{\com, \rho} \nahalts\) (i.e., \(\sem{C}\rho = \emptyset\)) is
   undecidable.
 \end{corollary}
 
@@ -297,15 +299,15 @@ results:
   The set of functions \(f\in \partialrec[k]\) s.t.
   \(f(x) \uparrow \forall x \in \n^k\) is not trivial and saturated,
   therefore it is not recursive by Rice's theorem
-  \cite{rice1953classes}
+  \cite{rice1953classes}.
 \end{proof}
 
 \begin{corollary}
-  \(\trans{\com}{\rho} \ahalts\) is undecidable.
+  \(\stt{\com, \rho} \ahalts\) is undecidable.
 \end{corollary}
 \begin{proof}
   The set of functions \(f\in \partialrec[k]\) s.t.
   \(f(x) \downarrow \forall x \in \n^k\) is not trivial and saturated,
   therefore it is not recursive by Rice's theorem
-  \cite{rice1953classes};
+  \cite{rice1953classes}.
 \end{proof}

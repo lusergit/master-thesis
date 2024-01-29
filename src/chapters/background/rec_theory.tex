@@ -1,18 +1,18 @@
 \section{Recursion theory}
 \label{sec:recursionth}
-Following \cite{ranzato:analysis}, we'll provide the general
-terminology and notation fr computable functions in recursion theory,
-as in
-\cite{cutland1980computability,odifreddi1992classical,rogers1987theory}.
+This first section aims to provide background and terminology for the
+parts in recursion theory that will follow. More in detail, we'll take
+some notation from \cite{cutland1980computability} and introduce some
+new notation based on the same book.
 
-\begin{definition}[Total functions]
-  Let \(X,Y\) be two sets. Then \[X \to Y\] is the set of all total
-  functions from \(X\) to \(Y\).
-\end{definition}
+We start with functions: total and partial functions are essential to
+recursion theory:
 
-\begin{definition}[Partial functions]
-  Let \(X,Y\) be two sets. Then \[X \hto Y\] is the set of all partial
-  functions from \(X\) to \(Y\).
+\begin{definition}[Total and partial functions]
+  Let \(X,Y\) be two sets. We denote by \[X \to Y\] the set of all
+  total functions from \(X\) to \(Y\).  And by
+  \[X \hto Y\] the set of all partial functions from \(X\) to
+  \(Y\).
 \end{definition}
 \noindent
 
@@ -20,9 +20,10 @@ Partial functions are actually functions from a subset
 \(S \subseteq X\) which is called the \emph{natural domain} of \(f\)
 
 \begin{definition}[Domain of partial functions]
-  Let \(f : X \hto Y\). \(f(x)\downarrow\) means that \(f\) is defined
-  on \(x\), \(f(x)\uparrow\) means that \(f\) is undefined on
-  \(x\). Hence \[dom(f) = \{x \in X \mid f(x)\downarrow\}\]
+  Let \(f : X \hto Y\). We write \(f(x)\downarrow\) to indicate that
+  \(f\) is defined on \(x\), and \(f(x)\uparrow\) to indicate that
+  \(f\) is undefined on \(x\). Hence
+  \[dom(f) = \{x \in X \mid f(x)\downarrow\}\]
 \end{definition}
 
 % \begin{notation}[Implication overloading]
@@ -36,34 +37,28 @@ Partial functions are actually functions from a subset
 % \end{notation}
 
 We then need, mostly in section \ref{sec:functionsimp} to talk about
-partial recursive functions and their properties, namely the
-properties and conclusion that we derive from well known computability
-results. We therefore define partial recursive functions as follows:
+partial recursive functions and their properties. We therefore define
+partial recursive and total recursive functions as follows:
 
-\begin{notation}[Set of partial recursive functions]\label{bg:partialrec}
+\begin{notation}[partial and total recursive
+  functions]\label{bg:partialrec}
   By \(\partialrec[k]\) we denote the set of partial recursive
-  functions on natural numbers
-\end{notation}
-
-\begin{notation}[Set of total recursive functions]
-  By \(\n \tor \n\) we denote the set of partial recursive functions
-  on natural numbers
+  functions on natural numbers, while by \(\n \tor \n\) we denote the
+  set of partial recursive functions on natural numbers.
 \end{notation}
 
 We also need to talk about decidable properties and decidable sets. We
 therefore introduce the notion of recursive and recursively enumerable
 sets.
 
-\begin{definition}[Recursively enumerable set]
-  \(A \subseteq \n^k\) is \emph{recursively enumerable} (r.e. or
-  semi-decidable) if \(A = dom(f)\) for some \(f \in \partialrec[k]\)
-\end{definition}
-
-\begin{definition}[Recursive set]
-  \(A\subseteq \n\) is a recursive set if both \(A\) and its
+\begin{definition}[Recursively enumerable and recursive sets]
+  A set \(A \subseteq \n^k\) is \emph{recursively enumerable} (r.e. or
+  semi-decidable) if \(A = dom(f)\) for some \(f \in \partialrec[k]\).
+  
+  A set \(A\subseteq \n\) is a recursive set if both \(A\) and its
   complement \(\overline{A} = \n \setminus A\) are semi-decidable,
-  i.e., there exists some \(f \in \n \tor \n\) s.t. \[f = \lambda n
-  . (n \in A) ? 1 : 0\]
+  i.e., there exists some \(f \in \n \tor \n\) s.t.
+  \[f = \lambda n . (n \in A) ? 1 : 0\]
 \end{definition}
 
 \begin{lemma}[Computable function over a recursive set]\label{le:comprec}

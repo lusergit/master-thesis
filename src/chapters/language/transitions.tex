@@ -12,42 +12,45 @@ chapters.
   \begin{itemize}
   \item \(\state \cup \env\) is the set of configurations in the system;
   \item \(\env\) is the set of terminal states;
-  \item \(\to\) is the small step semantics defined in definition
-    \ref{def:sosem}, which describes the transition relations in the
-    system.
+  \item \(\to\) is the small step semantics defined in
+    Definition~\ref{def:sosem}, which describes the transition
+    relations in the system.
   \end{itemize}
 \end{definition}
 \noindent
 With the concept of derivation sequences we can define what we mean for
 \emph{partial} and \emph{universal} termination.
 \begin{definition}[Partial termination]
-  Let \(\com \in \imp, \rho \in \env\). \(\com\) \emph{partially
-    halts} on \(\rho\) when there's at least one derivation sequence of finite length
-  in the transition system \(\trans{\com}{\rho}\) ending up in some
-  state \(\rho'\):
-  \[ \trans{\com}{\rho} \ehalts \iff \exists k \in \n \mid \stt{\com,
+  Let \(\com \in \imp, \rho \in \env\). We say \(\com\)
+  \emph{partially halts} on \(\rho\) when there is at least one
+  derivation sequence of finite length in the transition system
+  starting with \(\stt{\com,\rho}\) and ending in some state
+  \(\rho'\):
+  \[ \stt{\com, \rho} \ehalts \iff \exists k \in \n \mid \stt{\com,
       \rho} \to^k \rho'.\] Dually
-  \[ \trans{\com}{\rho} \nahalts \iff \neg \; \trans{\com}{\rho}
+  \[ \stt{\com, \rho} \nahalts \iff \neg \; \stt{\com, \rho}
     \ehalts \] a program \emph{always loops} if there's no finite derivation sequence
   in its transition system that leads to a final environment.
 \end{definition}
 \begin{definition}[Universal termination]
-  Let \(\com \in \imp, \rho \in \env\). \(\com\) \emph{partially
-    loops} on \(\rho\) when there's at least one derivation sequence of infinite
-  length in the transition system \(\trans{\com}{\rho}\):
-  \[ \trans{\com}{\rho} \nehalts \iff \forall k \in \n \; \stt{\com,
+  Let \(\com \in \imp, \rho \in \env\). We say\(\com\) \emph{partially
+    loops} on \(\rho\) when there is at least one derivation sequence
+  of infinite length in the transition system tarting from
+  \(\stt{\com, \rho}\):
+  \[ \stt{\com, \rho} \nehalts \iff \forall k \in \n \; \stt{\com,
       \rho} \to^k \stt{\com', \rho'} \quad \text{for some }
     \com'\in\imp, \rho'\in\env.\] Dually
   \begin{equation*}
-    \trans{\com}{\rho} \ahalts \iff \neg \; \trans{\com}{\rho}
+    \stt{\com, \rho} \ahalts \iff \neg \; \stt{\com, \rho}
     \nehalts
   \end{equation*}
-  a program \emph{universally halts} iff there's no infinite derivation sequence in
+  a program \emph{universally halts} on \(\rho\) iff there is no
+  infinite derivation sequence starting from \(\stt{\com, \rho}\) in
   the transition systems.
 \end{definition}
 
-Example \ref{ex:partial} shows a program that partially halts, while
-example \ref{ex:neverhalts} shows a program that always loops.  Notice
+Example~\ref{ex:partial} shows a program that partially halts, while
+Example~\ref{ex:neverhalts} shows a program that always loops.  Notice
 that the absence of infinite derivation sequences implies that \(\trans{\com}{\rho}\)
 is finite.  Example \ref{ex:partial} shows a program that partially
 loops, while example \ref{ex:alwayshalt} shows a program that
@@ -66,10 +69,10 @@ universally halts.
   \begin{equation*}
     \var := 0;
   \end{equation*}
-  always halts, since \(\forall\rho \in \env, \rho \neq \bot\) builds
-  the transition system \[\stt{\var := 0, \rho} \to \rho[\var \mapsto
-    0]\] according to the expr rule in definition
-  \ref{def:sosem}. Therefore \(\trans{(\var := 0)}{\rho} \ahalts\)
+  it universally halts, since \(\forall\rho \in \env, \rho \neq \bot\)
+  \[\stt{\var := 0, \rho} \to \rho[\var \mapsto 0]\] according to the
+  expr rule in definition \ref{def:sosem}. Therefore
+  \(\stt{(\var := 0), \rho} \ahalts\)
   \(\forall \rho \in \env\setminus\{\bot\}\).
 \end{example}
 
@@ -109,11 +112,11 @@ universally halts.
 
 \begin{example}\label{ex:partial}
   Consider the program \[(\pplus{\var})^*\] it partially halts
-  (\(\trans{(\pplus{\var})^*}{\rho}\ehalts\)), as according to the
+  (\(\stt{(\pplus{\var})^*, \rho}\ehalts\)), as according to the
   transition rule star\(_{\text{fix}}\) \(\exists \rho \in \env\) s.t.
   \[\infer[\text{star}_{\text{fix}}]{\stt{(\pplus{\var})^*, \rho} \to
     \rho}{\rho \neq \bot}\] But it also partially loops
-(\(\trans{(\pplus{\var})^*}{\rho}\nehalts\)). In fact we can build the
+(\(\stt{(\pplus{\var})^*, \rho}\nehalts\)). In fact we can build the
 infinite derivation
 sequence\[\stt{(\pplus{\var})^*, \rho[\var\mapsto 0]} \to^*
   \stt{(\pplus{\var})^*, \rho[\var\mapsto 1]} \to^*

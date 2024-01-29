@@ -1,5 +1,22 @@
 \section{Computing Non-relational collecting}
-\label{sec:label}
+\label{sec:computingnonrel}
+
+In this section we argue that the same method we used in
+section~\ref{sec:computingint} can be appied to the non-relational
+collecting abstraction in order to compute it in finite time without
+widening and narrowing operators, and therefore solve the following
+problem
+
+\begin{problem}[Termination of non-relational
+  analysis]\label{p:nonrel}
+  Given \(\com\in\imp, \rho \in \bCnr\), decide
+  \(\semnr{\com}\rho =^? \top\)
+\end{problem}
+
+To do so we prove the same property of Lemma~\ref{le:inc}, this time
+for the non-relational collecting semantics of
+Definition~\ref{def:nonrel}, and therefore derive the decidability of
+Problem~\ref{p:nonrel}.
 
 \begin{lemma}
   \label{le:incnr}
@@ -83,17 +100,17 @@
     and thus the thesis follows with  \(\var[z]=\var[y]=\var[x]\) and \(h=0\).
   \end{itemize}  
   
-  \medskip
+  % \medskip
   
-  \noindent
-  \textbf{Case} (\(\tru\))
-  A consequence of the fact that \(\tru \equiv x\in \nat\). 
+  % \noindent
+  % \textbf{Case} (\(\tru\))
+  % A consequence of the fact that \(\tru \equiv x\in \nat\). 
 
-  \medskip
+  % \medskip
   
-  \noindent
-  \textbf{Case} (\(\ff\))
-  A consequence of the fact that \(\ff \equiv x\in \varnothing\). 
+  % \noindent
+  % \textbf{Case} (\(\ff\))
+  % A consequence of the fact that \(\ff \equiv x\in \varnothing\). 
   %
   %  Since \(\semnr{\ff}\eta = \bot\) and thus
   %  \begin{center}
@@ -533,7 +550,7 @@
   and
   \(\Sigma_{i=0}^m h_i \leq \bound{\fix{\com}}=(n+1)\bound{\com}\),
   otherwise we could use the same argument above for inferring the
-  contradiction \(p\semnr{\fix{\com}} \eta \var[y] = \infty\).
+  contradiction \(\semnr{\fix{\com}} \eta \var[y] = \infty\).
 
   \medskip
 
@@ -556,13 +573,13 @@ Lemma~\ref{le:incnr} provides an effective algorithm for computing the
 interval semantics of commands. More precisely, given a command
 \(\com\), the corresponding finite set of variables
 \(\Var_{\com} \veq \mathit{vars}(\com)\), and an interval environment
-\(\rho : \Var_{\com} \to \Int\), we define
+\(\rho : \Var_{\com} \to \poset{\z}_{\neq\emptyset}\), we define
 \[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
   \}.\]
 %
 Then, when computing \(\semnr{\fix{\com}} \rho\) on such \(\rho\)
 having a finite domain, we can restrict to a bounded interval domain
-\(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
+\(\bCnr_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
 \{ \top, \bot \}\) where
 \[
   \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \nat\ \land\
@@ -582,7 +599,7 @@ having a finite domain, we can restrict to a bounded interval domain
   % 
   % \semnr{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semnr{\com} \rho')
   % \sqcup \rho}
-  computed in \(\mathbb{A}\) and in \(\mathbb{A}_{\com,\rho}\)
+  computed in \(\bCnr\) and in \(\bCnr_{\com,\rho}\)
   coincide.
 \end{lemma}
 

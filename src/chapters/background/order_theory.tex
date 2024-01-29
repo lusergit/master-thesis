@@ -1,4 +1,5 @@
 \section{Order theory}
+\label{sec:ordertheory}
 
 Within Theoretical Computer Science, especially in the field of
 semantics, partial orders hold significant importance. They are
@@ -8,8 +9,8 @@ core notions. These notions include the idea of approximation, where
 certain analysis results may be less precise than others, creating a
 partial order where some results are incomparable. Moreover, partial
 orders are fundamental in conveying the concept of soundness: an
-analysis is deemed sound if its result is more general than the actual
-behavior. These mathematical notions, essential for discussions
+analysis is deemed sound if its result is an over-approximation of the
+actual behavior. These mathematical notions, essential for discussions
 surrounding the Abstract Interpretation formalism, primarily involve
 order and lattice theory.
 
@@ -31,25 +32,25 @@ order and lattice theory.
 \end{definition}
 
 \begin{definition}[Least upper bound]
-  Let \(\langle X, \sqsubseteq \rangle\) be a POSet and let \(Z
-  \subseteq X\). We say that \(\overline{z}\) is an \emph{upper bound}
-  on \(Z\) if \(\forall z \in Z\) \(z \sqsubseteq \overline{z}\). It
-  is the \emph{least upper bound} of \(Z\) (denoted as
-  \(\lubof[X]{Z}\)) if \(\forall z' \in Z\) upper bounds on \(Z\),
-  \(\overline{z} \sqsubseteq z'\).
+  Let \(\langle X, \sqsubseteq \rangle\) be a POSet and let
+  \(Z \subseteq X\). We say that \(\overline{z} \in Z\) is an
+  \emph{upper bound} of \(Z\) if \(\forall z \in Z\)
+  \(z \sqsubseteq \overline{z}\). It is the \emph{least upper bound}
+  of \(Z\) (denoted as \(\sqcup{Z}\)) if \(\forall z'\) upper bounds
+  of \(Z\), \(\overline{z} \sqsubseteq z'\).
 \end{definition}
 
 \begin{definition}[Greatest lower bound]
-  Let \(\langle X, \sqsubseteq \rangle\) be a POSet and let \(Z
-  \subseteq X\). We say that \(\overline{z}\) is a \emph{lower bound}
-  on \(Z\) if \(\forall z \in Z\) \(\overline{z} \sqsubseteq z\). It
-  is the \emph{greatest lower bound} of \(Z\) (denoted as
-  \(\glbof[X]{Z}\)) if \(\forall z' \in Z\) upper bounds on \(Z\), \(z'
-  \sqsubseteq \overline{z}\).
+  Let \(\langle X, \sqsubseteq \rangle\) be a POSet and let
+  \(Z \subseteq X\). We say that \(\overline{z}\in Z\) is a
+  \emph{lower bound} of \(Z\) if \(\forall z \in Z\)
+  \(\overline{z} \sqsubseteq z\). It is the \emph{greatest lower
+    bound} of \(Z\) (denoted as \(\sqcap{Z}\)) if \(\forall z'\) upper
+  bounds of \(Z\), \(z' \sqsubseteq \overline{z}\).
 \end{definition}
 
-Usually then we're talking about least and greatest lower bound the
-bigger set is often implicit, and we therefore simply write
+Usually then we are talking about least and greatest lower bound the
+host set is often implicit, and we therefore simply write
 \(\lubof{Z}\) and \(\glbof{Z}\).  In abstract interpretation we often
 rely on special kinds of POSets, where the existance of the greatest
 lower bound and the least upper bound is ensured for each subset of
@@ -136,7 +137,7 @@ function over a ccpo, provided that the function is continuous.
   partial order \(\tuple{D , \sqsubseteq}\) with the lest element
   \(\bot\). Then
   \begin{equation*}
-    \fix{f} = \sqcup\{f^n(\bot) \mid n \in \n\}
+    \lfp(f) = \sqcup\{f^n(\bot) \mid n \in \n\}
   \end{equation*}
   where
   \begin{itemize}

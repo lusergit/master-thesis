@@ -22,14 +22,13 @@ program \emph{execution}.% The first building block are
     % \bsem{\var\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(\var)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
     % \bsem{\var\leq k} \rho & \defin \begin{cases} \rho & \rho(\var)\leq k \\ \bot & \text{otherwise} \end{cases} \\
     % \bsem{\var> k} \rho & \defin \begin{cases} \rho & \rho(\var) > k \\ \bot & \text{otherwise} \end{cases} \\
-    \bsem{\tru} \rho & \defin \rho \\
-    \bsem{\ff} \rho & \defin \bot \\
+    % \bsem{\tru} \rho & \defin \rho \\
+    % \bsem{\ff} \rho & \defin \bot \\
     \bsem{\var:= k} \rho & \defin \rho [\var\mapsto k] \\
     \bsem{\var:= \var[y] + k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) + k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
     \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
   \end{align*}
-  where with \(\smashed{\env}\) we mean \(\env \cup \{\bot\}\), the
-  smashed bottom in the \(\env\) lattice.
+  where with \(\smashed{\env}\) we mean \(\env \cup \{\bot\}\).
 \end{definition}
 
 The next building block is the concrete collecting semantics for the
@@ -127,7 +126,7 @@ We can also observe that a program induces a monotone function in the
 concrete domain \(\dom\):
 
 \begin{lemma}
-  Given a program \(\com\in\imp\), the semantics function
+  Given a program \(\com\in\imp\), the semantic function
   \(\sem{\com} : \dom \to \dom\) is monotone.
 \end{lemma}
 
@@ -247,7 +246,7 @@ to \(\sem{\com}X\) as program \emph{invariant}.
 \begin{notation}[Singleton shorthand]
   Sometimes we need to consider the semantics over the singleton set
   \(\{\rho\}\). In these cases we will write \(\sem{\com}\rho\)
-  meaning \(\sem{\com}\{\rho\}\).
+  instead of \(\sem{\com}\{\rho\}\).
 \end{notation}
 
 %% \begin{definition}[Program length]
@@ -269,6 +268,8 @@ for the sake of simplicity.
   \var \in \interval{a}{b} & = \var \in S & \text{with } S = \interval{a}{b}, \text{ decidable}\\
   \var \leq k & = \var \in (-\infty, k]\\
   \var > k & = \var \in [k+1, + \infty) \\
+  \tru & = \var \in \n \\
+  \ff & = \var \in \emptyset \\
   \var \in S_1 \vee \var \in S_2 & = (\var \in S_1) + (\var \in S_2) \\ 
   \var \in S_1 \wedge \var \in S_2 & = (\var \in S_1);(\var \in S_2) \\
   \var \not\in S & = \var \in \neg S \\
@@ -326,9 +327,9 @@ environments.  With states we can define our small step semantics:
 In the following chapters we will usually use the following notation
 to talk about program execution:
 \begin{itemize}
-\item \(\to^+\) is the transitive closure of the \(\to\) relation;
-\item \(\to^*\) is the reflexive and transitive closure of the \(\to\)
-  relation.
+\item \(\to^+\) is the transitive closure of the relation \(\to\);
+\item \(\to^*\) is the reflexive and transitive closure of the
+  relation \(\to\).
 \end{itemize}
 \noindent
 With the following lemma we introduce a link between the small step
@@ -400,7 +401,7 @@ relation.
   \end{itemize}
 \end{proof}
 
-Notice that
+Note that
 \(\sem{C}X = \emptyset \iff \nexists \rho'\in\env, \rho \in X \mid
 \stt{\com[C],\rho} \to^* \rho'\), in other words the collecting
 semantics of some program \(\com\) starting from some states

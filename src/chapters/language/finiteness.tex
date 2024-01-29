@@ -1,26 +1,28 @@
 \section{Deciding invariant finiteness}\label{sec:finiteness}
 
 In this section we argue that even the finiteness of the semantics of
-some program on some initial states is undecidable. We show that by
-knowing whether \(\sem{\com}X\) is finite for some program
-\(\com\in\imp\) and some initial states \(X\in \dom\), we can decide
-whether \(\trans{\com}{\rho}\ahalts\) for all \(\rho \in X\). The
-first step is showing that if we have a program where the \(^*\)
-operator does not appear, then the program can only produce a finite
-amount of finite derivation sequences.
+some program on some initial states is undecidable. We show that if we
+were able to establish whether \(\sem{\com}X\) is finite for some
+program \(\com\in\imp\) and some initial states \(X\in \dom\), we
+could decide whether \(\stt{\com, \rho}\ahalts\) for all
+\(\rho \in X\), which instead is known to be undecidable. The first
+step is showing that if we have a program where the \(^*\) operator
+does not appear, then the program can only produce a finite amount of
+finite derivation sequences.
 
 \begin{lemma}\label{le:finiteness}
   If \(\com[D]\in\imp\starless\), and \(X \in \poset{env}\) is
   finite, then
-  \begin{enumerate}[label=(\roman*).]
-  \item \(\sem{D}X\) is finite;
-  \item \(\forall \rho \in X\) \(\trans{\com[D]}{\rho}\ahalts\)
-  \item \(\sizeof{\trans{\com[D]}{\rho}} < \infty\) for all
+  \begin{enumerate}[label=(\roman*).,ref=\thetheorem.(\roman*)]
+  \item\label{eq:fini} \(\sem{D}X\) is finite;
+  \item\label{eq:finii} \(\forall \rho \in X\) \(\stt{\com[D], \rho}\ahalts\)
+  \item\label{eq:finiii} \(\sizeof{\trans{\com[D]}{\rho}} < \infty\) for all
     \(\rho \in X\).
   \end{enumerate}
 
-  where by \(\sizeof{\trans{\com[D]}{\rho}}\) we mean the number of
-  derivation sequences starting from \(\stt{\com[D], \rho}\).
+  where by \(\trans{\com[D]}{\rho}\) we mean the set of all derivation
+  sequences starting from \(\stt{\com[D], \rho}\) in the transition
+  system.
 \end{lemma}
 
 \begin{proof}
@@ -50,16 +52,17 @@ amount of finite derivation sequences.
       finite, as they are sub expressions of \(\com[D]\). Since the
       union of finite sets is finite, \(\sem{D_1 + D_2}X\) is finite;
     \item by inductive hypothesis again \(\forall \rho \in X\)
-      \(\trans{\com[D]_1}{\rho}\ahalts\) and
-      \(\trans{\com[D]_2}{\rho}\ahalts\). By sum\(_1\) rule
-      \(\stt{\com_1 + \com_2, \rho} \to \stt{\com_1, \rho}\) and by
-      sum\(_2\)
-      \(\stt{\com_1 + \com_2, \rho} \to \stt{\com_2,
-        \rho}\). Therefore \(\trans{\com_1 + \com_2}{\rho}\ahalts\).
+      \(\stt{\com[D]_1, \rho}\ahalts\) and
+      \(\stt{\com[D]_2, \rho}\ahalts\). By sum\(_1\) rule
+      \(\stt{\com[D]_1 + \com[D]_2, \rho} \to \stt{\com[D]_1, \rho}\)
+      and by sum\(_2\)
+      \(\stt{\com[D]_1 + \com[D]_2, \rho} \to \stt{\com[D]_2,
+        \rho}\). Therefore
+      \(\stt{\com[D]_1 + \com[D]_2}{\rho}\ahalts\).
     \item For the latter argument, since both
-      \(\trans{\com[D_1]}{\rho}\) and \(\trans{\com[D_2]}{\rho}\) are
+      \(\stt{\com[D]_1}{\rho}\) and \(\stt{\com[D_2]}{\rho}\) are
       finite and composed of finite derivation sequences
-      \(\sizeof{\trans{(\com[D]_1 + \com[D]_2)}{\rho}} < \infty\).
+      \(\sizeof{\trans{\com[D]_1 + \com[D]_2}{\rho}} < \infty\).
     \end{enumerate}
   \item \(\com[D]\equiv \com[D_1; D_2]\), therefore
     \begin{enumerate}[label=(\roman*).]
@@ -67,9 +70,9 @@ amount of finite derivation sequences.
       hypothesis \(\sem{D_1}X = Y\). By inductive hypothesis again
       \(\sem{D_2}Y\) is finite;
     \item by inductive hypothesis both \(\forall \rho \in X\)
-      \(\trans{\com[D]_1}{\rho}\ahalts\) and \(\forall \rho' \in Y\)
-      \(\trans{\com[D]_2}{\rho'}\ahalts\), therefore by composition
-      lemma \(\trans{\com[D]_1;\com[D]_2}{\rho} \ahalts\)
+      \(\stt{\com[D]_1, \rho}\ahalts\) and \(\forall \rho' \in Y\)
+      \(\stt{\com[D]_2,\rho'}\ahalts\), therefore by composition
+      lemma \(\stt{\com[D]_1;\com[D]_2, \rho} \ahalts\)
     \item by inductive hypothesis both
       \(\sizeof{\trans{\com[D]_1}{\rho}} < \infty\) and
       \(\sizeof{\trans{\com[D]_2}{\rho'}} < \infty\)
@@ -86,6 +89,63 @@ amount of finite derivation sequences.
   \end{enumerate}
 \end{proof}
 
+
+In order to prove that finiteness is undecidable we need the following
+Lemma:
+
+\begin{lemma}\label{le:contain}
+  Let \(\com[D] \in \imp\starless\) and \(\rho \in \env\). If
+  \begin{equation}\label{eq:hp}
+    \sem{D}^{k+1}\rho \subseteq \bigcup_{i=0}^k\sem{D}^i\rho \quad \text{for some } k \in \n
+  \end{equation}
+  then
+  \begin{equation}\label{eq:what}
+    \forall j \in \n \quad \sem{D}^{k+1+j}\rho \subseteq \bigcup_{i=0}^k\sem{D}^i\rho
+  \end{equation}
+  and therefore
+  \(\sem{\com[D]^*}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\)
+\end{lemma}
+\begin{proof}
+  We can show \eqref{eq:what} by induction on \(j\):
+  \begin{itemize}
+  \item if \(j=0\) then we want to show that
+    \(\sem{D}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\), which is
+    true by hypothesis \eqref{eq:hp};
+    
+  \item In the inductive case we have to show that if the
+    statement holds for \(j\), it also holds for \(j+1\). We know
+    that
+    \begin{align*}
+      \bigcup_{i=0}^k\sem{\com[D]}^i\rho & = \bigcup_{i=0}^{k+1}\sem{\com[D]}^i\rho & \text{since by \eqref{eq:hp} } \sem{\com[D]}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{\com[D]}^i\rho \\
+                                         & = \rho \cup \bigcup _{i=1}^{k+1}\sem{\com[D]}^i \rho \\
+                                         & = \rho \cup \sem{\com[D]}\left( \bigcup _{i=0}^k\sem{\com[D]}^i \rho\right) & \text{by additivity of } \sem{\com[D]}
+    \end{align*}
+    By inductive hypothesis
+    \begin{equation*}
+      \sem{\com[D]}^{k+1+j}\rho \subseteq \bigcup_{i=0}^k\sem{\com[D]}^i\rho
+    \end{equation*}
+    so, by monotonicity of \(\sem{\com[D]}\)
+    \begin{equation*}
+      \sem{\com[D]}\left( \sem{\com[D]}^{k+1+j}\rho\right) \subseteq \sem{\com[D]}\left(\bigcup_{i=0}^k\sem{\com[D]}^i\rho \right)
+    \end{equation*}
+    and therefore
+    \begin{equation*}
+      \sem{\com[D]}^{(k+1)+(j+1)}\rho \subseteq \left(\bigcup_{i=1}^{k+1}\sem{\com[D]}^i\rho \right) \subseteq \rho \cup \left(\bigcup_{i=1}^{k+1}\sem{\com[D]}^i\rho \right) = \bigcup_{i=0}^{k+1}\sem{\com[D]}^i\rho = \bigcup_{i=0}^{k}\sem{\com[D]}^i\rho
+    \end{equation*}
+  \end{itemize}
+\end{proof}
+
+We also need to recall Konig's Lemma from \cite{konig1926lemma}:
+
+\begin{lemma}[König's Lemma]\label{le:konig}
+  Let \(T\) be a rooted tree with an infinite number of nodes,
+  each with a finite number of children.  Then \(T\) has a branch
+  of infinite length.
+\end{lemma}
+
+With Lemma~\ref{le:contain} and Lemma~\ref{le:konig} we can prove the
+following.
+
 \begin{lemma}\label{le:infiniteness}
   Given \(\com[D]\in\imp\starless\), and \(\rho \in \env\), the
   predicate "\(\sem{D^*}\rho\) is finite" is undecidable.
@@ -94,60 +154,21 @@ amount of finite derivation sequences.
 \begin{proof}
   We work by contradiction, showing that if we know whether
   \(\sem{\com}\rho\) is finite or infinite we can decide
-  \(\trans{\com}{\rho}\ahalts\).
+  \(\stt{\com, \rho}\ahalts\).
   \begin{itemize}
-  \item Suppose we can decide that \(\sem{D^*}\rho\) is infinite, then
-    we make the following observation:
-    \begin{observation}\label{obs:noncontained}
-      \begin{equation*}
-        \forall k \in \n \quad \sem{D}^{k+1}\rho \nsubseteq \bigcup_{i=0}^k\sem{D}^i\rho
-      \end{equation*} 
-    \end{observation}
-    The latter observation follows from the following lemma:
-    \begin{lemma}\label{le:contain}
-      Let \(\com[D] \in \imp\starless\) \(\rho \in \env\). If
-      \begin{equation}\label{eq:hp}
-        \sem{D}^{k+1}\rho \subseteq \bigcup_{i=0}^k\sem{D}^i\rho \quad \text{for some } k \in \n
-      \end{equation}
-      then
-      \begin{equation}\label{eq:what}
-        \forall j \in \n \quad \sem{D}^{k+1+j}\rho \subseteq \bigcup_{i=0}^k\sem{D}^i\rho
-      \end{equation}
-      and therefore
-      \(\sem{\com[D]^*}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\)
-    \end{lemma}
-    \begin{proof}
-      We can show \eqref{eq:what} by induction on \(j\):
-      \begin{itemize}
-      \item if \(j=0\) then we want to show that
-        \(\sem{D}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\), which is
-        true by hypothesis \eqref{eq:hp};
-        
-      \item In the inductive case we have to show that if the
-        statement holds for \(j\), it also holds for \(j+1\). We know
-        that
-        \begin{align*}
-          \bigcup_{i=0}^k\sem{\com[D]}^i\rho & = \bigcup_{i=0}^{k+1}\sem{\com[D]}^i\rho & \text{since by \eqref{eq:hp} } \sem{\com[D]}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{\com[D]}^i\rho \\
-                                          & = \rho \cup \bigcup _{i=1}^{k+1}\sem{\com[D]}^i \rho \\
-                                          & = \rho \cup \sem{\com[D]}\left( \bigcup _{i=0}^k\sem{\com[D]}^i \rho\right) & \text{by additivity}
-        \end{align*}
-        By inductive hypothesis
-        \begin{equation*}
-          \sem{\com[D]}^{k+1+j}\rho \subseteq \bigcup_{i=0}^k\sem{\com[D]}^i\rho
-        \end{equation*}
-        so, by monotonicity of \(\sem{\com[D]}\)
-        \begin{equation*}
-          \sem{\com[D]}\left( \sem{\com[D]}^{k+1+j}\rho\right) \subseteq \sem{\com[D]}\left(\bigcup_{i=0}^k\sem{\com[D]}^i\rho \right)
-        \end{equation*}
-        and therefore
-        \begin{equation*}
-          \sem{\com[D]}^{(k+1)+(j+1)}\rho \subseteq \left(\bigcup_{i=1}^{k+1}\sem{\com[D]}^i\rho \right) \subseteq \rho \cup \left(\bigcup_{i=1}^{k+1}\sem{\com[D]}^i\rho \right) = \bigcup_{i=0}^{k+1}\sem{\com[D]}^i\rho = \bigcup_{i=0}^{k}\sem{\com[D]}^i\rho
-        \end{equation*}
-      \end{itemize}
-    \end{proof}
+  \item Suppose that \(\sem{D^*}\rho\) is infinite, then we can
+    observe that because Lemma~\ref{le:contain}
 
+    \begin{equation}\label{eq:noncontain}
+      \forall k \in \n \quad \sem{D}^{k+1}\rho \nsubseteq \bigcup_{i=0}^k\sem{D}^i\rho
+    \end{equation}
+
+    Otherwise
+    \(\sem{\com[D]^*}\rho \subseteq
+    \bigcup_{i\in\n}\sem{\com[D]}^i\rho\) and we would contraddict the
+    hypothesis of \(\sem{\com[D]^*}\rho\) being infinite.
     % quindi lo statement deve essere falso
-    therefore \(\forall k \in \n\)
+    Therefore \(\forall k \in \n\)
     \(\sem{\com[D]}^{k+1}\rho \not\subseteq \bigcup_{i=0}^k
     \sem{\com[D]}^i\rho\), otherwise
     \(\sem{\com[D]^*}\rho \subseteq \bigcup_{i=0}^k\sem{\com[D]}\rho\) which
@@ -155,8 +176,8 @@ amount of finite derivation sequences.
     % No , definiamo l'albero dove ogni livello è composto dai
     % seguenti stati
     With this observation we build the tree \(\tuple{\env, \to^D}\),
-    where \(\to^D \subseteq \env \times \env\) and if
-    \(\rho' \to^D \rho''\) then \(\stt{\com[D], \rho'} \to^*
+    where \(\to^D \subseteq \env \times \env\) and
+    \(\rho' \to^D \rho''\) if \(\stt{\com[D], \rho'} \to^*
     \rho''\). We define by the following rule the levels of the tree:
     \begin{align*}
       Y_0 & = \{\rho\} \\
@@ -172,34 +193,17 @@ amount of finite derivation sequences.
       \(\forall \rho' \in Y_1\) \(\rho \to^D \rho'\) by definition and
       \(\forall \rho'''\in Y_{k+1} \exists \rho'' \in Y_k \mid \rho''
       \to^D \rho'''\);
-    \item because of observation \ref{obs:noncontained} each level
-      \(Y_k\) is non empty and finite, therefore there is an infinite
+    \item since \(\forall k\in\n\)
+      \(\sem{\com[D]}^{k+1}\rho \not\subseteq
+      \cup_{i=0}^k\sem{\com[D]}^i\rho\) by \eqref{eq:noncontain}, each
+      level \(Y_k\) is non empty. Each level is also finite because of
+      Lemma~\ref{eq:fini}. Therefore there is an infinite
       quantity of levels, where each node has a finite quantity of
-      children;
-    \item\label{it:three} for all \(\rho', \rho''\in\env\)
-      s.t. \(\rho' \to^D \rho''\) since
-      \(\stt{\com[D], \rho'} \to^* \rho''\) we can apply the corollary
-      (\ref{co:comp}) of the composition lemma (\ref{le:comp}) and
-      state that
-      \(\stt{\com[D];\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''}\)
-      and because of the star rule
-      \(\stt{\com[D]^*, \rho'} \to \stt{\com[D];\com[D]^*, \rho'}\) We
-      can therefore say that
-      \begin{equation*}
-        \stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''}
-      \end{equation*}
+      children.
     \end{enumerate}
 
-    what is left to do is show that there's a derivation sequence from
-    \(\stt{\com[D]^*, \rho}\) of infinite length.  To do so we need
-    König's Lemma from \cite{konig1926lemma}:
-    
-    \begin{lemma}[König's Lemma]\label{le:konig}
-      Let \(T\) be a rooted tree with an infinite number of nodes,
-      each with a finite number of children.  Then \(T\) has a branch
-      of infinite length.
-    \end{lemma}
-
+    what is left to do is show that there is a derivation sequence
+    from \(\stt{\com[D]^*, \rho}\) of infinite length.
     \begin{figure}
       \centering
       \begin{tikzpicture}[->,>=stealth]
@@ -238,38 +242,48 @@ amount of finite derivation sequences.
         \(\env\).}\label{fig:tree}
     \end{figure}
 
-    We can therefore use König's Lemma (\ref{le:konig}) and deduce
-    that there exists an infinite derivation sequence from \(\rho\) of \(\to^D\)
-    relations
+    We can do this by using König's Lemma~\ref{le:konig} and deduce
+    that there exists an infinite derivation sequence from \(\rho\) of
+    \(\to^D\) relations
     \begin{equation*}
       \rho \to^D \rho' \to^D \rho'' \to^D \dots
     \end{equation*}
     Where each element belongs to a different level \(Y_k\), and
     therefore is different from every other environment appearing in
-    the sequence. Because of observation \ref{it:three} there exists a
-    derivation sequence
+    the sequence. Observe that for all \(\rho', \rho''\in\env\)
+    s.t. \(\rho' \to^D \rho''\) since
+    \(\stt{\com[D], \rho'} \to^* \rho''\) we can apply
+    Corollary~\ref{co:comp} of Lemma~\ref{le:comp} and derive that
+    \(\stt{\com[D];\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''}\)
+    and because of the star rule
+    \(\stt{\com[D]^*, \rho'} \to \stt{\com[D];\com[D]^*, \rho'}\). We
+    can therefore say that
+    \begin{equation*}
+      \stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''}
+    \end{equation*}
+    Therefore, there exists an infinite derivation sequence  
     \begin{equation*}
       \stt{\com[D]^*, \rho} \to^*\stt{\com[D]^*, \rho'} \to^* \stt{\com[D]^*, \rho''} \to^* \dots
     \end{equation*}
-    which is infinite, which means \(\trans{\com[D]^*}{\rho}\nehalts\)
-    and therefore \(\trans{\com[D]^*}{\rho} \ahalts\) is false.
+    which means \(\stt{\com[D]^*, \rho}\nehalts\) and therefore
+    \(\stt{\com[D]^*, \rho} \ahalts\) is false.
     
-  \item Suppose we can decide \(\sem{D^*}\rho\) is finite, then we can
+  \item if instead \(\sem{D^*}\rho\) is finite, then we can
     reduce total termination to the presence of some cycle in one of
     the derivation sequences starting from
-    \(\trans{\com[D]^*}{\rho}\). The statement we want to prove is the
+    \(\stt{\com[D]^*, \rho}\). The statement we want to prove is the
     following:
     \begin{equation*}
-      \text{if }\sem{\com[D]^*}\rho \text{ is finite, then } \trans{\com[D]^*}{\rho} \ahalts \iff \text{ no derivation sequence starting from } \trans{\com[D]^*}{\rho} \text{ has cycles}
+      \text{if }\sem{\com[D]^*}\rho \text{ is finite, then } \stt{\com[D]^*, \rho} \ahalts \iff \text{ no derivation sequence starting from } \stt{\com[D]^*, \rho} \text{ has cycles}
     \end{equation*}
     \begin{itemize}
     \item[\((\Rightarrow)\)] In this case we want to prove that if
       \(\sem{\com[D]^*}\) is finite and
-      \(\trans{\com[D]}{\rho} \ahalts\) then there are no cycles in
+      \(\stt{\com[D], \rho} \ahalts\) then there are no cycles in
       any derivation sequence starting from \(\stt{\com[D],
         \rho}\). To do so we work by contradiction. Suppose there is
       some derivation sequence starting from
-      \(\trans{\com[D]^*}{\rho}\) with some cycle
+      \(\stt{\com[D]^*, \rho}\) with some cycle
       \begin{equation*}
         \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^* \rho''
       \end{equation*}
@@ -279,14 +293,14 @@ amount of finite derivation sequences.
         \stt{\com[D]^*, \rho} \to^* \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^+ \stt{\com[D]^*, \rho'} \to^+ \dots
       \end{equation*}
       is part of the transition system for \(\stt{\com[D], \rho}\),
-      and therefore \(\trans{\com[D]^*}{\rho} \ahalts\) is false which
+      and therefore \(\stt{\com[D]^*, \rho} \ahalts\) is false which
       is absurd.
     \item[\((\Leftarrow)\)] In this case we want to prove that if
       \(\sem{\com[D]^*}\rho\) is finite and there are no cycles in any
       derivation sequence starting from \(\stt{\com[D], \rho}\) then
-      \(\trans{\com[D]}{\rho} \ahalts\). We work again by
+      \(\stt{\com[D], \rho} \ahalts\). We work again by
       contradiction. Suppose that we have an infinite derivation
-      sequence starting from \(\trans{\com[D]^*}{\rho}\). It must be
+      sequence starting from \(\stt{\com[D]^*, \rho}\). It must be
       that \(\forall i,j \in \n\) \(i \neq j\), \(\rho_i \neq \rho_j\)
       with \(\rho_0 = \rho\), otherwise there would be a cycle, which
       would contraddict the hypothesis. Therefore the derivation
@@ -321,7 +335,7 @@ amount of finite derivation sequences.
         \stt{\com[D]^*, \rho'} \to \stt{\com[D];\com[D]^*, \rho'}
       \end{equation*}
       by lemma~\ref{le:finiteness} we know that
-      \(\trans{\com[D]}{\rho'}\ahalts\) and
+      \(\stt{\com[D], \rho'}\ahalts\) and
       \(\sizeof{\trans{\com[D]}{\rho'}} < \infty\), therefore there is
       a finite number of environments \(\rho''\)
       s.t. \(\stt{\com[D],\rho'} \to^* \rho''\). For each one of them
@@ -338,6 +352,6 @@ amount of finite derivation sequences.
     state \(\stt{\com[D]^*, \rho'}\) again, with
     \(\rho'\in\sem{\com[D]^*}\rho\). Since there is a finite amount of
     states \(\rho'\in\sem{\com[D]^*}\rho\), the number of reachable
-    states from \(\trans{\com[D]^*}{\rho}\) is finite.
+    states from \(\stt{\com[D]^*, \rho}\) is finite.
   \end{itemize}
 \end{proof}
