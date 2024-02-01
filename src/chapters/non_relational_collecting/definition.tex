@@ -5,7 +5,7 @@ We first define \emph{non-relational collecting} analysis the the
 \(\imp\) language in a standard way.
 
 \begin{definition}
-  Let \(\Int_c \defin \poset{\n} \setminus \{\emptyset\}\) and
+  Let \(\nrdom \defin \poset{\n} \setminus \{\emptyset\}\) and
   \begin{equation*}
     \envnr \defin \{\eta \mid \eta: \Var \to \Int_c\} \cup \{\bot\}
   \end{equation*}
@@ -14,8 +14,7 @@ We first define \emph{non-relational collecting} analysis the the
   \(\eta,\eta':\Var \to \Int_c\)
   \begin{align*}
     \bot & \mathrel{\dot{\subseteq}} \eta\\
-    \eta & \mathrel{\dot{\subseteq}} \eta' & \text{ if }\quad \forall
-                                             \var\in \Var. \eta(\var)\subseteq \eta'(\var)
+    \eta & \mathrel{\dot{\subseteq}} \eta' & \text{ if } \eta\var\subseteq \eta'\var \quad \forall \var\in \Var
   \end{align*}
 \end{definition}
 

@@ -9,8 +9,8 @@ problem
 
 \begin{problem}[Termination of non-relational
   analysis]\label{p:nonrel}
-  Given \(\com\in\imp, \rho \in \bCnr\), decide
-  \(\semnr{\com}\rho =^? \top\)
+  Given \(\com\in\imp, \eta \in \bCnr\), decide
+  \(\semnr{\com}\eta =^? \top\)
 \end{problem}
 
 To do so we prove the same property of Lemma~\ref{le:inc}, this time
@@ -23,7 +23,7 @@ Problem~\ref{p:nonrel}.
   Let \(\com\in \imp\). % and \(\var[y] \in \Var\)
     
   \noindent
-  For all \(\eta \in \mathbb{A}\) and \(\var[y] \in \Var\), if
+  For all \(\eta \in \bCnr\) and \(\var[y] \in \Var\), if
   \(\max(\semnr{\com} \eta \var[y]) \neq \infty\) and
   \(\max(\semnr{\com}\eta \var[y]) > \bound{\com}\) then there exist a
   variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
@@ -31,7 +31,7 @@ Problem~\ref{p:nonrel}.
   hold:
   \begin{enumerate}[label=(\roman*)]
   \item \(\max(\semnr{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); \label{point1nr}
-  \item  for all \(\eta' \in \mathbb{A}\), if \(\eta' \sqsupseteq \eta\)
+  \item  for all \(\eta' \in \bCnr\), if \(\eta' \nrsupseteq \eta\)
     % and \(\semnr{\com}\eta' \neq \top\)
     then
     \(\max(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\). \label{point2nr}
@@ -50,7 +50,7 @@ Problem~\ref{p:nonrel}.
   thus \(\max(\semnr{\com} \eta \var[y]) = 0 \leq \bound{\com}\),
   against the hypothesis
   \(\max(\semnr{\com}\eta \var[y]) > \bound{\com}\). Moreover, when
-  quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\) in
+  quantifying over \(\eta'\) such that \(\eta' \dot{\supseteq} \eta\) in
   \ref{point1nr}, if \(\max(\semnr{\com}\eta' \var[y]) = \infty\)
   holds, then
   \(\max(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\)
@@ -62,7 +62,7 @@ Problem~\ref{p:nonrel}.
   \noindent
   \textbf{Case} (\(\var \in S\))\\
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bCnr\) and assume
   \(\infty\neq\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
   %
   Clearly \(\semnr{\var \in S}\eta \neq \bot\), otherwise we would get the contradiction
@@ -71,8 +71,8 @@ Problem~\ref{p:nonrel}.
   We distinguish two cases:
   \begin{itemize}
     
-  \item If \(\var[y] \neq \var\), then for all \(\eta' \in \mathbb{A}\)
-    such that \(\eta \sqsubseteq \eta'\) it holds
+  \item If \(\var[y] \neq \var\), then for all \(\eta' \in \bCnr\)
+    such that \(\eta \nrsubseteq \eta'\) it holds
     \(\bot \neq \semnr{\var \in S}\eta' = \eta'[\var \mapsto \eta\var
       \cap S]\) and thus
     \[
@@ -89,10 +89,10 @@ Problem~\ref{p:nonrel}.
     \(\max (\eta\var \cap S) \leq \max(S)= \bound{\var \in
       S}\), violating the assumption \(\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
     Hence, \(\max(S) = \infty\) must hold and therefore
-    \(\max (\eta(\var) \sqcap S) = \max(\eta(\var))=
-    \max(\eta(\var))+0\). It is immediate to check that the same holds
+    \(\max (\eta\var \cap S) = \max(\eta\var)=
+    \max(\eta\var)+0\). It is immediate to check that the same holds
     for all
-    \(\eta' \sqsupseteq \eta\), i.e.,
+    \(\eta' \nrsupseteq \eta\), i.e.,
     \[
     \max (\eta'\var \cap S) = \max(\eta'\var)=
     \max(\eta'\var)+0
@@ -126,7 +126,7 @@ Problem~\ref{p:nonrel}.
   \noindent
   \textbf{Case} (\(\var := k\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bCnr\) and assume
   \(\max(\semnr{\var := k}\eta \var[y]) > \bound{\var := k} = k\).
 
   Observe that it cannot be \(\var = \var[y]\). In fact, since
@@ -138,7 +138,7 @@ Problem~\ref{p:nonrel}.
   violating the assumption.
   %
   Therefore, it must be \(\var[y] \neq \var\). Now, for all
-  \(\eta' \sqsupseteq \eta\), we have
+  \(\eta' \nrsupseteq \eta\), we have
   \(\semnr{\var := k}\eta' \var[y] = \eta' \var[y]\) and thus
   \begin{center}
     \(\max(\semnr{\var := k}\eta' \var[y]) = \max(\eta' \var[y]) =
@@ -154,7 +154,7 @@ Problem~\ref{p:nonrel}.
   \noindent
   \textbf{Case} (\(\var := \var[w] + k\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bCnr\) and assume
   \(\max(\semnr{\var := \var[w] + k}\eta \var[y]) > \bound{\var := \var[w] + k} = k\).
   %
   Recall that
@@ -163,7 +163,7 @@ Problem~\ref{p:nonrel}.
   We distinguish two cases:
   \begin{itemize}
     
-  \item If \(\var[y] \neq \var\), then for all \(\eta' \sqsupseteq \eta\), we have
+  \item If \(\var[y] \neq \var\), then for all \(\eta' \nrsupseteq \eta\), we have
     \(\semnr{\var := \var[w] + k}\eta' \var[y] = \eta' \var[y]\) and thus
     \begin{center}
       \(\max(\semnr{\var := \var[w] + k}\eta' \var[y]) = \max(\eta' \var[y])\).
@@ -172,7 +172,7 @@ Problem~\ref{p:nonrel}.
     \(h =0 \leq \bound{\var := \var[w] + k}\) and \(\var[z] = \var[y]\).
     
   \item 
-    If \(\var = \var[y]\) then  for all \(\eta' \sqsupseteq \eta\), we have
+    If \(\var = \var[y]\) then  for all \(\eta' \nrsupseteq \eta\), we have
     \(\semnr{\var := \var[w] + k}\eta' \var[y] = \eta' \var[w] +
     k\) and thus
     \begin{center}
@@ -192,7 +192,7 @@ Problem~\ref{p:nonrel}.
   \noindent
   \textbf{Case} (\(\var := \var[w] - k\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bCnr\) and assume
   \(\max(\semnr{\var := \var[w] - k}\eta \var[y]) > \bound{\var := \var[w] - k} = k\).
   %
   Recall that
@@ -202,8 +202,8 @@ Problem~\ref{p:nonrel}.
   \begin{itemize}
     
   \item If \(\var[y] \neq \var\), then for all
-    \(\eta' \in \mathbb{A}\) such that
-    \(\eta \sqsubseteq \eta'\), we have
+    \(\eta' \in \bCnr\) such that
+    \(\eta \nrsubseteq \eta'\), we have
     \(\semnr{\var := \var[w] - k}\eta' \var[y] = \eta' \var[y]\) and thus
     \begin{center}
       \(\max(\semnr{\var := \var[w] - k}\eta' \var[y]) = \max(\eta' \var[y])\).
@@ -211,8 +211,8 @@ Problem~\ref{p:nonrel}.
     hence the thesis holds, with
     \(h =0 \leq \bound{\var := \var[w] - k}\) and \(\var[z] = \var[y]\).
     
-  \item If \(\var = \var[y]\) then for all \(\eta' \in \mathbb{A}\) such
-    that \(\eta \sqsubseteq \eta'\), we have
+  \item If \(\var = \var[y]\) then for all \(\eta' \in \bCnr\) such
+    that \(\eta \nrsubseteq \eta'\), we have
     \(\semnr{\var := \var[w] - k}\eta' \var[y] = \eta' \var[w] - k\) and
     thus
     \begin{center}
@@ -234,7 +234,7 @@ Problem~\ref{p:nonrel}.
   \noindent
   \textbf{Case} (\(\com_1 \ndet \com_2\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bCnr\) and assume
   \(\max(\semnr{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2} =
   \bound{\com_1} + \bound{\com_2}\).
 
@@ -263,7 +263,7 @@ Problem~\ref{p:nonrel}.
   \(\com_1\), we have that there exists \(h \in \mathbb{Z}\) with
   \(|h| \leq \bound{\com_1}\) and \(\var[z] \in \Var\) such that
   \(\max(\semnr{\com_1}\eta \var[y]) = \max(\eta \var[z]) + h\) and for
-  all \(\eta' \in \mathbb{A}\), \(\eta \sqsubseteq \eta'\),
+  all \(\eta' \in \bCnr\), \(\eta \nrsubseteq \eta'\),
   \[
   \max(\semnr{\com_1}\eta' \var[y]) \geq \max(\eta' \var[z]) + h
   \]
@@ -275,7 +275,7 @@ Problem~\ref{p:nonrel}.
   \]
   %
   and and for
-  all \(\eta' \in \mathbb{A}\), \(\eta \sqsubseteq \eta'\),
+  all \(\eta' \in \bCnr\), \(\eta \nrsubseteq \eta'\),
   \begin{align*}
     \max(\semnr{\com_1 \ndet \com_2}\eta' \var[y])
     &= \max\{ \max(\semnr{\com_1}\eta' \var[y]),  \max(\semnr{\com_2}\eta' \var[y])\}\\
@@ -294,7 +294,7 @@ Problem~\ref{p:nonrel}.
   \noindent
   \textbf{Case} (\(\com_1 \seq \com_2\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bCnr\) and assume
   \(\max(\semnr{\com_1 \seq \com_2}\eta) > \bound{\com_1 \seq \com_2} =
   \bound{\com_1} + \bound{\com_2}\).
   
@@ -310,8 +310,8 @@ Problem~\ref{p:nonrel}.
   \geq \bound{\com_2}\), by inductive hypothesis on \(\com_2\), there
   are \(|h_2| \leq \bound{\com_2}\) and \(\var[w] \in \Var\) such that
   \(\max(\semnr{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2\)
-  and for all \(\eta_1' \in \mathbb{A}\) with
-  \(\eta_1 \sqsubseteq \eta_1'\)
+  and for all \(\eta_1' \in \bCnr\) with
+  \(\eta_1 \nrsubseteq \eta_1'\)
   \begin{equation}
     \label{eq:seq2nr}
     \max(\semnr{\com_2} \eta_1' \var[y]) \geq \max(\eta_1' \var[w]) + h_2
@@ -334,14 +334,14 @@ Problem~\ref{p:nonrel}.
   inductive hypothesis also to \(\com_1\) and deduce that there are
   \(|h_1| \leq \bound{\com_1}\) and \(\var[w]' \in \Var\) such that
   \(\max(\semnr{\com_1} \eta \var[w]) = \max(\eta \var[w]') + h_1\)
-  and for all \(\eta' \in \mathbb{A}\) with \(\eta \sqsubseteq \eta'\)
+  and for all \(\eta' \in \bCnr\) with \(\eta \nrsubseteq \eta'\)
   \begin{equation}
     \label{eq:seq1nr}
     \max(\semnr{\com_1} \eta' \var[w]) \geq \max(\eta' \var[w]') + h_1
     \tag{\ddag}
   \end{equation}
 
-  Now, for all \(\eta' \in \mathbb{A}\) with \(\eta \sqsubseteq \eta'\) we have that:
+  Now, for all \(\eta' \in \bCnr\) with \(\eta \nrsubseteq \eta'\) we have that:
   \begin{align*}
     \max(\semnr{\com_1 \seq \com_2}\eta \var[y])
     &= \max(\semnr{\com_2}(\semnr{\com_1}\eta) \var[y])\\
@@ -360,7 +360,7 @@ Problem~\ref{p:nonrel}.
     \max(\semnr{\com_1 \seq \com_2}\eta' \var[y]) & = & \\ 
     \max(\semnr{\com_2}(\semnr{\com_1}\eta') \var[w]) & \geq & \\ 
     \max(\semnr{\com_1}\eta' \var[w]') + h_2 & \geq & 
-    \text{by \eqref{eq:seq2}, since } \eta_1 = \semnr{\com_1}\eta \sqsubseteq \semnr{\com_1}\eta' \text{ , by monotonicity} \\
+    \text{by \eqref{eq:seq2}, since } \eta_1 = \semnr{\com_1}\eta \nrsubseteq \semnr{\com_1}\eta' \text{ , by monotonicity} \\
     (\max(\eta' \var[y]) +h_1) + h_2 & & \text{by \eqref{eq:seq1}}\
   \end{align*}
 
@@ -377,7 +377,7 @@ Problem~\ref{p:nonrel}.
   \noindent
   \textbf{Case} (\(\fix{\com}\)) 
   %
-  Let \(\eta \in \mathbb{A}\) such that
+  Let \(\eta \in \bCnr\) such that
   \(\semnr{\fix{\com}} \eta \var[y] \neq \infty\). Recall that
   \(\semnr{\fix{\com}} \eta = \lfp(\lambda \mu. (\semnr{\com}
     \mu \sqcup\eta))\). Observe that the least fixpoint of
@@ -389,9 +389,9 @@ Problem~\ref{p:nonrel}.
   \item \(\eta_0 \veq \eta\),
   \item for all \(i\in \nat\),
     \(\eta_{i+1} \veq \semnr{\com} \eta_i \sqcup \eta_i= \semnr{\com \ndet
-    \tru} \eta_i \sqsupseteq \eta_i\),
+    \tru} \eta_i \nrsupseteq \eta_i\),
   \end{itemize}
-  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \mathbb{A}\) such that
+  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \bCnr\) such that
   \[ 
   \semnr{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
   \]
@@ -411,7 +411,7 @@ Problem~\ref{p:nonrel}.
   there exist \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\) such that \(|h| \leq \bound{\com}\) and 
   \begin{enumerate}[label=(\alph*)]
   \item \(\infty \neq \max(\eta_{j+1} \var) = \max(\eta_j \var[z]) + h\),
-  \item \(\forall \eta' \sqsupseteq \eta_j.
+  \item \(\forall \eta' \nrsupseteq \eta_j.
     \max(\semnr{\com \ndet \tru}\eta'\var) \geq \max(\eta' \var[z]) + h\).
   \end{enumerate}
   To shortly denote that the two conditions (a) and (b) hold, we write
@@ -437,7 +437,7 @@ Problem~\ref{p:nonrel}.
     \max(\semnr{\fix{\com}} \eta \var[y]) = \max(\eta \var[z]) + h
     \tag{i}
   \end{equation}
-  and for all \(\eta' \sqsupseteq \eta\),
+  and for all \(\eta' \nrsupseteq \eta\),
   \begin{equation}\label{eq:maxmiddlemaxendnr}
     \max(\semnr{\fix{\com}} \eta' \var[y]) \geq \max(\eta' \var[z]) + h
     \tag{ii}
@@ -490,13 +490,12 @@ Problem~\ref{p:nonrel}.
   Thus,
   \[\max(\semnr{\com \ndet \tru}^{k_2-k_1} \eta_{k_1} \var[w]) = \max(\eta_{k_1}
   \var[w]) + h\] 
-  Observe that for all \(\eta' \sqsupseteq \eta_{k_1}\)
+  Observe that for all \(\eta' \nrsupseteq \eta_{k_1}\)
   \begin{equation}\label{prop2nr}
     \max(\semnr{\com \ndet \tru}^{k_2-k_1} \eta' \var[w]) \geq \max(\eta'
     \var[w]) + h
   \end{equation}
-  This property \eqref{prop2} can be shown by induction on \(k_2-k_1 \geq 1\).
-  
+  Property~\eqref{prop2nr} can be shown by induction on \(k_2-k_1 \geq 1\).  
   \noindent    
   Then, an inductive argument allows us to show that for all \(r \in \mathbb{N}\):
   \begin{equation}\label{noppnr}
@@ -506,7 +505,7 @@ Problem~\ref{p:nonrel}.
   In fact, for \(r=0\) the claim trivially holds. Assuming the validity for \(r\geq 0\) then we have that
   \begin{align*}    
     & \max(\semnr{\com \ndet \tru}^{(r+1)(k_2-k_1)} \eta_{k_1} \var[w]) =\\
-    &\max(\semnr{\com \ndet \tru}^{k_2-k_1} ( \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{by \eqref{prop2} as }\eta_{k_1} \sqsubseteq \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\\
+    &\max(\semnr{\com \ndet \tru}^{k_2-k_1} ( \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{by \eqref{prop2nr} as }\eta_{k_1} \nrsubseteq \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\\
     &\max(\semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) + h \geq & \mbox{by inductive hypothesis}\\
     &  \max(\eta_{k_1}\var[w])  + rh + h
     \geq 
@@ -514,29 +513,33 @@ Problem~\ref{p:nonrel}.
   \end{align*}
 
   \noindent
-  However,
-  This would contradict the hypothesis \(\semnr{\fix{\com}} \eta \var[y] \neq \infty\). In fact the inequality \eqref{nopp} would imply
+  However, This would contradict the hypothesis
+  \(\max(\semnr{\fix{\com}} \eta \var[y]) \neq \infty\). In fact the
+  inequality \eqref{noppnr} would imply
   \begin{align*}
-    \semnr{\fix{\com}} \eta \var[w]
-    & = \bigsqcup_{i \in \mathbb{N}} \semnr{\com
-      \ndet \tru}^i \eta \var[w] =\\ 
-    & =  \bigsqcup_{i \in \mathbb{N}} \semnr{\com \ndet
-      \tru}^i \eta_{k_1} \var[w]\\ 
-    & = \bigsqcup_{r \in \mathbb{N}} \semnr{\com \ndet
-      \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]\\
+    \max(\semnr{\fix{\com}} \eta \var[w])
+    & = \max\left(\bigsqcup_{i \in \mathbb{N}} \semnr{\com
+      \ndet \tru}^i \eta \var[w]\right) \\ 
+    & = \max\left(\bigsqcup_{i \in \mathbb{N}} \semnr{\com \ndet
+      \tru}^i \eta_{k_1} \var[w]\right)\\ 
+    & = \max\left(\bigsqcup_{r \in \mathbb{N}} \semnr{\com \ndet
+      \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]\right)\\
     & = \infty
   \end{align*}
 
 
-  Now, from \eqref{eq:fix} we deduce that for all \(\eta' \sqsupseteq \eta_{k_1}\), for 
-  \(j \in \{ k_1, \ldots, m\}\), if we let \(\mu_{k_1} = \eta'\) and
-  \(\mu_{j+1} = \semnr{\com \ndet \tru} \mu_j\), we have that \(\max(\mu_{j+1} \var[y]_{j+1}) \geq \max(\mu_{j+1} \var[y]_{j}) + h_j\) and thus 
-  \[
-  \semnr{\com \ndet \tru}^{m-k_1+1} \eta' \var[y] = \mu_{m+1}
-  \var[y]_{m+1} \geq 
-  \max(\var[y]_{k_1}) + \Sigma_{i=k_1}^m h_i = \max(\eta' \var[w]) + \Sigma_{i=k_1}^m h_i
-  \]
-  Since \(\eta' = \semnr{\fix{\com}} \eta \sqsupseteq \eta_{k_1}\) we conclude
+  Now, from \eqref{eq:fixnr} we deduce that for all
+  \(\eta' \nrsupseteq \eta_{k_1}\), for \(j \in \{ k_1, \ldots, m\}\),
+  if we let \(\mu_{k_1} = \eta'\) and
+  \(\mu_{j+1} = \semnr{\com \ndet \tru} \mu_j\), we have that
+  \(\max(\mu_{j+1} \var[y]_{j+1}) \geq \max(\mu_{j+1} \var[y]_{j}) +
+  h_j\) and thus
+  \begin{equation*}
+    \max(\semnr{\com \ndet \tru}^{m-k_1+1} \eta' \var[y]) = \max(\mu_{m+1}
+    \var[y]_{m+1}) \geq 
+    \max(\var[y]_{k_1}) + \Sigma_{i=k_1}^m h_i = \max(\eta' \var[w]) + \Sigma_{i=k_1}^m h_i
+  \end{equation*}
+  Since \(\eta' = \semnr{\fix{\com}} \eta \nrsupseteq \eta_{k_1}\) we conclude
   \begin{align*}
     \semnr{\fix{\com}} \eta \var[y]
     & = \semnr{\com \ndet \tru}^{m-k_1+1} \semnr{\fix{\com}} \eta \var[y]\\
@@ -545,7 +548,8 @@ Problem~\ref{p:nonrel}.
   contradicting the assumption.
   
   \noindent
-  Therefore, the path \(\sigma\) of \eqref{eq:fix} must exist, and consequently
+  Therefore, the path \(\sigma\) of \eqref{eq:fixnr} must exist, and
+  consequently
   \[\max(\semnr{\fix{\com}} \eta \var[y]) = \max(\eta_{m+1} \var[y]) = \max(\eta  \var[y]_0) + \Sigma_{i=0}^m h_i\]
   and
   \(\Sigma_{i=0}^m h_i \leq \bound{\fix{\com}}=(n+1)\bound{\com}\),
@@ -554,14 +558,14 @@ Problem~\ref{p:nonrel}.
 
   \medskip
 
-  Let us now show \eqref{eq:maxmiddlemaxend}. Given
-  \(\eta' \sqsupseteq \eta\) from \eqref{eq:fix} we deduce that for
+  Let us now show \eqref{eq:maxmiddlemaxendnr}. Given
+  \(\eta' \nrsupseteq \eta\) from \eqref{eq:fixnr} we deduce that for
   all \(j \in \{ 0, \ldots, m\}\), if we let \(\mu_0 = \eta'\) and
   \(\mu_{j+1} = \semnr{\com \ndet \tru} \mu_j\), we have that
   \[
   \max(\mu_{j+1} \var[y]_{j+1}) \geq \max(\mu_{j+1} \var[y]_{j}) + h_j.
   \]
-  Therefore, since \(\semnr{\fix{\com}} \eta' \sqsupseteq \mu_{m+1}\)
+  Therefore, since \(\semnr{\fix{\com}} \eta' \nrsupseteq \mu_{m+1}\)
   (observe that the convergence of \(\semnr{\fix{\com}} \eta' \) could
   be at an index greater than \(m+1\)), we conclude that:
   \[\max(\semnr{\fix{\com}} \eta' \var[y]) \geq \max(\mu_{m+1}
@@ -573,18 +577,18 @@ Lemma~\ref{le:incnr} provides an effective algorithm for computing the
 interval semantics of commands. More precisely, given a command
 \(\com\), the corresponding finite set of variables
 \(\Var_{\com} \veq \mathit{vars}(\com)\), and an interval environment
-\(\rho : \Var_{\com} \to \poset{\z}_{\neq\emptyset}\), we define
-\[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
+\(\rho : \Var_{\com} \to \nrdom\), we define
+\[\max(\rho) \veq \max \{ \max(\rho\var) \mid \var \in \Var_{\com}
   \}.\]
 %
 Then, when computing \(\semnr{\fix{\com}} \rho\) on such \(\rho\)
 having a finite domain, we can restrict to a bounded interval domain
-\(\bCnr_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
+\(\bCnr_{\com,\rho} \veq (\Var_{\com} \to \nrdom[\com,\rho]) \cup
 \{ \top, \bot \}\) where
 \[
-  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \nat\ \land\
-  a \leq b \leq \max\{\max(\rho), \left(\left| \Var_{\com}\right| + 1
-  \right) \bound{\com}\}\}.
+  \nrdom[\com,\rho] \veq \{ S\subseteq \n \mid \max(S) \leq
+  \max\{\max(\rho), \left(\left| \Var_{\com}\right| + 1 \right)
+  \bound{\com}\}\}.
 \]
 
 % We could also operate uniformly on all commands, defining the
@@ -593,7 +597,7 @@ having a finite domain, we can restrict to a bounded interval domain
 
 \begin{lemma}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
-  \(\eta : \Var \to \Int\), the abstract semantics
+  \(\eta : \Var \to \nrdom\), the abstract semantics
   \(\semnr{\fix{\com}} \eta = \lfp(\lambda \mu . (\eta \sqcup
   \semnr{\com}\mu))\)
   % 
