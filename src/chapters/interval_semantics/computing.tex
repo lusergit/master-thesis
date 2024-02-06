@@ -309,7 +309,7 @@ a finite path in \(\langle X,\to\rangle\)
 \begin{lemma}
   \label{le:inc}
   Let \(\com\in \imp\). % and \(\var[y] \in \Var\)
-    
+  
   \noindent
   For all \(\eta \in \mathbb{A}\) and \(\var[y] \in \Var\), if
   \(\max(\semi{\com} \eta \var[y]) \neq \infty\) and
@@ -736,13 +736,14 @@ a finite path in \(\langle X,\to\rangle\)
   \end{equation}
   such that \(\var[y]_{m+1}=\var[y]\) and for all \(j \in \{0,\ldots, m+1\}\), 
   \(\var[y]_j\in \Var\)  and
-  \(\max(\eta_{j} \var[y]_{j}) > \bound{C}\).
+  \(\max(\eta_{j} \var[y]_{j}) > \bound{\com}\).
   %, so that for \(j\neq m+1\), \(|h_j|\leq \bound{\com}\).
-  In fact, if, by contradiction, this is not the case, there  would exist an index \(i \in \{0,\ldots, m\}\) (as \(\max(\eta_{m+1} \var[y]_{m+1}) > \bound{C}\) already holds)
-  such that \(\max(\eta_{i} \var[y]_{i}) \leq
-  \bound{C}\), while for all
-  \(j \in \{i+1,\ldots, m+1\}\), \(\max(\eta_{j} \var[y]_j) > \bound{C}\).
-  Thus, in such a case, 
+  In fact, if, by contradiction, this is not the case, there would
+  exist an index \(i \in \{0,\ldots, m\}\) (as
+  \(\max(\eta_{m+1} \var[y]_{m+1}) > \bound{\com}\) already holds)
+  such that \(\max(\eta_{i} \var[y]_{i}) \leq \bound{\com}\), while
+  for all \(j \in \{i+1,\ldots, m+1\}\),
+  \(\max(\eta_{j} \var[y]_j) > \bound{\com}\).  Thus, in such a case,
   we consider the nonempty path:
   \[\pi \veq (\var[y]_i, i) \to_{h_i} (\var[y]_{i+1}, i+1) \to_{h_{i+1}} \ldots
   \to_{h_m} (\var[y]_{m+1}, m+1)\]
@@ -861,14 +862,14 @@ interval semantics of commands. More precisely, given a command
 \[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
   \}.\]
 %
-Then, when computing \(\semi{\fix{\com}} \rho\) on such \(\rho\)
+Then, when computing \(\semi{\com} \rho\) on such \(\rho\)
 having a finite domain, we can restrict to a bounded interval domain
 \(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
 \{ \top, \bot \}\) where
 \[
   \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \nat\ \land\
-  a \leq b \leq \max\{\max(\rho), \left(\left| \Var_{\com}\right| + 1
-  \right) \bound{\com}\}\}.
+  a \leq b \leq \max(\rho) + \bound{\com}\} \cup
+  \{\interval{a}{\infty} \mid a \in \nat \}
 \]
 
 % We could also operate uniformly on all commands, defining the
@@ -878,8 +879,7 @@ having a finite domain, we can restrict to a bounded interval domain
 \begin{lemma}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
   \(\rho : \Var \to \Int\), the abstract semantics
-  \(\semi{\fix{\com}} \eta = \lfp(\lambda \mu . (\eta \sqcup
-  \semi{\com}\mu))\)
+  \(\semi{\com} \rho \)
   % 
   % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
   % \sqcup \rho}
@@ -888,18 +888,79 @@ having a finite domain, we can restrict to a bounded interval domain
 \end{lemma}
 
 \begin{proof}
-  Todo: consequence of Lemma~\ref{le:inc}.
-  % because of Lemma~\ref{le:inc},
-  % \(\forall \eta \in \bA, \var[y] \in \Var\) if
-  % \(\max(\semi{\com})\eta\var[y]\) and
-  % \(\max(\semi{\com}\eta\var[y]) > \bound{\com}\) then
-  % \(\exists\var[z] \in \var, h \in \n \mid |h| \leq \bound{\com}\) and
-  % both the following statements hold:
-  % \begin{enumerate}[label=(\roman*).]
-  % \item \(\max(\semi{\com}\eta\var[y]) = \max{\eta\var[z]} + h\)
-  % \item for all \(\eta' \in \mathbb{A}\), if
-  %   \(\eta' \sqsupseteq \eta\) then
-  %   \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) +
-  %   h\).
-  % \end{enumerate}
+  We can prove this by induction on the command \(\com\).
+
+  \noindent
+  \textbf{Case} (\(\var \in S\)) 
+  %
+  recall that
+  \begin{equation*}
+    \bound{\var\in S} = \begin{cases}
+      \min(S) & \max(S) = \infty \\
+      \max(S) & \max(S) \in \n
+    \end{cases}
+  \end{equation*}
+  and
+  \begin{equation*}
+    \bA_{\var\in S, \rho} = (\Var_{\var\in S} \to \Int_{\var\in S, \rho} ) \cup \{\top, \bot\}
+  \end{equation*}
+  where
+  \begin{equation*}
+    \Int_{\var\in S, \rho} = \{\interval{a}{b} \mid a,b \in \n \wedge a \leq b \leq \max(\rho) + \bound{\var\in S}\} \cup \{\interval{a}{\infty} \mid a \in \n\}
+  \end{equation*}
+  notice that in case \(\semi{\var\in S}\rho = \bot\) it is obvious
+  that \(\bot \in \bA_{\com,\rho}\). Therefore we consider the case
+  where
+  \(\semi{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap
+  \Int(S)]\). Here we have again 2 cases
+  \begin{itemize}
+  \item in case \(\max(S) \in \n\) then
+    \begin{equation*}
+      \max(\rho\var \sqcap \Int(S)) \leq \max(\rho \var) \leq \max(\rho) + \bound{\var\in S}
+    \end{equation*}
+    and therefore
+    \begin{equation*}
+      \rho[\var \mapsto \rho\var \sqcap \Int(S)] \in \bA_{\var \in S, \rho}
+    \end{equation*}
+    
+  \item in case \(\max(S)\not\in \n\) then
+    \begin{equation*}
+      \max(\rho\var \sqcap \Int(S)) = \max(\rho\var)
+    \end{equation*}
+    but this means again that
+    \begin{equation*}
+      \rho[\var \mapsto \rho\var \sqcap \Int(S)] \in \bA_{\var \in S,\rho}
+    \end{equation*}
+  \end{itemize}
+
+  \noindent
+  \textbf{Case} (\(\var := k\))
+  % 
+  recall that
+  \begin{equation*}
+    \semi{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}]
+  \end{equation*}
+  and notice that
+  \begin{equation*}
+    k \leq k \leq \max(\rho) + \bound{\var := k} = \max(\rho) + k
+  \end{equation*}
+  and therefore
+  \begin{equation*}
+    \semi{\var:= k}\rho \in \bA_{\var:= k, \rho}
+  \end{equation*}
+
+  \noindent
+  \textbf{Case} (\(\var := \var[y] + k\))
+
+  \noindent
+  \textbf{Case} (\(\var := \var[y] - k\))
+
+  \noindent
+  \textbf{Case} (\(\com_1 + \com_2\))
+
+  \noindent
+  \textbf{Case} (\(\com_1 ; \com_2\))
+
+  \noindent
+  \textbf{Case} (\(\fix{\com}\))
 \end{proof}

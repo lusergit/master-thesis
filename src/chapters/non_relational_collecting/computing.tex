@@ -63,10 +63,13 @@ Problem~\ref{p:nonrel}.
   \textbf{Case} (\(\var \in S\))\\
   % 
   Take \(\eta \in \bCnr\) and assume
-  \(\infty\neq\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
+  \(\infty\neq\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in
+    S}\).
   %
-  Clearly \(\semnr{\var \in S}\eta \neq \bot\), otherwise we would get the contradiction
-  \(\max(\semnr{\var \in S}\eta \var[y]) =0 \leq \bound{\var \in S}\).
+  Clearly \(\semnr{\var \in S}\eta \neq \bot\), otherwise
+  \(\max(\semnr{\var \in S}\eta \var[y]) =0 \leq \bound{\var \in S}\)
+  which is against the hypothesis that
+  \(\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in S}\)
   
   We distinguish two cases:
   \begin{itemize}
@@ -86,18 +89,19 @@ Problem~\ref{p:nonrel}.
     \end{equation*}
     Note that it cannot be \(\max(S)\in \nat\). Otherwise, by
     Definition~\ref{de:bound},
-    \(\max (\eta\var \cap S) \leq \max(S)= \bound{\var \in
-      S}\), violating the assumption \(\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
+    \(\max (\eta\var \cap S) \leq \max(S)= \bound{\var \in S}\),
+    violating the assumption
+    \(\max(\semnr{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
     Hence, \(\max(S) = \infty\) must hold and therefore
-    \(\max (\eta\var \cap S) = \max(\eta\var)=
-    \max(\eta\var)+0\). It is immediate to check that the same holds
-    for all
+    \(\max (\eta\var \cap S) = \max(\eta\var)= \max(\eta\var)+0\).
+    It is immediate to check that the same holds for all
     \(\eta' \nrsupseteq \eta\), i.e.,
-    \[
-    \max (\eta'\var \cap S) = \max(\eta'\var)=
-    \max(\eta'\var)+0
-    \]
-    and thus the thesis follows with  \(\var[z]=\var[y]=\var[x]\) and \(h=0\).
+    \begin{equation*}
+      \max (\eta'\var \cap S) = \max(\eta'\var)=
+      \max(\eta'\var)+0
+    \end{equation*}
+    and thus the thesis follows with \(\var[z]=\var[y]=\var[x]\) and
+    \(h=0\).
   \end{itemize}  
   
   % \medskip

@@ -7,11 +7,11 @@ We first define \emph{non-relational collecting} analysis the the
 \begin{definition}
   Let \(\nrdom \defin \poset{\n} \setminus \{\emptyset\}\) and
   \begin{equation*}
-    \envnr \defin \{\eta \mid \eta: \Var \to \Int_c\} \cup \{\bot\}
+    \envnr \defin \{\eta \mid \eta: \Var \to \nrdom\} \cup \{\bot\}
   \end{equation*}
   The nonrelational collecting domain is the complete lattice
   \(\bCnr \defin \tuple{\envnr,\dot{\subseteq}}\) where for all
-  \(\eta,\eta':\Var \to \Int_c\)
+  \(\eta,\eta':\Var \to \nrdom\)
   \begin{align*}
     \bot & \mathrel{\dot{\subseteq}} \eta\\
     \eta & \mathrel{\dot{\subseteq}} \eta' & \text{ if } \eta\var\subseteq \eta'\var \quad \forall \var\in \Var
