@@ -389,26 +389,26 @@ a finite path in \(\langle X,\to\rangle\)
     and thus the thesis follows with  \(\var[z]=\var[y]=\var[x]\) and \(h=0\).
   \end{itemize}  
   
-  \medskip
+  % \medskip
   
-  \noindent
-  \textbf{Case} (\(\tru\))
-  A consequence of the fact that \(\tru \equiv x\in \nat\). 
+  % \noindent
+  % \textbf{Case} (\(\tru\))
+  % A consequence of the fact that \(\tru \equiv x\in \nat\). 
 
-  \medskip
+  % \medskip
   
-  \noindent
-  \textbf{Case} (\(\ff\))
-  A consequence of the fact that \(\ff \equiv x\in \varnothing\). 
-  %
-  %  Since \(\semi{\ff}\eta = \bot\) and thus
-  %  \begin{center}
-  %    \(\max(\semi{\ff}\eta \var[y]) = \max(\bot \var[y]) =0 \leq \bound{\ff}\).
-  %  \end{center}
-  %  the thesis vacuosly holds
+  % \noindent
+  % \textbf{Case} (\(\ff\))
+  % A consequence of the fact that \(\ff \equiv x\in \varnothing\). 
+  % %
+  % %  Since \(\semi{\ff}\eta = \bot\) and thus
+  % %  \begin{center}
+  % %    \(\max(\semi{\ff}\eta \var[y]) = \max(\bot \var[y]) =0 \leq \bound{\ff}\).
+  % %  \end{center}
+  % %  the thesis vacuosly holds
 
 
-  % ----------------------------------------------
+  % % ----------------------------------------------
   
   \medskip
   
@@ -883,84 +883,43 @@ having a finite domain, we can restrict to a bounded interval domain
   % 
   % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
   % \sqcup \rho}
-  computed in \(\mathbb{A}\) and in \(\mathbb{A}_{\com,\rho}\)
+  computed in \(\bA\) and in \(\bA_{\com,\rho}\)
   coincide.
 \end{lemma}
 
 \begin{proof}
-  We can prove this by induction on the command \(\com\).
+  What we want to prove is that given a command \(\com\in\imp\) and an
+  initial environment \(\rho : \Var \to \Int\) we can build a complete
+  lattice with finite chains which contains all the results of the
+  interval analysis.  We prove this by carrying a case analysis on
+  each variable in \(\Var_{\com}\).
+  \medskip
 
   \noindent
-  \textbf{Case} (\(\var \in S\)) 
-  %
-  recall that
-  \begin{equation*}
-    \bound{\var\in S} = \begin{cases}
-      \min(S) & \max(S) = \infty \\
-      \max(S) & \max(S) \in \n
-    \end{cases}
-  \end{equation*}
-  and
-  \begin{equation*}
-    \bA_{\var\in S, \rho} = (\Var_{\var\in S} \to \Int_{\var\in S, \rho} ) \cup \{\top, \bot\}
-  \end{equation*}
-  where
-  \begin{equation*}
-    \Int_{\var\in S, \rho} = \{\interval{a}{b} \mid a,b \in \n \wedge a \leq b \leq \max(\rho) + \bound{\var\in S}\} \cup \{\interval{a}{\infty} \mid a \in \n\}
-  \end{equation*}
-  notice that in case \(\semi{\var\in S}\rho = \bot\) it is obvious
-  that \(\bot \in \bA_{\com,\rho}\). Therefore we consider the case
-  where
-  \(\semi{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap
-  \Int(S)]\). Here we have again 2 cases
+  Let \(\var[y] \in \Var_{\com}\), we have two options:
   \begin{itemize}
-  \item in case \(\max(S) \in \n\) then
-    \begin{equation*}
-      \max(\rho\var \sqcap \Int(S)) \leq \max(\rho \var) \leq \max(\rho) + \bound{\var\in S}
-    \end{equation*}
-    and therefore
-    \begin{equation*}
-      \rho[\var \mapsto \rho\var \sqcap \Int(S)] \in \bA_{\var \in S, \rho}
-    \end{equation*}
-    
-  \item in case \(\max(S)\not\in \n\) then
-    \begin{equation*}
-      \max(\rho\var \sqcap \Int(S)) = \max(\rho\var)
-    \end{equation*}
-    but this means again that
-    \begin{equation*}
-      \rho[\var \mapsto \rho\var \sqcap \Int(S)] \in \bA_{\var \in S,\rho}
-    \end{equation*}
+  \item \(\max(\semi{\com}\rho\var[y]) = \infty\), then the result of
+    the analisys \(\semi{\com}\rho\var[y] = \interval{a}{\infty}\)
+    with \(a\in\n\), which is in \(\Int_{\com, \rho}\) by definition.
+  \item \(\max(\semi{\com}\rho\var[y]) \neq \infty\). In this case we
+    have again 2 possibilities:
+    \begin{itemize}
+    \item \(\max(\semi{\com}\rho\var[y]) \leq \bound{\com}\) and
+      therefore by definition of \(\Int_{\com,\rho}\)
+      \(\semi{\com}\rho\var[y] \in \Int_{\com, \rho}\).
+      
+    \item \(\max(\semi{\com}\rho\var[y]) > \bound{\com}\). In this
+      case we can apply Lemma~\ref{le:inc} and notice that
+      \begin{equation*}
+        \exists \var[z] \in \Var_{\com}, h \in \z \mid \left|h\right| \leq \bound{\com} \wedge \max(\semi{\com}\rho\var[y]) = \max(\rho\var[z]) + h
+      \end{equation*}
+      and we can conclude by noticing that
+      \(\max(\rho\var[z]) + h\leq \max(\rho) + \bound{\com}\), which
+      means that \(\semi{\com}\rho\var[y] \in \Int_{\com, \rho}\).
+    \end{itemize}
   \end{itemize}
 
-  \noindent
-  \textbf{Case} (\(\var := k\))
-  % 
-  recall that
-  \begin{equation*}
-    \semi{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}]
-  \end{equation*}
-  and notice that
-  \begin{equation*}
-    k \leq k \leq \max(\rho) + \bound{\var := k} = \max(\rho) + k
-  \end{equation*}
-  and therefore
-  \begin{equation*}
-    \semi{\var:= k}\rho \in \bA_{\var:= k, \rho}
-  \end{equation*}
-
-  \noindent
-  \textbf{Case} (\(\var := \var[y] + k\))
-
-  \noindent
-  \textbf{Case} (\(\var := \var[y] - k\))
-
-  \noindent
-  \textbf{Case} (\(\com_1 + \com_2\))
-
-  \noindent
-  \textbf{Case} (\(\com_1 ; \com_2\))
-
-  \noindent
-  \textbf{Case} (\(\fix{\com}\))
+  Since for every given variable \(\var[y]\) the analysis
+  \(\semi{\com}\rho\var[y]\) is in \(\Int_{\com,\rho}\) then
+  \[\semi{\com}\rho \in \bA_{\com,\rho}\]
 \end{proof}
