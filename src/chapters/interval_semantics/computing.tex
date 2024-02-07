@@ -890,16 +890,15 @@ having a finite domain, we can restrict to a bounded interval domain
 \begin{proof}
   What we want to prove is that given a command \(\com\in\imp\) and an
   initial environment \(\rho : \Var \to \Int\) we can build a complete
-  lattice with finite chains which contains all the results of the
-  interval analysis.  We prove this by carrying a case analysis on
-  each variable in \(\Var_{\com}\).
-  \medskip
+  lattice with finite ascending chains which contains all the results
+  of the interval analysis.  We prove this by carrying a case analysis
+  on each variable in \(\Var_{\com}\).  \medskip
 
   \noindent
   Let \(\var[y] \in \Var_{\com}\), we have two options:
   \begin{itemize}
   \item \(\max(\semi{\com}\rho\var[y]) = \infty\), then the result of
-    the analisys \(\semi{\com}\rho\var[y] = \interval{a}{\infty}\)
+    the analysis \(\semi{\com}\rho\var[y] = \interval{a}{\infty}\)
     with \(a\in\n\), which is in \(\Int_{\com, \rho}\) by definition.
   \item \(\max(\semi{\com}\rho\var[y]) \neq \infty\). In this case we
     have again 2 possibilities:
