@@ -57,14 +57,14 @@ respect to that variable becomes stable. % We also introduce an
   natural number, denoted \(\bound{\com}\in \nat\), defined
   inductively as follows:
   \begin{align*}
-    %
+    % 
     \bound{\var \in S}  
     & \veq \begin{cases}
       \min(S) & \text{if } \max(S)=\infty\\
       \max(S) & \text{if } \max(S)\in \nat
     \end{cases}
     \\
-    %
+    % 
     \bound{\var \in [a,b]}  
     & \veq \begin{cases}
       a & \text{if } b=\infty\\
@@ -72,25 +72,25 @@ respect to that variable becomes stable. % We also introduce an
     \end{cases}
     \\
     % boolean
-    %
+    % 
     \bound{\var \leq k}  
     & \veq k\\
-    %
+    % 
     \bound{\var > k} 
     & \veq k\\
-    %
-    %
+    % 
+    % 
     \bound{\tru} 
     & \veq 0\\
-    %
+    % 
     \bound{\ff} 
     & \veq 0\\
     % \bound{\var > \var[y]}  
     % & \veq 0\\
-    %
-    %
+    % 
+    % 
     % assignements
-    %
+    % 
     \bound{\var := k} 
     & \veq k\\
     %
@@ -171,57 +171,83 @@ environments, that we'll later use for lemma~\ref{le:computebounds}
 \end{definition}
 
 \begin{lemma}\label{le:computebounds}
-  For all \(\com \in \imp\), \(\bound{\com}=\sum_{\var\in \vars{\com}}
-  (\boundt{\com}b_0)(\var)\), with \(b_0\veq \lambda x.0\).
+  For all \(\com \in \imp\),
+  \(\bound{\com}=\sum_{\var\in \vars{\com}}
+  \left(\boundt{\com}b_0\right)(\var)\), with \(b_0\veq \lambda x.0\).
 \end{lemma}
 \begin{proof}
-  By induction on \(\com\in \imp\).
-  \paragraph*{Base cases: \\}
-  \noindent
-  \begin{itemize}[label={}]
-  \item \((\var \in S)\):
-    \begin{align*}
-      \bound{\var\in S} & = \begin{cases} \min(S) & \text{if } \max(S) = \infty \\ \max(S) & \text{otherwise} \end{cases} & \\
-      \boundt{\var \in S}b_0 & = \begin{cases} b_0[\var \mapsto 0 + \min(S)] & \text{if } \max(S) = \infty \\ b_0[\var \mapsto 0 + \max(S)] & \text{if } \max(S) \in \n \end{cases} &
-    \end{align*}
-    and since \(\var\) is the only variable in \(\varsof{\var \in
-      S}\), \(\bound{\var\in S} = \boundt{\var \in S}b_0(\var)\)
-  \item \((\var \in \interval{a}{b}), (\var \leq k), (\var > k)\) are
-    the same as the latter case;
-  \item \((\tru), (\ff)\): notice that \(\varsof{\tru} = \varsof{\ff}
-    = \emptyset\);
-  \item \((\var := k)\): just notice that
-    \(\bound{\var := k} = k = b_0(\var) + k = b_0[\var \mapsto b_0 +
-    k] = \boundt{\var := k }b_0\) and \(\var\) is the only variable in
-    \(\var := k\).
-  \item \((\var := \var + k), (\var := \var - k)\) are analogous to
-    the latter case.
-  \end{itemize}
+  For the following proof we work by induction on \(\com\in \imp\):
+
+  \paragraph*{Base cases:} \mbox{} \\
+  
+  \medskip
+
+  \textbf{Case} (\(\var \in S\))
+  %
+  \begin{align*}
+    \bound{\var\in S} & = \begin{cases}
+      \min(S) & \text{if } \max(S) = \infty \\
+      \max(S) & \text{otherwise}
+    \end{cases} & \\
+    \boundt{\var \in S}b_0 & = \begin{cases}
+      b_0[\var \mapsto 0 + \min(S)] & \text{if } \max(S) = \infty \\
+      b_0[\var \mapsto 0 + \max(S)] & \text{if } \max(S) \in \n
+    \end{cases} &
+  \end{align*}
+  
+  and since \(\var\) is the only variable in \(\varsof{\var \in S}\),
+  \(\bound{\var\in S} = \sum_{\vars{\var \in S}}\left(\boundt{\var \in
+      S}b_0\right)\var\)
+  
+  \medskip
+  
+  \textbf{Case} (\(\var := k\))
+  %
+  just notice that
+  \(\bound{\var := k} = k = \sum_{\var[y] \in \vars{\com}} b_0[\var \mapsto b_0 + k]
+  = \boundt{\var := k }b_0\)
+
+  \medskip
+
+  \textbf{Case} (\(\var := \var[y] + k\))
+  
+  \medskip
 
   \noindent
-  \paragraph*{Inductive cases:\\}
-  \begin{itemize}[label={}]
-  \item[\((\com_1 \ndet \com_2)\)]
-    \begin{align*}
-      \bound{\com_1 \ndet \com_2} & = &\\
-      \bound{\com_1} + \bound{\com_2} & = & \text{by inductive hypothesis}\\
+  \paragraph*{Inductive cases:}\mbox{}\\
+  
+  \medskip
+  
+  \textbf{Case} (\(\com_1 \ndet \com_2\))
+  %
+  \begin{align*}
+    \bound{\com_1 \ndet \com_2} & = &\\
+    \bound{\com_1} + \bound{\com_2} & = & \text{by inductive hypothesis}\\
       \sum_{\var\in \vars{\com_1}} (\boundt{\com}b_0)(\var) + \sum_{\var\in \vars{\com_2}} (\boundt{\com}b_0)(\var) & = &\\
-      \sum_{\var\in \vars{\com_1}\cap \vars{\com_2}} (\boundt{\com_1}b_0)(\var)+(\boundt{\com_2}b_0)(\var) & \;+ & \\
-      \sum_{\var\in \vars{\com_1}\smallsetminus \vars{\com_2}} (\boundt{\com_1}b_0)(\var) & \;+ & \\
-      \sum_{\var\in \vars{\com_2}\smallsetminus \vars{\com_1}} (\boundt{\com_2}b_0)(\var) & = & \\
-      \boundt{\com_1 \ndet \com_2}b_0 & &
-    \end{align*}
-  \item[\((\com_1; \com_2)\)] identical to \((\com_1 \ndet \com_2)\);
-  \item[\((\com^*)\)]
-    \begin{align*}
-      \bound{\com^*} & = &\\
-      |\vars{C}+1|\bound{\com} & = & \text{by inductive hypothesis} \\
-      |\vars{C}+1|\sum_{\var\in \vars{\com}} (\boundt{\com}b_0)(\var) & = &\\
-      \sum_{\var\in \vars{\com}} |\vars{C}+1|(\boundt{\com}b_0)(\var) & = &\\
-      %\lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b_0)(\var[x]) =&\\
+    \sum_{\var\in \vars{\com_1}\cap \vars{\com_2}} (\boundt{\com_1}b_0)(\var)+(\boundt{\com_2}b_0)(\var) & \;+ & \\
+    \sum_{\var\in \vars{\com_1}\smallsetminus \vars{\com_2}} (\boundt{\com_1}b_0)(\var) & \;+ & \\
+    \sum_{\var\in \vars{\com_2}\smallsetminus \vars{\com_1}} (\boundt{\com_2}b_0)(\var) & = & \\
+    \boundt{\com_1 \ndet \com_2}b_0 & &
+  \end{align*}
+
+  \medskip
+  
+  \textbf{Case} (\(\com_1 ; \com_2\))
+  %
+  identical to \((\com_1 \ndet \com_2)\);
+
+  \medskip
+  
+  \textbf{Case} (\(\com^*\))
+  % 
+  \begin{align*}
+    \bound{\com^*} & = &\\
+    |\vars{C}+1|\bound{\com} & = & \text{by inductive hypothesis} \\
+    |\vars{C}+1|\sum_{\var\in \vars{\com}} (\boundt{\com}b_0)(\var) & = &\\
+    \sum_{\var\in \vars{\com}} |\vars{C}+1|(\boundt{\com}b_0)(\var) & = &\\
+    % \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b_0)(\var[x]) =&\\
       \boundt{\fix{\com}}b_0 & &
-    \end{align*}
-  \end{itemize}
+  \end{align*}
 \end{proof}
 
 We next prove an easy graph-theoretic property which will later be
@@ -889,17 +915,19 @@ having a finite domain, we can restrict to a bounded interval domain
 
 \begin{proof}
   What we want to prove is that given a command \(\com\in\imp\) and an
-  initial environment \(\rho : \Var \to \Int\) we can build a complete
-  lattice with finite ascending chains which contains all the results
-  of the interval analysis.  We prove this by carrying a case analysis
-  on each variable in \(\Var_{\com}\).  \medskip
+  initial environment \(\rho : \Var \to \Int\) the analysis in the
+  lattice \(\bA\) and in the lattice \(\bA_{\com,\rho}\) coincide. In
+  other words what we want to prove is that for every variable
+  \(\var[y]\) the values of \(\semi{\com}\rho\var[y]\) are in
+  \(\bA_{\com,\rho}\). We prove this by case analysis on each variable
+  in \(\Var_{\com}\).  \medskip
 
   \noindent
   For all \(\var[y] \in \Var_{\com}\) we have two options:
   \begin{itemize}
   \item \(\max(\semi{\com}\rho\var[y]) = \infty\), then the result of
-    the analysis \(\semi{\com}\rho\var[y] = \interval{a}{\infty}\)
-    with \(a\in\n\), which is in \(\Int_{\com, \rho}\) by definition.
+    the analysis \(\semi{\com}\rho\var[y] = \interval{a}{\infty}\) for
+    some \(a\in\n\), which is in \(\Int_{\com, \rho}\) by definition.
   \item \(\max(\semi{\com}\rho\var[y]) \neq \infty\). In this case we
     have again 2 possibilities:
     \begin{itemize}

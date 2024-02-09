@@ -1,4 +1,5 @@
 \section{Interval Analysis}
+\label{sec:interval}
 
 We define \emph{interval analysis} of the above language \(\imp\) in a
 standard way, taking the best correct approximations (bca) for the
@@ -137,9 +138,8 @@ an empty interval).
     \semi{\var \in S}\eta 
     & \veq  
       \begin{cases}
-        \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if
-                                                              }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
-                                                                                                                   \text{otherwise}
+        \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
+                                                                                                                            \text{otherwise}
       \end{cases}\\
     % \semi{\tru}\eta 
     % & \veq \eta\\
@@ -162,97 +162,25 @@ an empty interval).
   \end{align*}
 \end{definition}
 
-We can immediately see how in the abstract interval domain, the
-semantics of the Kleene star and the fixpoint operator is not the
-same. This intuitively happens because the kleene star is the least
-opper bound of a chain of interals, while the fix operator keeps
-iterating over least upper bounds.
-
-\begin{example} \label{ex:fix}
-  This is the case, for instance, the following program \(P\)
-  represents the difference between the Kleene Star and the Fix
-  operator:
-\begin{verbatim}
-  while x < 8 do
-  if x = 2 then x := x+6;
-  x := x-3
-  if x <= 0 then x:=0
-\end{verbatim}
-starting with the finite interval \(\interval{3}{4}\) we get the
-following loop invariants:
-
-\begin{align*}
-  \text{Kleene: } &\sqcup\{[3,4], [0,1], [0,0], [0,0], \ldots\} = [0,4]\\[5pt]
-  \text{Fix: } & \sqcup\{\bot, [3,4], [0,4], [0,5], [0,5],\ldots\} = [0,5]
-\end{align*}
-
-\noindent
-Both invariants are correct, because they over-approximate the most
-precise concrete invariant \(\{0,1,3,4\}\), however the Kleene
-invariant is strictly more precise than the Fix one.
-\end{example}
-
-\begin{lemma}[\(\fix{\com}\) \textbf{is syntactic sugar}]\label{le:sugar}
-  For all \(\eta\),
-  \(\semi{\fix{\com}} \eta = \semi{\kleene{(\tru + \com)}} \eta\).
-\end{lemma}
-
-\begin{proof}
-  Let us first show by induction that 
-  \begin{equation}\label{prop2}
-    \forall i\geq 0.\: (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot = (\tru \sqcup \semi{\com})^{i} \eta \tag{\(\sharp\)}
-  \end{equation}
-
-  \noindent
-  \(i=0\): \( (\eta \sqcup \tru \sqcup \semi{\com})^{1} \bot = \eta \sqcup \bot \sqcup \semi{\com}\bot = \eta = 
-  (\tru \sqcup \semi{\com})^{0} \eta\).
-  
-  %\medskip
-  \noindent
-  \(i+1\):  
-  \begin{align*}
-    (\tru \sqcup \semi{\com})^{i+1} \eta & = & \\
-    (\tru \sqcup \semi{\com})((\tru \sqcup \semi{\com})^{i} \eta) & = & \\
-    ((\tru \sqcup \semi{\com})^{i} \eta) \sqcup  \semi{\com}((\tru \sqcup \semi{\com})^{i} \eta) & = & \text{By induction}\\
-    (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot \sqcup \semi{\com}((\eta \sqcup \tru \sqcup \semi{\com})^{i+1}\bot ) &= & \text{As } \eta \sqsubseteq (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot \\
-    \eta \sqcup (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot \sqcup \semi{\com}((\eta \sqcup \tru \sqcup \semi{\com})^{i+1}\bot ) & = & \\
-    (\eta \sqcup \tru \sqcup \semi{\com}) ((\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot) & = & \\
-    (\eta \sqcup \tru \sqcup \semi{\com})^{i+2} \bot & &
-  \end{align*}
-
-  Let us also show that:
-  \begin{equation}\label{prop3}
-    \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} =
-    \lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi{\com} \mu)}\tag{\(\diamond\)}
-  \end{equation}
-  Observe that \(\lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} = \eta \sqcup  \semi{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)})\), so that we have that:
-  \[
-  \eta \sqcup  \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} \sqcup \semi{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)})
-  \sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)}
-  \]
-  As a consequence, \(\lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi{\com} \mu)}\sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)}\) holds. The reverse inequality follows because, for all \(\mu\), 
-  \(\eta \sqcup \semi{\com} \mu \sqsubseteq \eta \sqcup \mu \sqcup \semi{\com} \mu\).
-
-  Then, we have that:
-  \begin{align*}
-    \semi{\fix{\com}} \eta & = \\
-    \lfp{\lambda \mu. (\eta \sqcup \semi{\com} \mu)} & = &  \text{By \eqref{prop3}}\\
-    \lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi{\com} \mu)} & = & \text{By Knaster-Tarski Theorem} \\
-    \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi{\com})^i \bot & = \\
-    \bot \sqcup \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi{\com})^{i+1} \bot & = & \text{By \eqref{prop2}}\\
-    \bigsqcup_{i \in \nat} (\tru \sqcup \semi{\com})^{i} \eta & = \\
-    \semi{\kleene{(\tru + \com)}} \eta. &
-  \end{align*}  
-\end{proof}
-
-\begin{remark}
-  Let us remark that in case we were interested in studying
-  termination of the abstract interpreter, we could assume that the
-  input of a program will always be a finite interval in such a way
-  that non termination can be identified with the impossibility of
-  converging to a finite interval for some variable. In fact, starting
-  from an environment \(\eta\) which maps each variable to a finite
-  interval, \(\semi{\com}\eta\) might be infinite on some variable
-  when \(\com\) includes a either Kleene or fix iteration which does
-  not converge in finitely many steps.
-\end{remark}
+Notice that the filtering in Definition~\ref{de:intervalsem} is not
+the best correct approximation. In particular the filtering
+instruction \(\var\in S\) is performed first by abstracting the
+numerical set \(S \subseteq \n\) with \(\abstr[\Int]\) and then by
+computing the greatest lower bound with \(\eta(\var)\). Best correct
+approximation would consist in the opposite approach: compute the
+concrete \(\concr(\eta\var)\) and subsequently compute the meet in
+the \(\poset{\n}\) domain:
+\begin{equation*}
+  \semi{\var\in S}\eta = \begin{cases}
+    \eta[\var \mapsto \abstr[\Int](\concr(\eta\var) \cap S)]
+    & \text{if } \concr(\eta\var) \cap S \neq \bot \\
+    \bot & \text{otherwise}
+  \end{cases}
+\end{equation*}
+This however would introduce a problem in proving Lemma~\ref{le:inc},
+as Axiom~\ref{ax:max} would not be respected.  Notice that this
+approximation coincides in fact with the best correct approximation in
+two important cases: \(\var \leq k\) and \(\var \geq k\). These two
+cases are widely used in programming, namely we can cite the fact that
+they are part of the nasa programming guidelines on writing
+analyzer-friendly code as stated in \cite{nasa:ten}.
