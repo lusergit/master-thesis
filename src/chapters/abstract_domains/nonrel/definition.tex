@@ -1,0 +1,97 @@
+\subsection{Definition}
+\label{sub:nonrel}
+
+We first define \emph{non-relational collecting} analysis the the
+\(\imp\) language in a standard way.
+
+\begin{definition}[Non Relational Collecting domain]
+  Let \(\nrdom \defin \poset{\n} \setminus \{\emptyset\}\) and
+  \begin{equation*}
+    \envnr \defin \{\eta \mid \eta: \Var \to \nrdom\} \cup \{\bot\}
+  \end{equation*}
+  The nonrelational collecting domain is the complete lattice
+  \(\bCnr \defin \tuple{\envnr,\dot{\subseteq}}\) where for all
+  \(\eta,\eta':\Var \to \nrdom\)
+  \begin{align*}
+    \bot & \mathrel{\dot{\subseteq}} \eta\\
+    \eta & \mathrel{\dot{\subseteq}} \eta' & \text{ if } \eta\var\subseteq \eta'\var \quad \forall \var\in \Var
+  \end{align*}
+\end{definition}
+
+In order to have a proper galois connection we also define abstraction
+and concretization maps:
+
+\begin{definition}[Non relational collecting abstraction]
+  we define the \emph{non relational abstraction} map
+  \(\alpha: \tuple{\poset{\env},\subseteq} \to
+  \tuple{\envnr,\dot{\subseteq}}\) as follows:
+  \begin{align*}
+    &\alpha(X) \defin 
+      \begin{cases}
+        \bot & \text{if }X=\varnothing\\
+        \lambda \var. \{\rho(\var) \in \n \mid \rho \in X\} &\text{if }X\neq \varnothing\\
+      \end{cases}
+  \end{align*}
+\end{definition}
+
+\begin{definition}[Non relational concretization]
+  We define the \emph{concretization map}
+  \(\gamma: \tuple{\envnr,\dot{\subseteq}} \to
+  \tuple{\poset{\env},\subseteq}\) as follows:
+  \begin{align*}
+    &\gamma(\bot) \defin \varnothing\\
+    &\gamma(\eta) \defin \{\rho : \Var \to \n \mid \forall \var \in \Var. \rho(\var)\in \eta(\var)\}
+  \end{align*}
+\end{definition}
+
+With an abstraction and concretization map we have a galois
+connection, where ...
+
+we also define the least upper bound and the greatest lower bound on
+elements of \(\bCnr\):
+
+\begin{definition}[lub and glb in \(\bCnr\)]
+  Let \(\eta,\theta \in \bCnr\). we define the \(\sqcup\) and
+  \(\sqcap\) operations:
+  \begin{align*}
+    \eta \sqcup \theta & = \sigma & \text{if } \sigma\var = \eta\var \cup \theta\var \quad \forall \var \in \Var \\
+    \eta \sqcap \theta & = \sigma & \text{if } \sigma\var = \eta\var \cap \theta\var \quad \forall \var \in \Var \\
+  \end{align*}
+\end{definition}
+
+finally we can define non relational collecting analysis.
+
+\begin{definition}[Non-Relational collecting semantics]\label{def:nonrel}
+  The \emph{Non-Relational collecting semantics} of \(\imp\), is the
+  strict (i.e., preserving \(\bot\))
+  % and co-strict (i.e., preserving \(\top\))
+  extension of the following function \(\semnr{\cdot}: \imp \to
+  \bCnr \to \bCnr\). For all \(\eta \in \envnr\),
+
+  \begin{align*}
+    % 
+    \semnr{\var \in S}\eta 
+    & \defin  
+      \begin{cases}
+        \eta[\var \mapsto \eta(\var)\cap S] & \text{if }\eta(\var)\cap S\neq \bot \\ \bot & \text{otherwise}
+      \end{cases}\\
+    \semnr{\tru}\eta 
+    & \defin \eta\\
+    \semnr{\ff}\eta 
+    & \defin \bot\\
+    \semnr{\var := k}\eta 
+    & \defin \eta[\var \mapsto \{k\}]\\
+    \semnr{\var := \var[y] + k}\eta 
+    & \defin \eta[\var \mapsto \eta (\var[y]) + k]\\
+    \semnr{\var := \var[y] - k}\eta 
+    & \defin \eta[\var \mapsto \eta (\var[y]) - k]\\
+    \semnr{\com_1 \ndet \com_2} \eta
+    & \defin \semnr{\com_1} \eta \sqcup \semnr{\com_2} \eta\\
+    \semnr{\com_1 \seq \com_2} \eta
+    & \defin \semnr{\com_2} (\semnr{\com_1} \eta)\\
+    \semnr{\kleene{\com}} \eta
+    & \defin \textstyle \bigsqcup_{i \in \nat} \semnr{\com}^i (\eta)\\
+    \semnr{\fix{\com}} \eta
+    & \defin  \lfp(\lambda \mu. (\eta \sqcup \semnr{\com} \mu))
+  \end{align*}
+\end{definition}

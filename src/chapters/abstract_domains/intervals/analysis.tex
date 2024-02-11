@@ -1,0 +1,186 @@
+\subsection{Definition}
+\label{sub:intervals}
+
+We define \emph{interval analysis} of the above language \(\imp\) in a
+standard way, taking the best correct approximations (bca) for the
+basic expressions in \(\expr\).
+
+\begin{definition}[Integer intervals]
+  We call
+  \[ \Int \defin \{ \interval{a}{b} \mid a \in \n \wedge b \in \n \cup
+    \{+\infty\} \wedge a\leq b \} \cup \{\abstract{\bot}\} \] set of
+  integer intervals.
+\end{definition}
+
+\begin{definition}[Concretization map]
+  We define the \emph{concretization map} \(\gamma:\Int \to
+  \poset{\n}\) as
+  \begin{align*}
+    \gamma(\interval{a}{b}) & \defin \{x\in \n \mid a \leq x \leq b\} \\
+    \gamma(\bot) & \defin \emptyset
+  \end{align*}
+\end{definition}
+
+\noindent
+Observe that \(\tuple{\Int,\sqsubseteq}\) is a complete lattice where
+for all \(I,J\in \Int\), \(I\sqsubseteq J\) iff
+\(\gamma(I) \subseteq \gamma(J)\).
+
+
+\begin{definition}[Abstract integer domain]
+  Let \(\Int_* \defin \Int \setminus \{\abstract{\bot}\}\). The
+  abstract domain \(\bA\) for program analysis is the variable-wise
+  lifting of \(\Int\): \[ \bA \defin (\Var \to \Int_*) \cup \{
+    \abstract{\bot} \} \]
+\end{definition}
+
+where the intervals for a given variable are always nonempty, while
+\(\abstract{\bot}\) represents the empty set of environments.  Thus,
+the corresponding concretization is defined as follows:
+
+\begin{definition}[Interval concretization]
+  We define the \emph{concretization map} for the abstract domain
+  \(\bA\) \(\concr[\Int] : \bA \to \poset{\env}\) as
+  \begin{align*}
+    \concr[\Int](\bot) & \defin \emptyset \\
+    \forall \eta\neq \bot \quad \concr[\Int](\eta) & \defin \{\rho \in \env \mid \forall x\in \Var \: \rho(x) \in \gamma(\eta(x))\} 
+  \end{align*}
+\end{definition}
+
+\begin{observation}
+  If we consider the ordering \(\sqsubseteq\) on \(\bA\)
+  s.t. \[\forall \eta, \theta \in \bA \quad \eta \sqsubseteq \theta
+    \iff \concr[\Int](\eta) \subseteq \concr[\Int](\theta)\] then
+  \(\tuple{\bA, \sqsubseteq}\) is a complete lattice.
+\end{observation}
+
+\begin{definition}[Interval abstraction]
+  We define the \emph{abstraction map} of some numerical set
+  \(X \subseteq \n\) into the abstract domain \(\bA\):
+  \(\abstr[\Int] : \poset{\n} \to \bA\) as
+  \[\abstr[\Int](X) \defin \begin{cases} \abstract{\bot} & \text{if }
+      X = \emptyset \\ \interval{\min(X)}{\max(X)} &
+      \text{otherwise} \end{cases}\]
+\end{definition}
+
+Observe that since we have both a concretization map \(\concr[\Int]\)
+and an abstraction map \(\abstr[\Int]\) we have built the Galois
+Connection \[\tuple{\concr[\Int], \dom, \bA, \abstr[\Int]}\] between
+the concrete domain \(\dom\) and the abstract domain \(\bA\),
+resulting
+
+\begin{definition}[Abstract operations]
+  We define sound abstract lub and glb operations in the \(\bA\)
+  domain:
+  \begin{align*}
+    \interval{a}{b} \; \acup \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
+    \interval{a}{b} \; \acap \; \interval{c}{d} & \defin \begin{cases} \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
+      \abstract{\bot} & \text{otherwise} \end{cases}
+  \end{align*}
+  And sound abstract arithmetical operations:
+  \begin{align*}
+    \abstract{-}\; \interval{a}{b} & \defin \interval{-b}{-a} \\
+    \interval{a}{b} \abstract{+} \interval{c}{d} & \defin \interval{a+c}{b+d} \\
+    \interval{a}{b} \abstract{-} \interval{c}{d} & \defin \interval{a-c}{b-d} \\
+    \interval{a}{b} \abstract{\times} \interval{c}{d} & \defin \interval{\min(ac,ad,bc,bd)}{\max(ac,ad,bc,bd)} \\
+  \end{align*}
+\end{definition}
+
+\begin{definition}[Interval sharpening]
+  \label{de:trunc}
+  For a nonempty interval \(\interval{a}{b} \in \Int\) and \(c \in \n\), we define
+  two operations raising \(\uparrow\) the lower bound to \(c\) and lowering \(\downarrow\) the upper
+  bound to \(c\), respectively:
+  \begin{align*}
+    &\truncL{\interval{a}{b}}{c} \veq 
+      \begin{cases} 
+        \interval{\max\{a,c\}}{b} & \text{if } c\leq b\\
+        \bot & \text{if } c > b
+      \end{cases}
+    \\
+    &\truncR{\interval{a}{b}}{c} \veq 
+      \begin{cases}   
+        \interval{a}{\min\{b,c\}} & \text{if } c\geq a\\
+        \bot & \text{if } c < a 
+      \end{cases} 
+  \end{align*}
+  Observe that \(\max(\truncR{\interval{a}{b}}{c})\leq c\) always holds. \qed   
+  % \end{quote}
+\end{definition}
+
+\begin{definition}[Interval addition and subtraction]
+  \label{de:add}
+  For a nonempty interval \(\interval{a}{b} \in \Int\) and \(c \in \n\) define
+  \(\interval{a}{b} \pm c \veq \interval{a\pm c}{b\pm c}\) (recall that \(\pm \infty + c = \pm\infty - c = \pm\infty\)).  
+  \qed
+\end{definition}
+
+
+Observe that for every interval \(\interval{a}{b} \in \Int\) and
+\(c \in \n\)
+\begin{center}
+  \(\max(\truncL{\interval{a}{b}}{c}) \leq b\)
+  \qquad and \qquad
+  \(\max(\truncR{\interval{a}{b}}{c}) \leq c\)
+\end{center}
+that trivially holds by 
+defining \(\max (\bot)  \veq 0\) (i.e., \(0\) is the maximum of
+an empty interval).
+% Just observe that the resulting interval could be empty, i.e.\ \(\bot\), and .
+
+\begin{definition}[Interval semantics]\label{de:intervalsem}
+  The \emph{interval semantics} of \(\imp\) is the strict (i.e.,
+  preserving \(\bot\))
+  % and co-strict (i.e., preserving \(\top\))
+  extension of the following function \(\semi{\cdot}: \imp \to
+  \bA \to \bA\). For all \(\eta: \Var \to \Int_*\),
+  \begin{align*}
+    \semi{\var \in S}\eta 
+    & \veq  
+      \begin{cases}
+        \eta[\var \mapsto \eta(\var)\sqcap \abstr[\Int](S)] & \text{if }\eta(\var)\sqcap \abstr[\Int](S)\neq \bot \\ \bot &
+                                                                                                                            \text{otherwise}
+      \end{cases}\\
+    % \semi{\tru}\eta 
+    % & \veq \eta\\
+    % \semi{\ff}\eta 
+    % & \veq \bot\\
+    \semi{\var := k}\eta 
+    & \veq \eta[\var \mapsto \interval{k}{k}]\\
+    \semi{\var := \var[y] + k}\eta 
+    & \veq \eta[\var \mapsto \eta (\var[y]) + k]\\
+    \semi{\var := \var[y] - k}\eta 
+    & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
+    \semi{\com_1 \ndet \com_2} \eta
+    & \veq \semi{\com_1} \eta \sqcup \semi{\com_2} \eta\\
+    \semi{\com_1 \seq \com_2} \eta
+    & \veq \semi{\com_2} (\semi{\com_1} \eta)\\
+    \semi{\kleene{\com}} \eta
+    & \veq \textstyle \bigsqcup_{i \in \nat} \semi{\com}^i (\eta)\\
+    \semi{\fix{\com}} \eta
+    & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi{\com} \mu))
+  \end{align*}
+\end{definition}
+
+Notice that the filtering in Definition~\ref{de:intervalsem} is not
+the best correct approximation. In particular the filtering
+instruction \(\var\in S\) is performed first by abstracting the
+numerical set \(S \subseteq \n\) with \(\abstr[\Int]\) and then by
+computing the greatest lower bound with \(\eta(\var)\). Best correct
+approximation would consist in the opposite approach: compute the
+concrete \(\concr(\eta\var)\) and subsequently compute the meet in
+the \(\poset{\n}\) domain:
+\begin{equation*}
+  \semi{\var\in S}\eta = \begin{cases}
+    \eta[\var \mapsto \abstr[\Int](\concr(\eta\var) \cap S)]
+    & \text{if } \concr(\eta\var) \cap S \neq \bot \\
+    \bot & \text{otherwise}
+  \end{cases}
+\end{equation*}
+This however would introduce a problem in proving Lemma~\ref{le:inc},
+as Axiom~\ref{ax:max} would not be respected.  Notice that this
+approximation coincides in fact with the best correct approximation in
+two important cases: \(\var \leq k\) and \(\var \geq k\). These two
+cases are widely used in programming, namely we can cite the fact that
+they are part of the nasa programming guidelines on writing
+analyzer-friendly code as stated in \cite{nasa:ten}.

@@ -1,0 +1,201 @@
+\section{Program bounds}
+\label{sec:bounds}
+
+\begin{definition}[\textbf{Program bound}]
+  \label{de:bound}
+  The \emph{bound} associated with a command \(\com\in \imp\) is a
+  natural number, denoted \(\bound{\com}\in \nat\), defined
+  inductively as follows:
+  \begin{align*}
+    % 
+    \bound{\var \in S}  
+    & \veq \begin{cases}
+      \min(S) & \text{if } \max(S)=\infty\\
+      \max(S) & \text{if } \max(S)\in \nat
+    \end{cases}
+    \\
+    % 
+    \bound{\var \in [a,b]}  
+    & \veq \begin{cases}
+      a & \text{if } b=\infty\\
+      b & \text{if } b\in \nat
+    \end{cases}
+    \\
+    % boolean
+    % 
+    \bound{\var \leq k}  
+    & \veq k\\
+    % 
+    \bound{\var > k} 
+    & \veq k\\
+    % 
+    % 
+    \bound{\tru} 
+    & \veq 0\\
+    % 
+    \bound{\ff} 
+    & \veq 0\\
+    % \bound{\var > \var[y]}  
+    % & \veq 0\\
+    % 
+    % 
+    % assignements
+    % 
+    \bound{\var := k} 
+    & \veq k\\
+    %
+    \bound{\var := \var[y] + k}
+    & \veq k\\
+    %
+    \bound{\var := \var[y] - k}
+    & \veq k\\
+    % 
+    % \bound{\var := \var[y]} 
+    % & \veq 0\\[3mm]
+    %
+    % commands
+    %
+    \bound{\com_1 \ndet \com_2}
+    & \veq \bound{\com_1} + \bound{\com_2}\\
+    %
+    \bound{\com_1 \seq \com_2}
+    & \veq \bound{\com_1} + \bound{\com_2}\\
+    %% %% 
+    %% \bound{\kleene{\com}}
+    %% & \veq 2 \bound{\com}\\
+    %% %% 
+    \bound{\kleene{\com}}
+    & \veq (|\varsof{\com}|+1) \bound{\com} \\ 
+  \end{align*}
+  where \(\varsof{\com}\) denotes the set of variables occurring in 
+  \(\com\).
+\end{definition}
+
+In order to compute the bound of a program we introduce bounded
+environments, that we'll later use for lemma~\ref{le:computebounds}
+
+\begin{definition}[\textbf{Bound Environment}]
+  \label{de:boundenv}
+  A bound environment (benv for short) is a total function \(b:\Var
+  \to \nat\). We define \(\benv \veq \{ b \mid b:\Var \to \nat\}\).
+  Each command \(\com\in \imp\) induces a benv transformer
+  \(\boundt{C}:\benv \to \benv\), which is defined inductively as
+  follows:
+  \begin{align*}
+    %
+    % boolean
+    %
+    \boundt{\var \in S}b  
+    & \veq 
+    \begin{cases} 
+      b[\var[x]\mapsto b(\var[x])+\min(S)]& \text{if }\max(S)=\infty\\
+      b[\var[x]\mapsto b(\var[x])+\max(S)]& \text{if }\max(S)\in \nat
+    \end{cases}
+    \\
+    %
+    % assignments
+    %
+    \boundt{\var := k}b 
+    & \veq  b[\var[x]\mapsto b(\var[x])+k]\\
+    %
+    \boundt{\var := \var[y] + k}b
+    & \veq  b[\var[x]\mapsto b(\var[x])+b(\var[y])+k]\\
+    %
+    \boundt{\var := \var[y] - k}b
+    & \veq  b[\var[x]\mapsto b(\var[x]) + b(\var[y]) - k]\\
+    %
+    % commands
+    %
+    \boundt{\com_1 \ndet \com_2}b
+    & \veq \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b)(\var[x])\\
+    %
+    \boundt{\com_1 \seq \com_2}b
+    & \veq \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b)(\var[x])\\
+    %& \veq \boundt{\com_2}(\boundt{\com_1}b) \\
+    % 
+    \boundt{\com^*}b
+    &\veq  \lambda \var[x]. (|\varsof{\com}|+1)(\boundt{\com}b)(\var[x])
+  \end{align*}    
+  where \(\varsof{\com}\) denotes the set of variables occurring
+  in \(\com\).
+\end{definition}
+
+\begin{lemma}\label{le:computebounds}
+  For all \(\com \in \imp\),
+  \(\bound{\com}=\sum_{\var\in \vars{\com}}
+  \left(\boundt{\com}b_0\right)(\var)\), with \(b_0\veq \lambda x.0\).
+\end{lemma}
+\begin{proof}
+  For the following proof we work by induction on \(\com\in \imp\):
+
+  \paragraph*{Base cases:} \mbox{} \\
+  
+  \medskip
+
+  \textbf{Case} (\(\var \in S\))
+  %
+  \begin{align*}
+    \bound{\var\in S} & = \begin{cases}
+      \min(S) & \text{if } \max(S) = \infty \\
+      \max(S) & \text{otherwise}
+    \end{cases} & \\
+    \boundt{\var \in S}b_0 & = \begin{cases}
+      b_0[\var \mapsto 0 + \min(S)] & \text{if } \max(S) = \infty \\
+      b_0[\var \mapsto 0 + \max(S)] & \text{if } \max(S) \in \n
+    \end{cases} &
+  \end{align*}
+  
+  and since \(\var\) is the only variable in \(\varsof{\var \in S}\),
+  \(\bound{\var\in S} = \sum_{\vars{\var \in S}}\left(\boundt{\var \in
+      S}b_0\right)\var\)
+  
+  \medskip
+  
+  \textbf{Case} (\(\var := k\))
+  %
+  just notice that
+  \(\bound{\var := k} = k = \sum_{\var[y] \in \vars{\com}} b_0[\var \mapsto b_0 + k]
+  = \boundt{\var := k }b_0\)
+
+  \medskip
+
+  \textbf{Case} (\(\var := \var[y] + k\))
+  
+  \medskip
+
+  \noindent
+  \paragraph*{Inductive cases:}\mbox{}\\
+  
+  \medskip
+  
+  \textbf{Case} (\(\com_1 \ndet \com_2\))
+  %
+  \begin{align*}
+    \bound{\com_1 \ndet \com_2} & = &\\
+    \bound{\com_1} + \bound{\com_2} & = & \text{by inductive hypothesis}\\
+      \sum_{\var\in \vars{\com_1}} (\boundt{\com}b_0)(\var) + \sum_{\var\in \vars{\com_2}} (\boundt{\com}b_0)(\var) & = &\\
+    \sum_{\var\in \vars{\com_1}\cap \vars{\com_2}} (\boundt{\com_1}b_0)(\var)+(\boundt{\com_2}b_0)(\var) & \;+ & \\
+    \sum_{\var\in \vars{\com_1}\smallsetminus \vars{\com_2}} (\boundt{\com_1}b_0)(\var) & \;+ & \\
+    \sum_{\var\in \vars{\com_2}\smallsetminus \vars{\com_1}} (\boundt{\com_2}b_0)(\var) & = & \\
+    \boundt{\com_1 \ndet \com_2}b_0 & &
+  \end{align*}
+
+  \medskip
+  
+  \textbf{Case} (\(\com_1 ; \com_2\))
+  %
+  identical to \((\com_1 \ndet \com_2)\);
+
+  \medskip
+  
+  \textbf{Case} (\(\com^*\))
+  % 
+  \begin{align*}
+    \bound{\com^*} & = &\\
+    |\vars{C}+1|\bound{\com} & = & \text{by inductive hypothesis} \\
+    |\vars{C}+1|\sum_{\var\in \vars{\com}} (\boundt{\com}b_0)(\var) & = &\\
+    \sum_{\var\in \vars{\com}} |\vars{C}+1|(\boundt{\com}b_0)(\var) & = &\\
+    % \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b_0)(\var[x]) =&\\
+      \boundt{\fix{\com}}b_0 & &
+  \end{align*}
+\end{proof}
