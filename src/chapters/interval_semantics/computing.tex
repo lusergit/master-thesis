@@ -914,39 +914,192 @@ having a finite domain, we can restrict to a bounded interval domain
 \end{lemma}
 
 \begin{proof}
-  What we want to prove is that given a command \(\com\in\imp\) and an
-  initial environment \(\rho : \Var \to \Int\) the analysis in the
-  lattice \(\bA\) and in the lattice \(\bA_{\com,\rho}\) coincide. In
-  other words what we want to prove is that for every variable
-  \(\var[y]\) the values of \(\semi{\com}\rho\var[y]\) are in
-  \(\bA_{\com,\rho}\). We prove this by case analysis on each variable
-  in \(\Var_{\com}\).  \medskip
+  What we want to show is that for every command \(\com\in\imp\), the
+  interval semantics on a starting environment \(\rho\) can be
+  computed on the lattice \(\bA_{\com,\rho}\) which is inifite but
+  only contains finite chains. In other words we want to prove that
+  the result of \(\semi{\com}\rho\) in \(\bA\) is in fact part of the
+  lattice \(\bA_{\com,\rho}\). We can prove this by induction on the
+  command \(\com\).
 
   \noindent
-  For all \(\var[y] \in \Var_{\com}\) we have two options:
+  \textbf{Case} (\(\var \in S\)) 
+  %
+  recall that
+  \begin{equation*}
+    \bound{\var\in S} = \begin{cases}
+      \min(S) & \max(S) = \infty \\
+      \max(S) & \max(S) \in \n
+    \end{cases}
+  \end{equation*}
+  and
+  \begin{equation*}
+    \bA_{\var\in S, \rho} = (\Var_{\var\in S} \to \Int_{\var\in S, \rho} ) \cup \{\top, \bot\}
+  \end{equation*}
+  where
+  \begin{equation*}
+    \Int_{\var\in S, \rho} = \{\interval{a}{b} \mid a,b \in \n \wedge a \leq b \leq \max(\rho) + \bound{\var\in S}\} \cup \{\interval{a}{\infty} \mid a \in \n\}
+  \end{equation*}
+  notice that in case \(\semi{\var\in S}\rho = \bot\) it is obvious
+  that \(\bot \in \bA_{\var \in S,\rho}\). Therefore we consider the case
+  \(\bot \neq \semi{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap
+  \Int(S)]\). Here we have again 2 cases
   \begin{itemize}
-  \item \(\max(\semi{\com}\rho\var[y]) = \infty\), then the result of
-    the analysis \(\semi{\com}\rho\var[y] = \interval{a}{\infty}\) for
-    some \(a\in\n\), which is in \(\Int_{\com, \rho}\) by definition.
-  \item \(\max(\semi{\com}\rho\var[y]) \neq \infty\). In this case we
-    have again 2 possibilities:
-    \begin{itemize}
-    \item \(\max(\semi{\com}\rho\var[y]) \leq \bound{\com}\) and
-      therefore by definition of \(\Int_{\com,\rho}\)
-      \(\semi{\com}\rho\var[y] \in \Int_{\com, \rho}\).
-      
-    \item \(\max(\semi{\com}\rho\var[y]) > \bound{\com}\). In this
-      case we can apply Lemma~\ref{le:inc} and notice that
-      \begin{equation*}
-        \exists \var[z] \in \Var_{\com}, h \in \z \mid \left|h\right| \leq \bound{\com} \wedge \max(\semi{\com}\rho\var[y]) = \max(\rho\var[z]) + h
-      \end{equation*}
-      and we can conclude by noticing that
-      \(\max(\rho\var[z]) + h\leq \max(\rho) + \bound{\com}\), which
-      means that \(\semi{\com}\rho\var[y] \in \Int_{\com, \rho}\).
-    \end{itemize}
+  \item in case \(\max(S) \in \n\) then
+    \begin{equation*}
+      \max(\rho\var \sqcap \Int(S)) \leq \max(\rho \var) \leq \max(\rho) \leq \max(\rho) + \bound{\var\in S}
+    \end{equation*}
+    and therefore
+    \begin{equation*}
+      \rho[\var \mapsto \rho\var \sqcap \Int(S)] \in \bA_{\var \in S, \rho}
+    \end{equation*}
+    
+  \item in case \(\max(S)\not\in \n\) then
+    \begin{equation*}
+      \max(\rho\var \sqcap \Int(S)) = \max(\rho\var) \leq \max(\rho) \leq \max(\rho) + \bound{\var \in S}
+    \end{equation*}
+    but this means again that
+    \begin{equation*}
+      \rho[\var \mapsto \rho\var \sqcap \Int(S)] \in \bA_{\var \in S,\rho}
+    \end{equation*}
   \end{itemize}
 
-  Since for every given variable \(\var[y]\) the analysis
-  \(\semi{\com}\rho\var[y]\) is in \(\Int_{\com,\rho}\) then
-  \[\semi{\com}\rho \in \bA_{\com,\rho}\]
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\var := k\))
+  % 
+  recall that
+  \begin{equation*}
+    \semi{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}]
+  \end{equation*}
+  and notice that
+  \begin{equation*}
+    k \leq k \leq \max(\rho) + \bound{\var := k} = \max(\rho) + k
+  \end{equation*}
+  and therefore
+  \begin{equation*}
+    \semi{\var:= k}\rho \in \bA_{\var:= k, \rho}
+  \end{equation*}
+   
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\var := \var[y] + k\))
+  % 
+  recall that
+  \begin{equation*}
+    \semi{\var := \var[y] + k}\rho = \rho[\var \mapsto \rho\var[y] + k]
+  \end{equation*}
+  and notice that
+  \begin{equation*}
+    \max(\rho\var[y]) + k \leq \max(\rho) + k = \max(\rho) + \bound{\var := k}
+  \end{equation*}
+  and therefore
+  \begin{equation*}
+    \semi{\var:= \var[y] + k}\rho \in \bA_{\var:=\var[y] + k, \rho}
+  \end{equation*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\var := \var[y] - k\))
+  % 
+  recall that
+  \begin{equation*}
+    \semi{\var := \var[y] - k}\rho = \rho[\var \mapsto \rho\var[y] - k]
+  \end{equation*}
+  and notice that
+  \begin{equation*}
+    \max(\rho\var[y]) - k \leq \max(\rho) + k = \max(\rho) + \bound{\var := k}
+  \end{equation*}
+  and therefore
+  \begin{equation*}
+    \semi{\var:=\var[y] - k}\rho \in \bA_{\var:= \var[y] - k, \rho}
+  \end{equation*}
+  
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1 + \com_2\))
+  %
+  Notice that in this case
+  \(\semi{\com_1 + \com_2} \rho = \semi{\com_1}\rho \sqcup
+  \semi{\com_2}\rho\) and
+  \(\bound{\com_1 + \com_2} = \bound{\com_1} + \bound{\com_2}\). By
+  inductive hypothesis we can say that
+  \(\semi{\com_1}\rho \in \bA_{\com_1, \rho}\) and
+  \(\semi{\com_2}\rho \in \bA_{\com_2, \rho}\). This means in other
+  words that \(\forall \var \in \Var\)
+  \begin{align*}
+    \max(\semi{\com_1}\rho\var) & \leq \max{\rho} + \bound{\com_1} \\
+    \max(\semi{\com_2}\rho\var) & \leq \max{\rho} + \bound{\com_2}
+  \end{align*}
+  and therefore \(\forall \var \in \Var\)
+  \begin{align*}
+    \max(\semi{\com_1 + \com_2} \rho \var & = \max(\semi{\com_1}\rho\var \sqcup \semi{\com_2}\rho\var) \\
+                                          & = \max\{\max(\semi{\com_1}\rho\var), \max(\semi{\com_2}\rho\var)\}
+  \end{align*}
+  Thus for each \(\var \in\Var\)
+  \(\max(\semi{\com_1 + \com_2}\rho\var) =
+  \max(\semi{\com_i}\rho\var)\) for some \(i \in \{1,2\}\).  Hence we
+  can notice that \(\forall \var\in\Var\)
+  \begin{equation*}
+    \max(\semi{\com_1 + \com_2}\rho\var) = \max(\semi{\com_i}\rho\var) \leq \max(\rho) + \bound{\com_i} 
+  \end{equation*}
+  for some \(i\in\{1,2\}\). Since this holds for every variable we can
+  write it in a more general way
+  \begin{equation*}
+    \max(\semi{\com_1 + \com_2}\rho) = \max(\semi{\com_i}\rho) \leq \max(\rho) + \bound{\com_i} 
+  \end{equation*}
+  again for some \(i\in\{1,2\}\). We conclude by noticing that
+  \begin{equation*}
+    \max(\rho) + \bound{\com_i} \leq \max(\rho) + \bound{\com_1} + \bound{\com_2} = \max(\rho) + \bound{\com_1 + \com_2}
+  \end{equation*}
+  for all \(i \in \{1,2\}\). Which means that
+  \begin{equation*}
+    \max(\semi{\com_1 + \com_2}\rho) \leq \max(\rho) + \bound{\com_1 + \com_2}
+  \end{equation*}
+  and therefore
+  \begin{equation*}
+    \semi{\com_1 + \com_2} \rho \in \bA_{\com_1 + \com_2, \rho}
+  \end{equation*}
+  
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1 ; \com_2\)) Recall that
+  \(\semi{\com_1 ; \com_2}\rho = \semi{\com_2}(\semi{\com_1}\rho)\) and
+  \(\bound{\com_1 ; \com_2} = \bound{\com_1} + \bound{\com_2}\). By
+  inductive hypothesis we know that
+  \begin{equation*}
+    \semi{\com_1}\rho \in \bA_{\com_1, \rho}
+  \end{equation*}
+  and therefore
+  \begin{equation}\label{eq:comp1}
+    \max(\semi{\com_1}\rho) \leq \max(\rho) + \bound{\com_1}
+  \end{equation}
+  Let's call \(\rho' = \semi{\com_1}\rho\), by inductive hypothesis we
+  can deduce that
+  \begin{equation*}
+    \semi{\com_2}\rho' \in \bA_{\com_2, \rho'}
+  \end{equation*}
+  with
+  \(\Int_{\com_2, \rho'} = \{\interval{a}{b} \mid a,b \in \n \wedge a
+  \leq b \leq \max(\rho') + \bound{\com_2}\} \cup
+  \{\interval{a}{\infty} \mid a \in \n\}\). By \eqref{eq:comp1}
+  \begin{equation*}
+    \max(\rho') = \max(\semi{\com_1}\rho) \leq \max(\rho) + \bound{\com_1}
+  \end{equation*}
+  and therefore
+  \(\rho'' \in \bA_{\com_2, \rho'} \Rightarrow \rho'' \in
+  \bA_{\com_1;\com_2, \rho}\) which means that
+  \begin{equation*}
+    \semi{\com_1;\com_2}\rho = \semi{\com_2}(\semi{\com_1}\rho) = \semi{\com_2}\rho' \in \bA_{\com_1;\com_2, \rho}
+  \end{equation*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\fix{\com}\))
 \end{proof}
