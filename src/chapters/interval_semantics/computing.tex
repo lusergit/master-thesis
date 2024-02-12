@@ -895,9 +895,10 @@ having a finite domain, we can restrict to a bounded interval domain
 \[
   \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \nat\ \land\
   a \leq b \leq \max(\rho) + \bound{\com}\} \cup
-  \{\interval{a}{\infty} \mid a \in \nat \}
+  \{\interval{a}{\infty} \mid a \in \nat\}
 \]
 
+% Notice that \(\interval{0}{\infty} = \top\).
 % We could also operate uniformly on all commands, defining the
 % semantics for \(\com\) in a domain with intervals bounded by
 % \(\max(\rho) +\bound{\com}\)
@@ -918,8 +919,8 @@ having a finite domain, we can restrict to a bounded interval domain
   initial environment \(\rho : \Var \to \Int\) the analysis in the
   lattice \(\bA\) and in the lattice \(\bA_{\com,\rho}\) coincide. In
   other words what we want to prove is that for every variable
-  \(\var[y]\) the values of \(\semi{\com}\rho\var[y]\) are in
-  \(\bA_{\com,\rho}\). We prove this by case analysis on each variable
+  \(\var[y]\) the possible values of \(\semi{\com}\rho\var[y]\) are in
+  \(\Int_{\com,\rho}\). We prove this by case analysis on each variable
   in \(\Var_{\com}\).  \medskip
 
   \noindent
