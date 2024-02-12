@@ -2,9 +2,10 @@
 \label{sec:assumptions}
 
 
-Given some abstract domain \(\bA\) we define an \emph{analysis over}
-\(\bA\) as the function \(\semi{\cdot} : \imp \to \bA \to \bA\), which
-maps each \(\imp\) command to a continuous function over the \(\bA\)
+Given some abstract domain \(\bA\) over some domain \(\bD\)
+(e.g. \(\bA\) over \(\Int\)) we define an \emph{analysis over} \(\bA\)
+as the function \(\semi{\cdot} : \imp \to \bA \to \bA\), which maps
+each \(\imp\) command to a continuous function over the \(\bA\)
 lattice.  The analysis is inductively defined as follows:
 
 \begin{definition}[Abstract interpretation]\label{de:ainterpret}
@@ -13,7 +14,7 @@ lattice.  The analysis is inductively defined as follows:
   % and co-strict (i.e., preserving \(\top\))
   extension of the following function
   \(\semi{\cdot}: \imp \to \bA \to \bA\). For all
-  \(\eta: \Var \to \bA_*\),
+  \(\eta: \Var \to \bD_*\),
   \begin{align*}
     \semi{\var \in S}\eta 
     & \veq  
@@ -40,6 +41,8 @@ lattice.  The analysis is inductively defined as follows:
     \semi{\fix{\com}} \eta
     & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi{\com} \mu))
   \end{align*}
+
+  Where by \(\bD_*\) we mean \(\bD \setminus \{\emptyset\}\).
 \end{definition}
 
 Notice that the filtering in Definition~\ref{de:intervalsem} is not
