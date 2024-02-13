@@ -23,29 +23,29 @@ and concretization maps:
 
 \begin{definition}[Non relational collecting abstraction]
   we define the \emph{non relational abstraction} map
-  \(\alpha: \tuple{\poset{\env},\subseteq} \to
-  \tuple{\envnr,\dot{\subseteq}}\) as follows:
-  \begin{align*}
-    &\alpha(X) \defin 
+  \[\alpha: \tuple{\poset{\env},\subseteq} \to
+  \tuple{\envnr,\dot{\subseteq}}\] as follows:
+  \begin{equation*}
+    \alpha(X) \defin 
       \begin{cases}
-        \bot & \text{if }X=\varnothing\\
-        \lambda \var. \{\rho(\var) \in \n \mid \rho \in X\} &\text{if }X\neq \varnothing\\
+        \bot & \text{if }X=\varnothing \\
+        \lambda \var. \{\rho(\var) \in \n \mid \rho \in X\} & \text{if }X\neq \varnothing\\
       \end{cases}
-  \end{align*}
+  \end{equation*}
 \end{definition}
 
 \begin{definition}[Non relational concretization]
   We define the \emph{concretization map}
-  \(\gamma: \tuple{\envnr,\dot{\subseteq}} \to
-  \tuple{\poset{\env},\subseteq}\) as follows:
+  \[\gamma: \tuple{\envnr,\dot{\subseteq}} \to
+  \tuple{\poset{\env},\subseteq}\] as follows:
   \begin{align*}
-    &\gamma(\bot) \defin \varnothing\\
-    &\gamma(\eta) \defin \{\rho : \Var \to \n \mid \forall \var \in \Var. \rho(\var)\in \eta(\var)\}
+    \gamma(\bot) & \defin \varnothing \\
+    \gamma(\eta) & \defin \{\rho : \Var \to \n \mid \forall \var \in \Var. \rho(\var)\in \eta(\var)\}
   \end{align*}
 \end{definition}
 
 With an abstraction and concretization map we have a galois
-connection, where ...
+connection, where \todo{finish}
 
 we also define the least upper bound and the greatest lower bound on
 elements of \(\bCnr\):

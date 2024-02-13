@@ -7,9 +7,10 @@ basic expressions in \(\expr\).
 
 \begin{definition}[Integer intervals]
   We call
-  \[ \Int \defin \{ \interval{a}{b} \mid a \in \n \wedge b \in \n \cup
-    \{+\infty\} \wedge a\leq b \} \cup \{\abstract{\bot}\} \] set of
-  integer intervals.
+  \[ \Int \defin \{ \interval{a}{b} \mid a \in \z \cup \{-\infty\}
+    \wedge b \in \z \cup \{+\infty\} \wedge a\leq b \} \cup
+    \{\abstract{\bot}\} \] set of integer intervals. We write \(\top\)
+  instead of \(\interval{-\infty}{+\infty}\)
 \end{definition}
 
 \begin{definition}[Concretization map]
@@ -29,8 +30,8 @@ for all \(I,J\in \Int\), \(I\sqsubseteq J\) iff
 
 \begin{definition}[Abstract integer domain]
   Let \(\Int_* \defin \Int \setminus \{\abstract{\bot}\}\). The
-  abstract domain \(\bA\) for program analysis is the variable-wise
-  lifting of \(\Int\): \[ \bA \defin (\Var \to \Int_*) \cup \{
+  abstract domain \(\inte\) for program analysis is the variable-wise
+  lifting of \(\Int\): \[ \inte \defin (\Var \to \Int_*) \cup \{
     \abstract{\bot} \} \]
 \end{definition}
 
@@ -40,7 +41,7 @@ the corresponding concretization is defined as follows:
 
 \begin{definition}[Interval concretization]
   We define the \emph{concretization map} for the abstract domain
-  \(\bA\) \(\concr[\Int] : \bA \to \poset{\env}\) as
+  \(\inte\) \(\concr[\Int] : \inte \to \poset{\env}\) as
   \begin{align*}
     \concr[\Int](\bot) & \defin \emptyset \\
     \forall \eta\neq \bot \quad \concr[\Int](\eta) & \defin \{\rho \in \env \mid \forall x\in \Var \: \rho(x) \in \gamma(\eta(x))\} 
@@ -48,16 +49,17 @@ the corresponding concretization is defined as follows:
 \end{definition}
 
 \begin{observation}
-  If we consider the ordering \(\sqsubseteq\) on \(\bA\)
-  s.t. \[\forall \eta, \theta \in \bA \quad \eta \sqsubseteq \theta
-    \iff \concr[\Int](\eta) \subseteq \concr[\Int](\theta)\] then
-  \(\tuple{\bA, \sqsubseteq}\) is a complete lattice.
+  If we consider the ordering \(\sqsubseteq\) on \(\inte\)
+  s.t.
+  \[\forall \eta, \theta \in \inte \quad \eta \sqsubseteq \theta \iff
+    \concr[\Int](\eta) \subseteq \concr[\Int](\theta)\] then
+  \(\tuple{\inte, \sqsubseteq}\) is a complete lattice.
 \end{observation}
 
 \begin{definition}[Interval abstraction]
   We define the \emph{abstraction map} of some numerical set
-  \(X \subseteq \n\) into the abstract domain \(\bA\):
-  \(\abstr[\Int] : \poset{\n} \to \bA\) as
+  \(X \subseteq \n\) into the abstract domain \(\inte\):
+  \(\abstr[\Int] : \poset{\n} \to \inte\) as
   \[\abstr[\Int](X) \defin \begin{cases} \abstract{\bot} & \text{if }
       X = \emptyset \\ \interval{\min(X)}{\max(X)} &
       \text{otherwise} \end{cases}\]
@@ -65,12 +67,12 @@ the corresponding concretization is defined as follows:
 
 Observe that since we have both a concretization map \(\concr[\Int]\)
 and an abstraction map \(\abstr[\Int]\) we have built the Galois
-Connection \[\tuple{\concr[\Int], \dom, \bA, \abstr[\Int]}\] between
-the concrete domain \(\dom\) and the abstract domain \(\bA\),
+Connection \[\tuple{\concr[\Int], \dom, \inte, \abstr[\Int]}\] between
+the concrete domain \(\dom\) and the abstract domain \(\inte\),
 resulting
 
 \begin{definition}[Abstract operations]
-  We define sound abstract lub and glb operations in the \(\bA\)
+  We define sound abstract lub and glb operations in the \(\inte\)
   domain:
   \begin{align*}
     \interval{a}{b} \; \acup \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
@@ -132,8 +134,9 @@ an empty interval).
   The \emph{interval semantics} of \(\imp\) is the strict (i.e.,
   preserving \(\bot\))
   % and co-strict (i.e., preserving \(\top\))
-  extension of the following function \(\semi{\cdot}: \imp \to
-  \bA \to \bA\). For all \(\eta: \Var \to \Int_*\),
+  extension of the following function
+  \(\semi{\cdot}: \imp \to \inte \to \inte\). For all
+  \(\eta: \Var \to \Int_*\),
   \begin{align*}
     \semi{\var \in S}\eta 
     & \veq  
