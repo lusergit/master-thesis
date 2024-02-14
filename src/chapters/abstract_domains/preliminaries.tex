@@ -1,0 +1,38 @@
+\section{Abstract semantics}
+\label{sec:abstractsem}
+
+In order to talk about analysis over some abstract domain \(\bA\), we
+preliminarly introduce the abstract semantic.
+
+\begin{definition}
+  Given and abstract domain \(\bA\), with an abstraction map
+  \({\alpha : \poset{\z} \to \bA}\) and a concretization map
+  \({\concr : \bA \to \poset{\z}}\) the \emph{analysis semantics} over
+  \(\bA\) is defined as the strict (i.e., preserving \(\bot\))
+  extension of the following function
+  \({\semi[\bA]{\cdot} : \imp \to \bA \to \bA}\). For all
+  \(\eta \in \bA\)
+
+  \begin{align*}
+    \semi[\bA]{\var \in S}\eta 
+    & \veq  
+      \begin{cases}
+        \eta[\var \mapsto \abstr(\concr(\eta\var) \cap S)] & \text{if }\eta\var\cap S\neq \emptyset \\
+        \bot & \text{otherwise}
+      \end{cases}\\
+    \semi[\bA]{\var := k}\eta 
+    & \veq \eta[\var \mapsto \abstr(\{k\})]\\
+    \semi[\bA]{\var := \var[y] + k}\eta 
+    & \veq \eta[\var \mapsto \eta (\var[y]) + k]\\
+    \semi[\bA]{\var := \var[y] - k}\eta 
+    & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
+    \semi[\bA]{\com_1 \ndet \com_2} \eta
+    & \veq \semi[\bA]{\com_1} \eta \sqcup \semi[\bA]{\com_2} \eta\\
+    \semi[\bA]{\com_1 \seq \com_2} \eta
+    & \veq \semi[\bA]{\com_2} (\semi[\bA]{\com_1} \eta)\\
+    \semi[\bA]{\kleene{\com}} \eta
+    & \veq \textstyle \bigsqcup_{i \in \nat} \semi[\bA]{\com}^i (\eta)\\
+    \semi[\bA]{\fix{\com}} \eta
+    & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi[\bA]{\com} \mu))
+  \end{align*}
+\end{definition}

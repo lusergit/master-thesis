@@ -83,9 +83,16 @@ a finite path in \(\langle X,\to\rangle\)
   positive weight.
 \end{proof}
 
+
 \begin{lemma}
   \label{le:inc}
-  Let \(\com\in \imp\). % and \(\var[y] \in \Var\)
+  Consider an abstract domain \(\bA\) s.t.
+  \begin{enumerate}[label=(\Roman*)]
+  \item\label{inc:hp1} if \(\max(\abstr(S)) = \infty\) then
+    \(\max(\eta(\var) \sqcap \abstr(S)) = \max(\eta\var)\)
+  \item\label{inc:hp2} \(\max(a \sqcup b) = \max\{\max(a), \max(b)\}\)
+  \end{enumerate}
+  and let \(\com\in \imp\). % and \(\var[y] \in \Var\)
   
   \noindent
   For all \(\eta \in \mathbb{A}\) and \(\var[y] \in \Var\), if

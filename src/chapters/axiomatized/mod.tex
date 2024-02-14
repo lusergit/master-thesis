@@ -36,8 +36,11 @@ have seen in section \ref{sec:finiteness}. First let's formalize the
 problem we want to solve.
 
 \begin{problem}[Analysis termination]\label{problem1}
-  Given \(\com\in \imp\), \(\eta \in \bA\), decide: \(\semi{\com} \eta
-  =^? \top\)
+  Given a program \(\com\in \imp\) and an abstract domain \(\bA\) with
+  \(\eta \in \bA\), decide
+  \begin{equation*}
+    \semi{\com} \eta =^? \top
+  \end{equation*}
 \end{problem}
 
 To do so we present a novel technique, based on the idea of
@@ -52,6 +55,6 @@ respect to that variable becomes stable. % We also introduce an
 % \emph{increment bound} which captures the largest increment or
 % decrement that can affect a variable.
 
-\subimport{./}{assumptions}
+%% \subimport{./}{assumptions}
 \subimport{./}{bounds}
 \subimport{./}{computing}

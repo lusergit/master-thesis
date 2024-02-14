@@ -2,16 +2,18 @@
 \label{sub:nonrel}
 
 We first define \emph{non-relational collecting} analysis the the
-\(\imp\) language in a standard way.
+\(\imp\) language in a standard way, taking again the best correct
+approximation (bca) for the basic expressions in \(\expr\).
 
 \begin{definition}[Non Relational Collecting domain]
-  Let \(\nrdom \defin \poset{\n} \setminus \{\emptyset\}\) and
+  % Let \(\nrdom \defin \poset{\n} \setminus \{\emptyset\}\) and
+  We define the non relational collecting environments as
   \begin{equation*}
-    \envnr \defin \{\eta \mid \eta: \Var \to \nrdom\} \cup \{\bot\}
+    \envnr \defin \{\eta \mid \eta: \Var \to \poset{\z}\setminus \{\emptyset\}\} \cup \{\bot\}
   \end{equation*}
-  The nonrelational collecting domain is the complete lattice
+  And the non relational collecting domain as the complete lattice
   \(\bCnr \defin \tuple{\envnr,\dot{\subseteq}}\) where for all
-  \(\eta,\eta':\Var \to \nrdom\)
+  \(\eta,\eta'\in \envnr\)
   \begin{align*}
     \bot & \mathrel{\dot{\subseteq}} \eta\\
     \eta & \mathrel{\dot{\subseteq}} \eta' & \text{ if } \eta\var\subseteq \eta'\var \quad \forall \var\in \Var
@@ -23,8 +25,10 @@ and concretization maps:
 
 \begin{definition}[Non relational collecting abstraction]
   we define the \emph{non relational abstraction} map
-  \[\alpha: \tuple{\poset{\env},\subseteq} \to
-  \tuple{\envnr,\dot{\subseteq}}\] as follows:
+  \begin{equation*}
+    \alpha: \tuple{\poset{\env},\subseteq} \to \bCnr
+  \end{equation*}
+  as follows:
   \begin{equation*}
     \alpha(X) \defin 
       \begin{cases}

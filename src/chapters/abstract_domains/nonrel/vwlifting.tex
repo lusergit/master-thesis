@@ -1,0 +1,56 @@
+\subsection{Variable-wise lifting}
+\label{sub:vwintervals}
+
+We can therefore proceed to introduce the variable-wise lifting of the
+\(\poset{\z}\) domain, building the real abstract domain \(\bCnr\):
+
+\begin{definition}[Abstract Non relational collecting domain]
+  Let \(\poset{\z}_* = \poset{\z} \setminus \{\emptyset\}\). The
+  abstract domain \(\bCnr\) for program analysis is the variable-wise
+  lifting of \(\poset{\z}\):
+  \[ \bCnr \defin (\Var \to \poset{\z}_*) \cup \{ \bot \} \]
+\end{definition}
+
+In this domain, we define again abstraction and concretization maps,
+building a galios connection with the concrete domain
+
+\begin{definition}
+  \label{def:vwgalios}
+  We define the \emph{concretization map} of abstract environments
+  \(\eta \in \bCnr\), i.e., \({\concr : \bCnr \to \poset{\env}}\) as
+  follows
+  \begin{align*}
+    \concr(\bot) & \defin \emptyset \\
+    \concr(\eta) & \defin \{\rho \in \env \mid \forall \var \in \Var \quad \rho(\var) \in \eta\var\}
+  \end{align*}
+  and the \emph{abstraction map} of sets of concrete environments
+  \(X \in \poset{\env}\), i.e., \(\abstr : \poset{\env} \to \bCnr\) as
+  \begin{align*}
+    \abstr(\emptyset) & \defin \bot \\
+    \abstr(X) & \defin \lambda \var \; . \; \{\rho(\var) \mid \rho \in X\} \\
+  \end{align*}
+\end{definition}
+
+We can again define a notion of order for elements of \(\bCnr\) based
+on the concretization map. We do by overloading the notation
+\(\sqsubseteq\). Let \(\eta, \theta \in \bCnr\), then
+\begin{equation*}
+  \eta \sqsubseteq \theta \text{ iff } \concr(\eta) \subseteq \concr(\theta)
+\end{equation*}
+
+Notice that because of the definition of the concretization map
+(Definition~\ref{def:vwgalios})
+\begin{equation*}
+  \eta \sqsubseteq \theta \iff \forall \var \in \Var \; \eta(\var) \sqsubseteq \theta(\var)
+\end{equation*}
+Again, we can define least upper bounds and greatest lower bounds by
+lifting the \(\sqcup\) and \(\sqcap\) operations. Let again
+\(\eta, \theta \in \bCnr\), then
+\begin{align*}
+  \eta \acap \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \cap \theta(\var) \quad \forall \var\in\Var \\
+  \eta \acup \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \cup \theta(\var) \quad \forall \var\in\Var \\
+\end{align*}
+
+Again we can notice that \(\tuple{\bCnr, \sqsubseteq}\) is a complete
+lattice, as for every two elements \(\eta,\theta\in\bCnr\) there
+exists both \(\eta \sqcup \theta\) and \(\eta \sqcap \theta\).
