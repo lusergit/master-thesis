@@ -1,0 +1,232 @@
+\section{Computing interval semantics}
+\label{sec:computingint}
+
+Lemma~\ref{le:inc} provides an effective algorithm for computing the
+abstract semantics of commands provided a domain that respects
+properties \ref{inc:hp1} and \ref{inc:hp2}. We can in fact verify that
+the intervals respect such claims.
+
+\begin{observation}[\ref{inc:hp1} holds on intervals]
+  Let \(\iota \in \Int, S \in \poset{\z}\). If
+  \(\max(\abstr(S)) = \infty\) and
+  \({\iota \sqcap \abstr(S) \neq \bot}\) then
+  \({max(\iota \sqcap \abstr(S)) = \max(\iota)}\) where
+  \(S \in \poset{\Z}\) and \(\iota \in \Int\)
+\end{observation}
+
+\begin{proof}
+  Let \(\iota = \interval{a}{b}\) and
+  \(\abstr(S) = \interval{c}{\infty}\) and remember that
+  \({\iota \sqcap \abstr(S) \neq \bot}\). Then
+  \begin{equation*}
+    \max([a,b] \sqcap \abstr(S)) = \max(\interval{\max\{a, c\}}{\min\{b , \infty\}}) = b = \max(\iota) \qedhere
+  \end{equation*}
+\end{proof}
+
+\begin{observation}[\ref{inc:hp2} holds on intervals]
+  Let \(\iota, \kappa \in \Int\), then
+  \(\max(\iota \sqcup \kappa) = \max\{\max(\iota), \max(\kappa)\}\)
+\end{observation}
+
+\begin{proof}
+  Let \(\iota = \interval{a}{b}\) and \(\kappa =
+  \interval{c}{d}\). Then by definition
+  \(\iota \sqcup \kappa = \interval{\min\{a,c\}}{\max\{b,d\}}\), and
+  therefore
+  \begin{equation*}
+    \max(\iota \sqcup \kappa) = \max\{b,d\} = \max\{\max(\iota), \max(\kappa)\} \qedhere
+  \end{equation*}
+\end{proof}
+
+This means that we can apply Lemma~\ref{le:inc} on the intervals
+domain \(\inte\).  First, given a command \(\com\), the corresponding
+finite set of variables \(\Var_{\com} \veq \mathit{vars}(\com)\), and
+an interval environment \(\rho : \Var_{\com} \to \Int\), we define
+\[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
+  \}.\]
+%
+Then, when computing \(\semi[\inte]{\com} \rho\) on such \(\rho\)
+having a finite domain, we can restrict to a bounded interval domain
+\(\inte_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
+\{ \top, \bot \}\) where
+\begin{equation*}
+  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \z \land
+  \min(\rho) - \lbound{\com} \leq a \leq b \leq \max(\rho) + \bound{\com}\}
+\end{equation*}
+
+% We could also operate uniformly on all commands, defining the
+% semantics for \(\com\) in a domain with intervals bounded by
+% \(\max(\rho) +\bound{\com}\)
+
+\begin{lemma}
+  Let \(\com\in \imp\) be a command. Then, for all finitely supported
+  \(\rho : \Var \to \Int\), the abstract semantics
+  \(\semi{\com} \rho \)
+  % 
+  % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
+  % \sqcup \rho}
+  computed in \(\inte\) and in \(\inte_{\com,\rho}\)
+  coincide, i.e., 
+  \begin{equation*}
+    \semi[\inte]{\com}\rho = \semi[\inte_{\com,\rho}]{\com}\rho
+  \end{equation*}
+\end{lemma}
+
+\begin{proof}
+  The proof will proceed by induction on the command \(\com\). First,
+  let's explore the base cases.
+
+  \medskip
+
+  \textbf{Case} (\(\var \in S\)).
+  %
+  Recall that
+  % \begin{equation*}
+  %   \bound{\var \in S} = \begin{cases}
+  %     \min(\abstr(S)) & \text{if }\max(\abstr(S)) = \infty \\
+  %     \max(\abstr(S)) & \text{otherwise}
+  %   \end{cases}
+  % \end{equation*}
+  % and
+  \begin{equation*}
+    \semi[\inte]{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr(S)]
+  \end{equation*}
+  by definition it holds that
+  \(\max(\rho\var \sqcap \abstr(S)) \leq \max(\rho\var)\) and
+  therefore
+  \begin{equation*}
+    \semi[\inte_{\com,\rho}]{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr(S)]
+  \end{equation*}
+  which means that
+  \begin{equation*}
+    \semi[\inte]{\var\in S}\rho = \semi[\inte_{\com,\rho}]{\var\in S}\rho
+  \end{equation*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\var := k\)).
+  %
+  Recall that
+  \begin{equation*}
+    \semi[\inte]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}]
+  \end{equation*}
+  and also recall that
+  \(k \leq k \leq \max(\rho) + k = \max(\rho) + \bound{\var :=
+    k}\). Hence by definition
+  \begin{equation*}
+    \semi[\inte_{\com,\rho}]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}]
+  \end{equation*}
+  and therefore
+  \begin{equation*}
+    \semi[\inte]{\var := k}\rho = \semi[\inte_{\com,\rho}]{\var := k}\rho
+  \end{equation*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\var := \var[y] + k\)).
+  % 
+  Recall that
+  \({\semi[\inte]{\var := \var[y] + k}\rho} = {\rho[\var \mapsto
+    \rho\var[y] + k]}\) and
+  \({\max(\rho\var + k)} \leq {\max(\rho) + k} = {\max(\rho) +
+    \bound{\var := \var[y] + k}}\)
+  and therefore by definition
+  \begin{equation*}
+    \semi[\inte_{\com,\rho}]{\var := \var[y] + k}\rho = \rho[\var \mapsto \rho\var[y] + k]
+  \end{equation*}
+  hence
+  \begin{equation*}
+    \semi[\inte_{\com,\rho}]{\var := \var[y] + k}\rho = \semi[\inte]{\var := \var[y] + k}\rho
+  \end{equation*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\var := \var[y] - k\)).
+  % 
+  Recall that
+  \({\semi[\inte]{\var := \var[y] - k}\rho} = {\rho[\var \mapsto
+    \rho\var[y] - k]}\) and that
+  \({\max(\rho\var[y] - k)} \leq {\max(\rho) + k} = {\max(\rho) +
+    \bound{\rho\var[y] - k}}\). Hence we can notice that
+  \({\semi[\inte_{\com,\rho}]{\var := \var[y] - k}\rho} = {\rho[\var
+    \mapsto \rho\var[y] - k]}\) and therefore
+  \begin{equation*}
+    \semi[\inte]{\var := \var[y] - k}\rho = \semi[\inte_{\com,\rho}]{\var := \var[y] - k}\rho
+  \end{equation*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1 + \com_2\)).
+  % 
+  Recall that
+  \({\semi[\inte]{\com_1 + \com_2}\rho} = {\semi[\inte]{\com_1}\rho}
+  \sqcup {\semi[\inte]{\com_2}\rho}\) and by inductive hypothesis
+  \begin{align*}
+    \semi[\inte]{\com_1}\rho & = \semi[\inte_{\com_1, \rho}]{\com_1}\rho \\
+    \semi[\inte]{\com_2}\rho & = \semi[\inte_{\com_2, \rho}]{\com_2}\rho
+  \end{align*}
+  by definition
+  \begin{equation*}
+    \semi[\inte_{\com_1, \rho}]{\com_1}\rho \sqcup \semi[\inte_{\com_2, \rho}]{\com_2}\rho = \rho'
+  \end{equation*}
+  where \(\forall \var \in \Var\)
+  \(\rho'\var = {\left(\semi[\inte_{\com_1,
+        \rho}]{\com_1}\rho\right)\var} \sqcup
+  {\left(\semi[\inte_{\com_2, \rho}]{\com_2}\rho\right)
+    \var}\). \todo[inline]{\(\top\) e \(\bot\) possiamo escluderli
+    perchè banalmente coincidono sempre} Recall that
+  \begin{align*}
+    \inte_{\com_1, \rho} & = \{\interval{a}{b} \mid \min(\rho) - \lbound{\com_1} \leq a \leq b \leq \max(\rho) + \bound{\com_1}\} \\
+    \inte_{\com_2, \rho} & = \{\interval{a}{b} \mid \min(\rho) - \lbound{\com_2} \leq a \leq b \leq \max(\rho) + \bound{\com_2}\}
+  \end{align*}
+  Hence observe that for all \(\var\in\Var\) we can call
+  \begin{align*}
+    \iota & = \semi[\inte_{\com_1, \rho}]{\com_1}\rho & \text{where } \iota\var = \interval{a}{b} \text{ for some } a,b\in\z \\
+    \kappa & = \semi[\inte_{\com_2, \rho}]{\com_2}\rho & \text{where }\kappa\var = \interval{c}{d} \text{ for some } c,d \in\z
+  \end{align*}
+  and by the definition of \(\sqcup\) for intervals 
+  \begin{equation*}
+    \iota\var \sqcup \kappa\var = \interval{\min\{a,c\}}{\max\{b,d\}}
+  \end{equation*}
+  we can notice that
+  \begin{align*}
+    \max(\iota\var\sqcup\kappa\var) & \leq \max(\rho) + \bound{\com_1} + \bound{\com_2} & \text{by Lemma~\ref{le:inc}}\\
+                                    & = \max(\rho) + (\bound{\com_1} + \bound{\com_2}) \\
+                                    & = \max(\rho) + \bound{\com_1 + \com_2}
+  \end{align*}
+  and dually
+  \begin{align*}
+    \min(\iota\var\sqcup\kappa\var) & \geq \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \\
+                                    & = \min(\rho) - (\lbound{\com_1} + \lbound{\com_2}) \\
+                                    & = \min(\rho) - \lbound{\com_1 + \com_2}
+  \end{align*}
+  and therefore
+  \begin{equation*}
+    \min(\rho) - \lbound{\com_1 + \com_2} \leq \min(\iota\var \sqcup \kappa\var) \leq \max(\iota\var \sqcup \kappa\var) \leq \max(\rho) + \bound{\com_1 + \com_2}
+  \end{equation*}
+  which by definition of \(\inte_{\com_1 + \com_2, \rho}\) means
+  \(\iota \sqcup \kappa \in \inte_{\com_1 + \com_2, \rho}\) and
+  therefore
+  \begin{equation*}
+    \semi[\inte]{\com_1 \ndet \com_2}\rho = \semi[\inte]{\com_1}\rho \sqcup \semi[\inte]{\com_2}\rho = \semi[\inte_{\com_1, \rho}]{\com_1}\rho \sqcup \semi[\inte_{\com_2, \rho}]{\com_2}\rho = \semi[\inte_{\com_1 + \com_2, \rho}]{\com_1 + \com_2}\rho
+  \end{equation*}
+  
+  
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1 ; \com_2\)).
+  % 
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\fix{\com}\)).
+  % 
+  
+
+\end{proof}

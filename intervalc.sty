@@ -35,15 +35,8 @@
 % \newcommand{\Var}{\ensuremath{\mathit{Var}}}
 
 % bound function 
-\makeatletter
-\newcommand{\bound}[2][\@nil]{%
-  \def\tmp{#1}%
-  \ifx\tmp\@nil
-    \ensuremath{({#2})_{\mathsf{b}}}
-  \else
-    \ensuremath{({#2})^{\mathsf{b}}}
-  \fi}
-\makeatother
+\newcommand{\bound}[1]{\ensuremath{({#1})^{\mathsf{b}}}}
+\newcommand{\lbound}[1]{\ensuremath{({#1})_{\mathsf{b}}}}
 % \newcommand{\bound}[1]{\ensuremath{({#1})^{\mathsf{b}}}}
 
 % \newcommand{\Env}{\ensuremath{\mathit{Env}}}
