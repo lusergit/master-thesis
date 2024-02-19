@@ -4,7 +4,7 @@
 In order to talk about analysis over some abstract domain \(\bA\), we
 preliminarly introduce the abstract semantic.
 
-\begin{definition}
+\begin{definition}\label{def:abstrsem}
   Given and abstract domain \(\bA\), with an abstraction map
   \({\alpha : \poset{\z} \to \bA}\) and a concretization map
   \({\concr : \bA \to \poset{\z}}\) the \emph{analysis semantics} over
@@ -17,7 +17,7 @@ preliminarly introduce the abstract semantic.
     \semi[\bA]{\var \in S}\eta 
     & \veq  
       \begin{cases}
-        \eta[\var \mapsto (\eta\var) \cap S)] & \text{if }\eta\var\cap S\neq \emptyset \\
+        \eta[\var \mapsto \eta\var \sqcap \abstr(S)] & \text{if }\eta\var\sqcap \abstr(S)\neq \bot \\
         \bot & \text{otherwise}
       \end{cases}\\
     \semi[\bA]{\var := k}\eta 
@@ -36,3 +36,26 @@ preliminarly introduce the abstract semantic.
     & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi[\bA]{\com} \mu))
   \end{align*}
 \end{definition}
+
+Notice that the filtering in Definition~\ref{def:abstrsem} is not the
+best correct approximation. In particular the filtering instruction
+\(\var\in S\) is performed first by abstracting the numerical set
+\(S \subseteq \n\) with \(\abstr\) and then by computing the greatest
+lower bound with \(\eta(\var)\). Best correct approximation would
+consist in the opposite approach: compute the concrete
+\(\concr(\eta\var)\) and subsequently compute the meet in the
+\(\poset{\n}\) domain:
+\begin{equation*}
+  \semi{\var\in S}\eta = \begin{cases}
+    \eta[\var \mapsto \abstr(\concr(\eta\var) \cap S)] & \text{if } \concr(\eta\var) \cap S \neq \emptyset \\
+    \bot & \text{otherwise}
+  \end{cases}
+\end{equation*}
+This however would introduce a problem in proving Lemma~\ref{le:inc},
+as Hypothesis~\ref{inc:hp1} would not be respected.  Notice that this
+approximation coincides in fact with the best correct approximation in
+two important cases: \(\var \leq k\) and \(\var \geq k\) with
+\(\var\in\Var\) and some constat \(k\in\z\). These two cases are
+widely used in programming, namely we can cite the fact that they are
+part of the nasa programming guidelines on writing analyzer-friendly
+code as stated in \cite{nasa:ten}.

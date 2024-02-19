@@ -105,9 +105,9 @@ fixpoint and the kleene star is the same. Let
 \(f = \lambda \mu . (\eta \sqcup \semnr{\com}\mu)\)
 \begin{align*}
   \semnr{\fix{\com}}\eta & = \lfp(f) \\
-                         & = \bigsqcup_{i\in\n}\{f^n\bot \mid n \in \n\} & \text{by fixpoint theorem \ref{th:fixpoint}}\\
+                         & = \textstyle\bigsqcup_{i\in\n}\{f^n\bot \mid n \in \n\} & \text{by fixpoint theorem \ref{th:fixpoint}}\\
                          & = \eta \sqcup (\eta \sqcup \semnr{\com}\eta) \sqcup \dots & \text{by definition}\\
-                         & = \bigsqcup_{i\in\n}\semnr{\com}^i\eta \\
+                         & = \textstyle\bigsqcup_{i\in\n}\semnr{\com}^i\eta \\
                          & = \semnr{\com^*}\eta
 \end{align*}
 

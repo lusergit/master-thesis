@@ -3,8 +3,8 @@
 
 \begin{definition}[\textbf{Program bound}]
   \label{de:bound}
-  The \emph{bound} associated with a command \(\com\in \imp\) is a
-  natural number, denoted \(\bound{\com}\in \nat\), defined
+  The \emph{upper bound} associated with a command \(\com\in \imp\) is
+  an integer number, denoted \(\bound{\com}\in \z\), defined
   inductively as follows:
   \begin{align*}
     % 
@@ -42,13 +42,13 @@
     % assignements
     % 
     \bound{\var := k} 
-    & \veq k\\
+    & \veq | k |\\
     %
     \bound{\var := \var[y] + k}
-    & \veq k\\
+    & \veq | k |\\
     %
-    \bound{\var := \var[y] - k}
-    & \veq k\\
+    % \bound{\var := \var[y] - k}
+    % & \veq k\\
     % 
     % \bound{\var := \var[y]} 
     % & \veq 0\\[3mm]
@@ -67,6 +67,73 @@
     \bound{\kleene{\com}}
     & \veq (|\varsof{\com}|+1) \bound{\com} \\ 
   \end{align*}
+
+  while the \emph{upper bound} associated with a command
+  \(\com\in \imp\) is again an integer number, denoted
+  \(\lbound{\com}\in \z\), defined inductively as follows:
+
+  \begin{align*}
+    % 
+    \bound{\var \in S}  
+    & \veq \begin{cases}
+      \min(S) & \text{if } \max(S)=\infty\\
+      \max(S) & \text{if } \max(S)\in \nat
+    \end{cases}
+    \\
+    % 
+    % \bound{\var \in [a,b]}  
+    % & \veq \begin{cases}
+    %   a & \text{if } b=\infty\\
+    %   b & \text{if } b\in \nat
+    % \end{cases}
+    % \\
+    % % boolean
+    % % 
+    % \bound{\var \leq k}  
+    % & \veq k\\
+    % % 
+    % \bound{\var > k} 
+    % & \veq k\\
+    % % 
+    % % 
+    % \bound{\tru} 
+    % & \veq 0\\
+    % % 
+    % \bound{\ff} 
+    % & \veq 0\\
+    % \bound{\var > \var[y]}  
+    % & \veq 0\\
+    % 
+    % 
+    % assignements
+    % 
+    \bound{\var := k} 
+    & \veq | k |\\
+    %
+    \bound{\var := \var[y] + k}
+    & \veq | k |\\
+    %
+    % \bound{\var := \var[y] - k}
+    % & \veq k\\
+    % 
+    % \bound{\var := \var[y]} 
+    % & \veq 0\\[3mm]
+    %
+    % commands
+    %
+    \bound{\com_1 \ndet \com_2}
+    & \veq \bound{\com_1} + \bound{\com_2}\\
+    %
+    \bound{\com_1 \seq \com_2}
+    & \veq \bound{\com_1} + \bound{\com_2}\\
+    %% %% 
+    %% \bound{\kleene{\com}}
+    %% & \veq 2 \bound{\com}\\
+    %% %% 
+    \bound{\kleene{\com}}
+    & \veq (|\varsof{\com}|+1) \bound{\com} \\ 
+  \end{align*}
+
   where \(\varsof{\com}\) denotes the set of variables occurring in 
   \(\com\).
 \end{definition}
@@ -101,8 +168,8 @@ environments, that we'll later use for lemma~\ref{le:computebounds}
     \boundt{\var := \var[y] + k}b
     & \veq  b[\var[x]\mapsto b(\var[x])+b(\var[y])+k]\\
     %
-    \boundt{\var := \var[y] - k}b
-    & \veq  b[\var[x]\mapsto b(\var[x]) + b(\var[y]) - k]\\
+    % \boundt{\var := \var[y] - k}b
+    % & \veq  b[\var[x]\mapsto b(\var[x]) + b(\var[y]) - k]\\
     %
     % commands
     %

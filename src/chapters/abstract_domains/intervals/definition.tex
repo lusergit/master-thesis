@@ -41,39 +41,21 @@ concretization and abastraction maps for the intervals domain
 
 The next step is to define some order on \(\Int\). For this purpouse
 we define a partial order \(\sqsubseteq\) based on the concretization
-map.
-
-\begin{definition}
-  \(\sqsubseteq : \Int \times \Int\) is a reflexive, antisymmetric and
-  transitive relation, i.e., for all \(I,J,K \in \Int\)
-  \begin{align*}
-    I \sqsubseteq I  & \quad \text{(reflexivity)} \\
-    I \sqsubseteq J \wedge J \sqsubseteq I \Rightarrow I = J & \quad \text{(antisimmetry)} \\
-    I \sqsubseteq J \wedge J \sqsubseteq K \Rightarrow I \sqsubseteq K & \quad \text{(transitivity)}
-  \end{align*}
-
-  where for all \(I,J \in \Int\)
-
-  \begin{equation*}
-    I \sqsubseteq J \iff \concr(I) \subseteq \concr(J)
-  \end{equation*}
-\end{definition}
-
+map.  For all \(I,J \in \Int\)
+\begin{equation*}
+  I \sqsubseteq J \iff \concr(I) \subseteq \concr(J)
+\end{equation*}
+\noindent
 We also define least upper bound and greatest lower bound on the
-\(\Int\) domain:
-
-\begin{definition}
-  \todo[inline]{intro alla def}
-    \begin{align*}
-      \interval{a}{b} \; \acup \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
-      \interval{a}{b} \; \acap \; \interval{c}{d} & \defin
-                                                    \begin{cases} \
-                                                      \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
-                                                      \abstract{\bot} & \text{otherwise}
-                                                    \end{cases}
-  \end{align*}
-\end{definition}
-
+\(\Int\) domain. Let \({\interval{a}{b}, \interval{c}{d}\in \Int}\)
+\begin{align*}
+  \interval{a}{b} \; \acup \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
+  \interval{a}{b} \; \acap \; \interval{c}{d} & \defin
+                                                \begin{cases} \
+                                                  \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
+                                                  \abstract{\bot} & \text{otherwise}
+                                                \end{cases}
+\end{align*}
 \noindent
 Observe that because of \(\sqsubseteq\) and \(\acup\) definitions
 \(\tuple{\Int,\sqsubseteq}\) is a complete lattice.  The next building
