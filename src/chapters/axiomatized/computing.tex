@@ -628,11 +628,12 @@ and let \(\com\in \imp\). % and \(\var[y] \in \Var\)
   + \Sigma_{i=0}^m h_i\] as desired.
 \end{proof}
 
+% Non è un corollario, dovrebbe essere integrato sopra
 \begin{corollary}
   if \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
   \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exists
   a variable \(\var[z] \in\Var\) and an integer \(h\in\z\) such that
-  \(-|h| \geq \lbound{\com}\) and the following two properties hold:
+  \(h \geq \lbound{\com}\) and the following two properties hold:
   \begin{enumerate}[label=(\roman*)]
   \item \(\min(\semi{\com}\eta\var[y]) = \min(\eta\var[z]) - h\)
   \item for all \(\eta'\in \bA\), if \(\eta' \sqsupseteq \eta\) then
