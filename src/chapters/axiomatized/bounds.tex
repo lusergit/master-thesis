@@ -10,128 +10,57 @@
     % 
     \bound{\var \in S}  
     & \veq \begin{cases}
-      \min(S) & \text{if } \max(S)=\infty\\
-      \max(S) & \text{if } \max(S)\in \nat
+      \min(S) & \text{if } \max(S)=+\infty\\
+      \max(S) & \text{if } \max(S)\in\z
     \end{cases}
     \\
-    % 
-    % \bound{\var \in [a,b]}  
-    % & \veq \begin{cases}
-    %   a & \text{if } b=\infty\\
-    %   b & \text{if } b\in \nat
-    % \end{cases}
-    % \\
-    % % boolean
-    % % 
-    % \bound{\var \leq k}  
-    % & \veq k\\
-    % % 
-    % \bound{\var > k} 
-    % & \veq k\\
-    % % 
-    % % 
-    % \bound{\tru} 
-    % & \veq 0\\
-    % % 
-    % \bound{\ff} 
-    % & \veq 0\\
-    % \bound{\var > \var[y]}  
-    % & \veq 0\\
-    % 
-    % 
-    % assignements
-    % 
     \bound{\var := k} 
     & \veq | k |\\
     %
     \bound{\var := \var[y] + k}
     & \veq | k |\\
     %
-    % \bound{\var := \var[y] - k}
-    % & \veq k\\
-    % 
-    % \bound{\var := \var[y]} 
-    % & \veq 0\\[3mm]
-    %
-    % commands
-    %
     \bound{\com_1 \ndet \com_2}
     & \veq \bound{\com_1} + \bound{\com_2}\\
     %
     \bound{\com_1 \seq \com_2}
     & \veq \bound{\com_1} + \bound{\com_2}\\
-    %% %% 
-    %% \bound{\kleene{\com}}
-    %% & \veq 2 \bound{\com}\\
-    %% %% 
-    \bound{\kleene{\com}}
+    % \bound{\kleene{\com}}
+    % & \veq (|\varsof{\com}|+1) \bound{\com} \\ 
+    \bound{\fix{\com}}
     & \veq (|\varsof{\com}|+1) \bound{\com} \\ 
   \end{align*}
 
-  while the \emph{upper bound} associated with a command
+  while the \emph{lower bound} associated with a command
   \(\com\in \imp\) is again an integer number, denoted
   \(\lbound{\com}\in \z\), defined inductively as follows:
 
   \begin{align*}
     % 
-    \bound{\var \in S}  
+    \lbound{\var \in S}  
     & \veq \begin{cases}
-      \min(S) & \text{if } \max(S)=\infty\\
-      \max(S) & \text{if } \max(S)\in \nat
+      \max(S) & \text{if } \min(S)=-\infty\\
+      \min(S) & \text{if } \min(S)\in \z
     \end{cases}
     \\
     % 
-    % \bound{\var \in [a,b]}  
-    % & \veq \begin{cases}
-    %   a & \text{if } b=\infty\\
-    %   b & \text{if } b\in \nat
-    % \end{cases}
-    % \\
-    % % boolean
-    % % 
-    % \bound{\var \leq k}  
-    % & \veq k\\
-    % % 
-    % \bound{\var > k} 
-    % & \veq k\\
-    % % 
-    % % 
-    % \bound{\tru} 
-    % & \veq 0\\
-    % % 
-    % \bound{\ff} 
-    % & \veq 0\\
-    % \bound{\var > \var[y]}  
-    % & \veq 0\\
-    % 
-    % 
-    % assignements
-    % 
-    \bound{\var := k} 
-    & \veq | k |\\
+    \lbound{\var := k} 
+    & \veq - | k |\\
     %
-    \bound{\var := \var[y] + k}
-    & \veq | k |\\
+    \lbound{\var := \var[y] + k}
+    & \veq - | k |\\
     %
-    % \bound{\var := \var[y] - k}
-    % & \veq k\\
-    % 
-    % \bound{\var := \var[y]} 
-    % & \veq 0\\[3mm]
+    \lbound{\com_1 \ndet \com_2}
+    & \veq \lbound{\com_1} + \lbound{\com_2}\\
     %
-    % commands
+    \lbound{\com_1 \seq \com_2}
+    & \veq \lbound{\com_1} + \lbound{\com_2}\\
     %
-    \bound{\com_1 \ndet \com_2}
-    & \veq \bound{\com_1} + \bound{\com_2}\\
+    % \lbound{\kleene{\com}}
+    % & \veq (|\varsof{\com}|+1) \lbound{\com} \\ 
     %
-    \bound{\com_1 \seq \com_2}
-    & \veq \bound{\com_1} + \bound{\com_2}\\
-    %% %% 
-    %% \bound{\kleene{\com}}
-    %% & \veq 2 \bound{\com}\\
-    %% %% 
-    \bound{\kleene{\com}}
-    & \veq (|\varsof{\com}|+1) \bound{\com} \\ 
+    \lbound{\fix{\com}}
+    & \veq (|\varsof{\com}|+1) \lbound{\com} \\ 
   \end{align*}
 
   where \(\varsof{\com}\) denotes the set of variables occurring in 
