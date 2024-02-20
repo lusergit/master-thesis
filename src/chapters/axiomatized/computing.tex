@@ -548,11 +548,11 @@ a finite path in \(\langle X,\to\rangle\)
   validity for \(r\geq 0\) then we have that
   \begin{align*}    
     & \max(\semi{\com \ndet \tru}^{(r+1)(k_2-k_1)} \eta_{k_1} \var[w]) =\\
-    &\max(\semi{\com \ndet \tru}^{k_2-k_1} ( \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{[by \eqref{prop2} as \(\eta_{k_1} \sqsubseteq \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\) ]}\\
-    &\max(\semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) + h \geq & \mbox{[by inductive hypothesis}]\\
+    &\max(\semi{\com \ndet \tru}^{k_2-k_1} ( \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{by \eqref{prop2} as \(\eta_{k_1} \sqsubseteq \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\) }\\
+    &\max(\semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) + h \geq & \mbox{by inductive hypothesis}\\
     &  \max(\eta_{k_1}\var[w])  + rh + h
-    \geq 
-    \max(\eta_{k_1}\var[w])  + (r+1)h
+      \geq 
+      \max(\eta_{k_1}\var[w])  + (r+1)h
   \end{align*}
 
   \noindent
@@ -620,18 +620,20 @@ interval semantics of commands. More precisely, given a command
 \(\com\), the corresponding finite set of variables
 \(\Var_{\com} \veq \mathit{vars}(\com)\), and an interval environment
 \(\rho : \Var_{\com} \to \Int\), we define
-\[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
-  \}.\]
+\begin{align*}
+  \max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}\} \\
+  \min(\rho) & \veq \min \{ \min(\rho(\var)) \mid \var \in \Var_{\com}\}
+\end{align*}
 %
 Then, when computing \(\semi{\com} \rho\) on such \(\rho\)
 having a finite domain, we can restrict to a bounded interval domain
 \(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
 \{ \top, \bot \}\) where
-\[
-  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \nat\ \land\
-  a \leq b \leq \max(\rho) + \bound{\com}\} \cup
-  \{\interval{a}{\infty} \mid a \in \nat \}
-\]
+\begin{equation*}
+  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \z\ \land\
+  \min(\rho) - \lbound{\com} \leq a \leq b \leq \max(\rho) + \bound{\com}\}
+  % \{\interval{a}{\infty} \mid a \in \nat \}
+\end{equation*}
 
 % We could also operate uniformly on all commands, defining the
 % semantics for \(\com\) in a domain with intervals bounded by

@@ -3,76 +3,74 @@
 
 \begin{definition}[\textbf{Program bound}]
   \label{de:bound}
-  The \emph{bound} associated with a command \(\com\in \imp\) is a
-  natural number, denoted \(\bound{\com}\in \nat\), defined
+  The \emph{upper bound} associated with a command \(\com\in \imp\) is
+  a natural number, denoted \(\bound{\com}\in \nat\), defined
   inductively as follows:
   \begin{align*}
     % 
     \bound{\var \in S}  
     & \veq \begin{cases}
-      \min(S) & \text{if } \max(S)=\infty\\
+      \min(S) & \text{if } \max(S)=+\infty\\
       \max(S) & \text{if } \max(S)\in \nat
     \end{cases}
     \\
     % 
-    % \bound{\var \in [a,b]}  
-    % & \veq \begin{cases}
-    %   a & \text{if } b=\infty\\
-    %   b & \text{if } b\in \nat
-    % \end{cases}
-    % \\
-    % % boolean
-    % % 
-    % \bound{\var \leq k}  
-    % & \veq k\\
-    % % 
-    % \bound{\var > k} 
-    % & \veq k\\
-    % % 
-    % % 
-    % \bound{\tru} 
-    % & \veq 0\\
-    % % 
-    % \bound{\ff} 
-    % & \veq 0\\
-    % \bound{\var > \var[y]}  
-    % & \veq 0\\
-    % 
-    % 
-    % assignements
-    % 
     \bound{\var := k} 
-    & \veq k\\
+    & \veq |k|\\
     %
     \bound{\var := \var[y] + k}
-    & \veq k\\
+    & \veq |k|\\
     %
-    \bound{\var := \var[y] - k}
-    & \veq k\\
-    % 
-    % \bound{\var := \var[y]} 
-    % & \veq 0\\[3mm]
-    %
-    % commands
+    % \bound{\var := \var[y] - k}
+    % & \veq k\\
     %
     \bound{\com_1 \ndet \com_2}
     & \veq \bound{\com_1} + \bound{\com_2}\\
     %
     \bound{\com_1 \seq \com_2}
     & \veq \bound{\com_1} + \bound{\com_2}\\
-    %% %% 
-    %% \bound{\kleene{\com}}
-    %% & \veq 2 \bound{\com}\\
-    %% %% 
-    \bound{\kleene{\com}}
+    %
+    \bound{\kleene{\com}} = \bound{\fix{\com}}
     & \veq (|\varsof{\com}|+1) \bound{\com} \\ 
   \end{align*}
-  where \(\varsof{\com}\) denotes the set of variables occurring in 
-  \(\com\).
+  where \(\varsof{\com}\) denotes the set of variables occurring in
+  \(\com\). Dually, the \emph{lower bound } associated with a command
+  \(\com\in \imp\) is again a natural number, denoted
+  \(\lbound{\com}\in \nat\), defined inductively as follows:
+  \begin{align*}
+    % 
+    \lbound{\var \in S}  
+    & \veq \begin{cases}
+      \max(S) & \text{if } \min(S)=-\infty\\
+      \min(S) & \text{if } \min(S)\in \z\\
+    \end{cases}
+    \\
+    % 
+    \lbound{\var := k} 
+    & \veq |k|\\
+    %
+    \lbound{\var := \var[y] + k}
+    & \veq |k|\\
+    %
+    % \bound{\var := \var[y] - k}
+    % & \veq k\\
+    %
+    \lbound{\com_1 \ndet \com_2}
+    & \veq \bound{\com_1} + \bound{\com_2}\\
+    %
+    \lbound{\com_1 \seq \com_2}
+    & \veq \bound{\com_1} + \bound{\com_2}\\
+    %
+    \lbound{\kleene{\com}} = \bound{\fix{\com}}
+    & \veq (|\varsof{\com}|+1) \bound{\com} \\ 
+  \end{align*}
 \end{definition}
 
-In order to compute the bound of a program we introduce bounded
-environments, that we'll later use for lemma~\ref{le:computebounds}
+We can notice that the two definitions of the bound \(\bound{\com}\)
+and \(\lbound{\com}\) coincide, except for the filtering instruction
+\(\var\in S\).  In order to compute the bound of a program we
+introduce bounded environments, that we'll later use for
+lemma~\ref{le:computebounds}
 
 \begin{definition}[\textbf{Bound Environment}]
   \label{de:boundenv}

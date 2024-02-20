@@ -1,3 +1,4 @@
+% !TeX root = mod.tex
 \section{Computing interval semantics}
 \label{sec:computingint}
 
@@ -140,22 +141,22 @@ having a finite domain, we can restrict to a bounded interval domain
   \begin{equation*}
     \semi[\inte_{\com,\rho}]{\var := \var[y] + k}\rho = \semi[\inte]{\var := \var[y] + k}\rho
   \end{equation*}
-
-  \medskip
-
-  \noindent
-  \textbf{Case} (\(\var := \var[y] - k\)).
+  %
+  % \medskip
   % 
-  Recall that
-  \({\semi[\inte]{\var := \var[y] - k}\rho} = {\rho[\var \mapsto
-    \rho\var[y] - k]}\) and that
-  \({\max(\rho\var[y] - k)} \leq {\max(\rho) + k} = {\max(\rho) +
-    \bound{\rho\var[y] - k}}\). Hence we can notice that
-  \({\semi[\inte_{\com,\rho}]{\var := \var[y] - k}\rho} = {\rho[\var
-    \mapsto \rho\var[y] - k]}\) and therefore
-  \begin{equation*}
-    \semi[\inte]{\var := \var[y] - k}\rho = \semi[\inte_{\com,\rho}]{\var := \var[y] - k}\rho
-  \end{equation*}
+  % \noindent
+  % \textbf{Case} (\(\var := \var[y] - k\)).
+  % % 
+  % Recall that
+  % \({\semi[\inte]{\var := \var[y] - k}\rho} = {\rho[\var \mapsto
+  %   \rho\var[y] - k]}\) and that
+  % \({\max(\rho\var[y] - k)} \leq {\max(\rho) + k} = {\max(\rho) +
+  %   \bound{\rho\var[y] - k}}\). Hence we can notice that
+  % \({\semi[\inte_{\com,\rho}]{\var := \var[y] - k}\rho} = {\rho[\var
+  %   \mapsto \rho\var[y] - k]}\) and therefore
+  % \begin{equation*}
+  %   \semi[\inte]{\var := \var[y] - k}\rho = \semi[\inte_{\com,\rho}]{\var := \var[y] - k}\rho
+  % \end{equation*}
 
   \medskip
 
@@ -175,26 +176,30 @@ having a finite domain, we can restrict to a bounded interval domain
   \end{equation*}
   where \(\forall \var \in \Var\)
   \(\rho'\var = {\left(\semi[\inte_{\com_1,
-        \rho}]{\com_1}\rho\right)\var} \sqcup
+        \rho}]{\com_1}\rho\right)(\var)} \sqcup
   {\left(\semi[\inte_{\com_2, \rho}]{\com_2}\rho\right)
-    \var}\). \todo[inline]{\(\top\) e \(\bot\) possiamo escluderli
+    (\var)}\). \todo[inline]{\(\top\) e \(\bot\) possiamo escluderli
     perchè banalmente coincidono sempre} Recall that
-  \begin{align*}
-    \inte_{\com_1, \rho} & = \{\interval{a}{b} \mid \min(\rho) - \lbound{\com_1} \leq a \leq b \leq \max(\rho) + \bound{\com_1}\} \\
-    \inte_{\com_2, \rho} & = \{\interval{a}{b} \mid \min(\rho) - \lbound{\com_2} \leq a \leq b \leq \max(\rho) + \bound{\com_2}\}
-  \end{align*}
+  \begin{align}
+    \inte_{\com_1, \rho} & = \{\interval{a}{b} \mid \min(\rho) - \lbound{\com_1} \leq a \leq b \leq \max(\rho) + \bound{\com_1}\} \label{ic1}\\
+    \inte_{\com_2, \rho} & = \{\interval{a}{b} \mid \min(\rho) - \lbound{\com_2} \leq a \leq b \leq \max(\rho) + \bound{\com_2}\} \label{ic2}
+  \end{align}
   Hence observe that for all \(\var\in\Var\) we can call
   \begin{align*}
     \iota & = \semi[\inte_{\com_1, \rho}]{\com_1}\rho & \text{where } \iota\var = \interval{a}{b} \text{ for some } a,b\in\z \\
     \kappa & = \semi[\inte_{\com_2, \rho}]{\com_2}\rho & \text{where }\kappa\var = \interval{c}{d} \text{ for some } c,d \in\z
   \end{align*}
-  and by the definition of \(\sqcup\) for intervals 
+  and by the definition of \(\sqcup\) for intervals
   \begin{equation*}
     \iota\var \sqcup \kappa\var = \interval{\min\{a,c\}}{\max\{b,d\}}
   \end{equation*}
-  we can notice that
+  we can notice that by \eqref{ic1}
+  \(b = {\max(\iota\var)} \leq {\max(\rho) + \bound{\com_1}}\) and by
+  \eqref{ic2}
+  \(d = {\max(\kappa\var)} \leq {\max(\rho) + \bound{\com_2}}\),
+    therefore
   \begin{align*}
-    \max(\iota\var\sqcup\kappa\var) & \leq \max(\rho) + \bound{\com_1} + \bound{\com_2} & \text{by Lemma~\ref{le:inc}}\\
+    \max(\iota\var\sqcup\kappa\var) & \leq \max(\rho) + \bound{\com_1} + \bound{\com_2} \\
                                     & = \max(\rho) + (\bound{\com_1} + \bound{\com_2}) \\
                                     & = \max(\rho) + \bound{\com_1 + \com_2}
   \end{align*}
@@ -221,12 +226,95 @@ having a finite domain, we can restrict to a bounded interval domain
   \noindent
   \textbf{Case} (\(\com_1 ; \com_2\)).
   % 
+  The goal in this case is to prove that
+  \({\semi[\inte]{\com_1 \seq \com_2}\rho} = {\semi[\inte_{\com_1 \seq
+      \com_2, \rho}]{\com_1 \seq \com_2}\rho}\). Let's start by
+  recalling that
+  \begin{equation}\label{eq:def1}
+    {\semi[\inte]{\com_1 \seq \com_2}\rho} = {\semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)}
+  \end{equation}
+  by inductive hypothesis we know that
+  \({\semi[\inte]{\com_1}\rho} = {\semi[\inte_{\com_1,
+      \rho}]{\com_1}\rho} = \rho'\) which means that for all
+  \(\var\in\Var\), let
+  \({\left(\semi[\inte_{\com_1, \rho}]{\com_1}\rho\right)}(\var) =
+  \interval{a}{b}\). By definition of \(\inte_{\com_1,\rho}\)
+  \begin{equation}\label{eq:b1}
+    \min(\rho) - \lbound{\com_1} \leq a \leq b \leq \max(\rho) + \bound{\com_1}
+  \end{equation}
+  Let's now substitute \(\rho'\) in \eqref{eq:def1} and observe that
+  \begin{equation}\label{eq:ind1}
+    \semi[\inte]{\com_2}\rho' = \semi[\inte_{\com_2, \rho'}]{\com_2}\rho' \quad \text{by inductive hypothesis}
+  \end{equation}
+  Again this means that for every \(\var \in \Var\) by letting
+  \({\left(\semi[\inte_{\com_2, \rho'}]{\com_2}\rho'\right)}(\var) =
+  \interval{a}{b}\) we now that
+  \begin{equation}\label{eq:b2}
+    \min(\rho') - \lbound{\com_2} \leq a \leq b \leq \max(\rho') + \bound{\com_2}
+  \end{equation}
+  but by \eqref{eq:b1} we know that
+  \({\min(\rho') = \min(\rho) - \lbound{\com_1}}\) and
+  \({\max(\rho') = \max(\rho) + \bound{\com_1}}\) which means that if
+  we substitute it in \eqref{eq:b2}
+  \begin{equation*}
+    \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \leq a \leq b \leq \max(\rho) + \bound{\com_1} + \bound{\com_2}
+  \end{equation*}
+  which is exactly
+  \begin{equation*}
+    \min(\rho) - \lbound{\com_1 \seq \com_2} \leq a \leq b \leq \max(\rho) + \bound{\com_1 \seq \com_2}
+  \end{equation*}
+  which means that
+  \(\inte_{\com_1 \seq \com_2, \rho} = \inte_{\com_2,
+    \left(\semi[\inte_{\com_1, \rho}]{\com_1}\rho\right)} =
+  \inte_{\com_2, \rho'}\) Therefore we can substitute \(\rho'\) in
+  \eqref{eq:ind1} and deduce that
+  \begin{equation*}
+    \semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right) =
+    \semi[\inte]{\com_2}\rho' = \semi[\inte_{\com_2,\rho'}]{\com_2}\rho' =
+    \semi[\inte_{\com_1\seq\com_2}, \rho]{\com_2}\left(\semi[\inte_{\com_1, \rho}]{\com_1}\rho\right)
+  \end{equation*}
+  We can conclude by noticing that \(\inte_{\com_1,\rho}\) is entirely
+  contained in \(\inte_{\com_1\seq \com_2, \rho}\) since by letting
+  \({\semi[\inte_{\com_1,\rho}]{\com_1}\rho = \interval{a}{b}}\)
+  \begin{align*}
+    \min(\rho) - \lbound{\com_1\seq \com_2} & = \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \\
+                                            & \leq  \min(\rho) - \lbound{\com_1} \\
+                                            & \leq a \\
+                                            & \leq b \\
+                                            & \leq \max(\rho) + \bound{\com_1}  \\
+                                            & \leq \max(\rho) + \bound{\com_1 \ndet \com_2}
+  \end{align*}
+  And therefore
+  \begin{align*}
+     \semi[\inte]{\com_1\seq \com_2}\rho & = \semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)\\
+                                          & = \semi[\inte_{\com_1\seq\com_2}, \rho]{\com_2}\left(\semi[\inte_{\com_1\seq\com_2, \rho}]{\com_1}\rho\right) \\
+                                          & = \semi[\inte_{\com_1\seq\com_2, \rho}]{\com_1\seq\com_2}\rho
+  \end{align*}
 
   \medskip
 
   \noindent
   \textbf{Case} (\(\fix{\com}\)).
   % 
-  
+  Recall as we observed in Lemma~\ref{le:inc} that
+  \({\semi[\inte]{\fix{\com}}\rho} = {\lfp(\lambda \mu
+    . \semi[\inte]{\com \ndet \tru}\mu)}\) above \(\rho\). we can
+  therefore build the chain
+  \begin{align*}
+    \rho_0 & \defin \rho \\
+    \rho_{i+1} & \defin \semi[\inte]{\com}\rho_i \sqcup \rho_i = \semi[\inte]{\com \ndet \tru}\rho_i \sqsupseteq \rho_i
+  \end{align*}
+  and therefore
+  \({\semi[\inte]{\fix{\com}}\rho} =
+  {\textstyle\bigsqcup_{i\in\n}\rho_i}\). By inductive hypothesis we
+  can notice that
+  \begin{equation*}
+    \semi[\inte]{\com \ndet \tru}\rho_i = \semi[\inte_{\com,\rho_i}]{\com \ndet \tru}\rho_i
+  \end{equation*}
+  which means that \(\forall \var\in\Var, i\in\n\) considering
+  \(\rho_i\var = \interval{a}{b}\)
+  \begin{equation*}
+    \min(\rho_i) - \lbound{\com} \leq a \leq b \leq \max(\rho_i) + \bound{\com}
+  \end{equation*}
 
 \end{proof}
