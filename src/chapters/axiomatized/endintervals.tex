@@ -47,13 +47,46 @@ an interval environment \(\rho : \Var_{\com} \to \Int\), we define
   \}.\]
 %
 Then, when computing \(\semi[\inte]{\com} \rho\) on such \(\rho\)
-having a finite domain, we can restrict to a bounded interval domain
-\(\inte_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
-\{ \top, \bot \}\) where
+having a finite domain, we can restrict to an interval domaian bounded
+by some constant \(k\)
+\(\inte_k \veq (\Var_{\com} \to \Int_k) \cup \{\top, \bot\}\) where
 \begin{equation*}
-  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \z \land
-  \min(\rho) - \lbound{\com} \leq a \leq b \leq \max(\rho) + \bound{\com}\}
+  \Int_k \veq \{ \interval{a}{b} \mid a, b \in \z \land
+  a \leq b \leq k\}
 \end{equation*}
+
+We need however a special bound, based on Lemma~\ref{le:inc}, based on
+the program we are considering and the initial environment. Such bound
+is computed by the function \({\boundof : \imp \times \inte \to \n}\)
+\begin{equation*}
+  \boundof(\com, \rho) = \max(\rho) + \bound{\com}
+\end{equation*}
+for simplicity we'll refer to \(\inte_{\com,\rho}\) for
+\(\inte_{\boundof(\com,\rho)}\), i.e.,
+\({\inte_{\com,\rho} = (\Var_{\com} \to \Int_{\com,\rho}) \cup \{
+  \top, \bot \}}\) where
+\begin{equation*}
+  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \n \land
+  a \leq b \leq \max(\rho) + \bound{\com}\}
+\end{equation*}
+
+We preliminarly observe that for any given \(k\in\n\) the lattice
+\(\inte_k\) is a sub-lattice of \(\inte\)
+\begin{align*}
+  \eta \sqcup \theta & \in \inte_k & \forall \eta,\theta \in \inte_k \\
+  \eta \sqcap \theta & \in \inte_k & \forall \eta,\theta \in \inte_k
+\end{align*}
+
+i.e., they are closed under \(\sqcap\) and \(\sqcup\). In fact if we
+consider \({\eta = \interval{a}{b} \in \inte_k}\) and
+\({\theta = \interval{c}{d} \in \inte_k}\) by definition both
+\(b,d \leq k\). Now consider
+\({\eta \sqcup \theta = \interval{\min\{a,c\}}{\max\{b,d\}}}\), where
+we can observe \(\max\{b,d\} \leq k\) and therefore
+\({\eta \sqcup \theta \in \inte_k}\). Also observe that for
+\({\eta \sqcap \theta = \interval{\max\{a,c\}}{\min\{b,d\}}}\) it
+holds that \({\min\{b,d\} \leq k}\) and therefore
+\({\eta \sqcap \theta \in \inte_k}\).
 
 % We could also operate uniformly on all commands, defining the
 % semantics for \(\com\) in a domain with intervals bounded by
@@ -61,16 +94,15 @@ having a finite domain, we can restrict to a bounded interval domain
 
 \begin{lemma}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
-  \(\rho : \Var \to \Int\), the abstract semantics
-  \(\semi{\com} \rho \)
-  % 
-  % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
-  % \sqcup \rho}
-  computed in \(\inte\) and in \(\inte_{\com,\rho}\)
-  coincide, i.e., 
+  \(\rho : \Var \to \Int\)
   \begin{equation*}
     \semi[\inte]{\com}\rho = \semi[\inte_{\com,\rho}]{\com}\rho
   \end{equation*}
+  i.e., the abstract semantics \(\semi{\com} \rho \)
+  % 
+  % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
+  % \sqcup \rho}
+  computed in \(\inte\) and in \(\inte_{\com,\rho}\) coincide.
 \end{lemma}
 
 \begin{proof}

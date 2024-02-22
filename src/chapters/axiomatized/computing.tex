@@ -83,13 +83,17 @@ a finite path in \(\langle X,\to\rangle\)
   positive weight.
 \end{proof}
 
-
+\newpage
 \begin{lemma}
   \label{le:inc}
-  Consider an abstract domain \(\bA\) s.t.
+  Let \(\bA\) be an abstract domain and
+  \(\bA_\Var = (\Var \to \bA) \cup \{\bot\}\) its variable-wise
+  lifting with \(\abstr : \poset{\z} \to \bA\) abstraction map and
+  \(\concr : \bA \to \poset{\z}\) concretization map s.t.
+  \(\forall \theta \in \bA_\Var\), \(S \in \poset{\z}\)
   \begin{enumerate}[label=(\Roman*)]
   \item\label{inc:hp1} if \(\max(\abstr(S)) = \infty\) then
-    \(\max(\eta(\var) \sqcap \abstr(S)) = \max(\eta\var)\)
+    \(\max(\theta(\var) \sqcap \abstr(S)) = \max(\theta\var)\)
   \item\label{inc:hp2} \(\max(a \sqcup b) = \max\{\max(a), \max(b)\}\)
   \end{enumerate}
   and let \(\com\in \imp\). % and \(\var[y] \in \Var\)
