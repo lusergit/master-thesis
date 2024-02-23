@@ -91,6 +91,13 @@ we can observe \(\max\{b,d\} \leq k\) and therefore
 \({\eta \sqcap \theta = \interval{\max\{a,c\}}{\min\{b,d\}}}\) it
 holds that \({\min\{b,d\} \leq k}\) and therefore
 \({\eta \sqcap \theta \in \inte_k}\) by definition of \(\inte_k\).
+Also observe that for all \(k\in\nat\)
+\begin{equation*}
+  \semi[\inte]{\com}\rho \sqsubseteq \semi[\inte_k]{\com}\rho
+\end{equation*}
+i.e., with \(\inte_k\) we have an over-approximation of \(\inte\). To
+notice this
+\todo[inline]{completare}
 
 % We could also operate uniformly on all commands, defining the
 % semantics for \(\com\) in a domain with intervals bounded by
@@ -203,7 +210,7 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \begin{equation*}
     {\semi[\inte]{\com_1 \ndet \com_2}\rho} = {\semi[\inte_{\com_1 \ndet \com_2, \rho}]{\com_1}\rho} \sqcup {\semi[\inte_{\com_1 \ndet \com_2, \rho}]{\com_2}}
   \end{equation*}
-  Now we can conlcude by recalling that \(\inte_k\) is closed under
+  and we can conlcude by recalling that \(\inte_k\) is closed under
   \(\sqcup\)
   \begin{equation*}
     {\semi[\inte_{\com_1 \ndet \com_2, \rho}]{\com_1}\rho} \sqcup {\semi[\inte_{\com_1 \ndet \com_2, \rho}]{\com_2}} = {\semi[\inte_{\com_1\ndet\com_2}]{\com_1 \ndet \com_2}\rho}
@@ -225,4 +232,67 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   
   \noindent
   \textbf{Case} (\(\fix{\com}\)).
+  % % per il fix(C) credo che un modo di procedere possa essere il seguente:
+  % 
+  % - uso come dominio I_k con k >= max(rho) + (n+2) C^b
+  Let's recall that as we observed in the \(\fix{\com}\) case in
+  Lemma~\ref{le:inc} that
+  \({\fix{\com} = \lfp(\lambda \mu . \semi[\inte]{\com \ndet
+      \tru}\mu)}\) above \(\rho\). We can therefore build the chain of
+  iterands
+  \begin{align*}
+    \rho_0 & \defin \rho \\
+    \rho_{i+1} & \defin \semi[\inte]{\com \ndet \tru}\rho_i
+  \end{align*}
+  Let's consider \(\inte_k\) with
+  \(k \geq \max(\rho) + (n+2)\bound{\com}\) where
+  \(n = |\varsof{\com}|\). We can make the following two observations:
+  \begin{enumerate}[label=(\roman*)]
+  \item if
+    \({\max(\semi[\inte]{\fix{\com}}\rho\var[y])} \neq +\infty\) then,
+    because of Lemma~\ref{le:inc} it holds that
+    \begin{equation*}
+      \max(\semi[\inte]{\fix{\com}}\rho\var[y]) \leq \max(\rho) + \bound{\fix{\com}} = \max(\rho) + (n+1)\bound{\com}
+    \end{equation*}
+    where \(n = \Var_{\com}\) is the number of variables appearing in
+    the program \(\com\). For all iterands \(\rho_i\) we can notice
+    that
+    \begin{equation*}
+      \rho_i = \left(\semi[\inte]{\com \ndet \tru}\right)^i\rho \sqsubseteq \semi[\inte]{\fix{\com}}\rho = \textstyle\bigsqcup_{i\in\nat}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho
+    \end{equation*}
+    now observe that because of our choice of \(k\) it holds that
+    \({k \geq \max(\rho_i) + \bound{\com}}\). We can therefore use the
+    inductive hypothesis and deduce that
+    \begin{equation*}
+      \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\inte_k]{\com\ndet\tru}\rho_i
+    \end{equation*}
+    Hence by \(\inte_k\) closure over \(\sqcup\)
+    \begin{equation*}
+      \textstyle\bigsqcup_{i\in\nat}\left(\semi[\inte]{\com\ndet\tru}\right)^i\rho
+      =
+      \textstyle\bigsqcup_{i\in\nat}\left(\semi[\inte_k]{\com\ndet\tru}\right)^i\rho
+    \end{equation*}
+  \end{enumerate}
+  % 
+  % - osservo che
+  % 
+  % (i) se max([ fix(C) ] rho y) calcolato in I è finito, per il lemma, vale
+  % 
+  % max([ fix(C) ] rho y) = max(rho) + fix(C)^b = max(rho) + (n+1) C^b
+  % 
+  % in tutti gli iterati ho che
+  % 
+  % rho_i = [C+id]^i rho <= [ fix(C) ] rho y 
+  % 
+  % e quindi per la scelta di k, sono certo che k >= max(rho_i) +
+  % C^b. Pertanto posso usare l'ipotesi induttiva su C per concludere
+  % che gli iterati coincidono su I e I_k
+  % 
+  % (ii) se max([ fix(C) ] rho y) in I infinito, dal fatto che in I_k
+  % faccio una sovrapprossimazione concludo che anche il calcolo in
+  % I_k da' infinito.
+  % 
+  % (in questo secondo caso non mi è evidente come concludere anche
+  % che il lowerbound dell'intervallo è lo stesso, ma suppongo si
+  % possa o derivi dalla trattazione duale con intervalli in Z)
 \end{proof}
