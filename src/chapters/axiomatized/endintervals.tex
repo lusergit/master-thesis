@@ -94,258 +94,100 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
 
 \begin{lemma}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
-  \(\rho : \Var \to \Int\)
+  \(\rho : \Var \to \Int\), for all \(k\geq \boundof(\com,\rho)\)
   \begin{equation*}
-    \semi[\inte]{\com}\rho = \semi[\inte_{\com,\rho}]{\com}\rho
+    \semi[\inte]{\com}\rho = \semi[\inte_k]{\com}\rho
   \end{equation*}
   i.e., the abstract semantics \(\semi{\com} \rho \)
   % 
   % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
   % \sqcup \rho}
-  computed in \(\inte\) and in \(\inte_{\com,\rho}\) coincide.
+  computed in \(\inte\) and in \(\inte_k\) coincide.
 \end{lemma}
 
 \begin{proof}
+
   The proof will proceed by induction on the command \(\com\). First,
   let's explore the base cases.
 
   \medskip
-
+  
+  \noindent
   \textbf{Case} (\(\var \in S\)).
   %
   Recall that
-  % \begin{equation*}
-  %   \bound{\var \in S} = \begin{cases}
-  %     \min(\abstr(S)) & \text{if }\max(\abstr(S)) = \infty \\
-  %     \max(\abstr(S)) & \text{otherwise}
-  %   \end{cases}
-  % \end{equation*}
-  % and
   \begin{equation*}
-    \semi[\inte]{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr(S)]
+    \semi[\inte]{\var \in S}\rho = \begin{cases}
+      \rho[\var \mapsto \rho\var \sqcap \abstr[\Int](S)] & \text{if } \rho\var \sqcap \abstr[\Int](S) \neq \bot \\
+      \bot & \text{otherwise}
+    \end{cases}
   \end{equation*}
-  by definition it holds that
-  \(\max(\rho\var \sqcap \abstr(S)) \leq \max(\rho\var)\) and
-  therefore
+  provided the abstraction map
+  \({\abstr[\Int] : \poset{\n} \to \Int}\). Let's also recall that
   \begin{equation*}
-    \semi[\inte_{\com,\rho}]{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr(S)]
+    \semi[\inte_k]{\var \in S}\rho = \begin{cases}
+      \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_k](S)] & \text{if } \rho\var \sqcap \abstr[\Int_k](S) \neq \bot \\
+      \bot & \text{otherwise}
+    \end{cases}
   \end{equation*}
-  which means that
+  Here we have 2 cases. If
+  \({\rho\var \sqcap \abstr[\Int](S) = \bot}\) then also for all
+  bounded sub-intervals \(\abstr[\Int_k](S)\) it holds that
+  \({\rho\var \sqcap \abstr[\Int_k](S) = \bot}\) and therefore
+  \({\semi[\inte]{\var\in S}\rho = \bot = \semi[\inte_k]{\var \in
+      S}}\). Otherwise
+  \({\rho\var \sqcap \abstr[\Int](S) \neq \bot}\). In this case
+  \({\semi[\inte]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap
+    \abstr[\Int](S)]}\) and we can notice that
+  \(\max(\rho\var \sqcap \abstr[\Int](S)) \leq
+  \max(\rho\var)\). Therefore for all \(k\in\n\) s.t.
+  \({k\geq \boundof(\var \in S, \rho) = \max(\rho) + \bound{\var\in
+      S}}\)
   \begin{equation*}
-    \semi[\inte]{\var\in S}\rho = \semi[\inte_{\com,\rho}]{\var\in S}\rho
+    \semi[\inte_k]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_k](S)]
   \end{equation*}
+  and the thesis holds.
 
   \medskip
-
+  
   \noindent
   \textbf{Case} (\(\var := k\)).
   %
-  Recall that
+  Let's recall that
+  \({\semi[\inte]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}
+    ]}\). We can conclude by observing that
+  \({k \leq k \leq \max(\rho) + k = \max(\rho) + \bound{\var := k}}\)
+  which means that also
+  \({\semi[\inte_k]{\var := k}\rho = \rho[\var \mapsto
+    \interval{k}{k}]}\) and therefore
   \begin{equation*}
-    \semi[\inte]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}]
+    \semi[\inte]{\var := k}\rho = \semi[\inte_k]{\var := k}\rho
   \end{equation*}
-  and also recall that
-  \(k \leq k \leq \max(\rho) + k = \max(\rho) + \bound{\var :=
-    k}\). Hence by definition
-  \begin{equation*}
-    \semi[\inte_{\com,\rho}]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}]
-  \end{equation*}
-  and therefore
-  \begin{equation*}
-    \semi[\inte]{\var := k}\rho = \semi[\inte_{\com,\rho}]{\var := k}\rho
-  \end{equation*}
+  and the thesis holds.
 
   \medskip
-
+  
   \noindent
   \textbf{Case} (\(\var := \var[y] + k\)).
-  % 
-  Recall that
-  \({\semi[\inte]{\var := \var[y] + k}\rho} = {\rho[\var \mapsto
-    \rho\var[y] + k]}\) and
-  \({\max(\rho\var[y] + k)} \leq {\max(\rho) + k} = {\max(\rho) +
-    \bound{\var := \var[y] + k}}\) and therefore by definition
-  \begin{equation*}
-    \semi[\inte_{\com,\rho}]{\var := \var[y] + k}\rho = \rho[\var \mapsto \rho\var[y] + k]
-  \end{equation*}
-  hence
-  \begin{equation*}
-    \semi[\inte_{\com,\rho}]{\var := \var[y] + k}\rho = \semi[\inte]{\var := \var[y] + k}\rho
-  \end{equation*}
   %
-  % \medskip
-  % 
-  % \noindent
-  % \textbf{Case} (\(\var := \var[y] - k\)).
-  % % 
-  % Recall that
-  % \({\semi[\inte]{\var := \var[y] - k}\rho} = {\rho[\var \mapsto
-  %   \rho\var[y] - k]}\) and that
-  % \({\max(\rho\var[y] - k)} \leq {\max(\rho) + k} = {\max(\rho) +
-  %   \bound{\rho\var[y] - k}}\). Hence we can notice that
-  % \({\semi[\inte_{\com,\rho}]{\var := \var[y] - k}\rho} = {\rho[\var
-  %   \mapsto \rho\var[y] - k]}\) and therefore
-  % \begin{equation*}
-  %   \semi[\inte]{\var := \var[y] - k}\rho = \semi[\inte_{\com,\rho}]{\var := \var[y] - k}\rho
-  % \end{equation*}
-
-  \medskip
-
-  \noindent
-  \textbf{Case} (\(\com_1 + \com_2\)).
-  % 
-  Recall that
-  \({\semi[\inte]{\com_1 + \com_2}\rho} = {\semi[\inte]{\com_1}\rho}
-  \sqcup {\semi[\inte]{\com_2}\rho}\) and by inductive hypothesis
-  \begin{align*}
-    \semi[\inte]{\com_1}\rho & = \semi[\inte_{\com_1, \rho}]{\com_1}\rho \\
-    \semi[\inte]{\com_2}\rho & = \semi[\inte_{\com_2, \rho}]{\com_2}\rho
-  \end{align*}
-  by definition
-  \begin{equation*}
-    \semi[\inte_{\com_1, \rho}]{\com_1}\rho \sqcup \semi[\inte_{\com_2, \rho}]{\com_2}\rho = \rho'
-  \end{equation*}
-  where \(\forall \var \in \Var\)
-  \(\rho'\var = {\left(\semi[\inte_{\com_1,
-        \rho}]{\com_1}\rho\right)(\var)} \sqcup
-  {\left(\semi[\inte_{\com_2, \rho}]{\com_2}\rho\right)
-    (\var)}\). \todo[inline]{\(\top\) e \(\bot\) possiamo escluderli
-    perchè coincidono sempre} Recall that
-  \begin{align}
-    \inte_{\com_1, \rho} & = \{\interval{a}{b} \mid \min(\rho) - \lbound{\com_1} \leq a \leq b \leq \max(\rho) + \bound{\com_1}\} \label{ic1}\\
-    \inte_{\com_2, \rho} & = \{\interval{a}{b} \mid \min(\rho) - \lbound{\com_2} \leq a \leq b \leq \max(\rho) + \bound{\com_2}\} \label{ic2}
-  \end{align}
-  Hence observe that for all \(\var\in\Var\) we can call
-  \begin{align*}
-    \iota & = \semi[\inte_{\com_1, \rho}]{\com_1}\rho & \text{where } \iota\var = \interval{a}{b} \text{ for some } a,b\in\z \\
-    \kappa & = \semi[\inte_{\com_2, \rho}]{\com_2}\rho & \text{where }\kappa\var = \interval{c}{d} \text{ for some } c,d \in\z
-  \end{align*}
-  and by the definition of \(\sqcup\) for intervals
-  \begin{equation*}
-    \iota\var \sqcup \kappa\var = \interval{\min\{a,c\}}{\max\{b,d\}}
-  \end{equation*}
-  we can notice that by \eqref{ic1}
-  \(b = {\max(\iota\var)} \leq {\max(\rho) + \bound{\com_1}}\) and by
-  \eqref{ic2}
-  \(d = {\max(\kappa\var)} \leq {\max(\rho) + \bound{\com_2}}\),
-    therefore
-  \begin{align*}
-    \max(\iota\var\sqcup\kappa\var) & \leq \max(\rho) + \bound{\com_1} + \bound{\com_2} \\
-                                    & = \max(\rho) + (\bound{\com_1} + \bound{\com_2}) \\
-                                    & = \max(\rho) + \bound{\com_1 + \com_2}
-  \end{align*}
-  and dually
-  \begin{align*}
-    \min(\iota\var\sqcup\kappa\var) & \geq \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \\
-                                    & = \min(\rho) - (\lbound{\com_1} + \lbound{\com_2}) \\
-                                    & = \min(\rho) - \lbound{\com_1 + \com_2}
-  \end{align*}
-  and therefore
-  \begin{equation*}
-    \min(\rho) - \lbound{\com_1 + \com_2} \leq \min(\iota\var \sqcup \kappa\var) \leq \max(\iota\var \sqcup \kappa\var) \leq \max(\rho) + \bound{\com_1 + \com_2}
-  \end{equation*}
-  which by definition of \(\inte_{\com_1 + \com_2, \rho}\) means
-  \(\iota \sqcup \kappa \in \inte_{\com_1 + \com_2, \rho}\) and
-  therefore
-  \begin{equation*}
-    \semi[\inte]{\com_1 \ndet \com_2}\rho = \semi[\inte]{\com_1}\rho \sqcup \semi[\inte]{\com_2}\rho = \semi[\inte_{\com_1, \rho}]{\com_1}\rho \sqcup \semi[\inte_{\com_2, \rho}]{\com_2}\rho = \semi[\inte_{\com_1 + \com_2, \rho}]{\com_1 + \com_2}\rho
-  \end{equation*}
-  
+  Let's recall that
   
   \medskip
-
   \noindent
-  \textbf{Case} (\(\com_1 ; \com_2\)).
-  % 
-  The goal in this case is to prove that
-  \({\semi[\inte]{\com_1 \seq \com_2}\rho} = {\semi[\inte_{\com_1 \seq
-      \com_2, \rho}]{\com_1 \seq \com_2}\rho}\). Let's start by
-  recalling that
-  \begin{equation}\label{eq:def1}
-    {\semi[\inte]{\com_1 \seq \com_2}\rho} = {\semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)}
-  \end{equation}
-  by inductive hypothesis we know that
-  \({\semi[\inte]{\com_1}\rho} = {\semi[\inte_{\com_1,
-      \rho}]{\com_1}\rho} = \rho'\) which means that for all
-  \(\var\in\Var\), let
-  \({\left(\semi[\inte_{\com_1, \rho}]{\com_1}\rho\right)}(\var) =
-  \interval{a}{b}\). By definition of \(\inte_{\com_1,\rho}\)
-  \begin{equation}\label{eq:b1}
-    \min(\rho) - \lbound{\com_1} \leq a \leq b \leq \max(\rho) + \bound{\com_1}
-  \end{equation}
-  Let's now substitute \(\rho'\) in \eqref{eq:def1} and observe that
-  \begin{equation}\label{eq:ind1}
-    \semi[\inte]{\com_2}\rho' = \semi[\inte_{\com_2, \rho'}]{\com_2}\rho' \quad \text{by inductive hypothesis}
-  \end{equation}
-  Again this means that for every \(\var \in \Var\) by letting
-  \({\left(\semi[\inte_{\com_2, \rho'}]{\com_2}\rho'\right)}(\var) =
-  \interval{a}{b}\) we now that
-  \begin{equation}\label{eq:b2}
-    \min(\rho') - \lbound{\com_2} \leq a \leq b \leq \max(\rho') + \bound{\com_2}
-  \end{equation}
-  but by \eqref{eq:b1} we know that
-  \({\min(\rho') = \min(\rho) - \lbound{\com_1}}\) and
-  \({\max(\rho') = \max(\rho) + \bound{\com_1}}\) which means that if
-  we substitute it in \eqref{eq:b2}
-  \begin{equation*}
-    \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \leq a \leq b \leq \max(\rho) + \bound{\com_1} + \bound{\com_2}
-  \end{equation*}
-  which is exactly
-  \begin{equation*}
-    \min(\rho) - \lbound{\com_1 \seq \com_2} \leq a \leq b \leq \max(\rho) + \bound{\com_1 \seq \com_2}
-  \end{equation*}
-  which means that
-  \(\inte_{\com_1 \seq \com_2, \rho} = \inte_{\com_2,
-    \left(\semi[\inte_{\com_1, \rho}]{\com_1}\rho\right)} =
-  \inte_{\com_2, \rho'}\) Therefore we can substitute \(\rho'\) in
-  \eqref{eq:ind1} and deduce that
-  \begin{equation*}
-    \semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right) =
-    \semi[\inte]{\com_2}\rho' = \semi[\inte_{\com_2,\rho'}]{\com_2}\rho' =
-    \semi[\inte_{\com_1\seq\com_2}, \rho]{\com_2}\left(\semi[\inte_{\com_1, \rho}]{\com_1}\rho\right)
-  \end{equation*}
-  We can conclude by noticing that \(\inte_{\com_1,\rho}\) is entirely
-  contained in \(\inte_{\com_1\seq \com_2, \rho}\) since by letting
-  \({\semi[\inte_{\com_1,\rho}]{\com_1}\rho = \interval{a}{b}}\)
-  \begin{align*}
-    \min(\rho) - \lbound{\com_1\seq \com_2} & = \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \\
-                                            & \leq  \min(\rho) - \lbound{\com_1} \\
-                                            & \leq a \\
-                                            & \leq b \\
-                                            & \leq \max(\rho) + \bound{\com_1}  \\
-                                            & \leq \max(\rho) + \bound{\com_1 \ndet \com_2}
-  \end{align*}
-  And therefore
-  \begin{align*}
-     \semi[\inte]{\com_1\seq \com_2}\rho & = \semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)\\
-                                          & = \semi[\inte_{\com_1\seq\com_2}, \rho]{\com_2}\left(\semi[\inte_{\com_1\seq\com_2, \rho}]{\com_1}\rho\right) \\
-                                          & = \semi[\inte_{\com_1\seq\com_2, \rho}]{\com_1\seq\com_2}\rho
-  \end{align*}
+  Next, we can move to the inductive cases
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\com_1 \ndet \com_2\)).
 
   \medskip
+  
+  \noindent
+  \textbf{Case} (\(\com_1 \seq \com_2\)).
 
+  \medskip
+  
   \noindent
   \textbf{Case} (\(\fix{\com}\)).
-  % 
-  Recall as we observed in Lemma~\ref{le:inc} that
-  \({\semi[\inte]{\fix{\com}}\rho} = {\lfp(\lambda \mu
-    . \semi[\inte]{\com \ndet \tru}\mu)}\) above \(\rho\). we can
-  therefore build the chain
-  \begin{align*}
-    \rho_0 & \defin \rho \\
-    \rho_{i+1} & \defin \semi[\inte]{\com}\rho_i \sqcup \rho_i = \semi[\inte]{\com \ndet \tru}\rho_i \sqsupseteq \rho_i
-  \end{align*}
-  and therefore
-  \({\semi[\inte]{\fix{\com}}\rho} =
-  {\textstyle\bigsqcup_{i\in\n}\rho_i}\). By inductive hypothesis we
-  can notice that
-  \begin{equation*}
-    \semi[\inte]{\com \ndet \tru}\rho_i = \semi[\inte_{\com,\rho_i}]{\com \ndet \tru}\rho_i
-  \end{equation*}
-  which means that \(\forall \var\in\Var, i\in\n\) considering
-  \(\rho_i\var = \interval{a}{b}\)
-  \begin{equation*}
-    \min(\rho_i) - \lbound{\com} \leq a \leq b \leq \max(\rho_i) + \bound{\com}
-  \end{equation*}
-
 \end{proof}
