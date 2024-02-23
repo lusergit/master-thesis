@@ -7,28 +7,25 @@ same. This intuitively happens because the kleene star is the least
 opper bound of a chain of interals, while the fix operator keeps
 iterating over least upper bounds.
 
-\begin{example} \label{ex:fix}
-  This is the case, for instance, the following program \(P\)
-  represents the difference between the Kleene Star and the Fix
-  operator:
+\begin{example} \label{ex:fix} This is the case, for instance, the
+  following program \(P\) represents the difference between the Kleene
+  Star and the Fix operator:
 \begin{verbatim}
   while x < 8 do
   if x = 2 then x := x+6;
   x := x-3
   if x <= 0 then x:=0
 \end{verbatim}
-starting with the finite interval \(\interval{3}{4}\) we get the
-following loop invariants:
-
-\begin{align*}
-  \text{Kleene: } &\sqcup\{[3,4], [0,1], [0,0], [0,0], \ldots\} = [0,4]\\
-  \text{Fix: } & \sqcup\{\bot, [3,4], [0,4], [0,5], [0,5],\ldots\} = [0,5]
-\end{align*}
-
-\noindent
-Both invariants are correct, because they over-approximate the most
-precise concrete invariant \(\{0,1,3,4\}\), however the Kleene
-invariant is strictly more precise than the Fix one.
+  starting with the finite interval \(\interval{3}{4}\) we get the
+  following loop invariants:
+  \begin{align*}
+    \text{Kleene: } &\sqcup\{[3,4], [0,1], [0,0], [0,0], \ldots\} = [0,4]\\
+    \text{Fix: } & \sqcup\{\bot, [3,4], [0,4], [0,5], [0,5],\ldots\} = [0,5]
+  \end{align*}
+  \noindent
+  Both invariants are correct, because they over-approximate the most
+  precise concrete invariant \(\{0,1,3,4\}\), however the Kleene
+  invariant is strictly more precise than the Fix one.
 \end{example}
 
 \begin{lemma}[\(\fix{\com}\) \textbf{is syntactic sugar}]\label{le:sugar}
@@ -46,7 +43,7 @@ invariant is strictly more precise than the Fix one.
   \(i=0\): \( (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{1} \bot = \eta \sqcup \bot \sqcup \semi[\inte]{\com}\bot = \eta = 
   (\tru \sqcup \semi[\inte]{\com})^{0} \eta\).
   
-  %\medskip
+  % \medskip
   \noindent
   \(i+1\):  
   \begin{align*}
@@ -66,8 +63,8 @@ invariant is strictly more precise than the Fix one.
   \end{equation}
   Observe that \(\lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)} = \eta \sqcup  \semi[\inte]{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)})\), so that we have that:
   \[
-  \eta \sqcup  \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)} \sqcup \semi[\inte]{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)})
-  \sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)}
+    \eta \sqcup  \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)} \sqcup \semi[\inte]{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)})
+    \sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)}
   \]
   As a consequence, \(\lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi[\inte]{\com} \mu)}\sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)}\) holds. The reverse inequality follows because, for all \(\mu\), 
   \(\eta \sqcup \semi[\inte]{\com} \mu \sqsubseteq \eta \sqcup \mu \sqcup \semi[\inte]{\com} \mu\).
