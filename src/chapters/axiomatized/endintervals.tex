@@ -8,19 +8,22 @@ properties \ref{inc:hp1} and \ref{inc:hp2}. We can in fact verify that
 the intervals respect such claims.
 
 \begin{observation}[\ref{inc:hp1} holds on intervals]
-  Let \(\iota \in \Int, S \in \poset{\z}\). If
-  \(\max(\abstr(S)) = \infty\) and
-  \({\iota \sqcap \abstr(S) \neq \bot}\) then
-  \({max(\iota \sqcap \abstr(S)) = \max(\iota)}\) where
-  \(S \in \poset{\Z}\) and \(\iota \in \Int\)
+  Let \(\iota \in \Int, S \in \poset{\z}\) and let
+  \({\abstr[\Int] : \poset{\z} \to \Int}\) be the abstraction map for
+  the interval domain. 
+  \begin{equation*}
+    \left(\max(\abstr[\Int](S)) = \infty\right) \land \left(\iota \sqcap \abstr[\Int](S) \neq \bot\right)
+    \Rightarrow max(\iota \sqcap \abstr[\Int](S)) = \max(\iota)
+  \end{equation*}
+  where \(S \in \poset{\Z}\) and \(\iota \in \Int\)
 \end{observation}
 
 \begin{proof}
   Let \(\iota = \interval{a}{b}\) and
-  \(\abstr(S) = \interval{c}{\infty}\) and remember that
+  \(\abstr[\Int](S) = \interval{c}{\infty}\) and remember that
   \({\iota \sqcap \abstr(S) \neq \bot}\). Then
   \begin{equation*}
-    \max([a,b] \sqcap \abstr(S)) = \max(\interval{\max\{a, c\}}{\min\{b , \infty\}}) = b = \max(\iota) \qedhere
+    \max([a,b] \sqcap \abstr[\Int](S)) = \max(\interval{\max\{a, c\}}{\min\{b , \infty\}}) = b = \max(\iota) \qedhere
   \end{equation*}
 \end{proof}
 
@@ -83,10 +86,11 @@ consider \({\eta = \interval{a}{b} \in \inte_k}\) and
 \(b,d \leq k\). Now consider
 \({\eta \sqcup \theta = \interval{\min\{a,c\}}{\max\{b,d\}}}\), where
 we can observe \(\max\{b,d\} \leq k\) and therefore
-\({\eta \sqcup \theta \in \inte_k}\). Also observe that for
+\({\eta \sqcup \theta \in \inte_k}\) by definition of
+\(\inte_k\). Also observe that for
 \({\eta \sqcap \theta = \interval{\max\{a,c\}}{\min\{b,d\}}}\) it
 holds that \({\min\{b,d\} \leq k}\) and therefore
-\({\eta \sqcap \theta \in \inte_k}\).
+\({\eta \sqcap \theta \in \inte_k}\) by definition of \(\inte_k\).
 
 % We could also operate uniformly on all commands, defining the
 % semantics for \(\com\) in a domain with intervals bounded by
