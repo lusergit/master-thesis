@@ -92,7 +92,8 @@ a finite path in \(\langle X,\to\rangle\)
   \(\concr : \bA \to \poset{\z}\) concretization map s.t.
   \(\forall \theta \in \bA_\Var\), \(S \in \poset{\z}\)
   \begin{enumerate}[label=(\Roman*)]
-  \item\label{inc:hp1} if \(\max(\abstr(S)) = \infty\) then
+  \item\label{inc:hp1} for all \(\var\in\Var\) if
+    \(\max(\abstr(S)) = \infty\) then
     \(\max(\theta(\var) \sqcap \abstr(S)) = \max(\theta\var)\)
   \item\label{inc:hp2} \(\max(a \sqcup b) = \max\{\max(a), \max(b)\}\)
   \end{enumerate}
@@ -652,8 +653,9 @@ following inductively-defined function:
   -(\fix{\com}) & \defin \fix{-\com} \\
 \end{align*}
 
-\todo[inline]{end}
+\todo[inline]{da finire}
 
+\noindent
 Lemma~\ref{le:inc} and its Corollary~\ref{co:inc} provide an
 effective algorithm for computing the interval semantics of
 commands. More precisely, given a command \(\com\), the corresponding
@@ -673,8 +675,6 @@ having a finite domain, we can restrict to a bounded interval domain
   \min(\rho) - \lbound{\com} \leq a \leq b \leq \max(\rho) + \bound{\com}\}
   % \{\interval{a}{\infty} \mid a \in \nat \}
 \end{equation*}
-
 % We could also operate uniformly on all commands, defining the
 % semantics for \(\com\) in a domain with intervals bounded by
 % \(\max(\rho) +\bound{\com}\)
-
