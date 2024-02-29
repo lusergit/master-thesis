@@ -637,21 +637,15 @@ a finite path in \(\langle X,\to\rangle\)
   \end{enumerate}
 \end{corollary}
 
-We would like to have an analogous property for programs that diverge
-to \(-\infty\). We can however notice that if we consider the negation
-of a program \(-(\com)\) where by \({- : \imp \to \imp}\) we mean the
-following inductively-defined function:
+\begin{proof}
+  The statements follows from the observation that Lemma~\ref{le:inc}
+  works also for \(\Int\) with the usual ordering \(\sqsubseteq\) but
+  with a different \(\max : \Int \to \z\) function, where
+  \begin{equation*}
+    \max(\interval{a}{b}) = a
+  \end{equation*}
+\end{proof}
 
-\begin{align*}
-  -(\var\in S) & \defin \var \in \{-x \mid x \in S\} \\
-  -(\var := k) & \defin \var := -k \\
-  -(\var := \var[y] + k) & \defin \var := \var[y] + (- k) \\
-  % -(\var := \var[y] - k) & \defin \var := \var[y] + k \\
-  -(\com_1 + \com_2) & \defin (-\com_1) + (-\com_2) \\
-  -(\com_1 ; \com_2) & \defin (-\com_1) ; (-\com_2) \\
-  -(\com^*) & \defin (-\com)^* \\
-  -(\fix{\com}) & \defin \fix{-\com} \\
-\end{align*}
 
 \todo[inline]{da finire}
 
