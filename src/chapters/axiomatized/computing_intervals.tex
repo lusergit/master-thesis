@@ -116,8 +116,8 @@ Observe that for
 \({\eta \sqcap \theta = \interval{\max\{a,c\}}{\min\{b,d\}}}\) it
 holds that \({\min\{b,d\} \leq k}\) and therefore
 \({\eta \sqcap \theta \in \inte_k}\) by definition of \(\inte_k\).
-\begin{lemma}\label{le:subs}
-  for all \(k\in\nat\) s.t. \(k \geq \max(\rho)\)
+\begin{lemma}\label{le:leq}
+  for all \(k\in\nat\)% s.t. \(k \geq \max(\rho)\)
   \begin{equation*}
     \semi[\inte]{\com}\rho \sqsubseteq \semi[\inte_k]{\com}\rho
   \end{equation*}
@@ -132,14 +132,14 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \noindent
   \textbf{Case} (\(\var \in S\)).
   % 
-  Recall that \(\semi[\inte]{\var\in S}\rho\) is dependent on
-  \({\rho\var \sqcap \abstr[\Int](S)}\). Hence we have two cases:
+  Recall that
+  \(\semi[\inte]{\var\in S}\rho = \rho[\var \mapsto {\rho\var \sqcap
+    \abstr[\Int](S)}]\). Hence we have two cases:
   \begin{itemize}
-  \item \({\rho\var \sqcap \abstr[\Int](S)} = \bot\). In this case, for
-    all \(k\geq \max(\rho)\) it holds that
-    \({\rho\var \sqcap \abstr[\Int_k](S)} = \bot\) and therefore
+  \item \({\rho\var \sqcap \abstr[\Int](S)} = \bot\). In this case it
+    holds that
     \begin{equation*}
-      \semi[\inte]{\var\in S}\rho = \bot \sqsubseteq \bot = \semi[\inte_k]{\var\in S}\rho
+      \semi[\inte]{\var\in S}\rho = \bot \sqsubseteq \semi[\inte_k]{\var\in S}\rho
     \end{equation*}
     
   \item \({\rho\var \sqcap \abstr[\Int](S)} = \interval{a}{b}\) for some
@@ -150,7 +150,7 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
     \end{equation*}
     and therefore
     \({\rho\var \sqcap \abstr[\Int](S)} \sqsubseteq {\rho\var \sqcap
-      \abstr[\Int_k](S)}\) for all \(k \geq \max(\rho)\). Hence
+      \abstr[\Int_k](S)}\). Hence
     \begin{equation*}
       {\semi[\inte]{\var\in S}\rho} \sqsubseteq {\semi[\inte_k]{\var\in S}\rho}
     \end{equation*}
@@ -170,6 +170,7 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \begin{equation*}
     \semi[\inte]{\var := k}\rho \sqsubseteq \semi[\inte_k]{\var := k}\rho
   \end{equation*}
+  which is our thesis.
 
   \medskip
 
@@ -200,13 +201,14 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \textbf{Case} (\(\com_1 \ndet \com_2\)).
   % 
   Recall that
-  \({\semi[\inte]{\com_1 \ndet \com_2}\rho} = {\semi[\inte]{\com_1}\rho}
-  \ndet {\semi[\inte]{\com_2}\rho}\). By inductive hypothesis
+  \({\semi[\inte]{\com_1 \ndet \com_2}\rho} =
+  {\semi[\inte]{\com_1}\rho} \ndet {\semi[\inte]{\com_2}\rho}\). By
+  inductive hypothesis
   \({\semi[\inte]{\com_1}\rho} \sqsubseteq
   {\semi[\inte_k]{\com_1}\rho}\) and
   \({\semi[\inte]{\com_2}\rho} \sqsubseteq
-  {\semi[\inte_k]{\com_2}\rho}\) for all \(k \geq \max(\rho)\). Hence we
-  can conclude by noticing that \(\inte_k\) is closed under \(\sqcup\)
+  {\semi[\inte_k]{\com_2}\rho}\). Hence we can conclude by noticing
+  that \(\inte_k\) is closed under \(\sqcup\)
   \begin{equation*}
     \semi[\inte]{\com_1 \ndet \com_2}\rho \sqsubseteq
     \semi[\inte_k]{\com_1}\rho \sqcup \semi[\inte_k]{\com_2}\rho =
@@ -222,8 +224,20 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \({\semi[\inte]{\com_1 \seq \com_2}\rho} =
   {\semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)}\). By
   inductive hypothesis
-  \({\semi[\inte]{\com_1}\rho} \sqsubseteq
-  {\semi[\inte_k]{\com_1}\rho}\)
+  \begin{equation}\label{eq:a1}
+    {\semi[\inte]{\com_1}\rho} \sqsubseteq {\semi[\inte_k]{\com_1}\rho}
+  \end{equation}
+  We can call \(\rho' = {\semi[\inte_k]{\com_1}\rho}\) and observe
+  that by inductive hypothesis
+  \begin{equation}\label{eq:a2}
+    {\semi[\inte]{\com_2}\rho'} \sqsubseteq {\semi[\inte_{k'}]{\com_2}\rho'}
+  \end{equation}
+  for all \(k'\in\n\). We can conclude by
+  \begin{align*}
+    {\semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)} & \sqsubseteq {\semi[\inte_k]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)} & \text{by \eqref{eq:a2}}\\
+                                                                & \sqsubseteq {\semi[\inte_k]{\com_2}\left(\semi[\inte_k]{\com_1}\rho\right)} & \text{by \eqref{eq:a1} and monotonicity}
+  \end{align*}
+  which is our thesis
 
   \medskip
 
@@ -231,8 +245,38 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \textbf{Case} (\(\fix{\com}\)).
   % 
   Recall that
+  \(\fix{\com} = {\lfp(\lambda \mu . (\rho \sqcup
+    \semi[\inte]{\com}\mu))}\), which again coincides with
+  \({\lfp(\lambda \mu . (\mu \sqcup \semi[\inte]{\com}\mu))}\) above
+  \(\rho\). i.e., we can build the chain of iterands
+  \begin{align*}
+    \rho_0 & \defin \rho \\
+    \rho_{i+1} & \defin \semi[\inte]{\com}\rho_i \sqcup \rho_i = \semi[\inte]{\com \ndet \tru}\rho_i
+  \end{align*}
+  and the analysis becomes
+  \({\semi[\inte]{\fix{\com}}\rho} =
+  {\textstyle\bigsqcup_{i\in\n}\rho_i} =
+  {\textstyle\bigsqcup_{i\in\n}\left(\semi[\inte]{\com \ndet
+        \tru}\right)^i\rho}\).  For each iterand, the inductive
+  hypothesis works for \(\com\) and for \(\tru\), and therefore it
+  works for \(\com \ndet \tru\). Now we can use an inductive argument
+  on \(i\) to state that for all \(i \in\n\)
+  \begin{equation*}
+    {\left(\semi[\inte]{\com\ndet\tru}\right)^i\rho} \sqsubseteq {\left(\semi[\inte_k]{\com\ndet\tru}\right)^i\rho}
+  \end{equation*}
+  Hence, by closure of \(\inte_k\) over \(\sqcup\)
+  \begin{equation*}
+    {\semi[\inte]{\fix{\com}}} =
+    {\textstyle\bigsqcup_{i\in\n}\left(\semi[\inte]{\com\ndet\tru}\right)^i \rho}
+    \quad \sqsubseteq \quad
+    {\textstyle\bigsqcup_{i\in\n}\left(\semi[\inte_k]{\com\ndet\tru}\right)^i \rho} =
+    {\semi[\inte_k]{\fix{\com}}}
+  \end{equation*}
 
 \end{proof}
+With this consideration we can now proceed to prove that the analysis
+on our bounded lattice \(\inte_{\com,\rho}\) produces the same result
+as the analysis on \(\inte\).
 
 % Galois connection??
 
@@ -257,9 +301,9 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
 
   The proof will proceed by induction on the command \(\com\). We can
   preliminarly observe that in case the analysis results in the
-  \(\top\) element (i.e., \({\semi[\inte]{\com}\rho = \top}\)).  Since
+  \(\top\) element (i.e., \({\semi[\inte]{\com}\rho = \top}\)),  since
   \(\semi[\inte]{\com}\rho \sqsubseteq \semi[\inte_k]{\com}\rho\) by
-  \eqref{eq:leq} it trivially holds that
+  Lemma~\ref{le:leq} it trivially holds that
   \(\semi[\inte_k]{\com}\rho = \top\) and therefore the two analysis
   coincide. We will therefore silently omit this case.  Now, let's
   explore the base cases.
@@ -276,15 +320,14 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
       \bot & \text{otherwise}
     \end{cases}
   \end{equation*}
-  provided the abstraction map
-  \({\abstr[\Int] : \poset{\n} \to \Int}\). Let's also recall that
+  and that
   \begin{equation*}
     \semi[\inte_k]{\var \in S}\rho = \begin{cases}
       \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_k](S)] & \text{if } \rho\var \sqcap \abstr[\Int_k](S) \neq \bot \\
       \bot & \text{otherwise}
     \end{cases}
   \end{equation*}
-  Here we have 2 cases. If
+  With \(k \geq \max(\rho) + \bound{\var \in S}\). We have 2 cases: if
   \({\rho\var \sqcap \abstr[\Int](S) = \bot}\) then also for all
   bounded sub-intervals \(\abstr[\Int_k](S)\) it holds that
   \({\rho\var \sqcap \abstr[\Int_k](S) = \bot}\) and therefore
@@ -294,9 +337,8 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \({\semi[\inte]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap
     \abstr[\Int](S)]}\) and we can notice that
   \(\max(\rho\var \sqcap \abstr[\Int](S)) \leq
-  \max(\rho\var)\). Therefore for all \(k\in\n\) s.t.
-  \({k\geq \boundof(\var \in S, \rho) = \max(\rho) + \bound{\var\in
-      S}}\)
+  \max(\rho\var) \leq \max(\rho)\). Therefore for all \(k\in\n\) s.t.
+  \({k\geq \max(\rho) + \bound{\var\in S}}\)
   \begin{equation*}
     \semi[\inte_k]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_k](S)]
   \end{equation*}
@@ -312,9 +354,9 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
     ]}\). We can conclude by observing that
   \({k \leq k \leq \max(\rho) + k = \max(\rho) + \bound{\var := k}}\)
   which means that also
-  \({\semi[\inte_k]{\var := k}\rho = \rho[\var \mapsto
-    \interval{k}{k}]}\) and therefore for all
-  \(j\geq \max(\rho) + \bound{\var := k}\)
+  \({\semi[\inte_j]{\var := k}\rho = \rho[\var \mapsto
+    \interval{k}{k}]}\) for all
+  \(j\geq \max(\rho) + \bound{\var := k}\). Therefore
   \begin{equation*}
     \semi[\inte]{\var := k}\rho = \semi[\inte_j]{\var := k}\rho
   \end{equation*}
@@ -328,40 +370,56 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   Let's recall that
   \({\semi[\inte]{\var := \var[y] + k}\rho = \rho[\var \mapsto
     \rho\var[y] + k]}\) and \(\bound{\var := \var[y] + k} =
-  |k|\). Here we have 2 cases
+  |k|\). Recall that we are considering \(\inte_j\) with
+  \(j \geq \max(\rho) + \bound{\var := \var[y] + k}\). Notice that
+  what we are interested in is the behaviour of \(\var\). We have 2
+  cases
   \begin{itemize}
-  \item \({\max(\semi[\inte]{\var := \var[y] + k}\rho) =
-      +\infty}\). This means however that
-    \({\semi[\inte]{\var := \var[y] + k}\rho = \top}\) and since
-    \(\semi[\inte]{\com}\rho \sqsubseteq \semi[\inte_k]{\com}\rho\)
-    for all \(k\geq \boundof(\var := \var[y] + k,\rho)\) then
-    \({\semi[\inte_k]{\var := \var[y] + k}\rho = \top}\)
   \item
-    \({\max(\semi[\inte]{\var := \var[y] + k}\rho) \neq +\infty}\). In
-    this case we have 2 more cases
+    \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} =
+    +\infty\). This means that \(\rho\var[y] + k = +\infty\), but
+    since \(k \in \z\), \(\rho\var[y] = \interval{a}{\infty}\) with
+    \(a \in \n\), therefore
+    \({\rho\var[y] + k} = {\interval{a+k}{+\infty}}\) which we can
+    notice is part of \(\Int_j\) for all \(j \in \n\). Hence
+    \begin{equation*}
+      \semi[\inte]{\var := \var[y] + k}\rho =
+      \rho[\var \mapsto \rho\var[y] + k] =
+      \semi[\inte_j]{\var := \var[y] + k}\rho
+    \end{equation*}
+    for all \(j \geq \max(\rho) + \bound{\var := \var[y] + k}\), which
+    is our thesis.
+  \item
+    \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} \neq
+    +\infty\). In this case we have 2 more cases:
     \begin{itemize}
     \item
-      \({\max(\semi[\inte]{\var := \var[y] + k}\rho) \leq \bound{\var
-          := \var[y] + k}}\). In this case however by definition it
+      \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} \leq
+      \bound{\var := \var[y] + k}\). In this case by definition it
       holds that
       \begin{equation*}
-        \max(\semi[\inte]{\var := \var[y] + k}\rho) \leq \bound{\var := \var[y] + k} \leq \max(\rho) + \bound{\var := \var[y] + k}
+        {\semi[\inte]{\var := \var[y] + k}\rho} = \rho[\var \mapsto \rho\var[y] + k] = {\semi[\inte_j]{\var := \var[y] + k}\rho}
       \end{equation*}
-      
+      for all \(j \geq \max(\rho) + \bound{\var := \rho\var[y] + k}\),
+      which is our thesis;
     \item
-      \({\max(\semi[\inte]{\var := \var[y] + k}\rho) > \bound{\var :=
-          \var[y] + k}}\). In this case by Lemma~\ref{le:inc} it holds
-      that for all \(\var[w]\in\Var\) s.t.
-      \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var[w]) >
-        \bound{\var := \var[y] + k}}\)
+      \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} <
+      \bound{\var := \var[y] + k}\). In this case by
+      Lemma~\ref{le:inc} we know that
       \begin{equation*}
-        \max(\semi[\inte]{\var := \var[y] + k}\rho\var[w]) = \max(\rho\var[z]) + h
+        {\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} = {\max(\rho\var[z]) + h}
       \end{equation*}
-      with \(|h| \leq \bound{\var := \var[y] + k}\). Which means that
-      in general
+      for some \(\var[z] \in \Var\) and \(h \in \z\) s.t.
+      \(|h| \leq \bound{\var := \var[y] + k} = |k|\), which means that
+      \({\rho[\var \mapsto \rho\var[y] + k]} \in \Int_j\) for all
+      \(j \geq \max(\rho) + \bound{\var := \var[y] + k}\).
+      Hence
       \begin{equation*}
-        \max(\semi[\inte]{\var := \var[y] + k}\rho) \leq \max(\rho) + \bound{\var := \var[y] + k}
+        \semi[\inte]{\var := \var[y] + k}\rho =
+        \rho[\var \mapsto \rho\var[y] + k] =
+        \semi[\inte_j]{\var := \var[y] + k}\rho
       \end{equation*}
+      for all \(j \geq \max(\rho) + \bound{\var := \var[y] + k}\),
       which is our thesis.
     \end{itemize}
   \end{itemize}
@@ -403,11 +461,20 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \textbf{Case} (\(\com_1 \seq \com_2\)).
   % 
   Let's recall that
-  \(\semi[\inte]{\com_1 \seq \com_2} =
+  \(\semi[\inte]{\com_1 \seq \com_2}\rho =
   \semi[\inte_{k_2}]{\com_2}\left({\semi[\inte_{k_1}]{\com_1}\rho}\right)\)
   where \(k_1 \geq \max(\rho) + \bound{\com_1}\) and if we call
   \(\rho' = {\semi[\inte_{k_1}]{\com_1}\rho}\) then
-  \({k_2 \geq \max(\rho') + \bound{\com_2}}\).
+  \({k_2 \geq \max(\rho') + \bound{\com_2}}\). In particular it holds
+  for \(k \geq {\max(\rho) + \bound{\com_1} +
+    \bound{\com_2}}\). Therefore
+  \begin{equation*}
+    \semi[\inte]{\com_1 \seq \com_2}\rho = \semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right) =
+    \semi[\inte_k]{\com_2}\left(\semi[\inte_k]{\com_1}\rho\right) = \semi[\inte_k]{\com_1 \seq \com_2}\rho
+  \end{equation*}
+  for all
+  \(k \geq \max(\rho) + \bound{\com_1} + \bound{\com_2} = \max(\rho) +
+  \bound{\com_1 \seq \com_2}\) which is our thesis.
 
   \medskip
   
@@ -436,8 +503,8 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
     \begin{equation*}
       \max(\semi[\inte]{\fix{\com}}\rho\var[y]) \leq \max(\rho) + \bound{\fix{\com}} = \max(\rho) + (n+1)\bound{\com}
     \end{equation*}
-    where \(n = \Var_{\com}\) is the number of variables appearing in
-    the program \(\com\). For all iterands \(\rho_i\) we can notice
+    where \(n = |\Var_{\com}|\) is the number of variables appearing
+    in the program \(\com\). For all iterands \(\rho_i\) we can notice
     that
     \begin{equation*}
       \rho_i = \left(\semi[\inte]{\com \ndet \tru}\right)^i\rho \sqsubseteq \semi[\inte]{\fix{\com}}\rho = \textstyle\bigsqcup_{i\in\nat}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho
@@ -448,7 +515,11 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
     \begin{equation*}
       \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\inte_k]{\com\ndet\tru}\rho_i
     \end{equation*}
-    Hence by \(\inte_k\) closure over \(\sqcup\)
+    for all \(k \geq \max(\rho_i) + \bound{\com}\). In particular it
+    holds for
+    \(k \geq \max(\rho) + \bound{\fix{\com}} \geq \max(\rho_i) +
+    \bound{\com}\) for all \(\i\in\n\). Hence by \(\inte_k\) closure
+    over \(\sqcup\)
     \begin{equation*}
       \semi[\inte]{\fix{\com}}\rho
       =
@@ -462,7 +533,7 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \item instead, if
     \({\max(\semi[\inte]{\fix{\com}}\rho\var[y])} = +\infty\) for some
     \(\var[y]\in \Var_{\com}\) then we can use the observation made
-    with the equation \eqref{eq:leq}
+    with Lemma~\ref{le:leq}, i.e., 
     \({\semi[\inte]{\com}\rho} \sqsubseteq
     {\semi[\inte_k]{\com}\rho}\) for all \({k \in \nat}\), and
     conclude because it means that
