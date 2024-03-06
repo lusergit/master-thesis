@@ -26,10 +26,12 @@
 \RequirePackage{mathtools}
 \RequirePackage{multicol}
 \RequirePackage{algorithm}
+\RequirePackage{listings}
 \RequirePackage{algpseudocode}
 \RequirePackage{dsfont}
 \RequirePackage{tikz}
 \RequirePackage{enumitem}
+\RequirePackage{xparse}
 \RequirePackage[
   hyperref,
   style=alphabetic,
@@ -111,6 +113,45 @@
 \newcommand{\rra}[1][]{\savebox{\@brx}{\(\m@th{#1\rangle}\)}%
   \mathclose{\copy\@brx\kern-0.5\wd\@brx\usebox{\@brx}}}
 \makeatother
+
+% LstListings style
+\RequirePackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    % backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+% Code instead of Listings on code captions
+\renewcommand{\lstlistingname}{Code}
+
+% Imp language listing
+\lstdefinelanguage{Imp}{
+  morekeywords={fix, *, ;, +, while, if, then, else, do, done, endif},
+    sensitive=false, % keywords are not case-sensitive
+    morecomment=[l]{//}, % l is for line comment
+    morecomment=[s]{/*}{*/}, % s is for start and end delimiter
+    morestring=[b]" % defines that strings are enclosed in double quotes
+} %
 
 \RequirePackage[a-2b,mathxmp]{pdfx}
 % \linespread{2}

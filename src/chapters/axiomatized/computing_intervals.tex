@@ -5,7 +5,13 @@
 Lemma~\ref{le:inc} provides an effective algorithm for computing the
 abstract semantics of commands provided a domain that respects
 properties \ref{inc:hp1} and \ref{inc:hp2}. We can in fact verify that
-the intervals respect such claims.
+the intervals respect such claims. First consider \(\tuple{\z, \leq}\)
+(\(\z\) with the usual ordering) and the max function
+\(\max : \Int \to \z\) defined as follows
+\begin{align*}
+  \max(\bot) & = -\infty \\
+  \max(\interval{a}{b}) & = b
+\end{align*}
 
 \begin{observation}[\ref{inc:hp1} holds on intervals]
   Let \(\iota \in \Int, S \in \poset{\z}\) and let
@@ -42,52 +48,157 @@ the intervals respect such claims.
   \end{equation*}
 \end{proof}
 
+Now we can also observe that the hypothesis hold if we consider
+\(\tuple{\z,\geq}\), i.e., \(\z\) with the inverse ordering and a
+modified max function \(\max : \Int \to \z\) defined as follows
+
+\begin{align*}
+  \max(\bot) & = -\infty \\
+  \max(\interval{a}{b}) & = a \\
+\end{align*}
+
+i.e., the \(\min\) function. In this we also have to consider the
+\(-\) operation instead of the \(+\) operation, in order to accomodate
+for the reverse ordering.
+ 
+% Non è un corollario, dovrebbe essere integrato sopra
+\begin{corollary}\label{co:inc}
+  if \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
+  \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exists a
+  variable \(\var[z] \in\Var\) and an integer \(h\in\z\) such that
+  \(|h| \geq \lbound{\com}\) and the following two properties hold:
+  \begin{enumerate}[label=(\roman*)]
+  \item \(\min(\semi{\com}\eta\var[y]) = \min(\eta\var[z]) - h\)
+  \item for all \(\eta'\in \bA\), if \(\eta' \sqsupseteq \eta\) then
+    \(\min(\semi{\com}\eta'\var[y]) \leq \min(\eta'\var[z]) - h\)
+  \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+  \todo[inline]{da finire}
+\end{proof}
+
 This means that we can apply Lemma~\ref{le:inc} on the intervals
 domain \(\inte\).  First, given a command \(\com\), the corresponding
-finite set of variables \(\Var_{\com} \veq \varsof{\com}\), and
-an interval environment \(\rho : \Var_{\com} \to \Int\), we define
-\[\max(\rho) \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}
-  \}.\]
+finite set of variables \(\Var_{\com} \veq \varsof{\com}\), and an
+interval environment \(\rho : \Var_{\com} \to \Int\), we define both
+the \(\min\) and the \(\max\) value of an interval environment:
+\begin{align*}
+\max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}\} \\
+\min(\rho) & \veq \max \{ \min(\rho(\var)) \mid \var \in \Var_{\com}\}
+\end{align*}
+
 % 
 Then, when computing \(\semi[\inte]{\com} \rho\) on such \(\rho\)
 having a finite domain, we can restrict to an interval domaian bounded
 by some constant \(k\in\n\) s.t.
-\(\inte_k \veq (\Var_{\com} \to \Int_k) \cup \{\top, \bot\}\) where
-\begin{equation*}
-  \Int_k \veq \{ \interval{a}{b} \mid a, b \in \z \land
-  a \leq b \leq k\} \cup \{\interval{a}{+\infty} \mid a \in\n\}
-\end{equation*}
+\(\binte{k_1}{k_2} \veq (\Var_{\com} \to \bInt{k_1}{k_2}) \cup \{\top, \bot\}\)
+where
+\begin{align*}
+  \bInt{k_1}{k_2} & \veq \{ \interval{a}{b} \mid a, b \in \z \; \land \; k_1 \leq a \leq b \leq k_2\} \\
+                  & \phantom{\veq} \cup \{\interval{a}{+\infty} \mid a \in \z \; \land \; a \geq k_1\} \\
+                  & \phantom{\veq} \cup \{\interval{-\infty}{b} \mid b \in \z \; \land \; b \leq k_2\}
+\end{align*}
 
+We can visualize the hasse diagram of the bounded integer domain in
+Figure~\ref{fig:bound} and notice that there are no infinite ascending
+chains by definition.
+% 
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \tikzset{node distance = .5cm}
+    \node (top) {\(\top\)};
+    \node (p1) [below=of top] {};
+    \node (1) [left=of p1]{\(\interval{k_1}{+\infty}\)};
+    \node (2) [right=of p1]{\(\interval{-\infty}{k_2}\)};
+    \node (4) [below=of p1]{\(\interval{k_1}{k_2}\)};
+    \node (p2) [left=of 4]{};
+    \node (p3) [right=of 4]{};
+    \node (3) [left=of p2]{\(\interval{k_1 + 1}{+\infty}\)};
+    \node (5) [right=of p3]{\(\interval{-\infty}{k_2 - 1}\)};
+    \node (p4) [below=of 4]{};
+    \node (6) [left=of p4]{\(\interval{k_1 + 1}{k_2}\)};
+    \node (pp1) [left=of 6]{};
+    \node (d1) [left=of pp1]{\(\dots\)};
+    \node (7) [right=of p4]{\(\interval{k_1}{k_2 - 1}\)};
+    \node (pp2) [right=of 7]{};
+    \node (d2) [right=of pp2]{\(\dots\)};
+    \node (9) [below=of p4]{\(\interval{k_1 + 1}{k_2 - 1}\)};
+    \node (p5) [left=of 9]{};
+    \node (8) [left=of p5]{\(\interval{k_1 + 2}{k_2}\)};
+    \node (p6) [right=of 9]{};
+    \node (10) [right=of p6]{\(\interval{k_1}{k_2 - 2}\)};
+    \node (d3) [left=of 8]{\(\dots\)};
+    \node (d4) [right=of 10]{\(\dots\)};
+    \node (vdot1) [below=of d3]{\(\vdots\)};
+    \node (vdot2) [below=of d4]{\(\vdots\)};
+    \node (dbot) [below=of 9]{\(\dots\)};
+    \node (pbot2) [left=of dbot]{};
+    \node (pbot1) [left=of pbot2]{};
+    \node (pbot3) [right=of dbot]{};
+    \node (pbot4) [right=of pbot3]{};
+    \node (bot) [below=of dbot]{\(\bot\)};
+
+    \draw
+    (top) edge (1) edge (2)
+    (1) edge (3) edge (4)
+    (2) edge (4) edge (5)
+    (3) edge (6) edge (d1)
+    (4) edge (6) edge (7)
+    (5) edge (7) edge (d2)
+    (d1) edge (d3) edge (8)
+    (6) edge (8) edge (9)
+    (7) edge (9) edge (10)
+    (d2) edge (10) edge (d4)
+    (9) edge (dbot)
+    (d3) edge (pbot1)
+    (8) edge (pbot2)
+    (10) edge (pbot3)
+    (d4) edge (pbot4)
+    (d4) edge (vdot2)
+    (d3) edge (vdot1)
+    (dbot) edge (bot)
+    (vdot1) edge (bot)
+    (vdot2) edge (bot);
+  \end{tikzpicture}
+  \caption{\(\Int_{k_1,k_2}\) Hasse diagram}
+  \label{fig:bound}
+\end{figure}
+%
 We need however a special bound, based on Lemma~\ref{le:inc}, based on
-the program we are considering and the initial environment. Such bound
-is computed by the function \({\boundof : \imp \times \inte \to \n}\)
-\begin{equation*}
-  \boundof(\com, \rho) = \max(\rho) + \bound{\com}
-\end{equation*}
-for simplicity we'll refer to \(\inte_{\com,\rho}\) for
-\(\inte_{\boundof(\com,\rho)}\), i.e.,
+the program we are considering and the initial environment.  For
+simplicity we'll refer to \(\inte_{\com,\rho}\) as
 \({\inte_{\com,\rho} = (\Var_{\com} \to \Int_{\com,\rho}) \cup \{
   \top, \bot \}}\) where
-\begin{equation*}
-  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \n \land
-  a \leq b \leq \max(\rho) + \bound{\com}\} \cup \{\interval{a}{+\infty} \mid a \in\n\}
-\end{equation*}
-
-We preliminarly observe that for any given \(k\in\n\) the lattice
-\(\inte_k\) is a sub-lattice of \(\inte\)
 \begin{align*}
-  \eta \sqcup \theta & \in \inte_k & \forall \eta,\theta \in \inte_k \\
-  \eta \sqcap \theta & \in \inte_k & \forall \eta,\theta \in \inte_k
+  \Int_{\com,\rho} & \veq \{ \interval{a}{b} \mid a, b \in \n \land
+                     \min(\rho) - \lbound{\com} \leq a \leq b \leq \max(\rho) + \bound{\com}\} \\
+                   & \phantom{\veq} \cup \{\interval{a}{+\infty} \mid a \in\z \; \land \; a \geq \min(\rho) - \lbound{\com}\} \\
+                   & \phantom{\veq} \cup \{\interval{-\infty}{b} \mid b \in\z \; \land \; b \leq \max(\rho) + \bound{\com}\} \\
+                   & = \bInt{\min(\rho)-\lbound{\com}}{\max(\rho) + \bound{\com}}
+\end{align*}
+
+We preliminarly observe that for any given \(k_1,k_2\in\n\) the
+lattice \(\binte{k_1}{k_2}\) is a sub-lattice of \(\inte\)
+\begin{align*}
+  \eta \sqcup \theta & \in \binte{k_1}{k_2} & \forall \eta,\theta \in \binte{k_1}{k_2} \\
+  \eta \sqcap \theta & \in \binte{k_1}{k_2} & \forall \eta,\theta \in \binte{k_1}{k_2} \\
 \end{align*}
 
 i.e., they are closed under \(\sqcap\) and \(\sqcup\). In fact if we
-consider \({\eta = \interval{a}{b} \in \inte_k}\) and
-\({\theta = \interval{c}{d} \in \inte_k}\) by definition both
-\(b,d \leq k\). Now consider
+consider \({\eta = \interval{a}{b} \in \binte{k_1}{k_2}}\) and
+\({\theta = \interval{c}{d} \in \binte{k_1}{k_2}}\) by definition both
+\(b,d \leq k_2\) and \(a,c \geq k_1\). Now consider
 \({\eta \sqcup \theta = \interval{\min\{a,c\}}{\max\{b,d\}}}\), where
-we can observe \(\max\{b,d\} \leq k\) and therefore
-\({\eta \sqcup \theta \in \inte_k}\) by definition of
-\(\inte_k\).
+we can observe \(\max\{b,d\} \leq k_2\) and \(\min\{a,c\} \geq k_1\)
+and therefore \({\eta \sqcup \theta \in \binte{k_1}{k_2}}\) by
+definition of \(\binte{k_1}{k_2}\).  Also observe that if
+\(\eta \sqcap \theta \neq \bot\) then
+\({\eta \sqcap \theta = \interval{\max\{a,c\}}{\min\{b,d\}}}\) and it
+holds that \({\min\{b,d\} \leq k_2}\) and \({\max\{a,c\} \geq k_1}\)
+and therefore \({\eta \sqcap \theta \in \binte{k_1}{k_2}}\) by definition of
+\(\binte{k_1}{k_2}\).
 
 \medskip
 
@@ -97,31 +208,47 @@ bounded interval domain is. In particular, let's first define our
 abstraction and concretization maps
 
 \begin{definition}\label{def:boundedac}
-  Let \(k\in\n\). The abstraction map
-  \({\abstr[\Int_k] : \poset{\z} \to \Int_k}\) is defined as follows
+  Let \(k_1, k_2\in\n\). The abstraction map
+  \({\abstr[\bInt{k_1}{k_2}] : \poset{\z} \to \bInt{k_1}{k_2}}\) is
+  defined as follows
   \begin{align*}
-    \abstr[\Int_k](\emptyset) & \defin \bot \\
-    \abstr[\Int_k](S) & \defin \begin{cases}
-      \interval{\min(S)}{\max(S)} & \text{if } \max(S) \leq k \\
-      \interval{\min(S)}{+\infty} & \text{otherwise}
+    \abstr[\bInt{k_1}{k_2}](\emptyset) & \defin \bot \\
+    \abstr[\bInt{k_1}{k_2}](S) & \defin \begin{cases}
+      \interval{\min(S)}{\max(S)} & \text{if } \max(S) \leq k_2 \text{ and } \min(S) \geq k_1\\
+      \interval{\min(S)}{+\infty} & \text{if } \max(S) > k_2 \text{ and } \min(S) \geq k_1 \\
+      \interval{-\infty}{\max(S)} & \text{if } \min(S) < k_1 \text{ and } \max(S) \leq k_2 \\
+      \interval{-\infty}{+\infty} & \text{otherwise}
     \end{cases}
   \end{align*}
   Where \(S\in\poset{\z}\). While the concretization map
-  \({\concr[\Int_k] : \Int_k \to \poset{\z}}\) actually coincides with
-  the concretization map \(\concr[\Int]\) as \(\Int_k\) is a
-  sublattice of \(\Int\).
+  \({\concr[\bInt{k_1}{k_2}] : \bInt{k_1}{k_2} \to \poset{\z}}\)
+  actually coincides with the concretization map \(\concr[\Int]\) as
+  \(\bInt{k_1}{k_2}\) is a sublattice of \(\Int\).
 \end{definition}
 
-Observe that for
-\({\eta \sqcap \theta = \interval{\max\{a,c\}}{\min\{b,d\}}}\) it
-holds that \({\min\{b,d\} \leq k}\) and therefore
-\({\eta \sqcap \theta \in \inte_k}\) by definition of \(\inte_k\).
-\begin{lemma}\label{le:leq}
-  for all \(k\in\nat\)% s.t. \(k \geq \max(\rho)\)
+Let's also redefine the \(+\) operation in the \(\bInt{k_1}{k_2}\)
+lattice, as adding a constant to an interval with the old definition
+might overcome the bound, and therefore diverge
+
+\begin{definition}\label{def:sumbound}
+  For a nonempty interval \(\interval{a}{b} \in \bInt{k_1}{k_2}\) and
+  \(c \in \n\) define
   \begin{equation*}
-    \semi[\inte]{\com}\rho \sqsubseteq \semi[\inte_k]{\com}\rho
+    \interval{a}{b} \pm c \veq \begin{cases}
+      \interval{a\pm c}{b\pm c} & a \pm c \geq k_1 \land b \pm c \leq k_2 \\
+      \interval{a\pm c}{+\infty} & b \pm c \geq k_2 \\
+      \interval{-\infty}{b \pm c} & a \pm c \leq k_1
+    \end{cases}
   \end{equation*}
-  i.e., with \(\inte_k\) we have an over-approximation of \(\inte\).
+  recalling that \(\pm \infty + c = \pm\infty - c = \pm\infty\).
+\end{definition}
+
+\begin{lemma}\label{le:leq}
+  for all \(k_1, k_2\in\nat\)% s.t. \(k \geq \max(\rho)\)
+  \begin{equation*}
+    \semi[\inte]{\com}\rho \sqsubseteq \semi[\binte{k_1}{k_2}]{\com}\rho
+  \end{equation*}
+  i.e., with \(\binte{k_1}{k_2}\) we have an over-approximation of \(\inte\).
 \end{lemma}
 \begin{proof}
   The proof works by induction on \(\com\). Let's therefore first work
@@ -139,20 +266,21 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \item \({\rho\var \sqcap \abstr[\Int](S)} = \bot\). In this case it
     holds that
     \begin{equation*}
-      \semi[\inte]{\var\in S}\rho = \bot \sqsubseteq \semi[\inte_k]{\var\in S}\rho
+      \semi[\inte]{\var\in S}\rho = \bot \sqsubseteq \semi[\binte{k_1}{k_2}]{\var\in S}\rho
     \end{equation*}
     
-  \item \({\rho\var \sqcap \abstr[\Int](S)} = \interval{a}{b}\) for some
-    \({a \in \n}, {b \in \n\cup\{+\infty\}}\). In this case notice that
-    because of \(\abstr[\Int_k]\) definition, it holds that
+  \item \({\rho\var \sqcap \abstr[\Int](S)} = \interval{a}{b}\) for
+    some \({a \in \n \cup \{-\infty\}}, {b \in
+      \n\cup\{+\infty\}}\). In this case notice that because of
+    \(\abstr[\bInt{k_1}{k_2}]\) definition, it holds that
     \begin{equation*}
-      \abstr[\Int](S) \sqsubseteq \abstr[\Int_k](S)
+      \abstr[\Int](S) \sqsubseteq \abstr[\bInt{k_1}{k_2}](S)
     \end{equation*}
     and therefore
     \({\rho\var \sqcap \abstr[\Int](S)} \sqsubseteq {\rho\var \sqcap
-      \abstr[\Int_k](S)}\). Hence
+      \abstr[\bInt{k_1}{k_2}](S)}\). Hence
     \begin{equation*}
-      {\semi[\inte]{\var\in S}\rho} \sqsubseteq {\semi[\inte_k]{\var\in S}\rho}
+      {\semi[\inte]{\var\in S}\rho} \sqsubseteq {\semi[\binte{k_1}{k_2}]{\var\in S}\rho}
     \end{equation*}
     which is our thesis.
   \end{itemize}
@@ -165,10 +293,10 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   Let's recall that
   \({\semi[\inte]{\var := k}\rho = \rho[\var \mapsto
     \abstr[\Int](\{k\})]}\) and since
-  \({\abstr[\Int](\{k\})} \sqsubseteq {\abstr[\Int_k](\{k\})}\) it holds
+  \({\abstr[\Int](\{k\})} \sqsubseteq {\abstr[\bInt{k_1}{k_2}](\{k\})}\) it holds
   that
   \begin{equation*}
-    \semi[\inte]{\var := k}\rho \sqsubseteq \semi[\inte_k]{\var := k}\rho
+    \semi[\inte]{\var := k}\rho \sqsubseteq \semi[\binte{k_1}{k_2}]{\var := k}\rho
   \end{equation*}
   which is our thesis.
 
@@ -181,13 +309,13 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   \({\semi[\inte]{\var := \var[y] + k}\rho} = {\rho[\var \mapsto
     \rho\var[y] + k]}\). Also recall that
   \begin{equation*}
-    \iota +_{\Int} j \sqsubseteq \iota +_{\Int_k} j
+    \iota +_{\Int} j \sqsubseteq \iota +_{\bInt{k_1}{k_2}} j
   \end{equation*}
-  where \(\iota \in \Int_k \subseteq \Int\), \(j\in\n\), i.e.,
-  \(\rho\var[y] + j\) in \(\Int\) is more precise than
-  \(\rho\var[y] + j\) in \(\Int_k\). Hence it holds that
+  where \(\iota \in \bInt{k_1}{k_2} \subseteq \Int\), \(j\in\n\),
+  i.e., \(\rho\var[y] + j\) in \(\Int\) is more precise than
+  \(\rho\var[y] + j\) in \(\bInt{k_1}{k_2}\). Hence it holds that
   \begin{equation*}
-    {\semi[\inte]{\var := \var[y] + k}\rho} \sqsubseteq {\semi[\inte_k]{\var := \var[y] + k}\rho}
+    {\semi[\inte]{\var := \var[y] + k}\rho} \sqsubseteq {\semi[\binte{k_1}{k_2}]{\var := \var[y] + k}\rho}
   \end{equation*}
   which is our thesis.
 
@@ -205,14 +333,14 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   {\semi[\inte]{\com_1}\rho} \ndet {\semi[\inte]{\com_2}\rho}\). By
   inductive hypothesis
   \({\semi[\inte]{\com_1}\rho} \sqsubseteq
-  {\semi[\inte_k]{\com_1}\rho}\) and
+  {\semi[\binte{k_1}{k_2}]{\com_1}\rho}\) and
   \({\semi[\inte]{\com_2}\rho} \sqsubseteq
-  {\semi[\inte_k]{\com_2}\rho}\). Hence we can conclude by noticing
-  that \(\inte_k\) is closed under \(\sqcup\)
+  {\semi[\binte{k_1}{k_2}]{\com_2}\rho}\). Hence we can conclude by noticing
+  that \(\binte{k_1}{k_2}\) is closed under \(\sqcup\)
   \begin{equation*}
     \semi[\inte]{\com_1 \ndet \com_2}\rho \sqsubseteq
-    \semi[\inte_k]{\com_1}\rho \sqcup \semi[\inte_k]{\com_2}\rho =
-    \semi[\inte_k]{\com_1 \sqcup \com_2}\rho
+    \semi[\binte{k_1}{k_2}]{\com_1}\rho \sqcup \semi[\binte{k_1}{k_2}]{\com_2}\rho =
+    \semi[\binte{k_1}{k_2}]{\com_1 \sqcup \com_2}\rho
   \end{equation*}
 
   \medskip
@@ -225,17 +353,17 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   {\semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)}\). By
   inductive hypothesis
   \begin{equation}\label{eq:a1}
-    {\semi[\inte]{\com_1}\rho} \sqsubseteq {\semi[\inte_k]{\com_1}\rho}
+    {\semi[\inte]{\com_1}\rho} \sqsubseteq {\semi[\binte{k_1}{k_2}]{\com_1}\rho}
   \end{equation}
-  We can call \(\rho' = {\semi[\inte_k]{\com_1}\rho}\) and observe
+  We can call \(\rho' = {\semi[\binte{k_1}{k_2}]{\com_1}\rho}\) and observe
   that by inductive hypothesis
-  \begin{equation}\label{eq:a2}
-    {\semi[\inte]{\com_2}\rho'} \sqsubseteq {\semi[\inte_{k'}]{\com_2}\rho'}
+  \begin{equation}\label{eq:a2} {\semi[\inte]{\com_2}\rho'}
+    \sqsubseteq {\semi[\binte{k_1'}{k_2'}]{\com_2}\rho'}
   \end{equation}
-  for all \(k'\in\n\). We can conclude by
+  for all \(k_1',k_2'\in\n\). We can conclude by
   \begin{align*}
-    {\semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)} & \sqsubseteq {\semi[\inte_k]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)} & \text{by \eqref{eq:a2}}\\
-                                                                & \sqsubseteq {\semi[\inte_k]{\com_2}\left(\semi[\inte_k]{\com_1}\rho\right)} & \text{by \eqref{eq:a1} and monotonicity}
+    {\semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)} & \sqsubseteq {\semi[\binte{k_1}{k_2}]{\com_2}\left(\semi[\inte]{\com_1}\rho\right)} & \text{by \eqref{eq:a2}}\\
+                                                                & \sqsubseteq {\semi[\binte{k_1}{k_2}]{\com_2}\left(\semi[\binte{k_1}{k_2}]{\com_1}\rho\right)} & \text{by \eqref{eq:a1} and monotonicity}
   \end{align*}
   which is our thesis
 
@@ -262,15 +390,15 @@ holds that \({\min\{b,d\} \leq k}\) and therefore
   works for \(\com \ndet \tru\). Now we can use an inductive argument
   on \(i\) to state that for all \(i \in\n\)
   \begin{equation*}
-    {\left(\semi[\inte]{\com\ndet\tru}\right)^i\rho} \sqsubseteq {\left(\semi[\inte_k]{\com\ndet\tru}\right)^i\rho}
+    {\left(\semi[\inte]{\com\ndet\tru}\right)^i\rho} \sqsubseteq {\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)^i\rho}
   \end{equation*}
-  Hence, by closure of \(\inte_k\) over \(\sqcup\)
+  Hence, by closure of \(\binte{k_1}{k_2}\) over \(\sqcup\)
   \begin{equation*}
     {\semi[\inte]{\fix{\com}}} =
     {\textstyle\bigsqcup_{i\in\n}\left(\semi[\inte]{\com\ndet\tru}\right)^i \rho}
     \quad \sqsubseteq \quad
-    {\textstyle\bigsqcup_{i\in\n}\left(\semi[\inte_k]{\com\ndet\tru}\right)^i \rho} =
-    {\semi[\inte_k]{\fix{\com}}}
+    {\textstyle\bigsqcup_{i\in\n}\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)^i \rho} =
+    {\semi[\binte{k_1}{k_2}]{\fix{\com}}}
   \end{equation*}
 
 \end{proof}
@@ -286,27 +414,28 @@ as the analysis on \(\inte\).
 
 \begin{lemma}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
-  \(\rho : \Var \to \Int\), for all \(k\geq \boundof(\com,\rho)\)
+  \(\rho : \Var \to \Int\)
   \begin{equation*}
-    \semi[\inte]{\com}\rho = \semi[\inte_k]{\com}\rho
+    \semi[\inte]{\com}\rho = \semi[\inte_{\com,\rho}]{\com}\rho
   \end{equation*}
   i.e., the abstract semantics \(\semi{\com} \rho\)
   % 
   % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
   % \sqcup \rho}
-  computed in \(\inte\) and in \(\inte_k\) coincide.
+  computed in \(\inte\) and in \(\inte_{\com,\rho}\) coincide.
 \end{lemma}
 
 \begin{proof}
 
   The proof will proceed by induction on the command \(\com\). We can
   preliminarly observe that in case the analysis results in the
-  \(\top\) element (i.e., \({\semi[\inte]{\com}\rho = \top}\)),  since
-  \(\semi[\inte]{\com}\rho \sqsubseteq \semi[\inte_k]{\com}\rho\) by
-  Lemma~\ref{le:leq} it trivially holds that
-  \(\semi[\inte_k]{\com}\rho = \top\) and therefore the two analysis
-  coincide. We will therefore silently omit this case.  Now, let's
-  explore the base cases.
+  \(\top\) element (i.e., \({\semi[\inte]{\com}\rho = \top}\)), since
+  for all \(k_1,k_2 \in \z\) it holds that
+  \(\semi[\inte]{\com}\rho \sqsubseteq
+  \semi[\binte{k_1}{k_2}]{\com}\rho\) by Lemma~\ref{le:leq} it
+  trivially holds that \(\semi[\inte_{\com,\rho}]{\com}\rho = \top\)
+  and therefore the two analysis coincide. We will therefore silently
+  omit this case.  Now, let's explore the base cases.
 
   \medskip
   
@@ -322,27 +451,30 @@ as the analysis on \(\inte\).
   \end{equation*}
   and that
   \begin{equation*}
-    \semi[\inte_k]{\var \in S}\rho = \begin{cases}
-      \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_k](S)] & \text{if } \rho\var \sqcap \abstr[\Int_k](S) \neq \bot \\
+    \semi[\inte_{\com,\rho}]{\var \in S}\rho = \begin{cases}
+      \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_{\com,\rho}](S)] & \text{if } \rho\var \sqcap \abstr[\Int_{\com,\rho}](S) \neq \bot \\
       \bot & \text{otherwise}
     \end{cases}
   \end{equation*}
   With \(k \geq \max(\rho) + \bound{\var \in S}\). We have 2 cases: if
   \({\rho\var \sqcap \abstr[\Int](S) = \bot}\) then also for all
-  bounded sub-intervals \(\abstr[\Int_k](S)\) it holds that
-  \({\rho\var \sqcap \abstr[\Int_k](S) = \bot}\) and therefore
-  \({\semi[\inte]{\var\in S}\rho = \bot = \semi[\inte_k]{\var \in
-      S}}\). Otherwise
+  bounded sub-intervals \(\abstr[\bInt{k_1}{k_2}](S)\) with
+  \(k_1 \leq \min(\rho) - \lbound{\var\in S}\) and
+  \(k_2 \geq \max(\rho) + \bound{\var\in S}\) it holds that
+  \({\rho\var \sqcap \abstr[\bInt{k_1}{k_2}](S) = \bot}\) and
+  therefore
+  \({\semi[\inte]{\var\in S}\rho = \bot = \semi[\inte_{\var\in S,
+      \rho}]{\var \in S}}\). Otherwise
   \({\rho\var \sqcap \abstr[\Int](S) \neq \bot}\). In this case
   \({\semi[\inte]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap
     \abstr[\Int](S)]}\) and we can notice that
-  \(\max(\rho\var \sqcap \abstr[\Int](S)) \leq
-  \max(\rho\var) \leq \max(\rho)\). Therefore for all \(k\in\n\) s.t.
-  \({k\geq \max(\rho) + \bound{\var\in S}}\)
+  \(\max(\rho\var \sqcap \abstr[\Int](S)) \leq \max(\rho\var) \leq
+  \max(\rho)\). Therefore
   \begin{equation*}
-    \semi[\inte_k]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_k](S)]
+    \semi[\inte_{\var \in S,\rho}]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_{\var \in S,\rho}](S)]
+    = \rho[\var \mapsto \rho\var \sqcap \abstr[\Int](S)] = \semi[\inte]{\var\in S}\rho
   \end{equation*}
-  and the thesis holds.
+  which is our thesis.
 
   \medskip
   
@@ -351,16 +483,8 @@ as the analysis on \(\inte\).
   % 
   Let's recall that
   \({\semi[\inte]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}
-    ]}\). We can conclude by observing that
-  \({k \leq k \leq \max(\rho) + k = \max(\rho) + \bound{\var := k}}\)
-  which means that also
-  \({\semi[\inte_j]{\var := k}\rho = \rho[\var \mapsto
-    \interval{k}{k}]}\) for all
-  \(j\geq \max(\rho) + \bound{\var := k}\). Therefore
-  \begin{equation*}
-    \semi[\inte]{\var := k}\rho = \semi[\inte_j]{\var := k}\rho
-  \end{equation*}
-  and the thesis holds.
+    ]}\). Recall that we are considering \(\inte_{\var := k,\rho}\),
+  therefore
 
   \medskip
   
@@ -447,7 +571,7 @@ as the analysis on \(\inte\).
   \begin{equation*}
     {\semi[\inte]{\com_1 \ndet \com_2}\rho} = {\semi[\inte_{\com_1 \ndet \com_2, \rho}]{\com_1}\rho} \sqcup {\semi[\inte_{\com_1 \ndet \com_2, \rho}]{\com_2}}
   \end{equation*}
-  and we can conlcude by recalling that \(\inte_k\) is closed under
+  and we can conlcude by recalling that \(\binte{k_1}{k_2}\) is closed under
   \(\sqcup\)
   \begin{equation*} {\semi[\inte_{\com_1 \ndet \com_2,
         \rho}]{\com_1}\rho} \sqcup {\semi[\inte_{\com_1 \ndet \com_2,
@@ -470,7 +594,7 @@ as the analysis on \(\inte\).
     \bound{\com_2}}\). Therefore
   \begin{equation*}
     \semi[\inte]{\com_1 \seq \com_2}\rho = \semi[\inte]{\com_2}\left(\semi[\inte]{\com_1}\rho\right) =
-    \semi[\inte_k]{\com_2}\left(\semi[\inte_k]{\com_1}\rho\right) = \semi[\inte_k]{\com_1 \seq \com_2}\rho
+    \semi[\binte{k_1}{k_2}]{\com_2}\left(\semi[\binte{k_1}{k_2}]{\com_1}\rho\right) = \semi[\binte{k_1}{k_2}]{\com_1 \seq \com_2}\rho
   \end{equation*}
   for all
   \(k \geq \max(\rho) + \bound{\com_1} + \bound{\com_2} = \max(\rho) +
@@ -492,7 +616,7 @@ as the analysis on \(\inte\).
     \rho_0 & \defin \rho \\
     \rho_{i+1} & \defin \semi[\inte]{\com \ndet \tru}\rho_i
   \end{align*}
-  Let's consider \(\inte_k\) with
+  Let's consider \(\binte{k_1}{k_2}\) with
   \(k \geq \max(\rho) + (n+2)\bound{\com}\) where
   \(n = |\varsof{\com}|\). We can make the following two observations
   for each variable \(\var[y]\):
@@ -513,21 +637,21 @@ as the analysis on \(\inte\).
     \({k \geq \max(\rho_i) + \bound{\com}}\). We can therefore use the
     inductive hypothesis and deduce that
     \begin{equation*}
-      \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\inte_k]{\com\ndet\tru}\rho_i
+      \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i
     \end{equation*}
     for all \(k \geq \max(\rho_i) + \bound{\com}\). In particular it
     holds for
     \(k \geq \max(\rho) + \bound{\fix{\com}} \geq \max(\rho_i) +
-    \bound{\com}\) for all \(i\in\n\). Hence by \(\inte_k\) closure
+    \bound{\com}\) for all \(i\in\n\). Hence by \(\binte{k_1}{k_2}\) closure
     over \(\sqcup\)
     \begin{equation*}
       \semi[\inte]{\fix{\com}}\rho
       =
       \textstyle\bigsqcup_{i\in\nat}\left(\semi[\inte]{\com\ndet\tru}\right)^i\rho
       =
-      \textstyle\bigsqcup_{i\in\nat}\left(\semi[\inte_k]{\com\ndet\tru}\right)^i\rho
+      \textstyle\bigsqcup_{i\in\nat}\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)^i\rho
       =
-      \semi[\inte_k]{\fix{\com}}\rho
+      \semi[\binte{k_1}{k_2}]{\fix{\com}}\rho
     \end{equation*}
     
   \item instead, if
@@ -535,10 +659,10 @@ as the analysis on \(\inte\).
     \(\var[y]\in \Var_{\com}\) then we can use the observation made
     with Lemma~\ref{le:leq}, i.e., 
     \({\semi[\inte]{\com}\rho} \sqsubseteq
-    {\semi[\inte_k]{\com}\rho}\) for all \({k \in \nat}\), and
+    {\semi[\binte{k_1}{k_2}]{\com}\rho}\) for all \({k \in \nat}\), and
     conclude because it means that
     \({\semi[\inte]{\fix{\com}}\rho} = \top =
-    {\semi[\inte_k]{\fix{\com}}\rho}\).
+    {\semi[\binte{k_1}{k_2}]{\fix{\com}}\rho}\).
   \end{enumerate}
   % 
   % - osservo che

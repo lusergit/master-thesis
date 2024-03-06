@@ -86,21 +86,25 @@ a finite path in \(\langle X,\to\rangle\)
 \newpage
 \begin{lemma}
   \label{le:inc}
-  Let \(\bA\) be an abstract domain and
-  \(\bA_\Var = (\Var \to \bA) \cup \{\bot\}\) its variable-wise
-  lifting with \(\abstr : \poset{\z} \to \bA\) abstraction map and
-  \(\concr : \bA \to \poset{\z}\) concretization map s.t.
-  \(\forall \theta \in \bA_\Var\), \(S \in \poset{\z}\)
+  Let \(\bA\) be an abstract domain and \(\bA_\Var\) its variable-wise
+  lifting with \(\abstr[\bA]\) and \(\abstr\) the abstraction maps for
+  a single and variable-wise respectively and \(\concr[\bA]\) and
+  \(\concr\) the concretization maps for a single variable and
+  variable-wise respecively, \(\com\in \imp\). Then consider a
+  function \({\max_{\bA} : \bA \to \z}\) s.t. for all \({a\in\bA}\) it
+  holds that \(x \leq \max_\bA(a)\) for all
+  \({x \in \concr[\bA](a)}\).  In such context if
+  \(\forall \theta \in \bA_\Var\), \(S \in \Int\) the following two
+  properties hold
   \begin{enumerate}[label=(\Roman*)]
   \item\label{inc:hp1} for all \(\var\in\Var\) if
-    \(\max(\abstr(S)) = \infty\) then
-    \(\max(\theta(\var) \sqcap \abstr(S)) = \max(\theta\var)\)
-  \item\label{inc:hp2} \(\max(a \sqcup b) = \max\{\max(a), \max(b)\}\)
+    \(\max_{\Int}(S) = \infty\) then
+    \(\max_\bA(\theta(\var) \sqcap \abstr[\bA](\concr[\Int](S))) = \max_\bA(\theta\var)\)
+  \item\label{inc:hp2} \(\max_\bA(a \sqcup b) = \max_\bA\{\max_\bA(a), \max_\bA(b)\}\)
   \end{enumerate}
-  and let \(\com\in \imp\). % and \(\var[y] \in \Var\)
   
   \noindent
-  For all \(\eta \in \mathbb{A}\) and \(\var[y] \in \Var\), if
+  Then for all \(\eta \in \mathbb{A}\) and \(\var[y] \in \Var\), if
   \(\max(\semi{\com} \eta \var[y]) \neq +\infty\) and
   \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\) then there exist a
   variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
@@ -143,36 +147,39 @@ a finite path in \(\langle X,\to\rangle\)
   Take \(\eta \in \mathbb{A}\) and assume
   \(\infty\neq\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
   %
-  Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get the contradiction
-  \(\max(\semi{\var \in S}\eta \var[y]) =0 \leq \bound{\var \in S}\).
+  Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get
+  the contradiction
+  \(\max(\semi{\var \in S}\eta \var[y]) = -\infty \leq \bound{\var \in
+    S}\).
   
   We distinguish two cases:
   \begin{itemize}
     
-  \item If \(\var[y] \neq \var\), then for all \(\eta' \in \mathbb{A}\)
-    such that \(\eta \sqsubseteq \eta'\) it holds
-    \(\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto \eta(\var)
-      \sqcap \abstr(S)]\) and thus
-    \[
-    \max(\semi{\var \in S}\eta' \var[y]) = \max(\eta' \var[y]) = \max(\eta' \var[y]) + 0
-    \]
+  \item If \(\var[y] \neq \var\), then for all
+    \(\eta' \in \mathbb{A}\) such that \(\eta \sqsubseteq \eta'\) it
+    holds
+    \(\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto
+    {\abstr[\bA](\concr[\bA](\eta(\var)) \cap \concr[\Int](S))}]\) and
+    thus
+    \begin{equation*}
+      \max(\semi{\var \in S}\eta' \var[y]) = \max(\eta' \var[y]) = \max(\eta' \var[y]) + 0
+    \end{equation*}
     hence the thesis follows with \(\var[z]=\var[y]\) and \(h = 0\).
 
-  \item If \(\var[y] = \var[x]\) then  \(\eta(\var) \in \Int_*\) and
-    \[ 
-    \max(\semi{\var \in S}\eta \var[y]) = \max (\eta(\var) \sqcap
-    \abstr(S))
-    \]
-    Note that it cannot be \(\max(S)\in \nat\). Otherwise, by
+  \item If \(\var[y] = \var[x]\) then \(\eta(\var) \in \bA_*\) and
+    \begin{equation*}
+      \max(\semi{\var \in S}\eta \var[y]) = \max(\abstr[\bA](\concr[\bA](\eta\var) \cap \concr[\Int](S)))
+    \end{equation*}
+    Note that it cannot be \(\max(S)\in \z\). Otherwise, by
     Definition~\ref{de:bound},
-    \(\max (\eta(\var) \sqcap \abstr(S)) \leq \max(S)= \bound{\var \in
-      S}\), violating the assumption
+    \(\max ({\abstr[\bA](\concr[\bA](\eta\var) \cap \concr[\Int](S))})
+    \leq \max(S)= \bound{\var \in S}\), violating the assumption
     \(\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
-    Hence, \(\max(S) = \infty\) must hold and therefore by
+    Hence, \(\max(S) = +\infty\) must hold and therefore by
     \ref{inc:hp1}
-    \(\max (\eta(\var) \sqcap \abstr(S)) = \max(\eta(\var))=
-    \max(\eta(\var))+0\). It is immediate to check that the same holds
-    for all \(\eta' \sqsupseteq \eta\), i.e.,
+    \(\max ({\abstr[\bA](\concr[\bA](\eta\var) \cap \concr[\Int](S))})
+    = \max(\eta(\var))= \max(\eta(\var))+0\). It is immediate to check
+    that the same holds for all \(\eta' \sqsupseteq \eta\), i.e.,
     \[
     \max (\eta'(\var) \sqcap \abstr(S)) = \max(\eta'(\var))=
     \max(\eta'(\var))+0
@@ -189,11 +196,13 @@ a finite path in \(\langle X,\to\rangle\)
   \(\max(\semi{\var := k}\eta \var[y]) > \bound{\var := k} = |k|\).
 
   Observe that it cannot be \(\var = \var[y]\). In fact, since
-  \(\semi{\var := k}\eta = \eta[\var \mapsto \interval{k}{k}]\), we would have
-  \(\semi{\var := k}\eta \var[y] = \interval{k}{k}\) and thus
-  \begin{center}
-    \(\max(\semi{\var := k}\eta \var[y]) = k  \leq \bound{\var := k}\).
-  \end{center}
+  \(\semi{\var := k}\eta = \eta[\var \mapsto \abstr[\bA](\{k\})]\), we
+  would have \(\semi{\var := k}\eta \var[y] = \abstr[\bA](\{k\})\) and
+  thus \todo[inline]{Forse non ovvio perchè \(\abstr[\bA](\{k\})\) può
+    non rappresentare esattamente \(\{k\}\).}
+  \begin{equation*}
+    \max(\semi{\var := k}\eta \var[y]) = k  \leq \bound{\var := k}
+  \end{equation*}
   violating the assumption.
   %
   Therefore, it must be \(\var[y] \neq \var\). Now, for all
@@ -294,16 +303,16 @@ a finite path in \(\langle X,\to\rangle\)
   \textbf{Case} (\(\com_1 \ndet \com_2\))
   % 
   Take \(\eta \in \mathbb{A}\) and assume
-  \(\max(\semi{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2} =
-  \bound{\com_1} + \bound{\com_2}\).
-
-  Recall that
-  \(\semi{\com_1 \ndet \com_2} \eta = \semi{\com_1}\eta \sqcup \semi{\com_2}\eta\).
+  \(\max(\semi{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2}
+  = \bound{\com_1} + \bound{\com_2}\).  Recall that
+  \(\semi{\com_1 \ndet \com_2} \eta = \semi{\com_1}\eta \sqcup
+  \semi{\com_2}\eta\).
   % 
-  Hence, since \(\semi{\com_1 \ndet \com_2} \eta \var[y] \neq \infty\), we have
-  that \(\semi{\com_1} \eta \var[y] \neq \infty \neq \semi{\com_2}\eta \var[y]\).
-
-  Moreover
+  Hence, since
+  \(\max(\semi{\com_1 \ndet \com_2} \eta \var[y]) \neq \infty\), we
+  have that
+  \(\max(\semi{\com_1} \eta \var[y]) \neq \infty \neq
+  \max(\semi{\com_2}\eta \var[y])\).  Moreover
   \begin{align*}
     \max(\semi{\com_1 \ndet \com_2}\eta \var[y])& =  \max(\semi{\com_1}\eta \var[y] \sqcup \semi{\com_2}\eta \var[y]) \\ 
     & = \max \{ \max(\semi{\com_1}\eta \var[y]), \max(\semi{\com_2}\eta \var[y])\} & \text{by \ref{inc:hp2}} 
@@ -360,12 +369,13 @@ a finite path in \(\langle X,\to\rangle\)
   \begin{center}
     \(\semi{\com_1} \eta = \eta_1\)
   \end{center}
-  since \(\max(\com_2 \eta_1 \var[y]) \neq \infty\) and 
-  \(\max(\com_2 \eta_1 \var[y]) > \bound{\com_1 \seq \com_2} \geq
-  \bound{\com_2}\), by inductive hypothesis on \(\com_2\), there are
-  \(|h_2| \leq \bound{\com_2}\) and \(\var[w] \in \Var\) such that
-  \(\max(\semi{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2\) and
-  for all \(\eta_1' \in \mathbb{A}\) with \(\eta_1 \sqsubseteq \eta_1'\)
+  since \(\max(\semi{\com_2}\eta_1 \var[y]) \neq \infty\) and
+  \(\max(\semi{\com_2} \eta_1 \var[y]) > \bound{\com_1 \seq \com_2}
+  \geq \bound{\com_2}\), by inductive hypothesis on \(\com_2\), there
+  are \(|h_2| \leq \bound{\com_2}\) and \(\var[w] \in \Var\) such that
+  \(\max(\semi{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2\)
+  and for all \(\eta_1' \in \mathbb{A}\) with
+  \(\eta_1 \sqsubseteq \eta_1'\)
   \begin{equation}
     \label{eq:seq2}
     \max(\semi{\com_2} \eta_1' \var[y]) \geq \max(\eta_1' \var[w]) + h_2
@@ -624,51 +634,27 @@ a finite path in \(\langle X,\to\rangle\)
   + \Sigma_{i=0}^m h_i\] as desired.
 \end{proof}
 
-% Non è un corollario, dovrebbe essere integrato sopra
-\begin{corollary}\label{co:inc}
-  if \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
-  \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exists
-  a variable \(\var[z] \in\Var\) and an integer \(h\in\z\) such that
-  \(h \geq \lbound{\com}\) and the following two properties hold:
-  \begin{enumerate}[label=(\roman*)]
-  \item \(\min(\semi{\com}\eta\var[y]) = \min(\eta\var[z]) - h\)
-  \item for all \(\eta'\in \bA\), if \(\eta' \sqsupseteq \eta\) then
-    \(\min(\semi{\com}\eta'\var[y]) \leq \min(\eta'\var[z]) - h\)
-  \end{enumerate}
-\end{corollary}
 
-\begin{proof}
-  The statements follows from the observation that Lemma~\ref{le:inc}
-  works also for \(\Int\) with the usual ordering \(\sqsubseteq\) but
-  with a different \(\max : \Int \to \z\) function, where
-  \begin{equation*}
-    \max(\interval{a}{b}) = a
-  \end{equation*}
-\end{proof}
-
-
-\todo[inline]{da finire}
-
-\noindent
-Lemma~\ref{le:inc} and its Corollary~\ref{co:inc} provide an
-effective algorithm for computing the interval semantics of
-commands. More precisely, given a command \(\com\), the corresponding
-finite set of variables \(\Var_{\com} \veq \mathit{vars}(\com)\), and
-an interval environment \(\rho : \Var_{\com} \to \Int\), we define
-\begin{align*}
-  \max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}\} \\
-  \min(\rho) & \veq \min \{ \min(\rho(\var)) \mid \var \in \Var_{\com}\}
-\end{align*}
-%
-Then, when computing \(\semi{\com} \rho\) on such \(\rho\)
-having a finite domain, we can restrict to a bounded interval domain
-\(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
-\{ \top, \bot \}\) where
-\begin{equation*}
-  \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \z\ \land\
-  \min(\rho) - \lbound{\com} \leq a \leq b \leq \max(\rho) + \bound{\com}\}
-  % \{\interval{a}{\infty} \mid a \in \nat \}
-\end{equation*}
-% We could also operate uniformly on all commands, defining the
-% semantics for \(\com\) in a domain with intervals bounded by
-% \(\max(\rho) +\bound{\com}\)
+% \noindent
+% Lemma~\ref{le:inc} and its Corollary~\ref{co:inc} provide an
+% effective algorithm for computing the interval semantics of
+% commands. More precisely, given a command \(\com\), the corresponding
+% finite set of variables \(\Var_{\com} \veq \mathit{vars}(\com)\), and
+% an interval environment \(\rho : \Var_{\com} \to \Int\), we define
+% \begin{align*}
+%   \max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}\} \\
+%   \min(\rho) & \veq \min \{ \min(\rho(\var)) \mid \var \in \Var_{\com}\}
+% \end{align*}
+% %
+% Then, when computing \(\semi{\com} \rho\) on such \(\rho\)
+% having a finite domain, we can restrict to a bounded interval domain
+% \(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
+% \{ \top, \bot \}\) where
+% \begin{equation*}
+%   \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \z\ \land\
+%   \min(\rho) - \lbound{\com} \leq a \leq b \leq \max(\rho) + \bound{\com}\}
+%   % \{\interval{a}{\infty} \mid a \in \nat \}
+% \end{equation*}
+% % We could also operate uniformly on all commands, defining the
+% % semantics for \(\com\) in a domain with intervals bounded by
+% % \(\max(\rho) +\bound{\com}\)

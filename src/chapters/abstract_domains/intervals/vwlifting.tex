@@ -8,7 +8,7 @@ We can therefore proceed to introduce the variable-wise lifting of the
   Let \(\Int_* \defin \Int \setminus \{\bot\}\). The abstract domain
   \(\inte\) for program analysis is the variable-wise lifting of
   \(\Int\):
-  \[ \inte \defin (\Var \to \Int_*) \cup \{ \abstract{\bot} \} \]
+  \[ \inte \defin (\Var \to \Int_*) \cup \{ \bot \} \]
 \end{definition}
 
 In this domain, we define again abstraction and concretization maps,
@@ -17,7 +17,7 @@ overloading the \(\abstr\) and \(\concr\) functions, to refer also to
 the abstraction and concretization of abstract environments.
 
 \begin{definition}
-  \label{def:vwgalios}
+  \label{def:vwabstr}
   We define the \emph{concretization map} of abstract environments
   \(\eta \in \inte\), i.e., \(\concr : \inte \to \poset{\env}\) as
   follows
@@ -34,14 +34,14 @@ the abstraction and concretization of abstract environments.
 \end{definition}
 
 We can again define a notion of order for elements of \(\inte\) based
-on the concretization map. We do by overloading the notation
-\(\sqsubseteq\). Let \(\eta, \theta \in \inte\), then
+on the concretization map. We do by overloading the 
+\(\sqsubseteq\) notation. Let \(\eta, \theta \in \inte\), then
 \begin{equation*}
   \eta \sqsubseteq \theta \text{ iff } \concr(\eta) \subseteq \concr(\theta)
 \end{equation*}
 
 Notice that because of the definition of the concretization map
-(Definition~\ref{def:vwgalios})
+(Definition~\ref{def:vwabstr})
 \begin{equation*}
   \eta \sqsubseteq \theta \iff \forall \var \in \Var \; \eta(\var) \sqsubseteq \theta(\var)
 \end{equation*}
@@ -49,7 +49,7 @@ i.e., two abstract environments are ordered if every variable's
 interval of the first environment is entirely contained in the
 interval of the second abstract environment.  \todo[inline]{Spiegare
   meglio} Again, we can define least upper bounds and greatest lower
-bounds by lifting the \(\sqcup\) and \(\sqcap\) operations. Let again
+bounds by lifting the \(\sqcup\) and \(\sqcap\) operations. i.e., let
 \(\eta, \theta \in \inte\), then
 \begin{align*}
   \eta \acap \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \sqcap \theta(\var) \quad \forall \var\in\Var \\

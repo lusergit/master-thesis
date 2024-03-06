@@ -7,28 +7,27 @@
 
 In this chapter we argue that for the language \(\imp\) the abstract
 semantics is computable in finite time without widening for abstract
-domains with some properties.
+domains with some properties.  Observe that the exact computation
+provides, already for our simple language, a precision which is not
+obtainable with (basic) widening and narrowing. In the example in
+Code~\ref{code1} if we consider the intervals abstract domain, the
+semantics maps \(\var\) and \(\var[y]\) to \([0,2]\) and \([6,8]\)
+resp., while widening/narrowing to \([0,\infty]\) and \([6,\infty]\)
 
-Observe that the exact computation provides, already for our simple
-language, a precision which is not obtainable with (basic) widening
-and narrowing. In the example below if we consider the intervals
-abstract domain, the semantics maps \(\var\) and \(\var[y]\) to
-\([0,2]\) and \([6,8]\) resp., while widening/narrowing to
-\([0,\infty]\) and \([6,\infty]\)
-
-\begin{verbatim}
-x:=0;
-y:=0;
-while (x<=5) do
-   if (y=0) then
-      y=y+1;
-   endif;
-   if (x==0) then
-      x:=y+7;
-   endif;
-done;
-end
-\end{verbatim}
+\begin{lstlisting}[caption=Code sample where analysis of
+  \(\fix{\com}\) is less precise than \(\com^*\), label=code1,
+  language=Imp]
+  x:=0;
+  y:=0;
+  while (x<=5) do
+     if (y=0) then
+        y=y+1;
+     endif;
+     if (x==0) then
+        x:=y+7;
+     endif;
+  done;
+\end{lstlisting}
 
 Of course, for the collecting semantics this is not the case. Already
 computing a finite upper bound for loop invariants when they are
@@ -48,11 +47,10 @@ To do so we present a novel technique, based on the idea of
 \emph{bounds}. Each program is associated to a bound, an ideal value
 above which for each variable we cannot guarantee convergence, and
 therefore we can safely assume that the program diverges.  First,
-given a program, we associate each variable with a \emph{single
-  bound}, which captures both both an \emph{upper bound} and a
-\emph{lower bound} for the variable. The rough idea is that, whenever
-a variable is within its bound, the behavior of the program with
-respect to that variable becomes stable. % We also introduce an
+given a program, we associate the program with a \emph{lower bound}
+and an \emph{upper bound}. The rough idea is that, whenever a variable
+is within its bound, the behavior of the program with respect to that
+variable becomes stable. % We also introduce an
 % \emph{increment bound} which captures the largest increment or
 % decrement that can affect a variable.
 

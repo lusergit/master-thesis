@@ -4,14 +4,14 @@
 \begin{definition}[\textbf{Program bound}]
   \label{de:bound}
   The \emph{upper bound} associated with a command \(\com\in \imp\) is
-  an integer number, denoted \(\bound{\com}\in \z\), defined
+  an integer number, denoted \(\bound{\com}\in \n\), defined
   inductively as follows:
   \begin{align*}
     % 
     \bound{\var \in S}  
     & \veq \begin{cases}
-      \min(S) & \text{if } \max(S)=+\infty\\
-      \max(S) & \text{if } \max(S)\in\z
+      |\min(S)| & \text{if } \max(S)=+\infty\\
+      |\max(S)| & \text{if } \max(S)\in\z
     \end{cases}
     \\
     \bound{\var := k} 
@@ -33,22 +33,22 @@
 
   while the \emph{lower bound} associated with a command
   \(\com\in \imp\) is again an integer number, denoted
-  \(\lbound{\com}\in \z\), defined inductively as follows:
+  \(\lbound{\com}\in \n\), defined inductively as follows:
 
   \begin{align*}
     % 
     \lbound{\var \in S}  
     & \veq \begin{cases}
-      \max(S) & \text{if } \min(S)=-\infty\\
-      \min(S) & \text{if } \min(S)\in \z
+      |\max(S)| & \text{if } \min(S)=-\infty\\
+      |\min(S)| & \text{if } \min(S)\in \z
     \end{cases}
     \\
     % 
     \lbound{\var := k} 
-    & \veq - | k |\\
+    & \veq | k |\\
     %
     \lbound{\var := \var[y] + k}
-    & \veq - | k |\\
+    & \veq | k |\\
     %
     \lbound{\com_1 \ndet \com_2}
     & \veq \lbound{\com_1} + \lbound{\com_2}\\
@@ -71,7 +71,7 @@ We can notice that the two definitions of the bound \(\bound{\com}\)
 and \(\lbound{\com}\) coincide, except for the filtering instruction
 \(\var\in S\).  In order to compute the bound of a program we
 introduce bounded environments, that we'll later use for
-lemma~\ref{le:computebounds}
+Lemma~\ref{le:computebounds}
 
 \begin{definition}[\textbf{Bound Environment}]
   \label{de:boundenv}
@@ -112,7 +112,7 @@ lemma~\ref{le:computebounds}
     & \veq \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b)(\var[x])\\
     %& \veq \boundt{\com_2}(\boundt{\com_1}b) \\
     % 
-    \boundt{\com^*}b
+    \boundt{\fix{\com}}b = \boundt{\com^*}b
     &\veq  \lambda \var[x]. (|\varsof{\com}|+1)(\boundt{\com}b)(\var[x])
   \end{align*}    
   where \(\varsof{\com}\) denotes the set of variables occurring
@@ -127,11 +127,9 @@ lemma~\ref{le:computebounds}
 \begin{proof}
   For the following proof we work by induction on \(\com\in \imp\):
 
-  \paragraph*{Base cases:} \mbox{} \\
-  
   \medskip
 
-  \textbf{Case} (\(\var \in S\))
+  \textbf{Case} (\(\var \in S\)).
   %
   \begin{align*}
     \bound{\var\in S} & = \begin{cases}
@@ -150,29 +148,31 @@ lemma~\ref{le:computebounds}
   
   \medskip
   
-  \textbf{Case} (\(\var := k\))
+  \textbf{Case} (\(\var := k\)).
   %
-  just notice that
-  \(\bound{\var := k} = k = \sum_{\var[y] \in \vars{\com}} b_0[\var \mapsto b_0 + k]
-  = \boundt{\var := k }b_0\)
+  Just notice that
+  \(\bound{\var := k} = k = \sum_{\var[y] \in \vars{\com}} b_0[\var
+  \mapsto b_0\var + k] = \boundt{\var := k }b_0\)
 
   \medskip
 
-  \textbf{Case} (\(\var := \var[y] + k\))
+  \textbf{Case} (\(\var := \var[y] + k\)).
+  %
+  As before just notice that
+  \begin{equation*}
+    \bound{\var := \var[y] + k} =
+    k =
+    \sum_{\var[y] \in \vars{\com}} b_0[\var \mapsto b_0(\var) + b_0(\var[y]) + k] = \boundt{\var := \var[y] + k }b_0
+  \end{equation*}
   
   \medskip
-
-  \noindent
-  \paragraph*{Inductive cases:}\mbox{}\\
   
-  \medskip
-  
-  \textbf{Case} (\(\com_1 \ndet \com_2\))
+  \textbf{Case} (\(\com_1 \ndet \com_2\)).
   %
   \begin{align*}
     \bound{\com_1 \ndet \com_2} & = &\\
     \bound{\com_1} + \bound{\com_2} & = & \text{by inductive hypothesis}\\
-      \sum_{\var\in \vars{\com_1}} (\boundt{\com}b_0)(\var) + \sum_{\var\in \vars{\com_2}} (\boundt{\com}b_0)(\var) & = &\\
+      \sum_{\var\in \vars{\com_1}} (\boundt{\com_1}b_0)(\var) + \sum_{\var\in \vars{\com_2}} (\boundt{\com_2}b_0)(\var) & = &\\
     \sum_{\var\in \vars{\com_1}\cap \vars{\com_2}} (\boundt{\com_1}b_0)(\var)+(\boundt{\com_2}b_0)(\var) & \;+ & \\
     \sum_{\var\in \vars{\com_1}\smallsetminus \vars{\com_2}} (\boundt{\com_1}b_0)(\var) & \;+ & \\
     \sum_{\var\in \vars{\com_2}\smallsetminus \vars{\com_1}} (\boundt{\com_2}b_0)(\var) & = & \\
@@ -195,6 +195,7 @@ lemma~\ref{le:computebounds}
     |\vars{C}+1|\sum_{\var\in \vars{\com}} (\boundt{\com}b_0)(\var) & = &\\
     \sum_{\var\in \vars{\com}} |\vars{C}+1|(\boundt{\com}b_0)(\var) & = &\\
     % \lambda \var[x]. (\boundt{\com_1}b)(\var[x]) + (\boundt{\com_2}b_0)(\var[x]) =&\\
+      \boundt{\kleene{\com}}b_0 & = & \\
       \boundt{\fix{\com}}b_0 & &
   \end{align*}
 \end{proof}
