@@ -23,7 +23,7 @@ a finite path in \(\langle X,\to\rangle\)
   length is \(j-i\); \(p_{i,j}\) is a cycle if \(x_i=x_j\).
 \end{enumerate}
 
-
+% Graph lemma
 \begin{lemma}[\textbf{Positive cycles in weighted directed graphs}]
   \label{le:cycles}
   Let \(p\) be a finite path
@@ -34,6 +34,7 @@ a finite path in \(\langle X,\to\rangle\)
   strictly positive weight.
 \end{lemma}
 
+% Graph lemma proof 
 \begin{proof}
   First note that \(w(p) = \Sigma_{k=0}^{\ell-1} h_k > (|X|-1)m\) implies that \(|p|=\ell \geq |X|\). 
   Then, we show our claim by induction on \(|p|=\ell \geq |X|\).
@@ -83,28 +84,45 @@ a finite path in \(\langle X,\to\rangle\)
   positive weight.
 \end{proof}
 
-\newpage
+We can now proceed to prove the fundamental lemma we will later use in
+Theorem~\ref{} to conclude. The following Lemma proves that for
+abstract domains that respect the properties \ref{inc:hp1} and
+\ref{inc:hp2} it holds that the maximum value each value can reach
+without diverging to infinity strictly depends on the constants inside
+of the program itself.
+
+\medskip
+
+\noindent
+More in detail, consider an abstract domain \(\bA\) and its
+variable-wise lifting \(\bA_\Var\), where \(\concr[\bA]\) and
+\(\concr\) are the concretization maps for \(\bA\) and \(\bA_\Var\)
+respectively, while \(\abstr[\bA]\) and \(\abstr\) are the abstraction
+maps again for \(\bA\) and \(\bA_\Var\) respectively. Also consider
+the set of integers \(\z\) with the usual ordering \(\leq\) and its
+complement \(>\), building the complete lattice \(\tuple{\z,
+  \leq}\). In such context if \(\forall \theta \in \bA_\Var\),
+\(S \in \Int\) the following two properties hold
+\begin{enumerate}[label=(\Roman*)]
+\item\label{inc:hp1} for all \(\var\in\Var\) if
+  \(\max(S) = +\infty\) then
+  \(\max(\abstr[\bA](\concr[\bA](\theta\var) \cap \concr[\Int](S))) = \max(\theta\var)\)
+\item\label{inc:hp2}
+  \(\max(\eta \sqcup \eta') = \max\{\max(\eta), \max(\eta')\}\) for
+  all \(\eta, \eta'\in \bA\)
+\end{enumerate}
+
+\noindent
+then the following lemma holds:
+
+% Increment lemma
 \begin{lemma}
   \label{le:inc}
-  Let \(\bA\) be an abstract domain and \(\bA_\Var\) its variable-wise
-  lifting with \(\abstr[\bA]\) and \(\abstr\) the abstraction maps for
-  a single and variable-wise respectively and \(\concr[\bA]\) and
-  \(\concr\) the concretization maps for a single variable and
-  variable-wise respecively, \(\com\in \imp\). Then consider a
-  function \({\max_{\bA} : \bA \to \z}\) s.t. for all \({a\in\bA}\) it
-  holds that \(x \leq \max_\bA(a)\) for all
-  \({x \in \concr[\bA](a)}\).  In such context if
-  \(\forall \theta \in \bA_\Var\), \(S \in \Int\) the following two
-  properties hold
-  \begin{enumerate}[label=(\Roman*)]
-  \item\label{inc:hp1} for all \(\var\in\Var\) if
-    \(\max_{\Int}(S) = \infty\) then
-    \(\max_\bA(\theta(\var) \sqcap \abstr[\bA](\concr[\Int](S))) = \max_\bA(\theta\var)\)
-  \item\label{inc:hp2} \(\max_\bA(a \sqcup b) = \max_\bA\{\max_\bA(a), \max_\bA(b)\}\)
-  \end{enumerate}
-  
-  \noindent
-  Then for all \(\eta \in \mathbb{A}\) and \(\var[y] \in \Var\), if
+  Let \(\com\in \imp\).
+  % Then consider a function \({\max_{\bA} : \bA \to \z}\) s.t. for
+  % all \({a\in\bA}\) it holds that \(x \leq \max_\bA(a)\) for all
+  % \({x \in \concr[\bA](a)}\).
+  For all \(\eta \in \bA\) and \(\var[y] \in \Var\), if
   \(\max(\semi{\com} \eta \var[y]) \neq +\infty\) and
   \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\) then there exist a
   variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
@@ -112,13 +130,25 @@ a finite path in \(\langle X,\to\rangle\)
   hold:
   \begin{enumerate}[label=(\roman*)]
   \item \(\max(\semi{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); \label{point1}
-  \item  for all \(\eta' \in \mathbb{A}\), if \(\eta' \sqsupseteq \eta\)
+  \item  for all \(\eta' \in \bA\), if \(\eta' \sqsupseteq \eta\)
     % and \(\semi{\com}\eta' \neq \top\)
     then
     \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\). \label{point2}
   \end{enumerate}
+  % dually, if \(\min(\semi{\com}\eta\var[y]) \neq - \infty\) and
+  % \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exists a
+  % variable \(\var[w] \in \Var\) and an integer \(i \in \z\) s.t.
+  % \(|i| \leq \lbound{\com}\) and the following two properties hold:
+  % \begin{enumerate}[label=(\roman*)]
+  % \item \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[w]) + i\); \label{point1min}
+  % \item  for all \(\eta' \in \bA\), if \(\eta' \sqsupseteq \eta\)
+  %   % and \(\semi{\com}\eta' \neq \top\)
+  %   then
+  %   \(\min(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[w]) + i\). \label{point2min}
+  % \end{enumerate}
 \end{lemma}
 
+% Increment lemma proof
 \begin{proof}
    The proof is by
   structural induction on the command \(\com\in \imp\).
@@ -144,7 +174,7 @@ a finite path in \(\langle X,\to\rangle\)
   \noindent
   \textbf{Case} (\(\var \in S\))\\
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bA\) and assume
   \(\infty\neq\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
   %
   Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get
@@ -156,7 +186,7 @@ a finite path in \(\langle X,\to\rangle\)
   \begin{itemize}
     
   \item If \(\var[y] \neq \var\), then for all
-    \(\eta' \in \mathbb{A}\) such that \(\eta \sqsubseteq \eta'\) it
+    \(\eta' \in \bA\) such that \(\eta \sqsubseteq \eta'\) it
     holds
     \(\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto
     {\abstr[\bA](\concr[\bA](\eta(\var)) \cap \concr[\Int](S))}]\) and
@@ -192,7 +222,7 @@ a finite path in \(\langle X,\to\rangle\)
   \noindent
   \textbf{Case} (\(\var := k\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bA\) and assume
   \(\max(\semi{\var := k}\eta \var[y]) > \bound{\var := k} = |k|\).
 
   Observe that it cannot be \(\var = \var[y]\). In fact, since
@@ -221,7 +251,7 @@ a finite path in \(\langle X,\to\rangle\)
   \noindent
   \textbf{Case} (\(\var := \var[w] + k\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bA\) and assume
   \(\max(\semi{\var := \var[w] + k}\eta \var[y]) > \bound{\var :=
     \var[w] + k} = |k|\).
   %
@@ -260,7 +290,7 @@ a finite path in \(\langle X,\to\rangle\)
   % \noindent
   % \textbf{Case} (\(\var := \var[w] - k\))
   % % 
-  % Take \(\eta \in \mathbb{A}\) and assume
+  % Take \(\eta \in \bA\) and assume
   % \(\max(\semi{\var := \var[w] - k}\eta \var[y]) > \bound{\var := \var[w] - k} = k\).
   % %
   % Recall that
@@ -270,7 +300,7 @@ a finite path in \(\langle X,\to\rangle\)
   % \begin{itemize}
     
   % \item If \(\var[y] \neq \var\), then for all
-  %   \(\eta' \in \mathbb{A}\) such that
+  %   \(\eta' \in \bA\) such that
   %   \(\eta \sqsubseteq \eta'\), we have
   %   \(\semi{\var := \var[w] - k}\eta' \var[y] = \eta' \var[y]\) and thus
   %   \begin{center}
@@ -279,7 +309,7 @@ a finite path in \(\langle X,\to\rangle\)
   %   hence the thesis holds, with
   %   \(h =0 \leq \bound{\var := \var[w] - k}\) and \(\var[z] = \var[y]\).
     
-  % \item If \(\var = \var[y]\) then for all \(\eta' \in \mathbb{A}\) such
+  % \item If \(\var = \var[y]\) then for all \(\eta' \in \bA\) such
   %   that \(\eta \sqsubseteq \eta'\), we have
   %   \(\semi{\var := \var[w] - k}\eta' \var[y] = \eta' \var[w] - k\) and
   %   thus
@@ -302,7 +332,7 @@ a finite path in \(\langle X,\to\rangle\)
   \noindent
   \textbf{Case} (\(\com_1 \ndet \com_2\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
+  Take \(\eta \in \bA\) and assume
   \(\max(\semi{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2}
   = \bound{\com_1} + \bound{\com_2}\).  Recall that
   \(\semi{\com_1 \ndet \com_2} \eta = \semi{\com_1}\eta \sqcup
@@ -328,7 +358,7 @@ a finite path in \(\langle X,\to\rangle\)
   \(\com_1\), we have that there exists \(h \in \mathbb{Z}\) with
   \(|h| \leq \bound{\com_1}\) and \(\var[z] \in \Var\) such that
   \(\max(\semi{\com_1}\eta \var[y]) = \max(\eta \var[z]) + h\) and for
-  all \(\eta' \in \mathbb{A}\), \(\eta \sqsubseteq \eta'\),
+  all \(\eta' \in \bA\), \(\eta \sqsubseteq \eta'\),
   \[
   \max(\semi{\com_1}\eta' \var[y]) \geq \max(\eta' \var[z]) + h
   \]
@@ -340,12 +370,12 @@ a finite path in \(\langle X,\to\rangle\)
   \]
   %
   and and for
-  all \(\eta' \in \mathbb{A}\), \(\eta \sqsubseteq \eta'\),
+  all \(\eta' \in \bA\), \(\eta \sqsubseteq \eta'\),
   \begin{align*}
     \max(\semi{\com_1 \ndet \com_2}\eta' \var[y])
     &= \max\{ \max(\semi{\com_1}\eta' \var[y]),  \max(\semi{\com_2}\eta' \var[y])\}\\
     % 
-    & \geq \max(\semi{\com_1\eta'} \var[y])\\
+    & \geq \max(\semi{\com_1}\eta' \var[y])\\
     %
     & \geq \max(\eta' \var[z]) + h
   \end{align*}
@@ -358,9 +388,9 @@ a finite path in \(\langle X,\to\rangle\)
   \noindent
   \textbf{Case} (\(\com_1 \seq \com_2\))
   % 
-  Take \(\eta \in \mathbb{A}\) and assume
-  \(\max(\semi{\com_1 \seq \com_2}\eta) > \bound{\com_1 \seq \com_2} =
-  \bound{\com_1} + \bound{\com_2}\).
+  Take \(\eta \in \bA\) and assume
+  \(\max(\semi{\com_1 \seq \com_2}\eta\var[y]) > \bound{\com_1 \seq
+    \com_2} = \bound{\com_1} + \bound{\com_2}\).
   
   Recall that
   \(\semi{\com_1 \seq \com_2} \eta = \semi{\com_2}(\semi{\com_1}\eta)\).
@@ -374,7 +404,7 @@ a finite path in \(\langle X,\to\rangle\)
   \geq \bound{\com_2}\), by inductive hypothesis on \(\com_2\), there
   are \(|h_2| \leq \bound{\com_2}\) and \(\var[w] \in \Var\) such that
   \(\max(\semi{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2\)
-  and for all \(\eta_1' \in \mathbb{A}\) with
+  and for all \(\eta_1' \in \bA\) with
   \(\eta_1 \sqsubseteq \eta_1'\)
   \begin{equation}
     \label{eq:seq2}
@@ -397,14 +427,14 @@ a finite path in \(\langle X,\to\rangle\)
   inductive hypothesis also to \(\com_1\) and deduce that there are
   \(|h_1| \leq \bound{\com_1}\) and \(\var[w]' \in \Var\) such that
   \(\max(\semi{\com_1} \eta \var[w]) = \max(\eta \var[w]') + h_1\) and
-  for all \(\eta' \in \mathbb{A}\) with \(\eta \sqsubseteq \eta'\)
+  for all \(\eta' \in \bA\) with \(\eta \sqsubseteq \eta'\)
   \begin{equation}
     \label{eq:seq1}
     \max(\semi{\com_1} \eta' \var[w]) \geq \max(\eta' \var[w]') + h_1
     \tag{\ddag}
   \end{equation}
 
-  Now, for all \(\eta' \in \mathbb{A}\) with \(\eta \sqsubseteq \eta'\) we have that:
+  Now, for all \(\eta' \in \bA\) with \(\eta \sqsubseteq \eta'\) we have that:
   \begin{align*}
     \max(\semi{\com_1 \seq \com_2}\eta \var[y])
     &= \max(\semi{\com_2}(\semi{\com_1}\eta) \var[y])\\
@@ -415,9 +445,8 @@ a finite path in \(\langle X,\to\rangle\)
     %
     & = \max(\semi{\com_1}\eta \var[w]) + h_2\\
     %
-    &= \max(\eta \var[w]')+h_1 + h_2
+    & = \max(\eta \var[w]')+h_1 + h_2
   \end{align*}
-  %
   and
   \begin{align*}
     \max(\semi{\com_1 \seq \com_2}\eta' \var[y]) & = & \\ 
@@ -438,25 +467,25 @@ a finite path in \(\langle X,\to\rangle\)
   \noindent
   \textbf{Case} (\(\fix{\com}\)) 
   %
-  Let \(\eta \in \mathbb{A}\) such that
-  \(\semi{\fix{\com}} \eta \var[y] \neq \infty\). Recall that
-  \(\semi{\fix{\com}} \eta = \lfp{\lambda \mu. (\semi{\com}
-    \mu \sqcup\eta)}\). Observe that the least fixpoint of
-  \(\lambda \mu. (\semi{\com}
-  \mu \sqcup\eta)\) coincides with the least
-  fixpoint of
-  \(\lambda \mu. (\semi{\com} \mu  \sqcup \mu) = \lambda \mu. \semi{ \com\ndet \tru} \mu\) above \(\eta\). Hence, if
+  Let \(\eta \in \bA\) such that
+  \(\max(\semi{\fix{\com}} \eta \var[y]) \neq + \infty\). Recall that
+  \(\semi{\fix{\com}} \eta = \lfp{\lambda \mu. (\semi{\com} \mu
+    \sqcup\eta)}\). Observe that the least fixpoint of
+  \(\lambda \mu. (\semi{\com} \mu \sqcup\eta)\) coincides with the
+  least fixpoint of
+  \(\lambda \mu. (\semi{\com} \mu \sqcup \mu) = \lambda \mu. \semi{
+    \com\ndet \tru} \mu\) above \(\eta\). Hence, if
   \begin{itemize}
   \item \(\eta_0 \veq \eta\),
   \item for all \(i\in \nat\),
     \(\eta_{i+1} \veq \semi{\com} \eta_i \sqcup \eta_i= \semi{\com \ndet
     \tru} \eta_i \sqsupseteq \eta_i\),
   \end{itemize}
-  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \mathbb{A}\) such that
+  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \bA\) such that
   \[ 
   \semi{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
   \]
-  Since \(\semi{\fix{\com}} \eta \var[y] \neq \infty\), we have that
+  Since \(\max(\semi{\fix{\com}}) \eta \var[y] \neq \infty\), we have that
   for all \(i\in \nat\), \(\eta_i \var[y] \neq \infty\). Moreover,
   \(\textstyle\bigsqcup_{i \in \nat} \eta_i\) on \(\var[y]\) is
   finitely reached in the chain \(\{\eta_i\}_{i\in \nat}\), i.e.,
@@ -634,6 +663,33 @@ a finite path in \(\langle X,\to\rangle\)
   + \Sigma_{i=0}^m h_i\] as desired.
 \end{proof}
 
+Notice that we can consider the set of integers \(\z\), ordered with
+the reverse order \(\geq\) and its complement \(<\), hence the
+complete lattice \(\tuple{\z, \geq}\) and a max function
+\({\max : \bA \to \z}\) s.t. \(\max(A) \leq a\) for all \(a\in A\),
+\(A \in \bA\), i.e., the min function, and the following dual form of
+Lemma~\ref{le:inc} would hold:
+
+% Dual formulation of the same lemma
+\begin{corollary}\label{co:inc}
+  Let \(\com \in \imp\).
+  
+  \noindent
+  For all \(\eta \in \bA\) and
+  \(\var[y] \in \Var\), if
+  \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
+  \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exist a
+  variable \(\var[z] \in\Var\) and an integer \(h \in \z\) s.t.
+  \(|h| \leq \lbound{\com}\) s.t. the following two properties hold:
+  
+  \begin{enumerate}[label=(\roman*)]
+  \item \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[z]) + i\); \label{point1min}
+  \item  for all \(\eta' \in \bA\), if \(\eta' \sqsupseteq \eta\)
+    % and \(\semi{\com}\eta' \neq \top\)
+    then
+    \(\min(\semi{\com}\eta' \var[y]) \leq \min(\eta' \var[z]) + i\). \label{point2min}
+  \end{enumerate}
+\end{corollary}
 
 % \noindent
 % Lemma~\ref{le:inc} and its Corollary~\ref{co:inc} provide an
@@ -648,7 +704,7 @@ a finite path in \(\langle X,\to\rangle\)
 % %
 % Then, when computing \(\semi{\com} \rho\) on such \(\rho\)
 % having a finite domain, we can restrict to a bounded interval domain
-% \(\mathbb{A}_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
+% \(\bA_{\com,\rho} \veq (\Var_{\com} \to \Int_{\com,\rho}) \cup
 % \{ \top, \bot \}\) where
 % \begin{equation*}
 %   \Int_{\com,\rho} \veq \{ \interval{a}{b} \mid a, b \in \z\ \land\
