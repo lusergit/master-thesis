@@ -2,10 +2,15 @@
 \section{Computing interval semantics}
 \label{sec:computingint}
 
-Lemma~\ref{le:inc} provides an effective algorithm for computing the
-abstract semantics of commands provided a domain that respects
-properties \ref{inc:hp1} and \ref{inc:hp2}. % We can in fact verify that
-% the intervals respect such claims. First consider \(\tuple{\z, \leq}\)
+Lemma~\ref{le:inc} provides an effective algorithm for computing the abstract
+semantics of commands provided a domain that respects properties \ref{inc:hp1}
+and \ref{inc:hp2}. The goal of the following section is to ensure that such
+properties are respeted by intervals, and show that the semantics
+computed on a finite sublattice of \(\Int\) (with no infinite
+ascending chains) effectively coincides with the semantics computed in
+the original \(\Int\) complete lattice, which instead contains
+infinite ascending chains.
+% First consider \(\tuple{\z, \leq}\)
 % (\(\z\) with the usual ordering) and the max function
 % \(\max : \Int \to \z\) defined as follows
 % \begin{align*}
@@ -14,11 +19,11 @@ properties \ref{inc:hp1} and \ref{inc:hp2}. % We can in fact verify that
 % \end{align*}
 
 \begin{observation}[\ref{inc:hp1} holds on intervals]
-  Let \(\iota \in \Int, S \in \poset{\z}\) and let
+  Let \(\iota \in \Int, S \in \Int\) and let
   \({\abstr[\Int] : \poset{\z} \to \Int}\) be the abstraction map for
   the interval domain. 
   \begin{equation*}
-    \left(\max(\abstr[\Int](S)) = \infty\right) \land \left(\iota \sqcap \abstr[\Int](S) \neq \bot\right)
+    \left(\max(S) = \infty\right) \land \left(\iota \sqcap S \neq \bot\right)
     \Rightarrow max(\iota \sqcap \abstr[\Int](S)) = \max(\iota)
   \end{equation*}
   where \(S \in \poset{\Z}\) and \(\iota \in \Int\)
@@ -90,7 +95,7 @@ the \(\min\) and the \(\max\) value of an interval environment:
 
 % 
 Then, when computing \(\semi[\inte]{\com} \rho\) on such \(\rho\)
-having a finite domain, we can restrict to an interval domaian bounded
+having a finite domain, we can restrict to an interval domain bounded
 by some constant \(k\in\n\) s.t.
 \(\binte{k_1}{k_2} \veq (\Var_{\com} \to \bInt{k_1}{k_2}) \cup \{\top, \bot\}\)
 where
@@ -100,7 +105,7 @@ where
                   & \phantom{\veq} \cup \{\interval{-\infty}{b} \mid b \in \z \; \land \; b \leq k_2\}
 \end{align*}
 
-We can visualize the hasse diagram of the bounded integer domain in
+We can visualize the Hasse diagram of the bounded integer domain in
 Figure~\ref{fig:bound} and notice that there are no infinite ascending
 chains by definition.
 % 
@@ -507,7 +512,7 @@ as the analysis on \(\inte\).
   |k|\). Recall that we are considering \(\binte{k_1}{k_2}\) with
   \(k_1 \leq \min(\rho) - \lbound{\var := \var[y] + k}\) and
   \(k_2 \geq \max(\rho) + \bound{\var := \var[y] + k}\). Notice that
-  what we are interested in the behaviour of \(\var\). We have 2 cases
+  what we are interested in the behavior of \(\var\). We have 2 cases
   \begin{itemize}
   \item
     \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} =
@@ -597,7 +602,7 @@ as the analysis on \(\inte\).
     n & \leq \min(\rho) - \lbound{\com_1} - \lbound{\com_2} & = \min(\rho) - \lbound{\com_1 \ndet \com_2} \\
     m & \geq \max(\rho) + \bound{\com_1} + \bound{\com_2} & = \max(\rho) + \bound{\com_1 \ndet \com_2}
   \end{align*}
-  and we can conlcude by recalling that \(\binte{n}{m}\) is closed
+  and we can conclude by recalling that \(\binte{n}{m}\) is closed
   under \(\sqcup\)
   \begin{equation*} {\semi[\inte_{\com_1 \ndet \com_2,
         \rho}]{\com_1}\rho} \sqcup {\semi[\inte_{\com_1 \ndet \com_2,
@@ -650,53 +655,99 @@ as the analysis on \(\inte\).
     \rho_0 & \defin \rho \\
     \rho_{i+1} & \defin \semi[\inte]{\com \ndet \tru}\rho_i
   \end{align*}
-  Let's consider \(\binte{k_1}{k_2}\) with
-  \(k \geq \max(\rho) + (n+2)\bound{\com}\) where
-  \(n = |\varsof{\com}|\). We can make the following two observations
-  for each variable \(\var[y]\):
+  Let's consider \(\binte{m}{n}\) with
+  \(n \leq \min(\rho) + (v+2)\bound{\com}\) where
+  \(v = |\varsof{\com}|\) and
+  \(m \geq \max(\rho) + (v+2)\bound{\com}\). We can make the following
+  observations for each variable \(\var[y]\in \Var_{\com}\).
   \begin{enumerate}[label=(\roman*)]
   \item if
-    \({\max(\semi[\inte]{\fix{\com}}\rho\var[y])} \neq +\infty\) then,
-    because of Lemma~\ref{le:inc} it holds that
-    \begin{equation*}
-      \max(\semi[\inte]{\fix{\com}}\rho\var[y]) \leq \max(\rho) + \bound{\fix{\com}} = \max(\rho) + (n+1)\bound{\com}
-    \end{equation*}
-    where \(n = |\Var_{\com}|\) is the number of variables appearing
-    in the program \(\com\). For all iterands \(\rho_i\) we can notice
+    \({\max(\semi[\inte]{\fix{\com}}\rho\var[y]) \neq +\infty}\) and
+    \({\min(\semi[\inte]{\fix{\com}}\rho\var[y]) \neq -\infty}\), then
+    because of Lemma~\ref{le:inc} and Corollary~\ref{co:inc} it holds
     that
+    \begin{align*}
+      \max(\semi[\inte]{\fix{\com}}\rho\var[y]) & \leq \max(\rho) + \bound{\fix{\com}} \\
+      \min(\semi[\inte]{\fix{\com}}\rho\var[y]) & \geq \min(\rho) - \lbound{\fix{\com}}
+    \end{align*}
+    and for each \(\rho_i\)
     \begin{equation*}
-      \rho_i = \left(\semi[\inte]{\com \ndet \tru}\right)^i\rho \sqsubseteq \semi[\inte]{\fix{\com}}\rho = \textstyle\bigsqcup_{i\in\nat}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho
+      \rho_i = {\left(\semi[\inte]{\com \ndet \tru}\right)}^i\rho \sqsubseteq
+      \semi[\inte]{\fix{\com}}\rho = 
+      \textstyle\bigsqcup_{i\in\n} {\left(\semi[\inte]{\com \ndet \tru}\right)}^i\rho
     \end{equation*}
-    now observe that because of our choice of \(k\) it holds that
-    \({k \geq \max(\rho_i) + \bound{\com}}\). We can therefore use the
-    inductive hypothesis and deduce that
+    because of the choice of \(n\) and \(m\) we can use the inductive
+    hypothesis ad say
     \begin{equation*}
-      \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i
+      \semi[\inte]{\com \ndet \tru}\rho_i =
+      \semi[\binte{m}{n}]{\com \ndet \tru}\rho_i =
+      {\left(\semi[\binte{m}{n}]{\com\ndet \tru}\right)}^i\rho.
     \end{equation*}
-    for all \(k \geq \max(\rho_i) + \bound{\com}\). In particular it
-    holds for
-    \(k \geq \max(\rho) + \bound{\fix{\com}} \geq \max(\rho_i) +
-    \bound{\com}\) for all \(i\in\n\). Hence by \(\binte{k_1}{k_2}\) closure
-    over \(\sqcup\)
+    Hence  by closure over \(\sqcup\)
     \begin{equation*}
-      \semi[\inte]{\fix{\com}}\rho
-      =
-      \textstyle\bigsqcup_{i\in\nat}\left(\semi[\inte]{\com\ndet\tru}\right)^i\rho
-      =
-      \textstyle\bigsqcup_{i\in\nat}\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)^i\rho
-      =
-      \semi[\binte{k_1}{k_2}]{\fix{\com}}\rho
+      \semi[\inte]{\fix\com}\rho =
+      \textstyle\bigsqcup_{i\in\n} {\left(\semi[\inte]{\com}\right)}^i\rho = 
+      \textstyle\bigsqcup_{i\in\n} {\left(\semi[\binte{m}{n}]{\com}\right)}^i\rho = 
+      \semi[\binte{m}{n}]{\fix\com}\rho
     \end{equation*}
     
-  \item instead, if
-    \({\max(\semi[\inte]{\fix{\com}}\rho\var[y])} = +\infty\) for some
-    \(\var[y]\in \Var_{\com}\) then we can use the observation made
-    with Lemma~\ref{le:leq}, i.e., 
-    \({\semi[\inte]{\com}\rho} \sqsubseteq
-    {\semi[\binte{k_1}{k_2}]{\com}\rho}\) for all \({k \in \nat}\), and
-    conclude because it means that
-    \({\semi[\inte]{\fix{\com}}\rho} = \top =
-    {\semi[\binte{k_1}{k_2}]{\fix{\com}}\rho}\).
+  \item\label{eq:case2} if both
+    \({\max(\semi[\inte]{\fix{\com}}\rho\var[y]) = +\infty}\) and
+    \({\min(\semi[\inte]{\fix{\com}}\rho\var[y]) = -\infty}\), it
+    means that
+    \(\semi[\inte]{\fix\com}\rho\var[y] =
+    \interval{-\infty}{+\infty}\). In this case since by
+    Lemma~\ref{le:leq}
+    \({\semi[\inte]{\com}\rho \sqsubseteq
+      \semi[\binte{i}{j}]{\com}\rho}\) for all \(i, j \in \z\)
+    s.t. \(i \leq j\), it holds that
+    \begin{equation*}
+      \semi[\inte]{\fix\com}\rho\var[y] = \semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]
+    \end{equation*}
+    for all \(k_1 \leq \min(\rho) - \lbound{\fix\com}\) and
+    \(k_2 \geq \max(\rho) + \bound{\fix\com}\), hence
+    \begin{equation*}
+      \semi[\inte]{\fix\com}\rho\var[y] = \semi[\inte_{\fix\com,\rho}]{\fix\com}\rho\var[y]
+    \end{equation*}
+    which is our thesis.
+    
+  \item either \[{\max(\semi[\inte]{\fix\com}\rho\var[y]) = + \infty} \; \land \;
+    {\min(\semi[\inte]{\fix\com}\rho\var[y]) \neq -\infty}\] or
+  \[{\max(\semi[\inte]{\fix\com}\rho\var[y]) \neq + \infty} \; \land
+    \; {\min(\semi[\inte]{\fix\com}\rho\var[y]) = -\infty}.\] In both
+  cases the same procedure as for the case~\ref{eq:case2} can be used.
+  Hence either the first or the second case happens:
+  \begin{align*}
+    \semi[\inte]{\fix\com}\rho\var[y] & = \interval{a}{+\infty} = \semi[\binte{k_1}{k_2}]{\fix\com}\rho \\
+    \semi[\inte]{\fix\com}\rho\var[y] & = \interval{-\infty}{b} = \semi[\binte{k_1}{k_2}]{\fix\com}\rho
+  \end{align*}
+  for some \(a\geq \min(\rho) - \lbound{\fix\com}\),
+  \(b \leq \max(\rho) + \bound{\fix\com}\), for all
+  \(k_1 \leq \min(\rho) - \lbound{\fix\com}\) and
+  \(k_2 \geq \max(\rho) + \bound{\fix\com}\).
+
+  % We will consider, without loss of generality the second of the two
+  % case, as the other one is holds for the same reason.  Hence
+  % \({\max(\semi[\inte]{\fix\com}\rho\var[y]) = + \infty}\), which
+  % means by Lemma~\ref{le:leq} that
+  % \(\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y] = +\infty\) for all
+  % \(k_1 \geq \max(\rho) + \bound{\fix\com}\), in particular with
+  % \(m\). Also,
+  % \({\min(\semi[\inte]{\fix\com}\rho\var[y]) \neq -\infty}\), which
+  % means by Corollary~\ref{co:inc}
+  % \begin{equation*}
+  %   \min(\semi[\inte]{\fix\com}\rho\var[y]) \geq \min(\rho) - \lbound{\fix\com}.
+  % \end{equation*}
+  % Observe that for all iterands \(\rho_i\) it still holds that
+  % \begin{equation*}
+  %   \rho_i = {\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho \sqsubseteq \semi[\inte]{\fix\com} \rho =
+  %   \textstyle\bigsqcup_{i\in\n}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho
+  % \end{equation*}
+  % Hence because of our choice of \(m\) we can use the
+  % inductive hypothesis and say that
+  % \begin{equation*}
+    
+  % \end{equation*}
   \end{enumerate}
   % 
   % - osservo che
