@@ -146,12 +146,15 @@
 
 % Imp language listing
 \lstdefinelanguage{Imp}{
-  morekeywords={fix, *, ;, +, while, if, then, else, do, done, endif},
+  morekeywords={fix, *, \;, +, while, if, then, else, do, done, endif},
     sensitive=false, % keywords are not case-sensitive
     morecomment=[l]{//}, % l is for line comment
     morecomment=[s]{/*}{*/}, % s is for start and end delimiter
-    morestring=[b]" % defines that strings are enclosed in double quotes
+    morestring=[b] % defines that strings are enclosed in double quotes
 } %
 
 \RequirePackage[a-2b,mathxmp]{pdfx}
+
+% Document properties
 % \linespread{2}
+% \setlength\parindent{0pt}

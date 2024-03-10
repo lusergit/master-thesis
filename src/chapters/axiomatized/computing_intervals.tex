@@ -171,6 +171,35 @@ chains by definition.
   \label{fig:bound}
 \end{figure}
 %
+First we can notice that based on the values of \(k_1\) and \(k_2\) we
+have a complete lattice of interval subdomains, whose top element is
+the \(\inte\) domain itself. We can define a notion of order for the
+lattices by overloading the \(\sqsubseteq\) symbol in the following
+way
+
+\begin{definition}
+  For all \(\bInt{k_1}{k_2}, \bInt{k_3}{k_4}\) bounded interval
+  domains
+  \begin{equation*}
+    \bInt{k_1}{k_2} \sqsubseteq \bInt{k_3}{k_4} \iff \interval{k_1}{k_2} \sqsubseteq \interval{k_3}{k_4}
+  \end{equation*}
+  \noindent
+  Dually, for all \(\binte{k_1}{k_2}, \binte{k_3}{k_4}\) bounded
+  interval domains
+  \begin{equation*}
+    \binte{k_1}{k_2} \sqsubseteq \binte{k_3}{k_4} \iff \bInt{k_1}{k_2} \sqsubseteq \bInt{k_3}{k_4}
+    \left(\iff \interval{k_1}{k_2} \sqsubseteq \interval{k_3}{k_4} \right)
+  \end{equation*}
+\end{definition}
+
+Notice that because of the latter definition
+\(\binte{k_1}{k_2} \sqsubseteq \inte\) for all \(k_1, k_2 \in \z\)
+s.t.\ \(k_1 \leq k_2\). By calling
+\(\inte_b = \{\binte{i}{j} \mid i,j \in \z \; \land \; i \leq j\} \cup
+\{\inte, \bot\}\) we can notice that \(\tuple{\inte_b, \sqsubseteq}\)
+is a complete lattice.
+
+\noindent
 We need however a special bound, based on Lemma~\ref{le:inc}, based on
 the program we are considering and the initial environment.  For
 simplicity we'll refer to \(\inte_{\com,\rho}\) as
@@ -249,7 +278,7 @@ might overcome the bound, and therefore diverge
 \end{definition}
 
 \begin{lemma}\label{le:leq}
-  for all \(k_1, k_2\in\nat\) % s.t. \(k \geq \max(\rho)\)
+  for all \(k_1, k_2\in\z\) s.t. \(k_1 \leq k_2\)
   \begin{equation*}
     \semi[\inte]{\com}\rho \sqsubseteq \semi[\binte{k_1}{k_2}]{\com}\rho
   \end{equation*}
@@ -420,15 +449,16 @@ as the analysis on \(\inte\).
 
 \begin{theorem}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
-  \(\rho : \Var \to \Int\)
+  \(\rho : \Var \to \Int\), and \(k_1, k_2\in \z\) s.t.
+  \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2} \)
   \begin{equation*}
-    \semi[\inte]{\com}\rho = \semi[\inte_{\com,\rho}]{\com}\rho
+    \semi[\inte]{\com}\rho = \semi[\binte{k_1}{k_2}]{\com}\rho
   \end{equation*}
   i.e., the abstract semantics \(\semi{\com} \rho\)
   % 
   % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
   % \sqcup \rho}
-  computed in \(\inte\) and in \(\inte_{\com,\rho}\) coincide.
+  computed in \(\inte\) and in \(\binte{k_1}{k_2}\) coincide.
 \end{theorem}
 
 \begin{proof}
@@ -451,36 +481,43 @@ as the analysis on \(\inte\).
   Recall that
   \begin{equation*}
     \semi[\inte]{\var \in S}\rho = \begin{cases}
-      \rho[\var \mapsto \rho\var \sqcap \abstr[\Int](S)] & \text{if } \rho\var \sqcap \abstr[\Int](S) \neq \bot \\
+      \rho[\var \mapsto \abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S))] & \text{if } \concr[\Int](\rho\var) \cap \concr[\Int](S) \neq \emptyset \\
       \bot & \text{otherwise}
     \end{cases}
   \end{equation*}
   and that
   \begin{equation*}
-    \semi[\inte_{\com,\rho}]{\var \in S}\rho = \begin{cases}
-      \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_{\com,\rho}](S)] & \text{if } \rho\var \sqcap \abstr[\Int_{\com,\rho}](S) \neq \bot \\
+    \semi[\binte{k_1}{k_2}]{\var \in S}\rho = \begin{cases}
+
+      \rho[\var \mapsto \abstr[\bInt{k_1}{k_2}](\concr[\Int](\rho\var) \cap \concr[\Int](S))] & \text{if } \concr[\Int](\rho\var) \cap \concr[\Int](S) \neq \emptyset \\
       \bot & \text{otherwise}
     \end{cases}
   \end{equation*}
-  With \(k \geq \max(\rho) + \bound{\var \in S}\). We have 2 cases: if
-  \({\rho\var \sqcap \abstr[\Int](S) = \bot}\) then also for all
-  bounded sub-intervals \(\abstr[\bInt{k_1}{k_2}](S)\) with
-  \(k_1 \leq \min(\rho) - \lbound{\var\in S}\) and
-  \(k_2 \geq \max(\rho) + \bound{\var\in S}\) it holds that
-  \({\rho\var \sqcap \abstr[\bInt{k_1}{k_2}](S) = \bot}\) and
-  therefore
-  \({\semi[\inte]{\var\in S}\rho = \bot = \semi[\inte_{\var\in S,
-      \rho}]{\var \in S}}\). Otherwise
-  \({\rho\var \sqcap \abstr[\Int](S) \neq \bot}\). In this case
-  \({\semi[\inte]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap
-    \abstr[\Int](S)]}\) and we can notice that
-  \(\max(\rho\var \sqcap \abstr[\Int](S)) \leq \max(\rho\var) \leq
-  \max(\rho)\). Therefore
-  \begin{equation*}
-    \semi[\inte_{\var \in S,\rho}]{\var \in S}\rho = \rho[\var \mapsto \rho\var \sqcap \abstr[\Int_{\var \in S,\rho}](S)]
-    = \rho[\var \mapsto \rho\var \sqcap \abstr[\Int](S)] = \semi[\inte]{\var\in S}\rho
-  \end{equation*}
-  which is our thesis.
+  With \(k_1 \leq \min(\rho) - \lbound{\var \in S}\) and
+  \(k_2 \geq \max(\rho) + \bound{\var \in S}\). We have 2 cases:
+  \begin{itemize}
+  \item if
+    \({\concr[\Int](\rho\var) \cap \concr[\Int](S) = \emptyset}\)
+    hence it holds that
+    \begin{equation*}
+      \semi[\inte]{\var\in S}\rho = \bot = \semi[\binte{k_1}{k_2}]{\var \in S}\rho.
+    \end{equation*}
+    
+  \item Otherwise
+    \({\concr[\Int](\rho\var) \cap \concr[\Int](S) \neq
+      \emptyset}\). In this case
+    \({\semi[\inte]{\var \in S}\rho = \rho[\var \mapsto \rho\var
+      \sqcap \abstr[\Int](S)]}\) and we can notice that
+    \(\max(\concr[\Int](\rho\var) \cap \concr[\Int](S)) \leq
+    \max(\rho\var) \leq \max(\rho)\). Therefore
+    \begin{align*}
+      \semi[\binte{k_1}{k_2}]{\var \in S}\rho & = \rho[\var \mapsto \abstr[\bInt{k_1}{k_2}](\concr[\Int](\rho\var) \cap \concr[\Int](S))] \\
+                                              & = \rho[\var \mapsto \abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S))] \\
+                                              & = \semi[\inte]{\var\in S}\rho
+    \end{align*}
+    for all \(k_1 \leq \min(\rho) - \lbound{\var \in S}\) and
+    \(k_2 \geq \max(\rho) + \bound{\var\in S}\). Which is our thesis.
+  \end{itemize}
 
   \medskip
   
@@ -489,15 +526,17 @@ as the analysis on \(\inte\).
   % 
   Let's recall that
   \({\semi[\inte]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}
-    ]}\). Recall that we are considering \(\inte_{\var := k,\rho}\),
-  hence we can conclude by observing that
+    ]}\). Recall that we are considering \(\binte{k_1}{k_2}\) with
+  \(k_1 \leq \min(\rho) - \lbound{\var := k}\) and
+  \(k_2 \geq \max(\rho) + \bound{\var := k}\). Hence we can conclude by
+  observing that
   \begin{equation*}
     \min(\rho) - \lbound{\var := k} \leq k \leq k \leq \max(\rho) + \bound{\var := k}
   \end{equation*}
   and therefore for all \(k_1 \leq \min(\rho) - \lbound{\var:=k}\) and
   \(k_2 \geq \max(\rho) + \bound{\var := k}\) it holds that
   \begin{equation*}
-    \semi[\inte]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}] = \semi[\inte_{\com,\rho}]{\var := k}\rho
+    \semi[\inte]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}] = \semi[\binte{k_1}{k_2}]{\var := k}\rho
   \end{equation*}
   which is our thesis.
 
@@ -509,10 +548,12 @@ as the analysis on \(\inte\).
   Let's recall that
   \({\semi[\inte]{\var := \var[y] + k}\rho = \rho[\var \mapsto
     \rho\var[y] + k]}\) and \(\bound{\var := \var[y] + k} =
-  |k|\). Recall that we are considering \(\binte{k_1}{k_2}\) with
-  \(k_1 \leq \min(\rho) - \lbound{\var := \var[y] + k}\) and
+  |k|\). Also remember that we are considering \(\binte{k_1}{k_2}\)
+  with \(k_1 \leq \min(\rho) - \lbound{\var := \var[y] + k}\) and
   \(k_2 \geq \max(\rho) + \bound{\var := \var[y] + k}\). Notice that
-  what we are interested in the behavior of \(\var\). We have 2 cases
+  for all \(\Var \ni \var[w] \neq \var \) it holds that
+  \(\rho\var[w] = \semi[\inte]{\var := \var[y] + k}\rho\var[w]\),
+  hence we consider \(\var\). We have 2 cases
   \begin{itemize}
   \item
     \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} =
@@ -527,55 +568,67 @@ as the analysis on \(\inte\).
       \semi[\binte{k_1}{k_2}]{\com}\rho\) for all \(k_1, k_2 \in \z\)
       s.t. \(k_1 \leq k_2\), which means that
       \begin{equation*}
-        \semi[\inte]{\var := \var[y] + k}\rho = \top = \semi[\binte{k_1}{k_2}]{\var := \var[y] + k}\rho
+        \semi[\inte]{\var := \var[y] + k}\rho\var = \interval{-\infty}{+\infty} = \semi[\binte{k_1}{k_2}]{\var := \var[y] + k}\rho\var
       \end{equation*}
-      for all \(k_1 \leq \min(\rho) - \lbound{\var := \var[y] + k}\)
-      and \(k_2 \geq \max(\rho) + \bound{\var := \var[y] + k}\), which
-      is our thesis.
+      in particular for all
+      \(k_1 \leq \min(\rho) - \lbound{\var := \var[y] + k}\) and
+      \(k_2 \geq \max(\rho) + \bound{\var := \var[y] + k}\), which is
+      our thesis.
     \item
-      \({\min(\semi[\inte]{\var := \var[y] + k}\rho\var)} \neq
+      \({\min(\semi[\inte]{\var := \var[y] + k}\rho\var)} \neq -
       \infty\). In this case by Corollary~\ref{co:inc}
       \begin{equation*}
-        \min(\semi[\inte]{\var := \var[y] + k}\rho\var) \geq \min(\rho) - \lbound{\var := \var[y] + k}
+        \min(\semi[\inte]{\var := \var[y] + k}\rho\var) = \min(\rho\var[y]) + k
       \end{equation*}
       and therefore
       \({\semi[\inte]{\var := \var[y] + k}\rho\var} =
-      \interval{a}{+\infty}\) for some
-      \(a \geq \min(\rho) - \lbound{\var := \var[y] + k}\), and our
+      \interval{a}{+\infty} = {\semi[\binte{k_1}{k_2}]{\var := \var[y]
+          + k}\rho\var}\) for some
+      \(a \geq \min(\rho) - \lbound{\var := \var[y] + k}\), and for
+      all \(k_1 \leq \min(\rho)- \lbound{\var := \var[y] + k}\) and
+      \(k_2 \geq \max(\rho) + \bound{\var := \var[y] + k}\). Hence our
       thesis holds.
 
     \end{itemize}
   \item
     \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} \neq
-    +\infty\). In this case by Lemma~\ref{le:inc} it holds that for
-    each variable \(\var[w]\in\Var\)
+    +\infty\). In this case by Lemma~\ref{le:inc} it holds that
     \begin{equation*}
-      \max(\semi[\inte]{\var:= \var[y] + k}\rho\var[w]) \leq \max(\rho) + \bound{\var := \var[y] + k}
+      \max(\semi[\inte]{\var:= \var[y] + k}\rho\var) = \max(\rho\var[y]) + k
     \end{equation*}
     Here we have 2 more cases depending on the value of
-    \(\min(\semi[\inte]{\var:= \var[y] + k}\rho\var[w])\):
+    \(\min(\semi[\inte]{\var:= \var[y] + k}\rho\var)\):
     \begin{itemize}
     \item
-      \({\min(\semi[\inte]{\var:= \var[y] + k}\rho\var[w])} =
+      \({\min(\semi[\inte]{\var:= \var[y] + k}\rho\var)} =
       -\infty\). In this case
       \(\semi[\inte]{\var := \var[y] + k}\rho\var[w] =
       \interval{-\infty}{b}\) with
-      \(b \leq \max(\rho) + \bound{\var := \var[y] + k}\), hence
+      \(b \leq \max(\rho) + \bound{\var := \var[y] + k}\), in
+      particular, because of the semantics and Lemma~\ref{le:inc} it
+      holds that
       \begin{equation*}
-        \semi[\inte]{\var := \var[y] + k}\rho\var[w] = \interval{-\infty}{b} = \semi[\inte_{\var := \var[y] + k, \rho}]{\var:=\var[y]+k}\rho\var[w]
+        \semi[\inte]{\var := \var[y] + k}\rho = \rho[\var \mapsto \rho\var[y] + k] = \semi[\binte{k_1}{k_2}]{\var := \var[y] + k}\rho
       \end{equation*}
-      and our thesis holds.
+      for all \(k_1 \leq \min(\rho) - \lbound{\var := \var[y] + k}\)
+      and \(k_2 \geq \max(\rho) + \bound{\var := \var[y] + k}\). Hence
+      \begin{equation*}
+        \semi[\inte]{\var := \var[y] + k}\rho\var[w] = \interval{-\infty}{b} = \semi[\binte{k_1}{k_2}]{\var:=\var[y]+k}\rho\var
+      \end{equation*}
+      which is our thesis.
       
     \item
-      \({\min(\semi[\inte]{\var:= \var[y] + k}\rho\var[w])} \neq
+      \({\min(\semi[\inte]{\var:= \var[y] + k}\rho\var)} \neq
       -\infty\). In this case by Corollary~\ref{co:inc} it also holds
       that
       \begin{equation*}
-        \min(\semi[\inte]{\var := \var[y] + k}\rho\var[w]) \geq \min(\rho) - \bound{\var := \var[y] +k} 
+        \min(\semi[\inte]{\var := \var[y] + k}\rho\var) = \min(\rho\var[y]) + k
       \end{equation*}
-      hence the thesis follows
+      hence the thesis follows for all
+      \(k_1 \leq \min(\rho) - \lbound{\var := \var[y] + k}\) and
+      \(k_2 \geq \max(\rho) + \bound{\var := \var[y] + k}\)
       \begin{equation*}
-        \semi[\inte]{\var := \var[y] + k}\rho = \rho[\var \mapsto \rho\var[y] + k] = \semi[\inte_{\var:=\var[y]+ k, \rho}]{\var := \var[y] + k}\rho
+        \semi[\inte]{\var := \var[y] + k}\rho = \rho[\var \mapsto \rho\var[y] + k] = \semi[\binte{k_1}{k_2}]{\var := \var[y] + k}\rho
       \end{equation*}
     \end{itemize}
   \end{itemize}
