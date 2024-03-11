@@ -515,10 +515,11 @@ as the analysis on \(\inte\).
   \item Otherwise
     \({\concr[\Int](\rho\var) \cap \concr[\Int](S) \neq
       \emptyset}\). In this case
-    \({\semi[\inte]{\var \in S}\rho = \rho[\var \mapsto \rho\var
-      \sqcap \abstr[\Int](S)]}\) and we can notice that
-    \(\max(\concr[\Int](\rho\var) \cap \concr[\Int](S)) \leq
-    \max(\rho\var) \leq \max(\rho)\). Therefore
+    \({\semi[\inte]{\var \in S}\rho = \rho[\var \mapsto
+      \abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S))]}\)
+    and we can notice that
+    \(\max(\abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S)))
+    \leq \max(\rho\var) \leq \max(\rho)\). Therefore
     \begin{align*}
       \semi[\binte{k_1}{k_2}]{\var \in S}\rho & = \rho[\var \mapsto \abstr[\bInt{k_1}{k_2}](\concr[\Int](\rho\var) \cap \concr[\Int](S))] \\
                                               & = \rho[\var \mapsto \abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S))] \\
@@ -682,11 +683,12 @@ as the analysis on \(\inte\).
   \semi[\inte]{\com}\left(\semi[\inte]{\com_1}\rho\right)\). By
   inductive hypothesis it holds that
   \begin{align}
-    \semi[\inte]{\com_1}\rho & = \semi[\binte{k_1}{k_2}]{\com_1}\rho & \forall k_1 \leq \min(\rho) - \lbound{\com_1} \; \land \; k_2 \geq \max(\rho) + \bound{\com_1}\tag{\dag} \\
+    \semi[\inte]{\com_1}\rho & = \semi[\binte{k_1}{k_2}]{\com_1}\rho & \forall k_1 \leq \min(\rho) - \lbound{\com_1} \; \land \; k_2 \geq \max(\rho) + \bound{\com_1}\tag{\dag}\label{eq:ind1}\\
     \semi[\inte]{\com_2}\rho' & = \semi[\binte{k_3}{k_4}]{\com_2}\rho' & \forall k_3 \leq \min(\rho') - \lbound{\com_2} \; \land \; k_4 \geq \max(\rho') + \bound{\com_2}\tag{\ddag}\label{eq:ind2}
   \end{align}
   where \(\rho' = \semi[\inte]{\com_1}\rho\). In particular notice
-  that \eqref{eq:ind2} holds for all \(n,m\) s.t.
+  that both \eqref{eq:ind1} and \eqref{eq:ind2} hold for all \(n,m\)
+  s.t.
   \begin{align*}
     m & \leq \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \leq \min(\rho) - \lbound{\com_2} \\
     n & \geq \max(\rho) + \bound{\com_1} + \bound{\com_2} \geq \max(\rho) + \bound{\com_2}.
