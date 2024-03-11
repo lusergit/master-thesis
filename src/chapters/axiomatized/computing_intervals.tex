@@ -586,7 +586,7 @@ as the analysis on \(\inte\).
       our thesis.
     \item
       \({\min(\semi[\inte]{\var := \var[y] + k}\rho\var)} \neq -
-      \infty\). In this case by Corollary~\ref{co:inc}
+      \infty\). In this case by Lemma~\ref{co:inc}
       \begin{equation*}
         \min(\semi[\inte]{\var := \var[y] + k}\rho\var) = \min(\rho\var[y]) + k
       \end{equation*}
@@ -629,8 +629,7 @@ as the analysis on \(\inte\).
       
     \item
       \({\min(\semi[\inte]{\var:= \var[y] + k}\rho\var)} \neq
-      -\infty\). In this case by Corollary~\ref{co:inc} it also holds
-      that
+      -\infty\). In this case by Lemma~\ref{co:inc} it also holds that
       \begin{equation*}
         \min(\semi[\inte]{\var := \var[y] + k}\rho\var) = \min(\rho\var[y]) + k
       \end{equation*}
@@ -712,9 +711,9 @@ as the analysis on \(\inte\).
   % - uso come dominio I_k con k >= max(rho) + (n+2) C^b
   Let's recall that as we observed in the \(\fix{\com}\) case in
   Lemma~\ref{le:inc} that
-  \({\fix{\com} = \lfp(\lambda \mu . \semi[\inte]{\com \ndet
-      \tru}\mu)}\) above \(\rho\). We can therefore build the chain of
-  iterands
+  \[{\fix{\com} = \lfp(\lambda \mu . \semi[\inte]{\com \ndet
+        \tru}\mu)}\] above \(\rho\). We can therefore build the chain
+  of iterands
   \begin{align*}
     \rho_0 & \defin \rho \\
     \rho_{i+1} & \defin \semi[\inte]{\com \ndet \tru}\rho_i
@@ -728,7 +727,7 @@ as the analysis on \(\inte\).
   \item if
     \({\max(\semi[\inte]{\fix{\com}}\rho\var[y]) \neq +\infty}\) and
     \({\min(\semi[\inte]{\fix{\com}}\rho\var[y]) \neq -\infty}\), then
-    because of Lemma~\ref{le:inc} and Corollary~\ref{co:inc} it holds
+    because of Lemma~\ref{le:inc} and Lemma~\ref{co:inc} it holds
     that
     \begin{align*}
       \max(\semi[\inte]{\fix{\com}}\rho\var[y]) & \leq \max(\rho) + \bound{\fix{\com}} \\
