@@ -95,13 +95,13 @@ of the program itself.
 
 \noindent
 More in detail, consider an abstract domain \(\bA\) and its
-variable-wise lifting \(\bA_\Var\), where \(\concr[\bA]\) and
-\(\concr\) are the concretization maps for \(\bA\) and \(\bA_\Var\)
+variable-wise lifting \(\bAn\), where \(\concr[\bA]\) and
+\(\concr\) are the concretization maps for \(\bA\) and \(\bAn\)
 respectively, while \(\abstr[\bA]\) and \(\abstr\) are the abstraction
-maps again for \(\bA\) and \(\bA_\Var\) respectively. Also consider
+maps again for \(\bA\) and \(\bAn\) respectively. Also consider
 the set of integers \(\z\) with the usual ordering \(\leq\) and its
 complement \(>\), building the complete lattice \(\tuple{\z,
-  \leq}\). In such context if \(\forall \theta \in \bA_\Var\),
+  \leq}\). In such context if \(\forall \theta \in \bAn\),
 \(S \in \Int\) the following two properties hold
 \begin{enumerate}[label=(\Roman*)]
 \item\label{inc:hp1} for all \(\var\in\Var\) if
@@ -122,7 +122,7 @@ then the following lemma holds:
   % Then consider a function \({\max_{\bA} : \bA \to \z}\) s.t. for
   % all \({a\in\bA}\) it holds that \(x \leq \max_\bA(a)\) for all
   % \({x \in \concr[\bA](a)}\).
-  For all \(\eta \in \bA\) and \(\var[y] \in \Var\), if
+  For all \(\eta \in \bAn\) and \(\var[y] \in \Var\), if
   \(\max(\semi{\com} \eta \var[y]) \neq +\infty\) and
   \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\) then there exist a
   variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
@@ -130,7 +130,7 @@ then the following lemma holds:
   hold:
   \begin{enumerate}[label=(\roman*)]
   \item \(\max(\semi{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); \label{point1}
-  \item  for all \(\eta' \in \bA\), if \(\eta' \sqsupseteq \eta\)
+  \item  for all \(\eta' \in \bAn\), if \(\eta' \sqsupseteq \eta\)
     % and \(\semi{\com}\eta' \neq \top\)
     then
     \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\). \label{point2}
@@ -174,7 +174,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\var \in S\))\\
   % 
-  Take \(\eta \in \bA\) and assume
+  Take \(\eta \in \bAn\) and assume
   \(\infty\neq\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
   %
   Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get
@@ -185,9 +185,8 @@ then the following lemma holds:
   We distinguish two cases:
   \begin{itemize}
     
-  \item If \(\var[y] \neq \var\), then for all
-    \(\eta' \in \bA\) such that \(\eta \sqsubseteq \eta'\) it
-    holds
+  \item If \(\var[y] \neq \var\), then for all \(\eta' \in \bAn\) such
+    that \(\eta \sqsubseteq \eta'\) it holds
     \[\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto
       {\abstr[\bA](\concr[\bA](\eta(\var)) \cap \concr[\Int](S))}]\]
     and thus
@@ -196,7 +195,7 @@ then the following lemma holds:
     \end{equation*}
     hence the thesis follows with \(\var[z]=\var[y]\) and \(h = 0\).
 
-  \item If \(\var[y] = \var[x]\) then \(\eta(\var) \in \bA_*\) and
+  \item If \(\var[y] = \var[x]\) then \(\eta(\var) \in \bA\) and
     \begin{equation*}
       \max(\semi{\var \in S}\eta \var[y]) = \max(\abstr[\bA](\concr[\bA](\eta\var) \cap \concr[\Int](S)))
     \end{equation*}
@@ -222,7 +221,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\var := k\))
   % 
-  Take \(\eta \in \bA\) and assume
+  Take \(\eta \in \bAn\) and assume
   \(\max(\semi{\var := k}\eta \var[y]) > \bound{\var := k} = |k|\).
 
   Observe that it cannot be \(\var = \var[y]\). In fact, since
@@ -251,7 +250,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\var := \var[w] + k\))
   % 
-  Take \(\eta \in \bA\) and assume
+  Take \(\eta \in \bAn\) and assume
   \(\max(\semi{\var := \var[w] + k}\eta \var[y]) > \bound{\var :=
     \var[w] + k} = |k|\).
   %
@@ -332,7 +331,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\com_1 \ndet \com_2\))
   % 
-  Take \(\eta \in \bA\) and assume
+  Take \(\eta \in \bAn\) and assume
   \(\max(\semi{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2}
   = \bound{\com_1} + \bound{\com_2}\).  Recall that
   \(\semi{\com_1 \ndet \com_2} \eta = \semi{\com_1}\eta \sqcup
@@ -358,7 +357,7 @@ then the following lemma holds:
   \(\com_1\), we have that there exists \(h \in \mathbb{Z}\) with
   \(|h| \leq \bound{\com_1}\) and \(\var[z] \in \Var\) such that
   \(\max(\semi{\com_1}\eta \var[y]) = \max(\eta \var[z]) + h\) and for
-  all \(\eta' \in \bA\), \(\eta \sqsubseteq \eta'\),
+  all \(\eta' \in \bAn\), \(\eta \sqsubseteq \eta'\),
   \[
   \max(\semi{\com_1}\eta' \var[y]) \geq \max(\eta' \var[z]) + h
   \]
@@ -370,7 +369,7 @@ then the following lemma holds:
   \]
   %
   and and for
-  all \(\eta' \in \bA\), \(\eta \sqsubseteq \eta'\),
+  all \(\eta' \in \bAn\), \(\eta \sqsubseteq \eta'\),
   \begin{align*}
     \max(\semi{\com_1 \ndet \com_2}\eta' \var[y])
     &= \max\{ \max(\semi{\com_1}\eta' \var[y]),  \max(\semi{\com_2}\eta' \var[y])\}\\
@@ -388,7 +387,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\com_1 \seq \com_2\))
   % 
-  Take \(\eta \in \bA\) and assume
+  Take \(\eta \in \bAn\) and assume
   \(\max(\semi{\com_1 \seq \com_2}\eta\var[y]) > \bound{\com_1 \seq
     \com_2} = \bound{\com_1} + \bound{\com_2}\).
   
@@ -404,7 +403,7 @@ then the following lemma holds:
   \geq \bound{\com_2}\), by inductive hypothesis on \(\com_2\), there
   are \(|h_2| \leq \bound{\com_2}\) and \(\var[w] \in \Var\) such that
   \(\max(\semi{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2\)
-  and for all \(\eta_1' \in \bA\) with
+  and for all \(\eta_1' \in \bAn\) with
   \(\eta_1 \sqsubseteq \eta_1'\)
   \begin{equation}
     \label{eq:seq2}
@@ -427,14 +426,14 @@ then the following lemma holds:
   inductive hypothesis also to \(\com_1\) and deduce that there are
   \(|h_1| \leq \bound{\com_1}\) and \(\var[w]' \in \Var\) such that
   \(\max(\semi{\com_1} \eta \var[w]) = \max(\eta \var[w]') + h_1\) and
-  for all \(\eta' \in \bA\) with \(\eta \sqsubseteq \eta'\)
+  for all \(\eta' \in \bAn\) with \(\eta \sqsubseteq \eta'\)
   \begin{equation}
     \label{eq:seq1}
     \max(\semi{\com_1} \eta' \var[w]) \geq \max(\eta' \var[w]') + h_1
     \tag{\ddag}
   \end{equation}
 
-  Now, for all \(\eta' \in \bA\) with \(\eta \sqsubseteq \eta'\) we have that:
+  Now, for all \(\eta' \in \bAn\) with \(\eta \sqsubseteq \eta'\) we have that:
   \begin{align*}
     \max(\semi{\com_1 \seq \com_2}\eta \var[y])
     &= \max(\semi{\com_2}(\semi{\com_1}\eta) \var[y])\\
@@ -467,7 +466,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\fix{\com}\)) 
   %
-  Let \(\eta \in \bA\) such that
+  Let \(\eta \in \bAn\) such that
   \(\max(\semi{\fix{\com}} \eta \var[y]) \neq + \infty\). Recall that
   \(\semi{\fix{\com}} \eta = \lfp{\lambda \mu. (\semi{\com} \mu
     \sqcup\eta)}\). Observe that the least fixpoint of
@@ -481,7 +480,7 @@ then the following lemma holds:
     \(\eta_{i+1} \veq \semi{\com} \eta_i \sqcup \eta_i= \semi{\com \ndet
     \tru} \eta_i \sqsupseteq \eta_i\),
   \end{itemize}
-  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \bA\) such that
+  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \bAn\) such that
   \[ 
   \semi{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
   \]
@@ -675,7 +674,7 @@ Lemma~\ref{le:inc} would hold:
   Let \(\com \in \imp\).
   
   \noindent
-  For all \(\eta \in \bA\) and
+  For all \(\eta \in \bAn\) and
   \(\var[y] \in \Var\), if
   \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
   \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exist a
@@ -684,7 +683,7 @@ Lemma~\ref{le:inc} would hold:
   
   \begin{enumerate}[label=(\roman*)]
   \item \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[z]) + h\); \label{point1min}
-  \item  for all \(\eta' \in \bA\), if \(\eta' \sqsupseteq \eta\)
+  \item  for all \(\eta' \in \bAn\), if \(\eta' \sqsupseteq \eta\)
     % and \(\semi{\com}\eta' \neq \top\)
     then
     \(\min(\semi{\com}\eta' \var[y]) \leq \min(\eta' \var[z]) + h\). \label{point2min}
