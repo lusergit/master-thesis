@@ -1,0 +1,621 @@
+
+\section{Corollary~\ref{co:inc} proof}\label{ap:proof}
+We preliminarly observe that we can also prove a dual property of the
+Lemma~\ref{le:cycles}:
+
+\begin{lemma}[\textbf{Negative cycles in weighted directed graphs}]\label{le:cyclesn}
+  Let \(p\) be a finite path
+  \[p = x_0 \to_{h_0} x_1 \to_{h_1} x_2 \to_{h_2} \cdots \to_{h_{\ell-1}} x_{\ell}\]
+  with
+  \(m \veq \max \{ |h_j| \mid j \in \{0, \ldots, \ell-1\}\}\in \nat\) and 
+  \(w(p) < -(|X|-1)m\). Then, \(p\) has a subpath which is a cycle having a 
+  strictly negative weight.
+\end{lemma}
+
+% Graph lemma proof 
+\begin{proof}
+  First note that \(w(p) = \Sigma_{k=0}^{\ell-1} h_k < -m(|X|-1)\)
+  implies that \(|p|=\ell \geq |X|\).  Then, we show our claim by
+  induction on \(|p|=\ell \geq |X|\).
+
+  \noindent
+  \textbf{Case} \((|p|=|X|)\).
+  %
+  Since the path \(p\) includes exactly \(|X|+1=\ell+1\) nodes, there
+  exist indices \(0\leq i < j\leq \ell\) such that \(x_i=x_j\), i.e.,
+  \(p_{i,j}\) is a subpath of \(p\) which is a cycle. Moreover, since
+  this cycle \(p_{i,j}\) includes at least one edge, we have that
+  \begin{align*}
+    w(p_{i,j}) = w(p) - (\Sigma_{k=0}^{i-1} h_k + \Sigma_{k=j}^{\ell-1}
+    h_k) & < & \text{as \(w(p) < -m(|X|-1)\)}\\
+    -m\left(|X|-1\right) - (\Sigma_{k=0}^{i-1} h_k + \Sigma_{k=j}^{\ell-1}
+    h_k) & \leq & \text{as } \Sigma_{k=0}^{i-1} h_k + \Sigma_{k=j}^{\ell-1}
+        h_k \geq -m(\ell-1) \\
+    -m(|X|-1) - (-m (\ell-1)) &= & \text{as \(\ell=|X|\)}  \\  
+    -m(|X|-1) + m(|X|-1) &= 0
+  \end{align*}
+  so that \(w(p_{i,j}) < 0\) holds. 
+
+  \medskip
+  \noindent
+
+  \noindent
+  \((|p|>|X|)\): Since the path \(p\) includes at least \(|X|+2\) nodes, as in
+  the base case, we have that \(p\) has a subpath which is a cycle. Then, we consider a
+  cycle \(p_{i,j}\) in \(p\), for some indices \(0\leq i < j\leq \ell\), which is maximal, i.e.,  such that
+  if  \(p_{i',j'}\) is a cycle in \(p\),  for some 
+  \(0\leq i' < j'\leq \ell\), then \(p_{i,j}\) is not a proper subpath of \(p_{i',j'}\).
+
+  \medskip
+
+  \noindent
+  If \(w(p_{i,j}) < 0\) then we are done. Otherwise we have that
+  \(w(p_{i,j}) \geq 0\) and we consider the path \(p'\) obtained from
+  \(p\) by stripping off the cycle \(p_{i,j}\), i.e.,
+  \begin{center}
+    \(p' \equiv \overbrace{x_0 \to_{h_0} x_1 \to_{h_1} \cdots \to_{h_{i-1}} x_i}^{p'_0,i} =
+    \overbrace{
+      x_j\to_{h_{j+1}} \ldots \to_{h_{\ell-1}} x_{\ell}}^{p'_{j+1,\ell}}\)
+  \end{center}
+  Since \(|p'| < |p|\) and
+  \(w(p')=w(p)-w(p_{i,j}) \leq w(p) < -m(|X|-1)\), we can apply the
+  inductive hypothesis on \(p'\).  We therefore derive that \(p'\) has
+  a subpath \(q\) which is a cycle having strictly positive
+  weight. This cycle \(q\) is either entirely in \(p'_{0,i}\) or in
+  \(p'_{j+1,\ell}\), otherwise \(q\) would include the cycle
+  \(p_{i,j}\) thus contradicting the maximality of \(p_{i,j}\). Hence,
+  \(q\) is a cycle in the original path \(p\) having a strictly
+  negative weight.
+\end{proof}
+
+\noindent
+For the following proof consider the \(\min : \Int \to \z\) function,
+inductively defined as follows:
+\begin{align*}
+  \min(\bot) & = + \infty \\
+  \min(\interval{a}{b}) & = a
+\end{align*}
+and recall the Corollary~\ref{co:inc} statement:
+
+\medskip
+
+\noindent
+\begin{lemma}\label{co:inc2}
+  
+  Let \(\com \in \imp\).
+
+  \noindent
+  For all \(\eta \in \inte\) and \(\var[y] \in \Var\), if
+  \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
+  \(\min(\semi{\com}\eta\var[y]) < -\lbound{\com}\) then there exist a
+  variable \(\var[z] \in\Var\) and an integer \(h \in \z\) s.t.
+  \(|h| \leq \lbound{\com}\) s.t.\ the following two properties hold:
+
+  \begin{enumerate}[label=(\roman*)]
+  \item\label{point1min}
+    \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[z]) + h\);
+  \item\label{point2min} for all \(\eta' \in \inte\), if \(\eta' \sqsupseteq \eta\)
+    % and \(\semi{\com}\eta' \neq \top\)
+    then
+    \(\min(\semi{\com}\eta' \var[y]) \leq \min(\eta' \var[z]) + h\).
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+   The proof is by
+  structural induction on the command \(\com\in \imp\).
+  %
+  We preliminarly observe that we can safely assume
+  \(\eta \neq \bot\).
+  % In fact, if \(\eta = \top\) then \(\semi{\com} \eta = \top\), so that the
+  % hypothesis \(\semi{\com} \eta \neq \top\) would not
+  % be satisfied.
+  In fact, if \(\eta = \bot\) then \(\semi{\com} \bot = \bot\) and
+  thus \(\min(\semi{\com} \eta \var[y]) = +\infty \geq \bound{\com}\),
+  against the hypothesis
+  \(\min(\semi{\com}\eta \var[y]) < -\lbound{\com}\). Moreover, when
+  quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\) in
+  \ref{point1}, if \(\min(\semi{\com}\eta' \var[y]) = - \infty\)
+  holds, then
+  \(\min(\semi{\com}\eta' \var[y]) \leq \min(\eta' \var[z]) + h\)
+  trivially holds, hence we will sometimes silently omit to consider
+  this case.
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\var \in S\))\\
+  % 
+  Take \(\eta \in \inte\) and assume
+  \(-\infty\neq\min(\semi{\var \in S}\eta \var[y]) < - \lbound{\var \in S}\).
+  %
+  Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get
+  the contradiction
+  \(\min(\semi{\var \in S}\eta \var[y]) = +\infty \geq \lbound{\var
+    \in S}\).  We distinguish two cases:
+  \begin{itemize}
+    
+  \item If \(\var[y] \neq \var\), then for all \(\eta' \in \inte\) such
+    that \(\eta \sqsubseteq \eta'\) it holds
+    \[\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto
+      {\abstr[\Int](\concr[\Int](\eta(\var)) \cap \concr[\Int](S))}]\]
+    and thus
+    \begin{equation*}
+      \min(\semi{\var \in S}\eta' \var[y]) = \min(\eta' \var[y]) = \min(\eta' \var[y]) + 0
+    \end{equation*}
+    hence the thesis follows with \(\var[z]=\var[y]\) and \(h = 0\).
+
+  \item If \(\var[y] = \var[x]\) then \(\eta(\var) \in \Int\) and
+    \begin{equation*}
+      \min(\semi{\var \in S}\eta \var[y]) = \min(\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S)))
+    \end{equation*}
+    Note that it cannot be \(\min(S)\in \z\). Otherwise, by
+    Definition~\ref{de:bound},
+    \(\min ({\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S))})
+    \geq \min(S)= \lbound{\var \in S}\), violating the assumption
+    \(\min(\semi{\var \in S}\eta \var[y]) < - \lbound{\var \in S}\).
+    Hence, \(\min(S) = -\infty\) must hold and therefore % by
+    % \ref{inc:hp1}
+    \(\min ({\abstr[\Int](\concr[\Int](\eta\var) \cap
+      \concr[\Int](S))}) = \min(\eta(\var)) = \min(\eta(\var)) +
+    0\). It is immediate to check that the same holds for all
+    \(\eta' \sqsupseteq \eta\), i.e.,
+    \begin{equation*}
+      \min(\abstr[\Int](\concr[\Int](\eta'\var) \cap \concr[\Int](S))) = \min(\eta'\var) + 0
+    \end{equation*}
+    % \[
+    % \min (\eta'(\var) \sqcap \abstr(S)) = \min(\eta'(\var))=
+    % \min(\eta'(\var))+0
+    % \]
+    and thus the thesis follows with  \(\var[z]=\var[y]=\var[x]\) and \(h=0\).
+  \end{itemize}  
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\var := k\))
+  % 
+  Take \(\eta \in \inte\) and assume
+  \(\min(\semi{\var := k}\eta \var[y]) < -\lbound{\var := k} = |k|\).
+
+  Observe that it cannot be \(\var = \var[y]\). In fact, since
+  \(\semi{\var := k}\eta = \eta[\var \mapsto \abstr[\Int](\{k\})]\),
+  we would have
+  \(\semi{\var := k}\eta \var[y] = \abstr[\Int](\{k\}) =
+  \interval{k}{k}\) and thus % \todo[inline]{Forse non ovvio perchè
+    % \(\abstr[\Int](\{k\})\) può non rappresentare esattamente
+    % \(\{k\}\).}
+  \begin{equation*}
+    \min(\semi{\var := k}\eta \var[y]) = k \geq |k| = \lbound{\var := k}
+  \end{equation*}
+  violating the assumption.
+  %
+  Therefore, it must be \(\var[y] \neq \var\). Now, for all
+  \(\eta' \sqsupseteq \eta\), we have
+  \(\semi{\var := k}\eta' \var[y] = \eta' \var[y]\) and thus
+  \begin{center}
+    \(\min(\semi{\var := k}\eta' \var[y]) = \min(\eta' \var[y]) =
+    \min(\eta' \var[y]) + 0\),
+  \end{center}
+  hence the thesis holds with \(h =0 \leq |k| = \lbound{\var :=k}\)
+  and \(\var[z] = \var[y]\).
+  
+  % ----------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\var := \var[w] + k\))
+  % 
+  Take \(\eta \in \inte\) and assume
+  \(\min(\semi{\var := \var[w] + k}\eta \var[y]) < -\lbound{\var :=
+    \var[w] + k} = |k|\).
+  %
+  Recall that
+  \(\semi{\var := \var[w] + k}\eta = \eta[\var \mapsto \eta \var[w] + k]\).
+  
+  We distinguish two cases:
+  \begin{itemize}
+    
+  \item If \(\var[y] \neq \var\), then for all \(\eta' \sqsupseteq \eta\), we have
+    \(\semi{\var := \var[w] + k}\eta' \var[y] = \eta' \var[y]\) and thus
+    \begin{equation*}
+      \min(\semi{\var := \var[w] + k}\eta' \var[y]) = \min(\eta' \var[y]) + 0
+    \end{equation*}
+    hence the thesis follows with
+    \(h =0 \leq \lbound{\var := \var[w] + k}\) and \(\var[z] = \var[y]\).
+    
+  \item 
+    If \(\var = \var[y]\) then  for all \(\eta' \sqsupseteq \eta\), we have
+    \(\semi{\var := \var[w] + k}\eta' \var[y] = \eta' \var[w] +
+    k\) and thus
+    \begin{equation*}
+      \min(\semi{\var := \var[w] + k}\eta' \var[y]) = \min(\eta' \var[w]) +
+      k
+    \end{equation*}
+    hence, the thesis follows with \(h = k\) (recall that
+    \(k \leq |k| = \lbound{\var := \var[w] + k}\)) and
+    \(\var[z] = \var[w]\).
+  \end{itemize}
+
+  % ----------------------------------------------
+  
+  % \medskip
+  
+  % \noindent
+  % \textbf{Case} (\(\var := \var[w] - k\))
+  % % 
+  % Take \(\eta \in \Int\) and assume
+  % \(\min(\semi{\var := \var[w] - k}\eta \var[y]) > \lbound{\var := \var[w] - k} = k\).
+  % %
+  % Recall that
+  % \(\semi{\var := \var[w] - k}\eta = \eta[\var \mapsto \eta \var[w] - k]\).
+  
+  % We distinguish two cases:
+  % \begin{itemize}
+    
+  % \item If \(\var[y] \neq \var\), then for all
+  %   \(\eta' \in \Int\) such that
+  %   \(\eta \sqsubseteq \eta'\), we have
+  %   \(\semi{\var := \var[w] - k}\eta' \var[y] = \eta' \var[y]\) and thus
+  %   \begin{center}
+  %     \(\min(\semi{\var := \var[w] - k}\eta' \var[y]) = \min(\eta' \var[y])\).
+  %   \end{center}
+  %   hence the thesis holds, with
+  %   \(h =0 \leq \lbound{\var := \var[w] - k}\) and \(\var[z] = \var[y]\).
+    
+  % \item If \(\var = \var[y]\) then for all \(\eta' \in \Int\) such
+  %   that \(\eta \sqsubseteq \eta'\), we have
+  %   \(\semi{\var := \var[w] - k}\eta' \var[y] = \eta' \var[w] - k\) and
+  %   thus
+  %   \begin{center}
+  %     \(\min(\semi{\var := \var[w] - k}\eta' \var[y]) = \min(\eta' \var[w]) -
+  %     k\).
+  %   \end{center}
+  %   Note that the assumption \(\min(\semi{\var := \var[w] - k}\eta \var[y]) > k\) and thus
+  %   \(\min(\semi{\var := \var[w] - k}\eta' \var[y]) > k\) ensures that subtraction is not
+  %   truncated on the maximum.
+    
+  %   Hence the thesis holds, with \(h = -k\), hence \(|h| = \lbound{\var := \var[w] - k}\),
+  %   and \(\var[z] = \var[w]\).
+  % \end{itemize}
+  
+  % ----------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\com_1 \ndet \com_2\))
+  % 
+  Take \(\eta \in \inte\) and assume
+  \(\min(\semi{\com_1 \ndet \com_2}\eta) < -\lbound{\com_1 \ndet \com_2}
+  = - \lbound{\com_1} - \lbound{\com_2}\).  Recall that
+  \(\semi{\com_1 \ndet \com_2} \eta = \semi{\com_1}\eta \sqcup
+  \semi{\com_2}\eta\).
+  % 
+  Hence, since
+  \(\min(\semi{\com_1 \ndet \com_2} \eta \var[y]) \neq -\infty\), we
+  have that
+  \(\min(\semi{\com_1} \eta \var[y]) \neq -\infty \neq
+  \min(\semi{\com_2}\eta \var[y])\).  Moreover
+  \begin{align*}
+    \min(\semi{\com_1 \ndet \com_2}\eta \var[y])& =  \min(\semi{\com_1}\eta \var[y] \sqcup \semi{\com_2}\eta \var[y]) \\ 
+    & = \min \{ \min(\semi{\com_1}\eta \var[y]), \min(\semi{\com_2}\eta \var[y])\} % & \text{by \ref{inc:hp2}} 
+  \end{align*}
+
+  Thus
+  \(\min(\semi{\com_1 \ndet \com_2}\eta \var[y]) =
+  \min(\semi{\com_i}\eta \var[y])\) for some \(i \in \{1,2\}\). We can
+  assume, without loss of generality, that the maximum is realized by
+  the first component, i.e.,
+  \(\min(\semi{\com_1 \ndet \com_2}\eta \var[y]) =
+  \min(\semi{\com_1}\eta \var[y]) < -\lbound{\com_1 \ndet
+    \com_2}\). Hence we can use the inductive hypothesis on \(\com_1\)
+  and state that there exists \(h \in \mathbb{Z}\) with
+  \(|h| \leq \lbound{\com_1}\) and \(\var[z] \in \Var\) such that
+  \(\min(\semi{\com_1}\eta \var[y]) = \min(\eta \var[z]) + h\) and for
+  all \(\eta' \in \inte\), \(\eta \sqsubseteq \eta'\),
+  \[
+  \min(\semi{\com_1}\eta' \var[y]) \leq \min(\eta' \var[z]) + h
+  \]
+
+  Therefore 
+  \[
+  \min(\semi{\com_1 \ndet \com_2}\eta \var[y])
+  = \min(\semi{\com_1}\eta \var[y]) = \min(\eta \var[z]) + h
+  \]
+  %
+  and and for
+  all \(\eta' \in \inte\), \(\eta \sqsubseteq \eta'\),
+  \begin{align*}
+    \min(\semi{\com_1 \ndet \com_2}\eta' \var[y])
+    &= \min\{ \min(\semi{\com_1}\eta' \var[y]),  \min(\semi{\com_2}\eta' \var[y])\}\\
+    % 
+    & \leq \min(\semi{\com_1}\eta' \var[y])\\
+    %
+    & \leq \min(\eta' \var[z]) + h
+  \end{align*}
+  with \(|h| \leq \lbound{\com_1} \leq \lbound{\com_1 \ndet \com_2}\), as desired.
+
+  % ----------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\com_1 \seq \com_2\))
+  % 
+  Take \(\eta \in \inte\) and assume
+  \(\min(\semi{\com_1 \seq \com_2}\eta\var[y]) < -\lbound{\com_1 \seq
+    \com_2} = - \lbound{\com_1} - \lbound{\com_2}\).
+  
+  Recall that
+  \(\semi{\com_1 \seq \com_2} \eta = \semi{\com_2}(\semi{\com_1}\eta)\).
+  %
+  If we define
+  \begin{center}
+    \(\semi{\com_1} \eta = \eta_1\)
+  \end{center}
+  since \(\min(\semi{\com_2}\eta_1 \var[y]) \neq -\infty\) and
+  \(\min(\semi{\com_2} \eta_1 \var[y]) < -\lbound{\com_1 \seq \com_2}
+  \leq \lbound{\com_2}\), by inductive hypothesis on \(\com_2\), there
+  are \(|h_2| \leq \lbound{\com_2}\) and \(\var[w] \in \Var\) such that
+  \(\min(\semi{\com_2} \eta_1 \var[y]) = \min(\eta_1 \var[w]) + h_2\)
+  and for all \(\eta_1' \in \inte\) with
+  \(\eta_1 \sqsubseteq \eta_1'\)
+  \begin{equation}
+    \label{eq:seq2}
+    \min(\semi{\com_2} \eta_1' \var[y]) \leq \min(\eta_1' \var[w]) + h_2
+    \tag{\dag}
+  \end{equation}
+  
+  Now observe that
+  \(\min(\semi{\com_1}\eta \var[w]) = \min(\eta_1 \var[w]) < -
+  \lbound{\com_1}\). Otherwise, if it were
+  \(\min(\eta_1 \var[w]) \geq -\lbound{\com_1}\) we would have
+  \begin{center}
+    \(\min(\semi{\com_2}\eta_1 \var[y]) = \min(\eta_1 \var[w]) + h_2 \geq
+    - \lbound{\com_1} - \lbound{\com_2} = - \lbound{\com_1 \seq \com_2}\),
+  \end{center}
+  violating the hypotheses. Moreover,
+  \(\min(\semi{\com_1}\eta \var[w]) \neq - \infty\), otherwise we
+  would have
+  \(\min(\semi{\com_2} \eta_1 \var[y]) = \min(\eta_1 \var[w]) + h_2 =
+  - \infty\), contradicting the hypotheses.  Therefore we can apply
+  the inductive hypothesis also to \(\com_1\) and deduce that there
+  are \(|h_1| \leq \lbound{\com_1}\) and \(\var[w]' \in \Var\) such
+  that
+  \(\min(\semi{\com_1} \eta \var[w]) = \min(\eta \var[w]') + h_1\) and
+  for all \(\eta' \in \inte\) with \(\eta \sqsubseteq \eta'\)
+  \begin{equation}
+    \label{eq:seq1}
+    \min(\semi{\com_1} \eta' \var[w]) \leq \min(\eta' \var[w]') + h_1
+    \tag{\ddag}
+  \end{equation}
+
+  Now, for all \(\eta' \in \inte\) with \(\eta \sqsubseteq \eta'\) we have that:
+  \begin{align*}
+    \min(\semi{\com_1 \seq \com_2}\eta \var[y])
+    &= \min(\semi{\com_2}(\semi{\com_1}\eta) \var[y])\\
+    %
+    & = \min(\semi{\com_2}\eta_1 \var[y])\\
+    %
+    & = \min(\eta_1 \var[w]) + h_2\\
+    %
+    & = \min(\semi{\com_1}\eta \var[w]) + h_2\\
+    %
+    & = \min(\eta \var[w]')+h_1 + h_2
+  \end{align*}
+  and
+  \begin{align*}
+    \min(\semi{\com_1 \seq \com_2}\eta' \var[y]) & = & \\ 
+    \min(\semi{\com_2}(\semi{\com_1}\eta') \var[y]) & \leq & \\ 
+    \min(\semi{\com_1}\eta' \var[w]) + h_2 & \leq & 
+    \text{by \eqref{eq:seq2}, since } \eta_1 = \semi{\com_1}\eta \sqsubseteq \semi{\com_1}\eta' \\
+    (\min(\eta' \var[w]') +h_1) + h_2 & & \text{by \eqref{eq:seq1}}\
+  \end{align*}
+
+  Thus, the thesis holds with \(h= h_1+h_2\), as
+  \(|h| =|h_1 +h_2| \leq |h_1| + |h_2| \leq \lbound{\com_1} +
+  \lbound{\com_2} = \lbound{\com_1 \seq \com_2}\), as needed.
+
+  % ----------------------------------------------------
+  
+  \medskip
+  
+  \noindent
+  \textbf{Case} (\(\fix{\com}\)) 
+  %
+  Let \(\eta \in \inte\) such that
+  \(\min(\semi{\fix{\com}} \eta \var[y]) \neq - \infty\). Recall that
+  \(\semi{\fix{\com}} \eta = \lfp{\lambda \mu. (\semi{\com} \mu
+    \sqcup\eta)}\). Observe that the least fixpoint of
+  \(\lambda \mu. (\semi{\com} \mu \sqcup\eta)\) coincides with the
+  least fixpoint of
+  \(\lambda \mu. (\semi{\com} \mu \sqcup \mu) = \lambda \mu. \semi{
+    \com\ndet \tru} \mu\) above \(\eta\). Hence, if
+  \begin{itemize}
+  \item \(\eta_0 \veq \eta\),
+  \item for all \(i\in \nat\),
+    \(\eta_{i+1} \veq \semi{\com} \eta_i \sqcup \eta_i= \semi{\com \ndet
+    \tru} \eta_i \sqsupseteq \eta_i\),
+  \end{itemize}
+  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \inte\) such that
+  \[ 
+  \semi{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
+  \]
+  Since \(\min(\semi{\fix{\com}}) \eta \var[y] \neq -\infty\), we have
+  that for all \(i\in \nat\), \(\min(\eta_i \var[y]) \neq
+  -\infty\). Moreover, \(\textstyle\bigsqcup_{i \in \nat} \eta_i\) on
+  \(\var[y]\) is finitely reached in the chain
+  \(\{\eta_i\}_{i\in \nat}\), i.e., there exists \(m \in \mathbb{N}\)
+  such that for all \(i \geq m+1\)
+  \[
+  \semi{\fix{\com}} \eta \var[y] = \eta_{i} \var[y].
+  \]
+  %\(\eta_m \neq \eta_{m+1}\) and 
+
+  The inductive hypothesis holds for \(\com\) and \(\tru\), hence for
+  \(\com \ndet \tru\), therefore for all \(\var \in \Var\) and
+  \(j \in \{0,1, \ldots, m\}\), if
+  \(\min(\eta_{j+1} \var) < -\lbound{\com\ndet \tru} = -\lbound{\com}\)
+  then there exist \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\) such
+  that \(|h| \leq \lbound{\com}\) and
+  \begin{enumerate}[label=(\alph*)]
+  \item \(-\infty \neq \min(\eta_{j+1} \var) = \min(\eta_j \var[z]) + h\),
+  \item \(\forall \eta' \sqsupseteq \eta_j.
+    \min(\semi{\com \ndet \tru}\eta'\var) \leq \min(\eta' \var[z]) + h\).
+  \end{enumerate}
+  To shortly denote that the two conditions (a) and (b) hold, we write
+  \[
+  (\var[z],j) \to_{h} (\var, j+1)
+  \]
+  %   when 
+  %  \(j\in  \{0, \ldots, m \}\), \(\var\in \Var\) and 
+  %  %\(\min(\eta_{j+1} \var) >\lbound{\com}\) hold, so that the existence of
+  %   \(h \in \mathbb{Z}\) and \(\var[z] \in \Var\) such that 
+  %   \(\min(\eta_{j+1} \var) = \min(\eta_j \var[z]) + h\) follows.
+  %   
+  %  
+  
+  Now, assume that for some variable \(\var[y] \in \Var\)
+  \[\min(\semi{\fix{\com}} \eta \var[y]) = \min(\eta_{m+1} \var[y]) <
+    - \lbound{\fix{\com}} = - (n+1) \lbound{\com}\] where
+  \(n=|\mathit{vars}(\com)|\).  We want to show that the thesis holds,
+  i.e., that there exist \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\)
+  with \(|h| \leq \lbound{\fix{\com}}\) such that:
+  \begin{equation}\label{eq:maxendmaxstart}
+    \min(\semi{\fix{\com}} \eta \var[y]) = \min(\eta \var[z]) + h
+    \tag{i}
+  \end{equation}
+  and for all \(\eta' \sqsupseteq \eta\),
+  \begin{equation}\label{eq:maxmiddlemaxend}
+    \min(\semi{\fix{\com}} \eta' \var[y]) \leq \min(\eta' \var[z]) + h
+    \tag{ii}
+  \end{equation}
+  
+  Let us consider\ \ref{point1min}. We first observe that we
+  can define a path
+  \begin{equation}
+    \label{eq:fixn}
+    \sigma \veq (\var[y]_0, 0) \to_{h_0} (\var[y]_1, 1) \to_{h_1}
+    \ldots \to_{h_m} (\var[y]_{m+1}, m+1)
+  \end{equation}
+  such that \(\var[y]_{m+1}=\var[y]\) and for all \(j \in \{0,\ldots, m+1\}\), 
+  \(\var[y]_j\in \Var\)  and
+  \(\min(\eta_{j} \var[y]_{j}) < -\lbound{\com}\).
+  %, so that for \(j\neq m+1\), \(|h_j|\leq \lbound{\com}\).
+  In fact, if, by contradiction, this is not the case, there would
+  exist an index \(i \in \{0,\ldots, m\}\) (as
+  \[\min(\eta_{m+1} \var[y]_{m+1}) < -\lbound{\com}\] already holds)
+  such that \(\min(\eta_{i} \var[y]_{i}) \geq -\lbound{\com}\), while
+  for all \(j \in \{i+1,\ldots, m+1\}\),
+  \(\min(\eta_{j} \var[y]_j) < -\lbound{\com}\).  Thus, in such a
+  case, we consider the nonempty path:
+  \[\pi \veq (\var[y]_i, i) \to_{h_i} (\var[y]_{i+1}, i+1) \to_{h_{i+1}} \ldots
+  \to_{h_m} (\var[y]_{m+1}, m+1)\]
+  and we have that:
+  \begin{align*}
+    &\Sigma_{j=i}^m h_j =\\ 
+    &\Sigma_{j=i}^m \min(\eta_{j+1} \var[y]_{j+1}) - \min(\eta_j \var[y]_{j}) =\\
+    &\min(\eta_{m+1} \var[y]_{m+1}) - \min(\eta_i \var[y]_{i}) =\\
+    &\min(\eta_{m+1} \var[y]) - \min(\eta_i \var[y]_{i}) < \\
+    &  - (n+1) \lbound{\com} + \lbound{\com} = - n \lbound{\com}
+  \end{align*}
+  with \(|h_j| \leq \lbound{\com}\) for \(j \in \{i,\ldots,
+  m\}\). Hence we can apply Lemma~\ref{le:cyclesn} to the projection
+  \(\pi_p\) of the nodes of this path \(\pi\) to the variable
+  component to deduce that \(\pi_p\) has a subpath which is a cycle
+  with a strictly negative weight.  More precisely, there exist
+  \(i \leq k_1 < k_2 \leq m+1\) such that
+  \(\var[y]_{k_1} = \var[y]_{k_2}\) and
+  \(h = \Sigma_{j=k_1}^{k_2-1} h_j < 0\). If we denote
+  \(\var[w] = \var[y]_{k_1} = \var[y]_{k_2}\), then we have that
+  \begin{align*}
+    \min(\eta_{k_2} \var[w]) & =  h_{k_2-1}  + \min(\eta_{k_2-1} \var[w]) \\
+                             & =  h_{k_2-1} + h_{k_2-2} + \min(\eta_{k_2-2} \var[w])  \\
+                             & = \Sigma_{j=k_1}^{k_2-1} h_j + \min(\eta_{k_1} \var[w])  \\
+                             & = \min(\eta_{k_1} \var[w]) + h & \text{recall } h = \Sigma_{j=k_1}^{k_2-1} h_j < 0
+  \end{align*}
+  Thus,
+  \[\min(\semi{\com \ndet \tru}^{k_2-k_1} \eta_{k_1} \var[w]) = \min(\eta_{k_1}
+  \var[w]) + h\] 
+  Observe that for all \(\eta' \sqsupseteq \eta_{k_1}\)
+  \begin{equation}\label{prop2n}
+    \min(\semi{\com \ndet \tru}^{k_2-k_1} \eta' \var[w]) \leq \min(\eta'
+    \var[w]) + h
+  \end{equation}
+  This property \eqref{prop2n} can be shown by induction on \(k_2-k_1 \geq 1\).
+  
+  \noindent    
+  Then, an inductive argument allows us to show that for all \(r \in \mathbb{N}\):
+  \begin{equation}\label{noppn}
+    \min(\semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) \leq \min(\eta_{k_1}
+    \var[w]) + r h
+  \end{equation}  
+  In fact, for \(r=0\) the claim trivially holds. Assuming the
+  validity for \(r\geq 0\) then we have that
+  \begin{align*}    
+    & \min(\semi{\com \ndet \tru}^{(r+1)(k_2-k_1)} \eta_{k_1} \var[w]) =\\
+    &\min(\semi{\com \ndet \tru}^{k_2-k_1} ( \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \leq & \mbox{by \eqref{prop2n} as }\eta_{k_1} \sqsubseteq \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\\
+    &\min(\semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) + h \leq & \mbox{by inductive hypothesis}\\
+    &  \min(\eta_{k_1}\var[w])  + rh + h
+      \leq 
+      \min(\eta_{k_1}\var[w])  + (r+1)h
+  \end{align*}
+
+  \noindent
+  However, This would contradict the hypothesis
+  \(\semi{\fix{\com}} \eta \var[y] \neq -\infty\). In fact the
+  inequality \eqref{noppn} would imply
+  \begin{align*}
+    \min\left(\semi{\fix{\com}} \eta \var[w]\right)
+    & = \min\left(\bigsqcup_{i \in \mathbb{N}} \semi{\com
+      \ndet \tru}^i \eta \var[w]\right)\\ 
+    & = \min\left(\bigsqcup_{i \in \mathbb{N}} \semi{\com \ndet
+      \tru}^i \eta_{k_1} \var[w]\right) \\ 
+    & = \min\left(\bigsqcup_{r \in \mathbb{N}} \semi{\com \ndet
+      \tru}^{r\left(k_2-k_1\right)} \eta_{k_1} \var[w]\right)\\
+    & = -\infty
+  \end{align*}
+
+  Now, from \eqref{eq:fixn} we deduce that for all
+  \(\eta' \sqsupseteq \eta_{k_1}\), for \(j \in \{ k_1, \ldots, m\}\),
+  if we let \(\mu_{k_1} = \eta'\) and
+  \(\mu_{j+1} = \semi{\com \ndet \tru} \mu_j\), we have that
+  \(\min(\mu_{j+1} \var[y]_{j+1}) \leq \min(\mu_{j+1} \var[y]_{j}) +
+  h_j\) and thus
+  \begin{equation*}
+    \semi{\com \ndet \tru}^{m-k_1+1} \eta' \var[y] = \mu_{m+1}
+    \var[y]_{m+1} \leq 
+    \min(\var[y]_{k_1}) + \Sigma_{i=k_1}^m h_i = \min(\eta' \var[w]) + \Sigma_{i=k_1}^m h_i
+  \end{equation*}
+  Since \(\eta' = \semi{\fix{\com}} \eta \sqsupseteq \eta_{k_1}\) we conclude
+  \begin{align*}
+    \min(\semi{\fix{\com}} \eta \var[y])
+    & = \min\left(\semi{\com \ndet \tru}^{m-k_1+1} \semi{\fix{\com}} \eta \var[y]\right) \\
+    & \leq -\infty + \Sigma_{i=k_1}^m h_i = -\infty
+  \end{align*}
+  contradicting the assumption.  Therefore, the path \(\sigma\) of
+  \eqref{eq:fixn} must exist, and consequently
+  \[\min(\semi{\fix{\com}} \eta \var[y]) = \min(\eta_{m+1} \var[y]) =
+    \min(\eta \var[y]_0) + \Sigma_{i=0}^m h_i\] and
+  \(\left|\Sigma_{i=0}^m h_i\right| \leq \lbound{\fix{\com}}=(n+1)\lbound{\com}\),
+  otherwise we could use the same argument above for inferring the
+  contradiction \(\min(\semi{\fix{\com}} \eta \var[y]) = -\infty\).
+
+  \medskip
+
+  Let us now show\ \ref{point2min}. Given
+  \(\eta' \sqsupseteq \eta\) from \eqref{eq:fixn} we deduce that for
+  all \(j \in \{ 0, \ldots, m\}\), if we let \(\mu_0 = \eta'\) and
+  \(\mu_{j+1} = \semi{\com \ndet \tru} \mu_j\), we have that
+  \[
+    \min(\mu_{j+1} \var[y]_{j+1}) \leq \min(\mu_{j+1} \var[y]_{j}) +
+    h_j. \]
+  Therefore, since \(\semi{\fix{\com}} \eta' \sqsupseteq \mu_{m+1}\)
+  (observe that the convergence of \(\semi{\fix{\com}} \eta' \) could
+  be at an index greater than \(m+1\)), we conclude that:
+  \[\min(\semi{\fix{\com}} \eta' \var[y]) \leq \min(\mu_{m+1}
+  \var[y]) = \min(\mu_{m+1} \var[y]_{m+1}) \leq \min(\eta' \var[y]_0)
+  + \Sigma_{i=0}^m h_i\] as desired.
+\end{proof}

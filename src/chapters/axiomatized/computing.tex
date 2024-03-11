@@ -1,9 +1,11 @@
-\section{Computing the analysis} 
-\label{sec:computing}
+\section{Bounding interval analysis}\label{sec:computing}
+The following section aims at proving that by bounding the interval
+domain to a subdomain with no infinite ascending chains, i.e., where
+every chain converges in finite time, we can still compute the most
+precise interval raresentation for each variable in our program.
 
-\todo[inline]{intro}
-First, prove an easy graph-theoretic property which will later be
-helpful.
+\todo[inline]{intro} To do so, we first prove an easy graph-theoretic
+property which will later be helpful.
 % We focus on graphs with edges labelled over integer numbers. 
 Consider a finite directed and edge-weighted graph
 \(\langle X,\to\rangle\) where
@@ -83,57 +85,40 @@ a finite path in \(\langle X,\to\rangle\)
   \(q\) is a cycle in the original path \(p\) having a strictly
   positive weight.
 \end{proof}
-
-We can now proceed to prove the fundamental lemma we will later use in
-Theorem~\ref{} to conclude. The following Lemma proves that for
-abstract domains that respect the properties \ref{inc:hp1} and
-\ref{inc:hp2} it holds that the maximum value each value can reach
-without diverging to infinity strictly depends on the constants inside
-of the program itself.
-
-\medskip
-
-\noindent
-More in detail, consider an abstract domain \(\bA\) and its
-variable-wise lifting \(\bAn\), where \(\concr[\bA]\) and
-\(\concr\) are the concretization maps for \(\bA\) and \(\bAn\)
-respectively, while \(\abstr[\bA]\) and \(\abstr\) are the abstraction
-maps again for \(\bA\) and \(\bAn\) respectively. Also consider
-the set of integers \(\z\) with the usual ordering \(\leq\) and its
-complement \(>\), building the complete lattice \(\tuple{\z,
-  \leq}\). In such context if \(\forall \theta \in \bAn\),
-\(S \in \Int\) the following two properties hold
-\begin{enumerate}[label=(\Roman*)]
-\item\label{inc:hp1} for all \(\var\in\Var\) if
-  \(\max(S) = +\infty\) then
-  \(\max(\abstr[\bA](\concr[\bA](\theta\var) \cap \concr[\Int](S))) = \max(\theta\var)\)
-\item\label{inc:hp2}
-  \(\max(\eta \sqcup \eta') = \max\{\max(\eta), \max(\eta')\}\) for
-  all \(\eta, \eta'\in \bA\)
-\end{enumerate}
-
-\noindent
-then the following lemma holds:
+% We can now proceed to prove the fundamental lemma we will later use in
+% Theorem~\ref{} to conclude. The following Lemma proves that for
+% abstract domains that respect the properties \ref{inc:hp1} and
+% \ref{inc:hp2} it holds that the maximum value each value can reach
+% without diverging to infinity strictly depends on the constants inside
+% of the program itself.
+% \medskip
+% More in detail, for the interval domain \(\Int\) and its variable-wise
+% lifing \(\inte\) the following lemma holds:
+We also preliminarly need to define the \(\max\) function for
+intervals. More in detail \(\max : \Int \to \z\) is defined as follows
+\begin{align*}
+  \max(\bot) & \defin - \infty \\
+  \max(\interval{a}{b}) & \defin b
+\end{align*}
 
 % Increment lemma
-\begin{lemma}
-  \label{le:inc}
+\begin{lemma}\label{le:inc}
   Let \(\com\in \imp\).
-  % Then consider a function \({\max_{\bA} : \bA \to \z}\) s.t. for
-  % all \({a\in\bA}\) it holds that \(x \leq \max_\bA(a)\) for all
-  % \({x \in \concr[\bA](a)}\).
-  For all \(\eta \in \bAn\) and \(\var[y] \in \Var\), if
+  % Then consider a function \({\max_{\Int} : \Int \to \z}\) s.t. for
+  % all \({a\in\Int}\) it holds that \(x \leq \max_\Int(a)\) for all
+  % \({x \in \concr[\Int](a)}\).
+  For all \(\eta \in \inte\) and \(\var[y] \in \Var\), if
   \(\max(\semi{\com} \eta \var[y]) \neq +\infty\) and
   \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\) then there exist a
   variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
   such that \(|h| \leq \bound{\com}\) and the following two properties
   hold:
   \begin{enumerate}[label=(\roman*)]
-  \item \(\max(\semi{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); \label{point1}
-  \item  for all \(\eta' \in \bAn\), if \(\eta' \sqsupseteq \eta\)
+  \item\label{point1} \(\max(\semi{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); 
+  \item\label{point2} for all \(\eta' \in \inte\), if \(\eta' \sqsupseteq \eta\)
     % and \(\semi{\com}\eta' \neq \top\)
     then
-    \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\). \label{point2}
+    \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\).
   \end{enumerate}
   % dually, if \(\min(\semi{\com}\eta\var[y]) \neq - \infty\) and
   % \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exists a
@@ -141,7 +126,7 @@ then the following lemma holds:
   % \(|i| \leq \lbound{\com}\) and the following two properties hold:
   % \begin{enumerate}[label=(\roman*)]
   % \item \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[w]) + i\); \label{point1min}
-  % \item  for all \(\eta' \in \bA\), if \(\eta' \sqsupseteq \eta\)
+  % \item  for all \(\eta' \in \Int\), if \(\eta' \sqsupseteq \eta\)
   %   % and \(\semi{\com}\eta' \neq \top\)
   %   then
   %   \(\min(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[w]) + i\). \label{point2min}
@@ -163,7 +148,7 @@ then the following lemma holds:
   against the hypothesis
   \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\). Moreover, when
   quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\) in
-  \ref{point1}, if \(\max(\semi{\com}\eta' \var[y]) = \infty\)
+  \ref{point1}, if \(\max(\semi{\com}\eta' \var[y]) = + \infty\)
   holds, then
   \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\)
   trivially holds, hence we will sometimes silently omit to consider
@@ -174,7 +159,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\var \in S\))\\
   % 
-  Take \(\eta \in \bAn\) and assume
+  Take \(\eta \in \inte\) and assume
   \(\infty\neq\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
   %
   Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get
@@ -185,34 +170,38 @@ then the following lemma holds:
   We distinguish two cases:
   \begin{itemize}
     
-  \item If \(\var[y] \neq \var\), then for all \(\eta' \in \bAn\) such
+  \item If \(\var[y] \neq \var\), then for all \(\eta' \in \inte\) such
     that \(\eta \sqsubseteq \eta'\) it holds
     \[\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto
-      {\abstr[\bA](\concr[\bA](\eta(\var)) \cap \concr[\Int](S))}]\]
+      {\abstr[\Int](\concr[\Int](\eta(\var)) \cap \concr[\Int](S))}]\]
     and thus
     \begin{equation*}
       \max(\semi{\var \in S}\eta' \var[y]) = \max(\eta' \var[y]) = \max(\eta' \var[y]) + 0
     \end{equation*}
     hence the thesis follows with \(\var[z]=\var[y]\) and \(h = 0\).
 
-  \item If \(\var[y] = \var[x]\) then \(\eta(\var) \in \bA\) and
+  \item If \(\var[y] = \var[x]\) then \(\eta(\var) \in \Int\) and
     \begin{equation*}
-      \max(\semi{\var \in S}\eta \var[y]) = \max(\abstr[\bA](\concr[\bA](\eta\var) \cap \concr[\Int](S)))
+      \max(\semi{\var \in S}\eta \var[y]) = \max(\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S)))
     \end{equation*}
     Note that it cannot be \(\max(S)\in \z\). Otherwise, by
     Definition~\ref{de:bound},
-    \(\max ({\abstr[\bA](\concr[\bA](\eta\var) \cap \concr[\Int](S))})
+    \(\max ({\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S))})
     \leq \max(S)= \bound{\var \in S}\), violating the assumption
     \(\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
-    Hence, \(\max(S) = +\infty\) must hold and therefore by
-    \ref{inc:hp1}
-    \(\max ({\abstr[\bA](\concr[\bA](\eta\var) \cap \concr[\Int](S))})
-    = \max(\eta(\var))= \max(\eta(\var))+0\). It is immediate to check
-    that the same holds for all \(\eta' \sqsupseteq \eta\), i.e.,
-    \[
-    \max (\eta'(\var) \sqcap \abstr(S)) = \max(\eta'(\var))=
-    \max(\eta'(\var))+0
-    \]
+    Hence, \(\max(S) = +\infty\) must hold and therefore % by
+    % \ref{inc:hp1}
+    \(\max ({\abstr[\Int](\concr[\Int](\eta\var) \cap
+      \concr[\Int](S))}) = \max(\eta(\var)) = \max(\eta(\var)) +
+    0\). It is immediate to check that the same holds for all
+    \(\eta' \sqsupseteq \eta\), i.e.,
+    \begin{equation*}
+      \max(\abstr[\Int](\concr[\Int](\eta'\var) \cap \concr[\Int](S))) = \max(\eta'\var) + 0
+    \end{equation*}
+    % \[
+    % \max (\eta'(\var) \sqcap \abstr(S)) = \max(\eta'(\var))=
+    % \max(\eta'(\var))+0
+    % \]
     and thus the thesis follows with  \(\var[z]=\var[y]=\var[x]\) and \(h=0\).
   \end{itemize}  
   
@@ -221,14 +210,16 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\var := k\))
   % 
-  Take \(\eta \in \bAn\) and assume
+  Take \(\eta \in \inte\) and assume
   \(\max(\semi{\var := k}\eta \var[y]) > \bound{\var := k} = |k|\).
 
   Observe that it cannot be \(\var = \var[y]\). In fact, since
-  \(\semi{\var := k}\eta = \eta[\var \mapsto \abstr[\bA](\{k\})]\), we
-  would have \(\semi{\var := k}\eta \var[y] = \abstr[\bA](\{k\})\) and
-  thus \todo[inline]{Forse non ovvio perchè \(\abstr[\bA](\{k\})\) può
-    non rappresentare esattamente \(\{k\}\).}
+  \(\semi{\var := k}\eta = \eta[\var \mapsto \abstr[\Int](\{k\})]\),
+  we would have
+  \(\semi{\var := k}\eta \var[y] = \abstr[\Int](\{k\}) =
+  \interval{k}{k}\) and thus % \todo[inline]{Forse non ovvio perchè
+    % \(\abstr[\Int](\{k\})\) può non rappresentare esattamente
+    % \(\{k\}\).}
   \begin{equation*}
     \max(\semi{\var := k}\eta \var[y]) = k  \leq \bound{\var := k}
   \end{equation*}
@@ -250,7 +241,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\var := \var[w] + k\))
   % 
-  Take \(\eta \in \bAn\) and assume
+  Take \(\eta \in \inte\) and assume
   \(\max(\semi{\var := \var[w] + k}\eta \var[y]) > \bound{\var :=
     \var[w] + k} = |k|\).
   %
@@ -262,9 +253,9 @@ then the following lemma holds:
     
   \item If \(\var[y] \neq \var\), then for all \(\eta' \sqsupseteq \eta\), we have
     \(\semi{\var := \var[w] + k}\eta' \var[y] = \eta' \var[y]\) and thus
-    \begin{center}
-      \(\max(\semi{\var := \var[w] + k}\eta' \var[y]) = \max(\eta' \var[y])\).
-    \end{center}
+    \begin{equation*}
+      \max(\semi{\var := \var[w] + k}\eta' \var[y]) = \max(\eta' \var[y])
+    \end{equation*}
     hence the thesis follows with
     \(h =0 \leq \bound{\var := \var[w] + k}\) and \(\var[z] = \var[y]\).
     
@@ -272,12 +263,11 @@ then the following lemma holds:
     If \(\var = \var[y]\) then  for all \(\eta' \sqsupseteq \eta\), we have
     \(\semi{\var := \var[w] + k}\eta' \var[y] = \eta' \var[w] +
     k\) and thus
-    \begin{center}
-      \(\max(\semi{\var := \var[w] + k}\eta' \var[y]) = \max(\eta' \var[w]) +
-      k\).
-    \end{center}
-    
-    Hence, the thesis follows with \(h = k\) (recall that
+    \begin{equation*}
+      \max(\semi{\var := \var[w] + k}\eta' \var[y]) = \max(\eta' \var[w]) +
+      k
+    \end{equation*}
+    hence, the thesis follows with \(h = k\) (recall that
     \(k \leq |k| = \bound{\var := \var[w] + k}\)) and
     \(\var[z] = \var[w]\).
   \end{itemize}
@@ -289,7 +279,7 @@ then the following lemma holds:
   % \noindent
   % \textbf{Case} (\(\var := \var[w] - k\))
   % % 
-  % Take \(\eta \in \bA\) and assume
+  % Take \(\eta \in \Int\) and assume
   % \(\max(\semi{\var := \var[w] - k}\eta \var[y]) > \bound{\var := \var[w] - k} = k\).
   % %
   % Recall that
@@ -299,7 +289,7 @@ then the following lemma holds:
   % \begin{itemize}
     
   % \item If \(\var[y] \neq \var\), then for all
-  %   \(\eta' \in \bA\) such that
+  %   \(\eta' \in \Int\) such that
   %   \(\eta \sqsubseteq \eta'\), we have
   %   \(\semi{\var := \var[w] - k}\eta' \var[y] = \eta' \var[y]\) and thus
   %   \begin{center}
@@ -308,7 +298,7 @@ then the following lemma holds:
   %   hence the thesis holds, with
   %   \(h =0 \leq \bound{\var := \var[w] - k}\) and \(\var[z] = \var[y]\).
     
-  % \item If \(\var = \var[y]\) then for all \(\eta' \in \bA\) such
+  % \item If \(\var = \var[y]\) then for all \(\eta' \in \Int\) such
   %   that \(\eta \sqsubseteq \eta'\), we have
   %   \(\semi{\var := \var[w] - k}\eta' \var[y] = \eta' \var[w] - k\) and
   %   thus
@@ -331,7 +321,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\com_1 \ndet \com_2\))
   % 
-  Take \(\eta \in \bAn\) and assume
+  Take \(\eta \in \inte\) and assume
   \(\max(\semi{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2}
   = \bound{\com_1} + \bound{\com_2}\).  Recall that
   \(\semi{\com_1 \ndet \com_2} \eta = \semi{\com_1}\eta \sqcup
@@ -344,20 +334,21 @@ then the following lemma holds:
   \max(\semi{\com_2}\eta \var[y])\).  Moreover
   \begin{align*}
     \max(\semi{\com_1 \ndet \com_2}\eta \var[y])& =  \max(\semi{\com_1}\eta \var[y] \sqcup \semi{\com_2}\eta \var[y]) \\ 
-    & = \max \{ \max(\semi{\com_1}\eta \var[y]), \max(\semi{\com_2}\eta \var[y])\} & \text{by \ref{inc:hp2}} 
+    & = \max \{ \max(\semi{\com_1}\eta \var[y]), \max(\semi{\com_2}\eta \var[y])\} % & \text{by \ref{inc:hp2}} 
   \end{align*}
 
   Thus
   \(\max(\semi{\com_1 \ndet \com_2}\eta \var[y]) =
   \max(\semi{\com_i}\eta \var[y])\) for some \(i \in \{1,2\}\). We can
-  assume, without loss of generality, that the maximum is realized
-  by the first component, i.e.,
+  assume, without loss of generality, that the maximum is realized by
+  the first component, i.e.,
   \(\max(\semi{\com_1 \ndet \com_2}\eta \var[y]) =
-  \max(\semi{\com_1}\eta \var[y])\). Hence, by inductive hypothesis on
-  \(\com_1\), we have that there exists \(h \in \mathbb{Z}\) with
+  \max(\semi{\com_1}\eta \var[y]) > \bound{\com_1 \ndet
+    \com_2}\). Hence we can use the inductive hypothesis on \(\com_1\)
+  and state that there exists \(h \in \mathbb{Z}\) with
   \(|h| \leq \bound{\com_1}\) and \(\var[z] \in \Var\) such that
   \(\max(\semi{\com_1}\eta \var[y]) = \max(\eta \var[z]) + h\) and for
-  all \(\eta' \in \bAn\), \(\eta \sqsubseteq \eta'\),
+  all \(\eta' \in \inte\), \(\eta \sqsubseteq \eta'\),
   \[
   \max(\semi{\com_1}\eta' \var[y]) \geq \max(\eta' \var[z]) + h
   \]
@@ -369,7 +360,7 @@ then the following lemma holds:
   \]
   %
   and and for
-  all \(\eta' \in \bAn\), \(\eta \sqsubseteq \eta'\),
+  all \(\eta' \in \inte\), \(\eta \sqsubseteq \eta'\),
   \begin{align*}
     \max(\semi{\com_1 \ndet \com_2}\eta' \var[y])
     &= \max\{ \max(\semi{\com_1}\eta' \var[y]),  \max(\semi{\com_2}\eta' \var[y])\}\\
@@ -387,7 +378,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\com_1 \seq \com_2\))
   % 
-  Take \(\eta \in \bAn\) and assume
+  Take \(\eta \in \inte\) and assume
   \(\max(\semi{\com_1 \seq \com_2}\eta\var[y]) > \bound{\com_1 \seq
     \com_2} = \bound{\com_1} + \bound{\com_2}\).
   
@@ -403,7 +394,7 @@ then the following lemma holds:
   \geq \bound{\com_2}\), by inductive hypothesis on \(\com_2\), there
   are \(|h_2| \leq \bound{\com_2}\) and \(\var[w] \in \Var\) such that
   \(\max(\semi{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2\)
-  and for all \(\eta_1' \in \bAn\) with
+  and for all \(\eta_1' \in \inte\) with
   \(\eta_1 \sqsubseteq \eta_1'\)
   \begin{equation}
     \label{eq:seq2}
@@ -422,18 +413,19 @@ then the following lemma holds:
   violating the hypotheses. Moreover,
   \(\semi{\com_1}\eta \var[w] \neq \infty\), otherwise we would have
   \(\max(\semi{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2 =
-  \infty\), contradicting the hypotheses.  Therefore we can apply the
-  inductive hypothesis also to \(\com_1\) and deduce that there are
-  \(|h_1| \leq \bound{\com_1}\) and \(\var[w]' \in \Var\) such that
+  + \infty\), contradicting the hypotheses.  Therefore we can apply
+  the inductive hypothesis also to \(\com_1\) and deduce that there
+  are \(|h_1| \leq \bound{\com_1}\) and \(\var[w]' \in \Var\) such
+  that
   \(\max(\semi{\com_1} \eta \var[w]) = \max(\eta \var[w]') + h_1\) and
-  for all \(\eta' \in \bAn\) with \(\eta \sqsubseteq \eta'\)
+  for all \(\eta' \in \inte\) with \(\eta \sqsubseteq \eta'\)
   \begin{equation}
     \label{eq:seq1}
     \max(\semi{\com_1} \eta' \var[w]) \geq \max(\eta' \var[w]') + h_1
     \tag{\ddag}
   \end{equation}
 
-  Now, for all \(\eta' \in \bAn\) with \(\eta \sqsubseteq \eta'\) we have that:
+  Now, for all \(\eta' \in \inte\) with \(\eta \sqsubseteq \eta'\) we have that:
   \begin{align*}
     \max(\semi{\com_1 \seq \com_2}\eta \var[y])
     &= \max(\semi{\com_2}(\semi{\com_1}\eta) \var[y])\\
@@ -449,10 +441,10 @@ then the following lemma holds:
   and
   \begin{align*}
     \max(\semi{\com_1 \seq \com_2}\eta' \var[y]) & = & \\ 
-    \max(\semi{\com_2}(\semi{\com_1}\eta') \var[w]) & \geq & \\ 
-    \max(\semi{\com_1}\eta' \var[w]') + h_2 & \geq & 
+    \max(\semi{\com_2}(\semi{\com_1}\eta') \var[y]) & \geq & \\ 
+    \max(\semi{\com_1}\eta' \var[w]) + h_2 & \geq & 
     \text{by \eqref{eq:seq2}, since } \eta_1 = \semi{\com_1}\eta \sqsubseteq \semi{\com_1}\eta' \text{ , by monotonicity} \\
-    (\max(\eta' \var[y]) +h_1) + h_2 & & \text{by \eqref{eq:seq1}}\
+    (\max(\eta' \var[w]') +h_1) + h_2 & & \text{by \eqref{eq:seq1}}\
   \end{align*}
 
   Thus, the thesis holds with \(h= h_1+h_2\), as
@@ -466,7 +458,7 @@ then the following lemma holds:
   \noindent
   \textbf{Case} (\(\fix{\com}\)) 
   %
-  Let \(\eta \in \bAn\) such that
+  Let \(\eta \in \inte\) such that
   \(\max(\semi{\fix{\com}} \eta \var[y]) \neq + \infty\). Recall that
   \(\semi{\fix{\com}} \eta = \lfp{\lambda \mu. (\semi{\com} \mu
     \sqcup\eta)}\). Observe that the least fixpoint of
@@ -480,7 +472,7 @@ then the following lemma holds:
     \(\eta_{i+1} \veq \semi{\com} \eta_i \sqcup \eta_i= \semi{\com \ndet
     \tru} \eta_i \sqsupseteq \eta_i\),
   \end{itemize}
-  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \bAn\) such that
+  then we define an increasing chain \(\{\eta_i\}_{i\in \nat}\subseteq \inte\) such that
   \[ 
   \semi{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
   \]
@@ -614,7 +606,7 @@ then the following lemma holds:
       \tru}^i \eta_{k_1} \var[w]\\ 
     & = \bigsqcup_{r \in \mathbb{N}} \semi{\com \ndet
       \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]\\
-    & = \infty
+    & = +\infty
   \end{align*}
 
   Now, from \eqref{eq:fix} we deduce that for all
@@ -632,7 +624,7 @@ then the following lemma holds:
   \begin{align*}
     \semi{\fix{\com}} \eta \var[y]
     & = \semi{\com \ndet \tru}^{m-k_1+1} \semi{\fix{\com}} \eta \var[y]\\
-    & \geq \infty + \Sigma_{i=k_1}^m h_i = \infty
+    & \geq +\infty + \Sigma_{i=k_1}^m h_i = +\infty
   \end{align*}
   contradicting the assumption.
   
@@ -643,7 +635,7 @@ then the following lemma holds:
     \max(\eta \var[y]_0) + \Sigma_{i=0}^m h_i\] and
   \(\Sigma_{i=0}^m h_i \leq \bound{\fix{\com}}=(n+1)\bound{\com}\),
   otherwise we could use the same argument above for inferring the
-  contradiction \(p\semi{\fix{\com}} \eta \var[y] = \infty\).
+  contradiction \(\max(\semi{\fix{\com}} \eta \var[y]) = +\infty\).
 
   \medskip
 
@@ -662,33 +654,36 @@ then the following lemma holds:
   + \Sigma_{i=0}^m h_i\] as desired.
 \end{proof}
 
-Notice that we can consider the set of integers \(\z\), ordered with
-the reverse order \(\geq\) and its complement \(<\), hence the
-complete lattice \(\tuple{\z, \geq}\) and a max function
-\({\max : \bA \to \z}\) s.t. \(\max(A) \leq a\) for all \(a\in A\),
-\(A \in \bA\), i.e., the min function, and the following dual form of
-Lemma~\ref{le:inc} would hold:
+We can now notice that this proof also works for the \(\min\) value of
+each variable's interval. I.e., the following property also holds:
 
 % Dual formulation of the same lemma
 \begin{corollary}\label{co:inc}
   Let \(\com \in \imp\).
   
   \noindent
-  For all \(\eta \in \bAn\) and
+  For all \(\eta \in \inte\) and
   \(\var[y] \in \Var\), if
   \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
-  \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exist a
+  \(\min(\semi{\com}\eta\var[y]) < -\lbound{\com}\) then there exist a
   variable \(\var[z] \in\Var\) and an integer \(h \in \z\) s.t.
   \(|h| \leq \lbound{\com}\) s.t. the following two properties hold:
   
   \begin{enumerate}[label=(\roman*)]
   \item \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[z]) + h\); \label{point1min}
-  \item  for all \(\eta' \in \bAn\), if \(\eta' \sqsupseteq \eta\)
+  \item  for all \(\eta' \in \inte\), if \(\eta' \sqsupseteq \eta\)
     % and \(\semi{\com}\eta' \neq \top\)
     then
     \(\min(\semi{\com}\eta' \var[y]) \leq \min(\eta' \var[z]) + h\). \label{point2min}
   \end{enumerate}
 \end{corollary}
+
+\begin{proof}
+  The full proof is available at Appendix~\ref{ap:proof}, as
+  Lemma~\ref{co:inc2}. Intuitively the proof works by considering the
+  integers \(\z\) with the reverse ordering \(<\) and a new bound,
+  \(\lbound{\com}\), computed by considering the reverse ordering.
+\end{proof}
 
 % \noindent
 % Lemma~\ref{le:inc} and its Corollary~\ref{co:inc} provide an
