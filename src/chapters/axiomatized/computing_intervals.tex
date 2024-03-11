@@ -295,25 +295,36 @@ might overcome the bound, and therefore diverge
   \textbf{Case} (\(\var \in S\)).
   % 
   Recall that
-  \(\semi[\inte]{\var\in S}\rho = \rho[\var \mapsto {\rho\var \sqcap
-    \abstr[\Int](S)}]\). Hence we have two cases:
+  \(\semi[\inte]{\var\in S}\rho = \rho[\var \mapsto
+  {\abstr[\Int](\concr[\Int](\rho\var) \cap
+    \concr[\Int](S))}]\). Here we have two cases:
   \begin{itemize}
-  \item \({\rho\var \sqcap \abstr[\Int](S)} = \bot\). In this case it
-    holds that
+  \item \({\concr[\Int](\rho\var) \cap \concr[\Int](S)} =
+    \emptyset\). In this case it holds that
     \begin{equation*}
       \semi[\inte]{\var\in S}\rho = \bot \sqsubseteq \semi[\binte{k_1}{k_2}]{\var\in S}\rho
     \end{equation*}
     
-  \item \({\rho\var \sqcap \abstr[\Int](S)} = \interval{a}{b}\) for
-    some \({a \in \n \cup \{-\infty\}}, {b \in
-      \n\cup\{+\infty\}}\). In this case notice that because of
-    \(\abstr[\bInt{k_1}{k_2}]\) definition, it holds that
+  \item
+    \({\concr[\Int](\rho\var) \cap \concr[\Int](S)} \neq \emptyset\).
+    Hence
     \begin{equation*}
-      \abstr[\Int](S) \sqsubseteq \abstr[\bInt{k_1}{k_2}](S)
+      \abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S)) = \interval{a}{b} \quad \text{for some }
+      {a \in \n \cup \{-\infty\}}, {b \in \n\cup\{+\infty\}}.
     \end{equation*}
-    and therefore
-    \({\rho\var \sqcap \abstr[\Int](S)} \sqsubseteq {\rho\var \sqcap
-      \abstr[\bInt{k_1}{k_2}](S)}\). Hence
+    In
+    this case notice that because of \(\abstr[\bInt{k_1}{k_2}]\)
+    definition, it holds that
+    \begin{equation*}
+      \abstr[\Int](P) \sqsubseteq \abstr[\bInt{k_1}{k_2}](P)
+    \end{equation*}
+    for any \(P \in \poset{\z}\) and
+    \(k_1, k_2 \in z \mid k_1 \leq k_2\). Therefore
+    \begin{equation*}
+      \abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S)) \sqsubseteq
+      \abstr[\bInt{k_1}{k_2}](\concr[\Int](\rho\var) \cap \concr[\Int](S))
+    \end{equation*}
+    which means
     \begin{equation*}
       {\semi[\inte]{\var\in S}\rho} \sqsubseteq {\semi[\binte{k_1}{k_2}]{\var\in S}\rho}
     \end{equation*}
@@ -365,7 +376,7 @@ might overcome the bound, and therefore diverge
   % 
   Recall that
   \({\semi[\inte]{\com_1 \ndet \com_2}\rho} =
-  {\semi[\inte]{\com_1}\rho} \ndet {\semi[\inte]{\com_2}\rho}\). By
+  {\semi[\inte]{\com_1}\rho} \sqcup {\semi[\inte]{\com_2}\rho}\). By
   inductive hypothesis
   \({\semi[\inte]{\com_1}\rho} \sqsubseteq
   {\semi[\binte{k_1}{k_2}]{\com_1}\rho}\) and
@@ -440,8 +451,6 @@ might overcome the bound, and therefore diverge
 With this consideration we can now proceed to prove that the analysis
 on our bounded lattice \(\inte_{\com,\rho}\) produces the same result
 as the analysis on \(\inte\).
-
-% Galois connection??
 
 % We could also operate uniformly on all commands, defining the
 % semantics for \(\com\) in a domain with intervals bounded by
