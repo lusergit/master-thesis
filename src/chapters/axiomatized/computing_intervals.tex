@@ -3,87 +3,9 @@
 \label{sec:computingint}
 
 Lemma~\ref{le:inc} provides an effective algorithm for computing the abstract
-semantics of commands provided a domain that respects properties \ref{inc:hp1}
-and \ref{inc:hp2}. The goal of the following section is to ensure that such
-properties are respected by intervals, and show that the semantics
-computed on a finite sub-lattice of \(\Int\) (with no infinite
-ascending chains) effectively coincides with the semantics computed in
-the original \(\Int\) complete lattice, which instead contains
-infinite ascending chains.
-% First consider \(\tuple{\z, \leq}\)
-% (\(\z\) with the usual ordering) and the max function
-% \(\max : \Int \to \z\) defined as follows
-% \begin{align*}
-%   \max(\bot) & = -\infty \\
-%   \max(\interval{a}{b}) & = b
-% \end{align*}
-
-\begin{observation}[\ref{inc:hp1} holds on intervals]
-  Let \(\iota \in \Int, S \in \Int\) and let
-  \({\abstr[\Int] : \poset{\z} \to \Int}\) be the abstraction map for
-  the interval domain. 
-  \begin{equation*}
-    \left(\max(S) = \infty\right) \land \left(\iota \sqcap S \neq \bot\right)
-    \Rightarrow max(\iota \sqcap \abstr[\Int](S)) = \max(\iota)
-  \end{equation*}
-  where \(S \in \poset{\Z}\) and \(\iota \in \Int\)
-\end{observation}
-
-\begin{proof}
-  Let \(\iota = \interval{a}{b}\) and
-  \(\abstr[\Int](S) = \interval{c}{\infty}\) and remember that
-  \({\iota \sqcap \abstr(S) \neq \bot}\). Then
-  \begin{equation*}
-    \max([a,b] \sqcap \abstr[\Int](S)) = \max(\interval{\max\{a, c\}}{\min\{b , \infty\}}) = b = \max(\iota) \qedhere
-  \end{equation*}
-\end{proof}
-
-\begin{observation}[\ref{inc:hp2} holds on intervals]
-  Let \(\iota, \kappa \in \Int\), then
-  \(\max(\iota \sqcup \kappa) = \max\{\max(\iota), \max(\kappa)\}\)
-\end{observation}
-
-\begin{proof}
-  Let \(\iota = \interval{a}{b}\) and \(\kappa =
-  \interval{c}{d}\). Then by definition
-  \(\iota \sqcup \kappa = \interval{\min\{a,c\}}{\max\{b,d\}}\), and
-  therefore
-  \begin{equation*}
-    \max(\iota \sqcup \kappa) = \max\{b,d\} = \max\{\max(\iota), \max(\kappa)\} \qedhere
-  \end{equation*}
-\end{proof}
-
-% Now we can also observe that the hypothesis hold if we consider
-% \(\tuple{\z,\geq}\), i.e., \(\z\) with the inverse ordering and a
-% modified max function \(\max : \Int \to \z\) defined as follows
-
-% \begin{align*}
-%   \max(\bot) & = -\infty \\
-%   \max(\interval{a}{b}) & = a \\
-% \end{align*}
-
-% i.e., the \(\min\) function. In this we also have to consider the
-% \(-\) operation instead of the \(+\) operation, in order to accomodate
-% for the reverse ordering.
- 
-% % Non è un corollario, dovrebbe essere integrato sopra
-% \begin{corollary}\label{co:inc}
-%   if \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
-%   \(\min(\semi{\com}\eta\var[y]) < \lbound{\com}\) then there exists a
-%   variable \(\var[z] \in\Var\) and an integer \(h\in\z\) such that
-%   \(|h| \geq \lbound{\com}\) and the following two properties hold:
-%   \begin{enumerate}[label=(\roman*)]
-%   \item \(\min(\semi{\com}\eta\var[y]) = \min(\eta\var[z]) - h\)
-%   \item for all \(\eta'\in \bA\), if \(\eta' \sqsupseteq \eta\) then
-%     \(\min(\semi{\com}\eta'\var[y]) \leq \min(\eta'\var[z]) - h\)
-%   \end{enumerate}
-% \end{corollary}
-
-% \begin{proof}
-%   \todo[inline]{da finire}
-% \end{proof}
-
-This means that we can apply Lemma~\ref{le:inc} on the intervals
+semantics of commands%  provided a domain that respects properties \ref{inc:hp1}
+% and \ref{inc:hp2}
+. This means that we can apply Lemma~\ref{le:inc} on the intervals
 domain \(\inte\).  First, given a command \(\com\), the corresponding
 finite set of variables \(\Var_{\com} \veq \varsof{\com}\), and an
 interval environment \(\rho : \Var_{\com} \to \Int\), we define both
@@ -358,8 +280,12 @@ might overcome the bound, and therefore diverge
     \iota +_{\Int} j \sqsubseteq \iota +_{\bInt{k_1}{k_2}} j
   \end{equation*}
   where \(\iota \in \bInt{k_1}{k_2} \subseteq \Int\), \(j\in\n\),
-  i.e., \(\rho\var[y] + j\) in \(\Int\) is more precise than
-  \(\rho\var[y] + j\) in \(\bInt{k_1}{k_2}\). Hence it holds that
+  \(+_{\Int}\) is the sum operated in the intervals domain and
+  \(+_{\bInt{k_1}{k_2}}\) is the sum operated in the interval domain
+  bounded by \(k_1\) and \(k_2\). % That is to say \(\rho\var[y] + j\)
+  % in \(\Int\) is more precise than \(\rho\var[y] + j\) in
+  % \(\bInt{k_1}{k_2}\).
+  Hence it holds that
   \begin{equation*}
     {\semi[\inte]{\var := \var[y] + k}\rho} \sqsubseteq {\semi[\binte{k_1}{k_2}]{\var := \var[y] + k}\rho}
   \end{equation*}
