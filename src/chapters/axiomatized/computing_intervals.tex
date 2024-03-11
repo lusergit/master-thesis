@@ -201,8 +201,8 @@ is a complete lattice.
 
 \noindent
 We need however a special bound, based on Lemma~\ref{le:inc}, based on
-the program we are considering and the initial environment.  For
-simplicity we'll refer to \(\inte_{\com,\rho}\) as
+the program we are considering and the initial environment.  Hence we
+define \(\inte_{\com,\rho}\) as
 \({\inte_{\com,\rho} = (\Var_{\com} \to \Int_{\com,\rho}) \cup \{
   \top, \bot \}}\) where
 \begin{align*}
@@ -247,14 +247,14 @@ abstraction and concretization maps
   defined as follows
   \begin{align*}
     \abstr[\bInt{k_1}{k_2}](\emptyset) & \defin \bot \\
-    \abstr[\bInt{k_1}{k_2}](S) & \defin \begin{cases}
-      \interval{\min(S)}{\max(S)} & \text{if } \max(S) \leq k_2 \text{ and } \min(S) \geq k_1\\
-      \interval{\min(S)}{+\infty} & \text{if } \max(S) > k_2 \text{ and } \min(S) \geq k_1 \\
-      \interval{-\infty}{\max(S)} & \text{if } \min(S) < k_1 \text{ and } \max(S) \leq k_2 \\
+    \abstr[\bInt{k_1}{k_2}](P) & \defin \begin{cases}
+      \interval{\min(P)}{\max(P)} & \text{if } \max(P) \leq k_2 \text{ and } \min(P) \geq k_1\\
+      \interval{\min(P)}{+\infty} & \text{if } \max(P) > k_2 \text{ and } \min(P) \geq k_1 \\
+      \interval{-\infty}{\max(P)} & \text{if } \min(P) < k_1 \text{ and } \max(P) \leq k_2 \\
       \interval{-\infty}{+\infty} & \text{otherwise}
     \end{cases}
   \end{align*}
-  Where \(S\in\poset{\z}\). While the concretization map
+  Where \(P\in\poset{\z}\). While the concretization map
   \({\concr[\bInt{k_1}{k_2}] : \bInt{k_1}{k_2} \to \poset{\z}}\)
   actually coincides with the concretization map \(\concr[\Int]\) as
   \(\bInt{k_1}{k_2}\) is a sublattice of \(\Int\).
