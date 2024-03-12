@@ -1,23 +1,23 @@
-\section{Introduction and related work}
-\label{sec:prev}
+\section{Introduction and related work}\label{sec:prev}
 
 Abstract interpretation has faced a difficult challenge since the
 beginning: the termination of the analyzer. When viewed from another
 perspective, every interpreter can be considered the most precise
 possible static analyzer. However, the critical issue is its
-non-termination. Cousot addresses this problem from the outset in
-\cite{patrickradiha:one} by introducing two operators that have since
-become standard: Widening and narrowing. The former is used to infer
-properties related to the termination of a loop, albeit at the cost of
-analysis precision (while still maintaining soundness). However, is it
-possible to forgo the use of widening operators and still achieve a
-sound analysis with the same precision as the one utilizing these
-operators? \cite{Gawlitza2009} is the first to introduce and
-demonstrate that this is indeed feasible, presenting an algorithm for
-calculating fixed-point equation systems using operations and the
-abstract domain of intervals in polynomial time.  It relies on a
-generalization of the Bellman-Ford algorithm from
-\cite{bellman1958algo} to find a lest solution for system of equations
-with addition and least upper bound. The method is then extended until
-the authors build a cubic time algorithm for the class of interval
-equations (equations with variables in the interval domain).
+non-termination. Cousot addresses this problem from the outset
+in~\cite{patrickradhia:one} by introducing two operators that have
+since become standard: Widening and narrowing. The former is used to
+infer properties related to the termination of a loop, albeit at the
+cost of analysis precision (while still maintaining
+soundness). However, is it possible to forgo the use of widening
+operators and still achieve a sound analysis with the same precision
+as the one utilizing these operators?\ \cite{Gawlitza2009} is the
+first to introduce and demonstrate that this is indeed feasible,
+presenting an algorithm for calculating fixed-point equation systems
+using operations and the abstract domain of intervals in polynomial
+time.  It relies on a generalization of the Bellman-Ford algorithm
+from~\cite{bellman1958algo} to find a lest solution for system of
+equations with addition and least upper bound. The method is then
+extended until the authors build a cubic time algorithm for the class
+of interval equations (equations with variables in the interval
+domain).
