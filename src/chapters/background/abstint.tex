@@ -4,12 +4,12 @@ Abstract interpretation is among the most well known methods of static
 analysis of programs. First introduced by Patrick and Radhia Cousot
 in~\cite{patrickradhia:one, patrickradhia:two} and consists in a
 sound-by-construction method to infer program properties given a model
-of their behaviour. The general idea is that we can approximate the
+of their behavior. The general idea is that we can approximate the
 semantics of a program with monotonic functions over ordered sets
 (usually \emph{complete lattices}). To do so we usually first
 introduce \emph{Abstract Domains} that capture some essential aspect
 of program execution while ignoring the details of the computation,
-which would make the analysis computaitonally infeasible.  This
+which would make the analysis computationally infeasible.  This
 analysis however carries the issue of completeness, which is closely
 related to the issue of choosing the best abstract domain to decide
 program correctness without raising false alarms. Achieving
@@ -27,12 +27,12 @@ interpretation by Prof.\ Miné~\cite{mine:course}.
 
 \subsection{General concepts}\label{subsec:abstrgeneral}
 
-Abstract interpretation hevely relies on order theory, which we
+Abstract interpretation heavily relies on order theory, which we
 introduced in Section~\ref{sec:ordertheory}, and builds on top of
 it. The core idea is that we use an \emph{abstract domain} as an
 approximation of the \emph{concrete domain}, in such a way that
 abstract computations are \emph{sound} with respect to the concrete
-ones. The minimal structure that we will require bothe in the abstract
+ones. The minimal structure that we will require both in the abstract
 and the concrete domains is a partial order that models the amount of
 information each instruction carries with respect to the program
 execution. Thus, the concrete domain is a partially ordered set
@@ -56,9 +56,9 @@ Trough concretization we have a first notion of \emph{soundness}
   \(c \leq \gamma(a)\).
 \end{definition}
 
-While monotonic conretizations are sufficent to reason about
-soundness, more structure is useful to desing a sound and
-\emph{accurate} analyser. The standard abstract interpretation
+While monotonic concretizations are sufficient to reason about
+soundness, more structure is useful to design a sound and
+\emph{accurate} analyzer. The standard abstract interpretation
 framework from~\cite{patrickradhia:one} also assumes the existence of
 some monotonic \emph{abstraction function}
 \({\abstr : \tuple{C, \leq} \to \tuple{A, \sqsubseteq}}\), such that
@@ -67,7 +67,7 @@ some monotonic \emph{abstraction function}
 \begin{definition}[Galois connection]
   Given two partially ordered sets
   \(\tuple{C, \leq}, \tuple{A, \sqsubseteq}\), the tuple
-  \(\tuple{\abstr, C, A, \concr}\) is a galois connection if
+  \(\tuple{\abstr, C, A, \concr}\) is a Galois connection if
   \begin{itemize}
   \item \(A,C\) are complete lattices;
   \item \(\abstr : \tuple{C, \leq} \to \tuple{A, \sqsubseteq}\) and
@@ -75,7 +75,7 @@ some monotonic \emph{abstraction function}
   \item for all \(a\in A, c\in C\), \(c \leq \concr(a) \iff \abstr(c) \sqsubseteq a\).
   \end{itemize}
 
-  Figure~\ref{fig:galois} is a visualization of the notion of galois
+  Figure~\ref{fig:galois} is a visualization of the notion of Galois
   connection.
 \end{definition}
 
@@ -98,10 +98,10 @@ some monotonic \emph{abstraction function}
 
 Galois connections carry with them some well known properties, that
 are useful to state best correct approximations (bca) and to prove the
-soundness by construction of the analyser:
+soundness by construction of the analyzer:
 
 \begin{theorem}[Galois connection properties]\label{th:galoisprop}
-  Given a glaois connection \(\tuple{\abstr, C, A, \concr}\) we have:
+  Given a Galois connection \(\tuple{\abstr, C, A, \concr}\) we have:
   \begin{enumerate}
   \item \(\concr \circ \abstr \circ \concr = \concr\) and
     \(\abstr \circ \concr \circ \abstr = \abstr\);
@@ -122,8 +122,8 @@ soundness by construction of the analyser:
   \end{enumerate}
 \end{theorem}
 
-Theorem~\ref{th:galoisprop} states two important properties of galois
-connections: \emph{soundness} and \emph{optimality}. Aditionally, from
+Theorem~\ref{th:galoisprop} states two important properties of Galois
+connections: \emph{soundness} and \emph{optimality}. Additionally, from
 the theorem we can derive the following corollary:
 
 \begin{corollary}[Best abstraction]\label{co:bestabstr}
@@ -135,7 +135,7 @@ the theorem we can derive the following corollary:
 
 In general we saw that for a Galois connection \(\concr \circ \abstr\)
 is idempotent, and generally not the identity function, as abstracting
-looses precision. Concretizing however, should not loose precision, so
+looses precision. Concertizing however, should not loose precision, so
 we could expect \(\abstr \circ \concr\) to be the identity
 function. When this is the case, we have a \emph{Galois insertion}:
 
@@ -146,7 +146,7 @@ function. When this is the case, we have a \emph{Galois insertion}:
   \begin{enumerate}
   \item \(\abstr\) is surjective: \(\forall a \in A\)
     \(\exists c \in C \mid \abstr(c) = a\);
-  \item \(\concr\) is injetive: \(\forall a, a'\in A\)
+  \item \(\concr\) is injective: \(\forall a, a'\in A\)
     \(\concr(a) = \concr(a') \Rightarrow a = a'\);
   \item \(\abstr \circ \concr\) is the identity function.
   \end{enumerate}
@@ -209,7 +209,7 @@ operator, the widening operator \(\widen\):
 the latter definition allows us to observe several things:
 \begin{itemize}
 \item the first point allows to construct increasing sequences by
-  iterating abstract operations that are not necessarly monotonic, and
+  iterating abstract operations that are not necessarily monotonic, and
   the result of \(x \widen y\) is a sound approximation of the
   concrete join \(\concr(a) \vee \concr(b)\);
 \item the second point ensures that all increasing sequences with
@@ -230,7 +230,7 @@ containing a top element \(\top\) could be the following:
 \end{example}
 
 which we can see respects all the properties of the widening
-definition and ensures convergence of strinctly increasing chains.
+definition and ensures convergence of strictly increasing chains.
 Notice however that in doing so we \emph{loose} precision. I can
 happen however that we can retrieve some of the lost precision by
 looking at the syntax of the program we are considering. We can do
@@ -255,6 +255,6 @@ this by using the \emph{narrowing} operator:
   \end{enumerate}
 \end{definition}
 
-Where the first point states that \(\narrow\) refines its left
+Where the first point states that \(\narrowi\) refines its left
 argument while bringing a sound approximation, and the second point
 enforces termination.

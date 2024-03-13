@@ -135,86 +135,91 @@ concrete domain \(\dom\):
   \(X, Y\in\dom, X \subseteq Y\). We want to prove that
   \(\sem{\com}X \subseteq \sem{\com}Y\).
 
-  \noindent
-  \paragraph*{Base case: \\}
-  \begin{itemize}
-  \item \(\com \equiv \com[e]\) therefore
-    \begin{align*}
-      \sem{\com[e]}X & = \{\seme{\com[e]}\rho \mid \rho \in X , \seme{\com[e]}\rho \neq \bot\} \\
-      \sem{\com[e]}Y & = \{\seme{\com[e]}\rho \mid \rho \in Y , \seme{\com[e]}\rho \neq \bot\} \\
-    \end{align*}
-    \(X\subseteq Y\) therefore \(\rho \in X \Rightarrow \rho \in Y\)
-    which also means that
-    \(\rho' \in \sem{\com[e]}X \Rightarrow \rho' \in \sem{\com[e]}Y\),
-    therefore
-    \(\sem{\com[e]}X \subseteq \sem{\com[e]}Y\)
-  \end{itemize}
+  \medskip
 
   \noindent
-  \paragraph*{Inductive cases: \\}
+  \textbf{Case} (\(\com[e]\)). In this case
+  \begin{align*}
+    \sem{\com[e]}X & = \{\seme{\com[e]}\rho \mid \rho \in X , \seme{\com[e]}\rho \neq \bot\} \\
+    \sem{\com[e]}Y & = \{\seme{\com[e]}\rho \mid \rho \in Y , \seme{\com[e]}\rho \neq \bot\}
+  \end{align*}
+  \(X\subseteq Y\) therefore \(\rho \in X \Rightarrow \rho \in Y\)
+  which also means that
+  \(\rho' \in \sem{\com[e]}X \Rightarrow \rho' \in \sem{\com[e]}Y\),
+  therefore \(\sem{\com[e]}X \subseteq \sem{\com[e]}Y\)
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1 + \com_2\)). In this case we need
+  to show that \(\sem{\com_1+\com_2}X \subseteq \sem{\com_1+\com_2}Y \)
+  \begin{align*}
+    \sem{\com_1 + \com_2}X & = \sem{\com_1}X \cup \sem{\com_2}X \\
+    \sem{\com_1 + \com_2}Y & = \sem{\com_1}Y \cup \sem{\com_2}Y
+  \end{align*}
+  by inductive hypothesis both
+  \(\sem{\com_1}X \subseteq \sem{\com_1}Y\) and
+  \(\sem{\com_2}X \subseteq \sem{\com_2}Y\) and therefore
+  \(\sem{\com_1 + \com_2}X \subseteq \sem{\com_1 + \com_2}Y\).
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1 ; \com_2\)). Therefore we need to show that
+  \(\sem{\com_1;\com_2}X \subseteq \sem{\com_1;\com_2}Y \)
+  \begin{align*}
+    \sem{\com_1 ; \com_2}X & = \sem{\com_2}(\sem{\com_1}X) \\
+    \sem{\com_1 ; \com_2}Y & = \sem{\com_2}(\sem{\com_1}Y)
+  \end{align*}
+  By induction hypothesis
+  \(\sem{\com_1} X \subseteq \sem{\com_1}Y\), and by induction
+  hypothesis again
+  \(\sem{\com_2}(\sem{\com_1} X) \subseteq \sem{\com_2}(\sem{\com_1}
+  Y)\) which means
+  \(\sem{\com_1 ; \com_2} X \subseteq \sem{\com_1 ; \com_2}Y\).
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\kleene{\com}\)). Therefore we need to show
+  that \(\sem{\com^*}X \subseteq \sem{\com^*}Y \).
+  \begin{align*}
+    \sem{\com^*}X & = \bigcup_{i\in\n}\sem{\com}^i X \\
+    \sem{\com^*}Y & = \bigcup_{i\in\n}\sem{\com}^i Y
+  \end{align*}
+  what we need to prove is that
+  \[\forall j \in \n \quad \bigcup_{i=0}^j\sem{\com}^i X \subseteq
+    \bigcup_{i=0}^j\sem{\com}^i Y\]
+  we can do this by induction on \(j\):
   \begin{itemize}
-  \item \(\com \equiv \com_1 + \com_2\) therefore we need to show that
-    \(\sem{com_1+\com_2}X \subseteq \sem{com_1+\com_2}Y \)
+  \item \(j=0\) therefore \(X\subseteq Y\) which is true by
+    hypothesis.
+  \item Now we need to work on the inductive case
+    \(j \Rightarrow j+1\). Notice that it holds that
     \begin{align*}
-      \sem{\com_1 + \com_2}X & = \sem{\com_1}X \cup \sem{\com_2}X \\
-      \sem{\com_1 + \com_2}Y & = \sem{\com_1}Y \cup \sem{\com_2}Y \\
+      \bigcup_{i=0}^{k+1}\sem{\com}^i X & = X \cup \bigcup_{i=1}^{k+1}\sem{\com}^i X & \text{by definition} \\
+                                        & = X \cup \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i X\right) & \text{by additivity}
     \end{align*}
-    by inductive hypothesis both
-    \(\sem{\com_1}X \subseteq \sem{\com_1}Y\) and
-    \(\sem{\com_2}X \subseteq \sem{\com_2}Y\) and therefore
-    \(\sem{\com_1 + \com_2}X \subseteq \sem{\com_1 + \com_2}Y\).
-  \item \(\com \equiv \com_1 ; \com_2\) therefore we need to show that
-    \(\sem{com_1;\com_2}X \subseteq \sem{com_1;\com_2}Y \)
-    \begin{align*}
-      \sem{\com_1 ; \com_2}X & = \sem{\com_2}(\sem{\com_1}X) \\
-      \sem{\com_1 ; \com_2}Y & = \sem{\com_2}(\sem{\com_1}Y) \\
-    \end{align*}
-    By induction hypothesis
-    \(\sem{\com_1} X \subseteq \sem{\com_1}Y\), and by induction
-    hypothesis again
-    \(\sem{\com_2}(\sem{\com_1} X) \subseteq \sem{\com_2}(\sem{\com_1}
-    Y)\) which means
-    \(\sem{\com_1 ; \com_2} X \subseteq \sem{\com_1 ; \com_2}Y\).
-  \item \(\com \equiv \com^*\) therefore we need to show that
-    \(\sem{\com^*}X \subseteq \sem{\com^*}Y \).
-    \begin{align*}
-      \sem{\com^*}X & = \bigcup_{i\in\n}\sem{\com}^i X \\
-      \sem{\com^*}Y & = \bigcup_{i\in\n}\sem{\com}^i Y
-    \end{align*}
-    what we need to prove is that
-    \[\forall j \in \n \quad \bigcup_{i=0}^j\sem{\com}^i X \subseteq
-      \bigcup_{i=0}^j\sem{\com}^i Y\]
-    we can do this by induction on \(j\):
-    \begin{itemize}
-    \item \(j=0\) therefore \(X\subseteq Y\) which is true by
-      hypothesis.
-    \item Now we need to work on the inductive case
-      \(j \Rightarrow j+1\). Notice that it holds that
-      \begin{align*}
-        \bigcup_{i=0}^{k+1}\sem{\com}^i X & = X \cup \bigcup_{i=1}^{k+1}\sem{\com}^i X & \text{by definition} \\
-                                          & = X \cup \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i X\right) & \text{by additivity}
-      \end{align*}
-      and also for \(Y\)
-      \begin{equation*}
-        \bigcup_{i=0}^{k+1}\sem{\com}^i Y = Y \cup \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i Y\right)
-      \end{equation*}
-      Also notice that
-      \begin{enumerate}[label=(\roman*)]
-      \item \(X \subseteq Y\) by hypothesis;
-      \item
-        \(\bigcup_{i=0}^{k}\sem{\com}^i X \subseteq
-        \bigcup_{i=0}^{k}\sem{\com}^i Y\) by inductive hypothesis;
-      \item 
-        \(\sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i X\right)
-        \subseteq \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i
-          Y\right)\) by additivity.
-      \end{enumerate}
-      Therefore
-      \[\bigcup_{i=0}^{k+1}\sem{\com}^i X = X \cup
-        \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i X\right)
-        \subseteq Y \cup \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i
-          Y\right) = \bigcup_{i=0}^{k+1}\sem{\com}^i Y \]
-    \end{itemize}
+    and also for \(Y\)
+    \begin{equation*}
+      \bigcup_{i=0}^{k+1}\sem{\com}^i Y = Y \cup \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i Y\right)
+    \end{equation*}
+    Also notice that
+    \begin{enumerate}[label=(\roman*)]
+    \item \(X \subseteq Y\) by hypothesis;
+    \item
+      \(\bigcup_{i=0}^{k}\sem{\com}^i X \subseteq
+      \bigcup_{i=0}^{k}\sem{\com}^i Y\) by inductive hypothesis;
+    \item 
+      \(\sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i X\right)
+      \subseteq \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i
+        Y\right)\) by additivity.
+    \end{enumerate}
+    Therefore
+    \[\bigcup_{i=0}^{k+1}\sem{\com}^i X = X \cup
+      \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i X\right)
+      \subseteq Y \cup \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i
+        Y\right) = \bigcup_{i=0}^{k+1}\sem{\com}^i Y \]
   \end{itemize}
 \end{proof}
 
@@ -348,8 +353,11 @@ relation.
 
 \begin{proof}
   by induction on \(\com\):
-  \paragraph*{Base case:\\}
-  \(\com \equiv \com[e]\) \newline
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com[e]\)). In this case it holds that
   \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge \bsem{e}\rho \neq
   \bot \}\),
   \(\forall \rho \in X . \stt{\com[e], \rho} \to \bsem{e}\rho\) if
@@ -357,48 +365,58 @@ relation.
   \[\sem{e}X = \{\bsem{e}\rho \mid \rho \in X \wedge \bsem{e}\rho \neq
     \bot \} = \{\rho' \in\env \mid \rho \in X \stt{\com[e], \rho} \to
     \rho'\}\]
-  \paragraph*{Inductive cases:\\}
-  \begin{itemize}
-  \item \(\com \equiv \com_1 + \com_2\) \newline
-    \(\sem{\com_1 + \com_2}X = \sem{\com_1}X \cup \sem{\com_2}X\),
-    \(\forall \rho \in X . \stt{\com_1 + \com_2, \rho} \to
-    \stt{\com_1, \rho} \vee \stt{\com_1 + \com_2, \rho} \to
-    \stt{\com_2, \rho}\) respectively according to rules
-    sum\textsubscript{1} and sum\textsubscript{2}. By inductive
-    hypothesis
-    \[\sem{\com_1}X = \{\rho' \in\env \mid \rho \in X ,
-      \stt{\com_1,\rho} \to^* \rho'\} \quad \sem{\com_2}X = \{\rho'
-      \in\env \mid \rho \in X , \stt{\com_2,\rho} \to^* \rho'\}\]
-    Therefore
-    \begin{align*}
-      \sem{\com_1 + \com_2}X & = \sem{\com_1}X \cup \sem{\com_2}X & \text{(by definition)}\\
-      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1,\rho} \to^* \rho'\} \cup \{\rho' \in\env \mid \rho \in X , \stt{\com_2,\rho} \to^* \rho'\} & \text{(by ind. hp)}\\
-      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1,\rho} \to^* \rho' \vee \stt{\com_2,\rho} \to^* \rho'\} \\
-      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1 + \com_2, \rho} \to^* \rho'\}
-    \end{align*}
-  \item \(\com \equiv \com_1;\com_2\) \newline
-    \(\sem{\com_1;\com_2}X = \sem{\com_2}(\sem{\com_1}X)\). By inductive hp
-    \(\sem{\com_1}X = \{\rho' \in\env \mid \rho \in X, \stt{\com_1,
-      \rho} \to^* \rho'\} = Y\), by inductive hp again
-    \(\sem{\com_2}Y = \{\rho' \in\env \mid \rho \in Y, \stt{\com_2,
-      \rho} \to^* \rho'\}\). Therefore
-    \begin{align*}
-      \sem{\com_1;\com_2}X & = \sem{\com_2}(\sem{\com_1}X) & \text{(by definition)}\\
-      & = \{\rho' \in\env \mid \rho'' \in \{\rho''' \mid \rho \in X, \stt{\com_1, \rho}  \to^* \rho'''\}, \stt{\com_2, \rho''} \to^* \rho'\} & \text{(by ind. hp)}\\
-      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1, \rho} \to^* \rho'' \wedge \stt{\com_2, \rho''} \to^* \rho'\} & \text{(by composition lemma)}\\
-      & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1;\com_2, \rho} \to^* \rho'\}
-    \end{align*}
-  \item \(\com \equiv \com^*\) \newline
-    \(\sem{\com^*}X = \cup_{i\in\n}\sem{\com}^i X\)
-    \begin{align*}
-      \sem{\com^*}X & = X \cup \sem{\com}X \cup \sem{\com}^2X \cup \dots & \text{(by definition)}\\
-      & = X \cup \{\rho' \in\env \mid \rho \in X . \stt{\com,\rho} \to^* \rho'\} \cup %% \{\rho' \in\poset{\env} \mid \rho \in X, \stt{\com;\com,\rho} \to^* \rho'\} \cup
-      \dots & \text{(by ind. hp)}\\
-      & = \cup_{i\in\n} \{\rho' \in\env \mid \rho \in X . \stt{\com^i, \rho} \to^*  \rho'\} \\
-      & = \{\rho' \in\env \mid \rho \in X . \vee_{i\in\n} \stt{\com^i, \rho} \to^* \rho'\} \\
-      & = \{\rho' \in\env \mid \rho \in X . \stt{\com^*, \rho} \to^* \rho'\}
-    \end{align*} \qedhere
-  \end{itemize}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1 + \com_2\)). In this case
+  \(\sem{\com_1 + \com_2}X = \sem{\com_1}X \cup \sem{\com_2}X\),
+  \(\forall \rho \in X . \stt{\com_1 + \com_2, \rho} \to
+  \stt{\com_1, \rho} \vee \stt{\com_1 + \com_2, \rho} \to
+  \stt{\com_2, \rho}\) respectively according to rules
+  sum\textsubscript{1} and sum\textsubscript{2}. By inductive
+  hypothesis
+  \[\sem{\com_1}X = \{\rho' \in\env \mid \rho \in X ,
+    \stt{\com_1,\rho} \to^* \rho'\} \quad \sem{\com_2}X = \{\rho'
+    \in\env \mid \rho \in X , \stt{\com_2,\rho} \to^* \rho'\}\]
+  Therefore
+  \begin{align*}
+    \sem{\com_1 + \com_2}X & = \sem{\com_1}X \cup \sem{\com_2}X & \text{(by definition)}\\
+                           & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1,\rho} \to^* \rho'\} \cup \{\rho' \in\env \mid \rho \in X , \stt{\com_2,\rho} \to^* \rho'\} & \text{(by ind. hp)}\\
+                           & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1,\rho} \to^* \rho' \vee \stt{\com_2,\rho} \to^* \rho'\} \\
+                           & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1 + \com_2, \rho} \to^* \rho'\}
+  \end{align*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1;\com_2\)). In this case
+  \(\sem{\com_1;\com_2}X = \sem{\com_2}(\sem{\com_1}X)\). By inductive
+  hp
+  \(\sem{\com_1}X = \{\rho' \in\env \mid \rho \in X, \stt{\com_1,
+    \rho} \to^* \rho'\} = Y\), by inductive hp again
+  \(\sem{\com_2}Y = \{\rho' \in\env \mid \rho \in Y, \stt{\com_2,
+    \rho} \to^* \rho'\}\). Therefore
+  \begin{align*}
+    \sem{\com_1;\com_2}X & = \sem{\com_2}(\sem{\com_1}X) & \text{(by definition)}\\
+                         & = \{\rho' \in\env \mid \rho'' \in \{\rho''' \mid \rho \in X, \stt{\com_1, \rho}  \to^* \rho'''\}, \stt{\com_2, \rho''} \to^* \rho'\} & \text{(by ind. hp)}\\
+                         & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1, \rho} \to^* \rho'' \wedge \stt{\com_2, \rho''} \to^* \rho'\} & \text{(by composition lemma)}\\
+                         & = \{\rho' \in\env \mid \rho \in X . \stt{\com_1;\com_2, \rho} \to^* \rho'\}
+  \end{align*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\kleene{\com}\)).  Then, in this case
+  \(\sem{\com^*}X = \cup_{i\in\n}\sem{\com}^i X\)
+  \begin{align*}
+    \sem{\com^*}X & = X \cup \sem{\com}X \cup \sem{\com}^2X \cup \dots & \text{(by definition)}\\
+                  & = X \cup \{\rho' \in\env \mid \rho \in X . \stt{\com,\rho} \to^* \rho'\} \cup %% \{\rho' \in\poset{\env} \mid \rho \in X, \stt{\com;\com,\rho} \to^* \rho'\} \cup
+                    \dots & \text{(by ind. hp)}\\
+                  & = \cup_{i\in\n} \{\rho' \in\env \mid \rho \in X . \stt{\com^i, \rho} \to^*  \rho'\} \\
+                  & = \{\rho' \in\env \mid \rho \in X . \vee_{i\in\n} \stt{\com^i, \rho} \to^* \rho'\} \\
+                  & = \{\rho' \in\env \mid \rho \in X . \stt{\com^*, \rho} \to^* \rho'\} \qedhere
+  \end{align*} 
 \end{proof}
 
 Note that

@@ -5,4 +5,4 @@
 find . -iwholename "**/src/chapters/**/[^mod]*.tex" \
      -not -path "**/discard*" \
      -not -path "**/old*" \
-     -exec xargs aspell -t -c {} \;
+     -exec aspell -t -c {} \;
