@@ -610,8 +610,16 @@ Notice in particular that since
   \end{equation*}
   and by inductive hypothesis
   \(\max\left({\left(\semi{\com\ndet\tru}\right)}^\ell\eta'\var[w]\right)
-  \geq \max\left(\eta'\var[w]\right) + h\).
-  \todo[inline]{Finire}
+  \geq \max\left(\eta'\var[w]\right) + h\). Recall that for all
+  \(\eta'' \in \inte\)
+  \(\semi{\com\ndet \tru}\eta'' = \eta '' \sqcup \semi{\com}\eta''\).
+  Hence we can notice that
+  \(\max(\semi{\com\ndet\tru}\eta'')\var \geq \max(\eta'')\var\) for
+  all \(\var \in \Var\). Therefore
+  \begin{equation*}
+    \max\left(\semi{\com\ndet\tru}\left({(\semi{\com\ndet\tru})}^\ell\eta'\right)\var[w]\right) \geq \max\left({(\semi{\com\ndet\tru})}^\ell\eta'\var[w]\right) \geq \max(\eta'\var[w]) + h
+  \end{equation*}
+  which is our thesis for Property~\eqref{prop2}.
   
   \noindent    
   Then, an inductive argument allows us to show that for all \(r \in \mathbb{N}\):
