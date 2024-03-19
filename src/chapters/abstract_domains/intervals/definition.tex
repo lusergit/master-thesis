@@ -51,7 +51,7 @@ We also define least upper bound and greatest lower bound on the
   \interval{a}{b} \; \acap \; \interval{c}{d} & \defin
                                                 \begin{cases} \
                                                   \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
-                                                  \abstract{\bot} & \text{otherwise}
+                                                  \bot & \text{otherwise}
                                                 \end{cases}
 \end{align*}
 \noindent
@@ -65,5 +65,5 @@ the addition and subtraction of an integer constant:
   For a nonempty interval \(\interval{a}{b} \in \Int\) and
   \(c \in \n\) define
   \(\interval{a}{b} \pm c \veq \interval{a\pm c}{b\pm c}\) (recall
-  that \(\pm \infty + c = \pm\infty - c = \pm\infty\)).
+  that conventionally \(\pm \infty + c = \pm\infty - c = \pm\infty\)).
 \end{definition}

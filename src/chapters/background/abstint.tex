@@ -51,7 +51,7 @@ is a \emph{concretization} functions
 
 Trough concretization we have a first notion of \emph{soundness}
 
-\begin{definition}[Soundness]
+\begin{definition}[Soundness]\label{def:soundness}
   \(a \in A\) is a \emph{sound} abstraction of \(c\in C\) iff
   \(c \leq \gamma(a)\).
 \end{definition}
@@ -81,7 +81,7 @@ some monotonic \emph{abstraction function}
 
 \begin{figure}
   \centering
-  \usetikzlibrary {arrows.meta}
+  \usetikzlibrary{arrows.meta}
   \begin{tikzpicture}[->, >=stealth]
     % Nodes
     \node (A) at (0,0) {A};
@@ -107,7 +107,7 @@ soundness by construction of the analyzer:
     \(\abstr \circ \concr \circ \abstr = \abstr\);
   \item \(\abstr \circ \concr\) and \(\concr \circ \abstr\) are
     idempotent;
-  \item \(\forall c \in C\)
+  \item\label{prop:three} \(\forall c \in C\)
     \(\abstr(c) = \sqcap \{a \mid c \leq \concr(a)\}\);
   \item \(\forall a \in A\)
     \(\concr(a) = \vee \{ c \mid \abstr(c) \sqsubseteq a \}\);
@@ -123,8 +123,17 @@ soundness by construction of the analyzer:
 \end{theorem}
 
 Theorem~\ref{th:galoisprop} states two important properties of Galois
-connections: \emph{soundness} and \emph{optimality}. Additionally, from
-the theorem we can derive the following corollary:
+connections: \emph{soundness} and \emph{optimality}. Recall that
+\(c \leq \concr(a)\) means by Definition~\ref{def:soundness} that
+\(a\) is a \emph{sound} approximation of \(c\). Then, given
+\(c \in C\) recall that \(c \leq \concr(\abstr(c))\), which means that
+\(\abstr(c)\) is a sound abstraction of \(c\). Finally,
+Property~\ref{prop:three} states that \(\abstr(c)\) is the best (i.e.,
+smallest) sound abstraction of \(c\), i.e., the \emph{optimal}
+abstraction.
+
+Additionally, from the theorem we can derive the
+following corollary:
 
 \begin{corollary}[Best abstraction]\label{co:bestabstr}
   If we have a Galois connection \(\tuple{\abstr, C, A, \concr}\),
@@ -135,7 +144,7 @@ the theorem we can derive the following corollary:
 
 In general we saw that for a Galois connection \(\concr \circ \abstr\)
 is idempotent, and generally not the identity function, as abstracting
-looses precision. Concertizing however, should not loose precision, so
+looses precision. Concretizing however, should not loose precision, so
 we could expect \(\abstr \circ \concr\) to be the identity
 function. When this is the case, we have a \emph{Galois insertion}:
 
@@ -196,8 +205,9 @@ operator, the widening operator \(\widen\):
     \begin{equation*}
       \forall x, y \in A \quad x \sqsubseteq x \widen y \; \land \; y \sqsubseteq x \widen y;
     \end{equation*}
-  \item it enforces convergence: for any sequence \(\{y^i\}_{i\in\n}\)
-    in \(A\), the sequence \(\{x^i\}_{i\in\n}\) computed as
+  \item it enforces convergence: for any increasing sequence
+    \({\{y^i\}}_{i\in\n}\) in \(A\), the sequence \(\{x^i\}_{i\in\n}\)
+    computed as
     \begin{align*}
       x^0 & \defin y^0 \\
       x^{i+1} & \defin x^i \widen y^{i+1}
@@ -231,7 +241,7 @@ containing a top element \(\top\) could be the following:
 
 which we can see respects all the properties of the widening
 definition and ensures convergence of strictly increasing chains.
-Notice however that in doing so we \emph{loose} precision. I can
+Notice however that in doing so we \emph{loose} precision. It can
 happen however that we can retrieve some of the lost precision by
 looking at the syntax of the program we are considering. We can do
 this by using the \emph{narrowing} operator:
@@ -243,10 +253,11 @@ this by using the \emph{narrowing} operator:
   \begin{enumerate}
   \item it computes lower bounds:
     \begin{equation*}
-      \forall x, y \in A \quad x \sqcup y \sqsubseteq x \narrowi y \sqsubseteq x;
+      \forall x, y \in A \quad x \sqcap y \sqsubseteq x \narrowi y \sqsubseteq x;
     \end{equation*}
-  \item it enforces convergence: for any sequence \(\{y^i\}_{i\in\n}\)
-    in \(A\), the sequence \(\{z^i\}_{i\in\n}\) computed as
+  \item it enforces convergence: for any decreasing sequence
+    \({\{y^i\}}_{i\in\n}\) in \(A\), the sequence
+    \({\{z^i\}}_{i\in\n}\) computed as
     \begin{align*}
       z^0 & \defin y^0 \\
       z^{i+1} & \defin z^i \narrowi y^{i+1}

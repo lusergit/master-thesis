@@ -11,9 +11,9 @@ domains with some properties.  Observe that the exact computation
 provides, already for our simple language, a precision which is not
 obtainable with (basic) widening and narrowing. In the example in
 Code~\ref{code1} if we consider the intervals abstract domain, the
-semantics maps \(\var\) and \(\var[y]\) to \([0,2]\) and \([6,8]\)
-respectively, while widening/narrowing to \([0,\infty]\) and
-\([6,\infty]\)
+semantics maps \(\var\) and \(\var[y]\) to \(\interval{0}{2}\) and
+\(\interval{6}{8}\) respectively, while widening/narrowing to
+\(\interval{0}{+\infty}\) and \(\interval{6}{+\infty}\).
 
 \begin{lstlisting}[caption=Code sample where analysis of
   \(\fix{\com}\) is less precise than \(\com^*\), label=code1,
@@ -33,7 +33,7 @@ respectively, while widening/narrowing to \([0,\infty]\) and
 Of course, for the collecting semantics this is not the case. Already
 computing a finite upper bound for loop invariants when they are
 finite is impossible as this would allow to decide termination, as we
-have seen in section \ref{sec:finiteness}. First let's formalize the
+have seen in Section~\ref{sec:finiteness}. First let's formalize the
 problem we want to solve.
 
 \begin{problem}[Analysis termination]\label{problem1}
@@ -46,12 +46,11 @@ problem we want to solve.
 
 To do so we present a novel technique, based on the idea of
 \emph{bounds}. Each program is associated to a bound, an ideal value
-above which for each variable we cannot guarantee convergence, and
-therefore we can safely assume that the program diverges.  First,
-given a program, we associate the program with a \emph{lower bound}
-and an \emph{upper bound}. The rough idea is that, whenever a variable
-is within its bound, the behavior of the program with respect to that
-variable becomes stable. % We also introduce an
+above which for each variable we can safely assume that the program
+diverges.  First, given a program, we associate the program with a
+\emph{lower bound} and an \emph{upper bound}. The rough idea is that,
+whenever a variable is within its bound, the behavior of the program
+with respect to that variable becomes stable. % We also introduce an
 % \emph{increment bound} which captures the largest increment or
 % decrement that can affect a variable.
 

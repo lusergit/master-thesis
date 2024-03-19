@@ -1,11 +1,10 @@
-\section{Abstract semantics}
-\label{sec:abstractsem}
+\section{Abstract semantics}\label{sec:abstractsem}
 
 In order to talk about analysis over some abstract domain \(\bA\), we
 preliminarly introduce the abstract semantic.
 
 \begin{definition}\label{def:abstrsem}
-  Given and abstract domain \(\bA\), with an abstraction map
+  Given an abstract domain \(\bA\), with an abstraction map
   \({\alpha : \poset{\z} \to \bA}\) and a concretization map
   \({\concr : \bA \to \poset{\z}}\) the \emph{analysis semantics} over
   \(\bA\) is defined as the strict (i.e., preserving \(\bot\))
@@ -32,7 +31,7 @@ preliminarly introduce the abstract semantic.
     \semi[\bA]{\com_1 \seq \com_2} \eta
     & \veq \semi[\bA]{\com_2} (\semi[\bA]{\com_1} \eta)\\
     \semi[\bA]{\kleene{\com}} \eta
-    & \veq \textstyle \bigsqcup_{i \in \nat} \semi[\bA]{\com}^i (\eta)\\
+    & \veq \textstyle \bigsqcup_{i \in \nat} {\left(\semi[\bA]{\com}\right)}^i (\eta)\\
     \semi[\bA]{\fix{\com}} \eta
     & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi[\bA]{\com} \mu))
   \end{align*}

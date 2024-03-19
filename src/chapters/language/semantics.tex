@@ -13,7 +13,7 @@ program \emph{execution}.% The first building block are
 \begin{definition}[Semantics of Basic Expressions]
   Let \emph{environments} be the maps from the set of variables to
   their numerical value:
-  \(\env \defin \{\rho \mid \rho : \Var \to \n\}\). For basic
+  \(\env \defin \{\rho \mid \rho : \Var \to \z\}\). For basic
   expressions \(e \in \expr\) the \emph{concrete semantics}
   \(\bsem{ \cdot} : \expr \to \env \to \smashed{\env}\) is
   inductively defined by:
@@ -63,63 +63,73 @@ We observe that the semantics we described is additive:
 \end{observation}
 
 \begin{proof}
-  We will prove it by induction on the program \(\com\):
+  We will prove it by induction on the program \(\com\). Let's first
+  explore the base cases.
+
+  \medskip
 
   \noindent
-  \paragraph*{Base case: \\}
-  \begin{itemize}
-  \item \(\com \equiv \com[e]\) therefore
-    \begin{align*}
-      \sem{\com[e]}(X\cup Y) & = \{\seme{\com[e]}\rho \mid \rho \in X \cup Y, \seme{\com[e]}\rho \neq \bot\} \\
-                             & = \{\seme{\com[e]}\rho \mid \rho \in X \vee \rho \in Y, \seme{\com[e]}\rho \neq \bot\} \\
-                             & = \{\seme{\com[e]}\rho \mid \rho \in X , \seme{\com[e]}\rho \neq \bot\} \cup \{\seme{\com[e]}\rho \mid \rho \in Y , \seme{\com[e]}\rho \neq \bot\} \\
-                             & = \sem{\com[e]}X \cup \sem{\com[e]}Y
-    \end{align*}
-  \end{itemize}
+  \textbf{Case} (\(\com[e]\)). Therefore
+  \begin{align*}
+    \sem{\com[e]}(X\cup Y) & = \{\seme{\com[e]}\rho \mid \rho \in X \cup Y, \seme{\com[e]}\rho \neq \bot\} \\
+                           & = \{\seme{\com[e]}\rho \mid \rho \in X \vee \rho \in Y, \seme{\com[e]}\rho \neq \bot\} \\
+                           & = \{\seme{\com[e]}\rho \mid \rho \in X , \seme{\com[e]}\rho \neq \bot\} \cup \{\seme{\com[e]}\rho \mid \rho \in Y , \seme{\com[e]}\rho \neq \bot\} \\
+                           & = \sem{\com[e]}X \cup \sem{\com[e]}Y
+  \end{align*}
+  
+  \medskip
+
+  \noindent
+  Next we can explore the inductive cases.
+
+  \medskip
   
   \noindent
-  \paragraph*{Inductive cases: \\}
+  \textbf{Case} (\(\com_1 + \com_2\)). Therefore
+  \begin{align*}
+    \sem{\com_1 + \com_2}(X\cup Y) & = \sem{\com_1}(X \cup Y) \cup \sem{\com_2}(X \cup Y) & \text{by definition}\\
+                                   & = \sem{\com_1}X \cup \sem{\com_1}Y \cup \sem{\com_2}X \cup \sem{\com_2}Y & \text{by inductive hypothesis} \\
+                                   & = \sem{\com_1 + \com_2} X \cup \sem{\com_1 + \com_2} Y
+  \end{align*}
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\com_1; \com_2\)). Therefore
+  \begin{align*}
+    \sem{\com_1 ; \com_2}(X\cup Y) & = \sem{\com_2}(\sem{\com_1}(X \cup Y)) & \text{by definition}\\
+                                   & = \sem{\com_2}(\sem{\com_1}X \cup \sem{\com_1}Y) & \text{by inductive hypothesis}\\
+                                   & = \sem{\com_2}(\sem{\com_1}X) \cup \sem{\com_2}(\sem{\com_1}Y) & \text{by inductive hypothesis}
+  \end{align*}
+  
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\kleene{\com}\)). Therefore
+  \[\sem{\com^*}(X\cup Y) = \bigcup_{i\in\n}\sem{C}^i(X\cup Y)\] in
+  order to use the inductive hypothesis we have to show
+  that
+  \[\forall i \in \n \quad \sem{\com}^i(X \cup Y) = \sem{\com}^i X
+    \cup \sem{\com}^i Y\] to do that, we work again by induction on
+  \(i\):
   \begin{itemize}
-  \item \(\com \equiv \com_1 + \com_2\) therefore
+  \item the base case is \(i = 0\) then \(X \cup Y = X \cup Y\).
+  \item For the inductive case we need to show that
+    \(i \Rightarrow i+1\):
     \begin{align*}
-      \sem{\com_1 + \com_2}(X\cup Y) & = \sem{\com_1}(X \cup Y) \cup \sem{\com_2}(X \cup Y) & \text{by definition}\\
-                           & = \sem{\com_1}X \cup \sem{\com_1}Y \cup \sem{\com_2}X \cup \sem{\com_2}Y & \text{by inductive hypothesis} \\
-                           & = \sem{\com_1 + \com_2} X \cup \sem{\com_1 + \com_2} Y
-    \end{align*}
-    
-  \item \(\com \equiv \com_1; \com_2\) therefore
-    \begin{align*}
-      \sem{\com_1 ; \com_2}(X\cup Y) & = \sem{\com_2}(\sem{\com_1}(X \cup Y)) & \text{by definition}\\
-                                     & = \sem{\com_2}(\sem{\com_1}X \cup \sem{\com_1}Y) & \text{by inductive hypothesis}\\
-                                     & = \sem{\com_2}(\sem{\com_1}X) \cup \sem{\com_2}(\sem{\com_1}Y) & \text{by inductive hypothesis}
-    \end{align*}
-    
-  \item \(\com \equiv \com^*\) therefore
-    \[\sem{\com^*}(X\cup Y) = \bigcup_{i\in\n}\sem{C}^i(X\cup Y)\] in
-    order to use the inductive hypothesis we have to show
-    that
-    \[\forall i \in \n \quad \sem{\com}^i(X \cup Y) = \sem{\com}^i X
-      \cup \sem{\com}^i Y\] to do that, we work again by induction on
-    \(i\):
-    \begin{itemize}
-    \item the base case is \(i = 0\) then \(X \cup Y = X \cup Y\).
-    \item For the inductive case we need to show that
-      \(i \Rightarrow i+1\):
-      \begin{align*}
-        \sem{\com}^{i+1}\left(X\cup Y\right) & = \sem{\com}\left(\sem{\com}^i \left(X \cup Y\right)\right) \\
-                                             & = \sem{\com}\left(\sem{\com}^iX \cup \sem{\com}^iY\right) & \text{by induction hypothesis on } i \\
-                                             & = \sem{\com}\left(\sem{\com}^iX\right) \cup \sem{\com}\left(\sem{\com}^iY\right) & \text{by induction hypothesis on } \com \\
-                                             & = \sem{\com}^{i+1}X \cup \sem{\com}^{i+1}Y
-      \end{align*}
-    \end{itemize}
-    Therefore we can use the inductive hypothesis internally and say
-    \begin{align*}
-      \sem{\com^*}\left(X\cup Y\right) & = \bigcup_{i\in\n}\sem{C}^i\left(X\cup Y\right) \\
-                                       & = \bigcup_{i\in\n}\left(\sem{C}^iX \cup \sem{C}^iY\right) & \text{for the later statement} \\
-                                       & = \left(\bigcup_{i\in\n}\sem{C}^iX\right) \cup \left(\bigcup_{i\in\n}\sem{C}^iY\right) \\
-                                       & = \sem{\com^*}X \cup \sem{\com^*}Y \qedhere
+      \sem{\com}^{i+1}\left(X\cup Y\right) & = \sem{\com}\left(\sem{\com}^i \left(X \cup Y\right)\right) \\
+                                           & = \sem{\com}\left(\sem{\com}^iX \cup \sem{\com}^iY\right) & \text{by induction hypothesis on } i \\
+                                           & = \sem{\com}\left(\sem{\com}^iX\right) \cup \sem{\com}\left(\sem{\com}^iY\right) & \text{by induction hypothesis on } \com \\
+                                           & = \sem{\com}^{i+1}X \cup \sem{\com}^{i+1}Y
     \end{align*}
   \end{itemize}
+  Therefore we can use the inductive hypothesis internally and say
+  \begin{align*}
+    \sem{\com^*}\left(X\cup Y\right) & = \bigcup_{i\in\n}\sem{C}^i\left(X\cup Y\right) \\
+                                     & = \bigcup_{i\in\n}\left(\sem{C}^iX \cup \sem{C}^iY\right) & \text{for the later statement} \\
+                                     & = \left(\bigcup_{i\in\n}\sem{C}^iX\right) \cup \left(\bigcup_{i\in\n}\sem{C}^iY\right) \\
+                                     & = \sem{\com^*}X \cup \sem{\com^*}Y \qedhere
+  \end{align*}
 \end{proof}
 
 We can also observe that a program induces a monotone function in the
@@ -273,13 +283,13 @@ for the sake of simplicity.
   \var \in \interval{a}{b} & = \var \in S & \text{with } S = \interval{a}{b}\\
   \var \leq k & = \var \in (-\infty, k]\\
   \var > k & = \var \in [k+1, + \infty) \\
-  \tru & = \var \in \n \\
+  \tru & = \var \in \z \\
   \ff & = \var \in \emptyset \\
   \var \in S_1 \vee \var \in S_2 & = (\var \in S_1) + (\var \in S_2) \\ 
   \var \in S_1 \wedge \var \in S_2 & = (\var \in S_1);(\var \in S_2) \\
-  \var \not\in S & = \var \in \neg S \\
+  %% \var \not\in S & = \var \in \neg S \\
   \ifte{b}{C_1}{C_2} & = (\com[e];\com_1) + (\com[\neg e];\com_2) \\
-  \while{b}{C} & = \fix{\com[e];\com};\neg\com[e] \\
+  \while{b}{C} & = \fix{b;\com};\neg b \\
   \pplus{\var} & = \var := \var + 1
 \end{align*}
 

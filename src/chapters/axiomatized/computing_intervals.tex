@@ -18,14 +18,18 @@ the \(\min\) and the \(\max\) value of an interval environment:
 % 
 Then, when computing \(\semi[\inte]{\com} \rho\) on such \(\rho\)
 having a finite domain, we can restrict to an interval domain bounded
-by some constant \(k\in\n\) s.t.
-\(\binte{k_1}{k_2} \veq (\Var_{\com} \to \bInt{k_1}{k_2}) \cup \{\top, \bot\}\)
-where
-\begin{align*}
-  \bInt{k_1}{k_2} & \veq \{ \interval{a}{b} \mid a, b \in \z \; \land \; k_1 \leq a \leq b \leq k_2\} \\
-                  & \phantom{\veq} \cup \{\interval{a}{+\infty} \mid a \in \z \; \land \; a \geq k_1\} \\
-                  & \phantom{\veq} \cup \{\interval{-\infty}{b} \mid b \in \z \; \land \; b \leq k_2\}
-\end{align*}
+by some constant \(k\in\n\):
+
+\begin{definition}[Bounded interval]\label{def:boundedint}
+  We define
+  \(\binte{k_1}{k_2} \veq (\Var_{\com} \to \bInt{k_1}{k_2}) \cup
+  \{\top, \bot\}\) where
+  \begin{align*}
+    \bInt{k_1}{k_2} & \veq \{ \interval{a}{b} \mid a, b \in \z \; \land \; k_1 \leq a \leq b \leq k_2\} \\
+                    & \phantom{\veq} \cup \{\interval{a}{+\infty} \mid a \in \z \; \land \; a \geq k_1\} \\
+                    & \phantom{\veq} \cup \{\interval{-\infty}{b} \mid b \in \z \; \land \; b \leq k_2\}
+  \end{align*}
+\end{definition}
 
 We can visualize the Hasse diagram of the bounded integer domain in
 Figure~\ref{fig:bound} and notice that there are no infinite ascending
@@ -95,9 +99,9 @@ chains by definition.
 %
 First we can notice that based on the values of \(k_1\) and \(k_2\) we
 have a complete lattice of interval subdomains, whose top element is
-the \(\inte\) domain itself. We can define a notion of order for the
-lattices by overloading the \(\sqsubseteq\) symbol in the following
-way
+the \(\inte = \binte{-\infty}{+\infty}\) domain. We can define a
+notion of order for the lattices by overloading the \(\sqsubseteq\)
+symbol in the following way
 
 \begin{definition}
   For all \(\bInt{k_1}{k_2}, \bInt{k_3}{k_4}\) bounded interval
@@ -122,17 +126,18 @@ s.t.\ \(k_1 \leq k_2\). By calling
 is a complete lattice.
 
 \noindent
-We need however a special bound, based on Lemma~\ref{le:inc}, based on
+We need however special bounds, based on Lemma~\ref{le:inc}, based on
 the program we are considering and the initial environment.  Hence we
 define \(\inte_{\com,\rho}\) as
 \({\inte_{\com,\rho} = (\Var_{\com} \to \Int_{\com,\rho}) \cup \{
   \top, \bot \}}\) where
 \begin{align*}
-  \Int_{\com,\rho} & \veq \{ \interval{a}{b} \mid a, b \in \n \land
+  \Int_{\com,\rho} & = \bInt{\min(\rho)-\lbound{\com}}{\max(\rho) + \bound{\com}} \\
+                   & = \{ \interval{a}{b} \mid a, b \in \n \land
                      \min(\rho) - \lbound{\com} \leq a \leq b \leq \max(\rho) + \bound{\com}\} \\
                    & \phantom{\veq} \cup \{\interval{a}{+\infty} \mid a \in\z \; \land \; a \geq \min(\rho) - \lbound{\com}\} \\
                    & \phantom{\veq} \cup \{\interval{-\infty}{b} \mid b \in\z \; \land \; b \leq \max(\rho) + \bound{\com}\} \\
-                   & = \bInt{\min(\rho)-\lbound{\com}}{\max(\rho) + \bound{\com}}
+                   & 
 \end{align*}
 
 We preliminarly observe that for any given \(k_1,k_2\in\n\) the
@@ -160,7 +165,7 @@ and therefore \({\eta \sqcap \theta \in \binte{k_1}{k_2}}\) by definition of
 
 \noindent
 Special attention must be put in defining what the analysis over a
-bounded interval domain is. In particular, let's first define our
+bounded interval domain. In particular, let's first define our
 abstraction and concretization maps
 
 \begin{definition}\label{def:boundedac}
@@ -220,7 +225,7 @@ might overcome the bound, and therefore diverge
   \(\semi[\inte]{\var\in S}\rho = \rho[\var \mapsto
   {\abstr[\Int](\concr[\Int](\rho\var) \cap
     \concr[\Int](S))}]\). Here we have two cases:
-  \begin{itemize}
+  \begin{enumerate}[label=(\arabic*)]
   \item \({\concr[\Int](\rho\var) \cap \concr[\Int](S)} =
     \emptyset\). In this case it holds that
     \begin{equation*}
@@ -251,7 +256,7 @@ might overcome the bound, and therefore diverge
       {\semi[\inte]{\var\in S}\rho} \sqsubseteq {\semi[\binte{k_1}{k_2}]{\var\in S}\rho}
     \end{equation*}
     which is our thesis.
-  \end{itemize}
+  \end{enumerate}
 
   \medskip
 
@@ -385,7 +390,9 @@ as the analysis on \(\inte\).
 \begin{theorem}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
   \(\rho : \Var \to \Int\), and \(k_1, k_2\in \z\) s.t.
-  \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2} \)
+  \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2}\), i.e.,
+  \(k_1 \leq \min(\rho) - \lbound{\com}\) and
+  \(k_2 \geq \max(\rho) + \bound{\com}\)
   \begin{equation*}
     \semi[\inte]{\com}\rho = \semi[\binte{k_1}{k_2}]{\com}\rho
   \end{equation*}
@@ -430,20 +437,23 @@ as the analysis on \(\inte\).
   \end{equation*}
   With \(k_1 \leq \min(\rho) - \lbound{\var \in S}\) and
   \(k_2 \geq \max(\rho) + \bound{\var \in S}\). We have 2 cases:
-  \begin{itemize}
-  \item if
-    \({\concr[\Int](\rho\var) \cap \concr[\Int](S) = \emptyset}\)
-    hence it holds that
+  \begin{enumerate}[label=(\arabic*)]
+  \item \({\concr[\Int](\rho\var) \cap \concr[\Int](S) = \emptyset}\).
+
+    \noindent
+    In this case it holds that
     \begin{equation*}
       \semi[\inte]{\var\in S}\rho = \bot = \semi[\binte{k_1}{k_2}]{\var \in S}\rho.
     \end{equation*}
     
-  \item Otherwise
-    \({\concr[\Int](\rho\var) \cap \concr[\Int](S) \neq
-      \emptyset}\). In this case
+  \item \({\concr[\Int](\rho\var) \cap \concr[\Int](S) \neq
+      \emptyset}\).
+
+    \noindent
+    In this case
     \({\semi[\inte]{\var \in S}\rho = \rho[\var \mapsto
-      \abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S))]}\)
-    and we can notice that
+      \abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S))]}\) and
+    we can notice that
     \(\max(\abstr[\Int](\concr[\Int](\rho\var) \cap \concr[\Int](S)))
     \leq \max(\rho\var) \leq \max(\rho)\). Therefore
     \begin{align*}
@@ -453,7 +463,7 @@ as the analysis on \(\inte\).
     \end{align*}
     for all \(k_1 \leq \min(\rho) - \lbound{\var \in S}\) and
     \(k_2 \geq \max(\rho) + \bound{\var\in S}\). Which is our thesis.
-  \end{itemize}
+  \end{enumerate}
 
   \medskip
   
@@ -490,11 +500,11 @@ as the analysis on \(\inte\).
   for all \(\Var \ni \var[w] \neq \var \) it holds that
   \(\rho\var[w] = \semi[\inte]{\var := \var[y] + k}\rho\var[w]\),
   hence we consider \(\var\). We have 2 cases
-  \begin{itemize}
+  \begin{enumerate}[label=(\arabic*)]
   \item
     \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} =
     +\infty\). In this case we have 2 more cases.
-    \begin{itemize}
+    \begin{enumerate}[label=(\roman*)]
     \item
       \({\min(\semi[\inte]{\var := \var[y] + k}\rho\var)} =
       -\infty\). In this case
@@ -525,7 +535,7 @@ as the analysis on \(\inte\).
       \(k_2 \geq \max(\rho) + \bound{\var := \var[y] + k}\). Hence our
       thesis holds.
 
-    \end{itemize}
+    \end{enumerate}
   \item
     \({\max(\semi[\inte]{\var := \var[y] + k}\rho\var)} \neq
     +\infty\). In this case by Lemma~\ref{le:inc} it holds that
@@ -534,7 +544,7 @@ as the analysis on \(\inte\).
     \end{equation*}
     Here we have 2 more cases depending on the value of
     \(\min(\semi[\inte]{\var:= \var[y] + k}\rho\var)\):
-    \begin{itemize}
+    \begin{enumerate}[label=(\roman*)]
     \item
       \({\min(\semi[\inte]{\var:= \var[y] + k}\rho\var[w])} =
       -\infty\). In this case
@@ -565,8 +575,8 @@ as the analysis on \(\inte\).
       \begin{equation*}
         \semi[\inte]{\var := \var[y] + k}\rho = \rho[\var \mapsto \rho\var[y] + k] = \semi[\binte{k_1}{k_2}]{\var := \var[y] + k}\rho
       \end{equation*}
-    \end{itemize}
-  \end{itemize}
+    \end{enumerate}
+  \end{enumerate}
   
   \medskip
   \noindent
@@ -633,7 +643,6 @@ as the analysis on \(\inte\).
   \noindent
   \textbf{Case} (\(\fix{\com}\)).
   % 
-
   Let's recall that as we observed in the \(\fix{\com}\) case in
   Lemma~\ref{le:inc} that
   \[{\fix{\com} = \lfp(\lambda \mu . \semi[\inte]{\com \ndet
@@ -644,8 +653,8 @@ as the analysis on \(\inte\).
     \rho_{i+1} & \defin \semi[\inte]{\com \ndet \tru}\rho_i
   \end{align*}
   Let's consider \(\binte{m}{n}\) with
-  \(n \leq \min(\rho) - (v+2)\bound{\com}\) and
-  \(m \geq \max(\rho) + (v+2)\bound{\com}\) where
+  \(n \leq \min(\rho) - (v+1)\bound{\com}\) and
+  \(m \geq \max(\rho) + (v+1)\bound{\com}\) where
   \(v = |\varsof{\com}|\). We can make the following observations for
   each variable \(\var[y]\in \Var_{\com}\):
 
@@ -685,7 +694,12 @@ as the analysis on \(\inte\).
       \(\max\left(\semi[\inte]{\fix\com}\rho\var[y]\right) \leq
       \bound{\fix\com}\) (or
       \(\min\left(\semi[\inte]{\fix\com}\rho\var[y]\right) \geq
-      -\lbound{\fix\com}\)), by choice of \(n,m\) we can use the
+      -\lbound{\fix\com}\)), by choice of \(n,m\) %, by inductive
+      % hypothesis it holds that, for each iterand \(\rho_i\)
+      % \begin{equation*}
+      %   \rho_{i+1} = \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\binte{n}{m}]{\com\ndet\tru}\rho_i
+      % \end{equation*}
+      we can use the
       inductive hypothesis and say that for each iterand
       \begin{equation*}
         \rho_i = {\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho = {\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^i\rho
@@ -700,6 +714,7 @@ as the analysis on \(\inte\).
         =
         \semi[\binte{n}{m}]{\fix\com}\rho.
       \end{equation*}
+      
       
     \item  Instead, in case
       \(\max\left(\semi[\inte]{\fix\com}\right) > \bound{\fix\com}\) (or

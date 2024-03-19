@@ -100,6 +100,8 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \max(\bot) & \defin - \infty \\
   \max(\interval{a}{b}) & \defin b
 \end{align*}
+Notice in particular that since
+\(\top = \interval{-\infty}{+\infty}\), \(\max(\top) = +\infty\).
 
 % Increment lemma
 \begin{lemma}\label{le:inc}
@@ -144,11 +146,11 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   % hypothesis \(\semi{\com} \eta \neq \top\) would not
   % be satisfied.
   In fact, if \(\eta = \bot\) then \(\semi{\com} \bot = \bot\) and
-  thus \(\max(\semi{\com} \eta \var[y]) = 0 \leq \bound{\com}\),
+  thus \(\max(\semi{\com} \eta \var[y]) = -\infty \leq \bound{\com}\),
   against the hypothesis
   \(\max(\semi{\com}\eta \var[y]) > \bound{\com}\). Moreover, when
-  quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\) in
-  \ref{point1}, if \(\max(\semi{\com}\eta' \var[y]) = + \infty\)
+  quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\)
+  in~\ref{point2}, if \(\max(\semi{\com}\eta' \var[y]) = + \infty\)
   holds, then
   \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\)
   trivially holds, hence we will sometimes silently omit to consider
@@ -157,10 +159,10 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \medskip
   
   \noindent
-  \textbf{Case} (\(\var \in S\))\\
+  \textbf{Case} (\(\var \in S\)).
   % 
   Take \(\eta \in \inte\) and assume
-  \(\infty\neq\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
+  \(+\infty\neq\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
   %
   Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get
   the contradiction
@@ -173,14 +175,14 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \item If \(\var[y] \neq \var\), then for all \(\eta' \in \inte\) such
     that \(\eta \sqsubseteq \eta'\) it holds
     \[\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto
-      {\abstr[\Int](\concr[\Int](\eta(\var)) \cap \concr[\Int](S))}]\]
+      {\abstr[\Int](\concr[\Int](\eta'(\var)) \cap \concr[\Int](S))}]\]
     and thus
     \begin{equation*}
       \max(\semi{\var \in S}\eta' \var[y]) = \max(\eta' \var[y]) = \max(\eta' \var[y]) + 0
     \end{equation*}
     hence the thesis follows with \(\var[z]=\var[y]\) and \(h = 0\).
 
-  \item If \(\var[y] = \var[x]\) then \(\eta(\var) \in \Int\) and
+  \item If \(\var[y] = \var[x]\) then
     \begin{equation*}
       \max(\semi{\var \in S}\eta \var[y]) = \max(\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S)))
     \end{equation*}
@@ -208,7 +210,7 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \medskip
   
   \noindent
-  \textbf{Case} (\(\var := k\))
+  \textbf{Case} (\(\var := k\)).
   % 
   Take \(\eta \in \inte\) and assume
   \(\max(\semi{\var := k}\eta \var[y]) > \bound{\var := k} = |k|\).
@@ -239,7 +241,7 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \medskip
   
   \noindent
-  \textbf{Case} (\(\var := \var[w] + k\))
+  \textbf{Case} (\(\var := \var[w] + k\)).
   % 
   Take \(\eta \in \inte\) and assume
   \(\max(\semi{\var := \var[w] + k}\eta \var[y]) > \bound{\var :=
@@ -277,7 +279,7 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   % \medskip
   
   % \noindent
-  % \textbf{Case} (\(\var := \var[w] - k\))
+  % \textbf{Case} (\(\var := \var[w] - k\)).
   % % 
   % Take \(\eta \in \Int\) and assume
   % \(\max(\semi{\var := \var[w] - k}\eta \var[y]) > \bound{\var := \var[w] - k} = k\).
@@ -319,7 +321,7 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \medskip
   
   \noindent
-  \textbf{Case} (\(\com_1 \ndet \com_2\))
+  \textbf{Case} (\(\com_1 \ndet \com_2\)).
   % 
   Take \(\eta \in \inte\) and assume
   \(\max(\semi{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2}
@@ -328,7 +330,7 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \semi{\com_2}\eta\).
   % 
   Hence, since
-  \(\max(\semi{\com_1 \ndet \com_2} \eta \var[y]) \neq \infty\), we
+  \(\max(\semi{\com_1 \ndet \com_2} \eta \var[y]) \neq +\infty\), we
   have that
   \(\max(\semi{\com_1} \eta \var[y]) \neq \infty \neq
   \max(\semi{\com_2}\eta \var[y])\).  Moreover
@@ -376,14 +378,13 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \medskip
   
   \noindent
-  \textbf{Case} (\(\com_1 \seq \com_2\))
+  \textbf{Case} (\(\com_1 \seq \com_2\)).
   % 
   Take \(\eta \in \inte\) and assume
   \(\max(\semi{\com_1 \seq \com_2}\eta\var[y]) > \bound{\com_1 \seq
-    \com_2} = \bound{\com_1} + \bound{\com_2}\).
-  
-  Recall that
-  \(\semi{\com_1 \seq \com_2} \eta = \semi{\com_2}(\semi{\com_1}\eta)\).
+    \com_2} = \bound{\com_1} + \bound{\com_2}\).  Recall that
+  \(\semi{\com_1 \seq \com_2} \eta =
+  \semi{\com_2}(\semi{\com_1}\eta)\).
   %
   If we define
   \begin{center}
@@ -411,7 +412,8 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
     \bound{\com_1} + \bound{\com_2} = \bound{\com_1 \seq \com_2}\),
   \end{center}
   violating the hypotheses. Moreover,
-  \(\semi{\com_1}\eta \var[w] \neq \infty\), otherwise we would have
+  \(\max(\semi{\com_1}\eta \var[w]) \neq +\infty\), otherwise we would
+  have
   \(\max(\semi{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2 =
   + \infty\), contradicting the hypotheses.  Therefore we can apply
   the inductive hypothesis also to \(\com_1\) and deduce that there
@@ -425,7 +427,7 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
     \tag{\ddag}
   \end{equation}
 
-  Now, for all \(\eta' \in \inte\) with \(\eta \sqsubseteq \eta'\) we have that:
+  Summing up:
   \begin{align*}
     \max(\semi{\com_1 \seq \com_2}\eta \var[y])
     &= \max(\semi{\com_2}(\semi{\com_1}\eta) \var[y])\\
@@ -436,9 +438,9 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
     %
     & = \max(\semi{\com_1}\eta \var[w]) + h_2\\
     %
-    & = \max(\eta \var[w]')+h_1 + h_2
+    & = \max(\eta \var[w]')+h_1 + h_2.
   \end{align*}
-  and
+  Now, for all \(\eta' \in \inte\) with \(\eta \sqsubseteq \eta'\) we have that:
   \begin{align*}
     \max(\semi{\com_1 \seq \com_2}\eta' \var[y]) & = & \\ 
     \max(\semi{\com_2}(\semi{\com_1}\eta') \var[y]) & \geq & \\ 
@@ -456,12 +458,12 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \medskip
   
   \noindent
-  \textbf{Case} (\(\fix{\com}\)) 
+  \textbf{Case} (\(\fix{\com}\)).
   %
   Let \(\eta \in \inte\) such that
   \(\max(\semi{\fix{\com}} \eta \var[y]) \neq + \infty\). Recall that
-  \(\semi{\fix{\com}} \eta = \lfp{\lambda \mu. (\semi{\com} \mu
-    \sqcup\eta)}\). Observe that the least fixpoint of
+  \(\semi{\fix{\com}} \eta = \lfp\left({\lambda \mu. (\semi{\com} \mu
+      \sqcup\eta)}\right)\). Observe that the least fixpoint of
   \(\lambda \mu. (\semi{\com} \mu \sqcup\eta)\) coincides with the
   least fixpoint of
   \(\lambda \mu. (\semi{\com} \mu \sqcup \mu) = \lambda \mu. \semi{
@@ -476,11 +478,12 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \[ 
   \semi{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
   \]
-  Since \(\max(\semi{\fix{\com}}) \eta \var[y] \neq \infty\), we have that
-  for all \(i\in \nat\), \(\eta_i \var[y] \neq \infty\). Moreover,
-  \(\textstyle\bigsqcup_{i \in \nat} \eta_i\) on \(\var[y]\) is
-  finitely reached in the chain \(\{\eta_i\}_{i\in \nat}\), i.e.,
-  there exists \(m \in \mathbb{N}\) such that for all \(i \geq m+1\)
+  Since \(\max(\semi{\fix{\com}}) \eta \var[y] \neq +\infty\), we have
+  that for all \(i\in \nat\), \(\max(\eta_i \var[y]) \neq
+  +\infty\). Moreover, \(\textstyle\bigsqcup_{i \in \nat} \eta_i\) on
+  \(\var[y]\) is finitely reached in the chain
+  \({\{\eta_i\}}_{i\in \nat}\), i.e., there exists
+  \(m \in \mathbb{N}\) such that for all \(i \geq m+1\)
   \[
   \semi{\fix{\com}} \eta \var[y] = \eta_{i} \var[y].
   \]
@@ -491,8 +494,8 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \(j \in \{0,1, \ldots, m\}\), if \(\max(\eta_{j+1} \var) >\bound{\com\ndet \tru} =\bound{\com}\) then
   there exist \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\) such that \(|h| \leq \bound{\com}\) and 
   \begin{enumerate}[label=(\alph*)]
-  \item \(\infty \neq \max(\eta_{j+1} \var) = \max(\eta_j \var[z]) + h\),
-  \item \(\forall \eta' \sqsupseteq \eta_j.
+  \item\label{pointa} \(+\infty \neq \max(\eta_{j+1} \var) = \max(\eta_j \var[z]) + h\),
+  \item\label{pointb} \(\forall \eta' \sqsupseteq \eta_j.
     \max(\semi{\com \ndet \tru}\eta'\var) \geq \max(\eta' \var[z]) + h\).
   \end{enumerate}
   To shortly denote that the two conditions (a) and (b) hold, we write
@@ -535,15 +538,16 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \(\var[y]_j\in \Var\)  and
   \(\max(\eta_{j} \var[y]_{j}) > \bound{\com}\).
   %, so that for \(j\neq m+1\), \(|h_j|\leq \bound{\com}\).
-  In fact, if, by contradiction, this is not the case, there would
+  In fact, if, by contradiction, this were not the case, there would
   exist an index \(i \in \{0,\ldots, m\}\) (as
   \(\max(\eta_{m+1} \var[y]_{m+1}) > \bound{\com}\) already holds)
   such that \(\max(\eta_{i} \var[y]_{i}) \leq \bound{\com}\), while
   for all \(j \in \{i+1,\ldots, m+1\}\),
   \(\max(\eta_{j} \var[y]_j) > \bound{\com}\).  Thus, in such a case,
   we consider the nonempty path:
-  \[\pi \veq (\var[y]_i, i) \to_{h_i} (\var[y]_{i+1}, i+1) \to_{h_{i+1}} \ldots
-  \to_{h_m} (\var[y]_{m+1}, m+1)\]
+  \begin{equation}\label{eq:pi}
+    \pi \veq (\var[y]_i, i) \to_{h_i} (\var[y]_{i+1}, i+1) \to_{h_{i+1}} \ldots \to_{h_m} (\var[y]_{m+1}, m+1)
+  \end{equation}
   and we have that:
   \begin{align*}
     &\Sigma_{j=i}^m h_j =\\ 
@@ -572,10 +576,42 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \var[w]) + h\] 
   Observe that for all \(\eta' \sqsupseteq \eta_{k_1}\)
   \begin{equation}\label{prop2}
-    \max(\semi{\com \ndet \tru}^{k_2-k_1} \eta' \var[w]) \geq \max(\eta'
-    \var[w]) + h
+    \max\left(\semi{\com \ndet \tru}^{k_2-k_1} \eta' \var[w]\right) \geq \max(\eta' \var[w]) + h
   \end{equation}
-  This property \eqref{prop2} can be shown by induction on \(k_2-k_1 \geq 1\).
+  Let us show Property~\eqref{prop2} by induction on \(\ell = k_2-k_1 \geq 1\).
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\ell = 1\)).
+  %
+  Notice that by~\ref{pointb} used to build \(\pi\)
+  in~\eqref{eq:pi} it holds that
+  \(\forall \eta'\sqsupseteq \eta_{k_1}\sqsupseteq \eta\)
+  \begin{equation*}
+    \max\left(\semi{\com\ndet\tru}\eta'\var[w]\right) \geq \max(\eta'\var[w]) + h
+  \end{equation*}
+  hence the thesis holds.
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(\ell \Rightarrow \ell + 1\)).
+  %
+  % In this case we can use the inductive hypothesis and state that
+  % \(\forall \eta'\sqsupseteq \eta_{k_1} \sqsupseteq \eta\)
+  % \begin{equation*}
+  %   \max\left({\left(\semi{\com\ndet\tru}\right)}^\ell\eta'\var[w]\right) \geq \max(\eta'\var[w]) + h
+  % \end{equation*}
+  % where \(h = \Sigma_{j=k_1}^{k_1 -1}h_j\).
+  Recall that
+  \begin{equation*}
+    {\left(\semi{\com\ndet\tru}\right)}^{\ell + 1}\eta' = {\left(\semi{\com\ndet\tru}\right)}\left(\left({\left(\semi{\com\ndet\tru}\right)}^\ell\right)\eta'\right)
+  \end{equation*}
+  and by inductive hypothesis
+  \(\max\left({\left(\semi{\com\ndet\tru}\right)}^\ell\eta'\var[w]\right)
+  \geq \max\left(\eta'\var[w]\right) + h\).
+  \todo[inline]{Finire}
   
   \noindent    
   Then, an inductive argument allows us to show that for all \(r \in \mathbb{N}\):
@@ -595,9 +631,9 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   \end{align*}
 
   \noindent
-  However, This would contradict the hypothesis
+  However, this would contradict the hypothesis
   \(\semi{\fix{\com}} \eta \var[y] \neq \infty\). In fact the
-  inequality \eqref{nopp} would imply
+  inequality~\eqref{nopp} would imply
   \begin{align*}
     \semi{\fix{\com}} \eta \var[w]
     & = \bigsqcup_{i \in \mathbb{N}} \semi{\com
@@ -609,12 +645,13 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
     & = +\infty
   \end{align*}
 
-  Now, from \eqref{eq:fix} we deduce that for all
+  Now, from~\eqref{eq:fix} we deduce that for all
   \(\eta' \sqsupseteq \eta_{k_1}\), for \(j \in \{ k_1, \ldots, m\}\),
   if we let \(\mu_{k_1} = \eta'\) and
-  \(\mu_{j+1} = \semi{\com \ndet \tru} \mu_j\), we have that
-  \(\max(\mu_{j+1} \var[y]_{j+1}) \geq \max(\mu_{j+1} \var[y]_{j}) +
-  h_j\) and thus
+  \(\mu_{j+1} = \semi{\com \ndet \tru} \mu_j\), by the choice of the
+  subsequence, since \(k_1 \geq i\), we have that
+  \[\max(\mu_{j+1} \var[y]_{j+1}) \geq \max(\mu_{j+1} \var[y]_{j}) +
+  h_j\] and thus
   \[
   \semi{\com \ndet \tru}^{m-k_1+1} \eta' \var[y] = \mu_{m+1}
   \var[y]_{m+1} \geq 
@@ -623,7 +660,8 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
   Since \(\eta' = \semi{\fix{\com}} \eta \sqsupseteq \eta_{k_1}\) we conclude
   \begin{align*}
     \semi{\fix{\com}} \eta \var[y]
-    & = \semi{\com \ndet \tru}^{m-k_1+1} \semi{\fix{\com}} \eta \var[y]\\
+    & = \semi{\com \ndet \tru}^{m-k_1+1} \semi{\fix{\com}} \eta \var[w]\\
+    & \max\left(\semi{\fix\com}\eta\var[w]\right) + {\Sigma_{i=k_1}}^m{h_i} \\
     & \geq +\infty + \Sigma_{i=k_1}^m h_i = +\infty
   \end{align*}
   contradicting the assumption.
