@@ -694,28 +694,12 @@ as the analysis on \(\inte\).
       \(\max\left(\semi[\inte]{\fix\com}\rho\var[y]\right) \leq
       \bound{\fix\com}\) (or
       \(\min\left(\semi[\inte]{\fix\com}\rho\var[y]\right) \geq
-      -\lbound{\fix\com}\)), by choice of \(n,m\) %, by inductive
-      % hypothesis it holds that, for each iterand \(\rho_i\)
-      % \begin{equation*}
-      %   \rho_{i+1} = \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\binte{n}{m}]{\com\ndet\tru}\rho_i
-      % \end{equation*}
-      we can use the
-      inductive hypothesis and say that for each iterand
-      \begin{equation*}
-        \rho_i = {\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho = {\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^i\rho
-      \end{equation*}
-      hence by closure over \(\sqcup\)
-      \begin{equation*}
-        \semi[\inte]{\fix\com}\rho
-        =
-        \textstyle\bigsqcup_{i\in\n}\rho_i
-        =
-        \textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^i\rho
-        =
-        \semi[\binte{n}{m}]{\fix\com}\rho.
-      \end{equation*}
-      
-      
+      -\lbound{\fix\com}\)). In this case it holds that either
+      \begin{align*}
+        \max(\semi[\inte]{\fix\com}\rho\var[y]) & \leq \bound{\fix\com} \leq \max(\rho) + \bound{\fix\com} \\
+        \min(\semi[\inte]{\fix\com}\rho\var[y]) & \geq - \lbound{\fix\com} \geq \min(\rho) - \bound{\fix\com}
+      \end{align*}
+
     \item  Instead, in case
       \(\max\left(\semi[\inte]{\fix\com}\right) > \bound{\fix\com}\) (or
       \(\min\left(\semi[\inte]{\fix\com}\right) < -\lbound{\fix\com}\)),
@@ -725,28 +709,62 @@ as the analysis on \(\inte\).
         \max\left(\semi[\inte]{\fix\com}\rho\var[y]\right) & \leq \max(\rho) + \bound{\fix\com} = \max(\rho) + (v + 1)\bound{\com} \\
         \min\left(\semi[\inte]{\fix\com}\rho\var[y]\right) & \geq \min(\rho) - \lbound{\fix\com} = \max(\rho) - (v + 1)\bound{\com} 
       \end{align*}
-      
-      hence again, by choice of \(n,m\) we can use the inductive
-      hypothesis in both cases and state that
-      \begin{equation*}
-        \semi[\inte]{\com \ndet \tru}\rho_i
-        =
-        {\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho
-        =
-        {\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^i\rho
-      \end{equation*}
-      and by closure over \(\sqcup\)
-      \begin{equation*}
-        \semi[\inte]{\fix\com}\rho
-        =
-        \textstyle\bigsqcup_{i\in\n}\rho_i
-        =
-        \textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^i\rho
-        =
-        \semi[\binte{n}{m}]{\fix\com}\rho.
-      \end{equation*}
     \end{enumerate}
+    Hence in both cases by choice of \(n,m\) we can use the inductive
+    hypothesis on the iterands \(\rho_i\). %, by inductive
+    % hypothesis it holds that, for each iterand \(\rho_i\)
+    % \begin{equation*}
+    %   \rho_{i+1} = \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\binte{n}{m}]{\com\ndet\tru}\rho_i
+    % \end{equation*}
+    and work by induction on \(i\) on the iterands. Here we present
+    the case for \(\max\) and
+    \(m \geq \max(\rho) + \bound{\fix\com}\), but the case where we
+    consider the \(\min\) value and
+    \(n \leq \min(\rho) - \lbound{\fix\com}\) is analogous.
+    
+    \medskip
+    
+    \noindent
+    \textbf{Case} (\(i=0\)).  Then
+    \begin{align*}
+      \max(\rho_{0+1 = 1}\var[y]) & = \max\left(\semi[\inte]{\com\ndet\tru}\rho_0\var[y]\right) \\
+                                  & = \max\left(\semi[\binte{n}{m}]{\com\ndet\tru}\rho_0\var[y]\right) & \text{by induction on } \com\ndet\tru \text{ bnd by choice of } m \\
+                                  & = \max\left({\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^{i+1}\rho\var[y]\right) & \text{by definition of } \rho_0
+    \end{align*}
+
+    \medskip
+
+    \noindent
+    \textbf{Case} (\(i \Rightarrow i+1\)).  Then
+    \begin{align*}
+      \max(\rho_{i+1}\var[y]) & = \max\left(\semi[\inte]{\com\ndet\tru}\rho_i\var[y]\right) \\
+                              & = \max\left(\semi[\binte{n}{m}]{\com\ndet\tru}\rho_i\var[y]\right) & \text{by induction on } \com \ndet \tru \text{ and by choice of } m \\
+                              & = \max\left(\semi[\binte{n}{m}]{\com\ndet\tru}{\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^i\rho\var[y]\right) & \text{by induction on } i \\
+                 & = \max\left({\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^{i+1}\rho\var[y]\right)
+    \end{align*}
+    hence by closure over \(\sqcup\)
+    \begin{align*}
+      \max\left(\semi[\inte]{\fix\com}\rho\var[y]\right)
+      & =
+        \max\left(\textstyle\bigsqcup_{i\in\n}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho\var[y]\right) \\
+      & =
+        \max\left(\textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{n}{m}]{\com\ndet\tru}\right)}^i\rho\var[y]\right) \\
+      & =
+        \max\left(\semi[\binte{n}{m}]{\fix\com}\rho\var[y]\right)
+    \end{align*}
+    Notice that the latter observations also holds for the \(\min\)
+    value and for all \(n \in \z\) s.t.
+    \({n \leq \min(\rho) - \lbound{\fix\com}}\).
   \end{enumerate}
+  Since the two cases apply for each variable and every possible
+  \(\max\) and \(\min\) value of \(\semi[\inte]{\fix\com}\rho\), we
+  can say that
+  \begin{equation*}
+    \semi[\inte]{\fix\com}\rho = \semi[\binte{n}{m}]{\fix\com}\rho
+  \end{equation*}
+  for all \(n \leq \min(\rho) - \lbound{\fix\com}\),
+  \(m \geq \max(\rho) + \bound{\fix\com}\) (hence
+  \(\binte{n}{m} \sqsubseteq \inte\)), which is our thesis.
   % 
   % - osservo che
   % 
