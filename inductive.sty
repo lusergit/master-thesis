@@ -1,0 +1,12 @@
+% inductive.sty --  `inductive` environment with `case` commands
+
+\RequirePackage{enumitem}
+
+% Define the 'inductive' environment
+\newlist{inductive}{description}{1}
+\setlist[inductive]{labelindent=\parindent, leftmargin=!, font=\normalfont}
+
+% Redefine the \case command to accept an optional argument
+\makeatletter
+\newcommand{\case}[1]{\item[\textbf{Case} (\normalfont{#1}).]}
+\makeatother

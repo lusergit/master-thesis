@@ -23,7 +23,7 @@ produced. For a brief history of the technique,
 see~\cite{ranzato:history}.
 
 The main source of this chapter comes from the notes on abstract
-interpretation by Prof.\ Miné~\cite{mine:course}.
+interpretation in~\cite{mine:course}.
 
 \subsection{General concepts}\label{subsec:abstrgeneral}
 
@@ -64,7 +64,7 @@ some monotonic \emph{abstraction function}
 \({\abstr : \tuple{C, \leq} \to \tuple{A, \sqsubseteq}}\), such that
 \(\tuple{\abstr, C, A, \concr}\) forms a Galois connection:
 
-\begin{definition}[Galois connection]
+\begin{definition}[Galois connection]\label{def:galoiscon}
   Given two partially ordered sets
   \(\tuple{C, \leq}, \tuple{A, \sqsubseteq}\), the tuple
   \(\tuple{\abstr, C, A, \concr}\) is a Galois connection if
@@ -72,11 +72,14 @@ some monotonic \emph{abstraction function}
   \item \(A,C\) are complete lattices;
   \item \(\abstr : \tuple{C, \leq} \to \tuple{A, \sqsubseteq}\) and
     \(\concr : \tuple{A, \sqsubseteq} \to \tuple{C, \leq}\) are monotonic;
-  \item for all \(a\in A, c\in C\), \(c \leq \concr(a) \iff \abstr(c) \sqsubseteq a\).
+  \item for all \(a\in A, c\in C\),
+    \begin{equation}\label{eq:conn}
+      c \leq \concr(a) \iff \abstr(c) \sqsubseteq a.
+    \end{equation}
   \end{itemize}
 
-  Figure~\ref{fig:galois} is a visualization of the notion of Galois
-  connection.
+  We denote \(\tuple{\abstr, C, A, \concr}\) as
+  \({\tuple{C, \leq} \galois{\abstr}{\concr} \tuple{A, \sqsubseteq}}\).
 \end{definition}
 
 \begin{figure}
@@ -89,19 +92,84 @@ some monotonic \emph{abstraction function}
     
     % Arrows
     \path
-    (C) edge[bend right=30] node[above]{$\alpha$} (A)
-    (A) edge[bend right=30] node[below]{$\gamma$} (C);
+    (C) edge[bend right=30] node[above]{$\abstr$} (A)
+    (A) edge[bend right=30] node[below]{$\concr$} (C);
   \end{tikzpicture}
   \caption{Galois connection between an abstract domain \(A\) and a
     concrete domain \(C\)}\label{fig:galois}
 \end{figure}
+
+Usually though we use an alternative characterization of Galois
+Connections, which is easier to prove:
+
+\begin{theorem}\label{th:alternate}
+  \(\tuple{C, \leq} \galois{\abstr}{\concr} \tuple{A, \sqsubseteq}\)
+  is a Galois connection iff the function pair
+  \(\tuple{\abstr,\concr}\) satisfies all the following properties:
+  \begin{enumerate}[label=(\arabic*)]
+  \item \(\abstr, \concr\) are monotonic;
+  \item \(\forall c \in C \quad c \leq \concr(\abstr(c))\) i.e.,
+    \(\concr \circ \abstr\) is extensive;
+  \item \(\forall a \in A \quad \abstr(\concr(a)) \sqsubseteq a\),
+    i.e., \(\abstr \circ \concr\) is reductive.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  Assume that \(\tuple{\abstr,\concr}\) satisfies~\eqref{eq:conn},
+  then we want to prove that the properties of
+  Theorem~\ref{th:alternate} hold.
+  \begin{enumerate}[label=(\arabic*)]
+  \item\label{proof:one} Applying~\eqref{eq:conn} with
+    \(a \defin \abstr(c)\) we get
+    \begin{equation}
+      c \leq \concr(\abstr(c))
+    \end{equation}
+    i.e., \(\concr \circ\abstr\) is extensive, which is our first
+    thesis.
+  \item\label{proof:two} Applying~\eqref{eq:conn} with
+    \(c \defin\concr(a)\) we get
+    \begin{equation}
+      \abstr(\concr(a)) \sqsubseteq a
+    \end{equation}
+    i.e., \(\abstr\circ\concr\) is reductive, which is our second
+    thesis.
+  \item By~\ref{proof:one} \(\forall c, c'\in C\) it holds that
+    \(c \leq c' \Rightarrow c \leq \concr(\abstr(c'))\). Hence, we can
+    apply again~\eqref{eq:conn} with \(a \defin \abstr(c')\) and get
+    that \(\abstr(c) \sqsubseteq \abstr(c')\), i.e., \(\abstr\) is
+    monotonic.
+  \item By~\ref{proof:two} \(\forall a, a'\in C\) it holds that
+    \(a \sqsubseteq a' \Rightarrow \abstr(\concr(a)) \sqsubseteq
+    a\). Hence, we can apply~\eqref{eq:conn} with
+    \(c \defin \concr(a)\) and get that
+    \(\concr(a)\leq\concr(a')\), i.e., \(\concr\) is
+    monotonic.
+  \end{enumerate}
+
+  Assume conversely that the four properties hold. Then we want to
+  prove that~\eqref{eq:conn} holds.
+  \begin{description}
+  \item[(\(\Rightarrow\))] First assume that \(c \leq
+    \concr(a)\). Then \(\abstr(c) \sqsubseteq \abstr(\concr(a))\) by
+    monotonicity of \(\abstr\) and \(\abstr(\concr(a)) \sqsubseteq a\)
+    by reductivity, hence \(\abstr(c) \sqsubseteq a\).
+  \item[(\(\Leftarrow\))] Likewise, assume that
+    \(\abstr(c) \sqsubseteq a\). Then
+    \(\concr(\abstr(c)) \leq \concr(a)\) by monotonicity of \(\concr\)
+    and \(c \leq \concr(\abstr(c))\) by extensivity, hence
+    \(c \leq \concr(a)\).
+  \end{description}
+\end{proof}
 
 Galois connections carry with them some well known properties, that
 are useful to state best correct approximations (bca) and to prove the
 soundness by construction of the analyzer:
 
 \begin{theorem}[Galois connection properties]\label{th:galoisprop}
-  Given a Galois connection \(\tuple{\abstr, C, A, \concr}\) we have:
+  Given a Galois connection
+  \(\tuple{C,\leq} \galois{\abstr}{\concr} \tuple{A, \sqsubseteq}\) we
+  have:
   \begin{enumerate}
   \item \(\concr \circ \abstr \circ \concr = \concr\) and
     \(\abstr \circ \concr \circ \abstr = \abstr\);
@@ -111,7 +179,7 @@ soundness by construction of the analyzer:
     \(\abstr(c) = \sqcap \{a \mid c \leq \concr(a)\}\);
   \item \(\forall a \in A\)
     \(\concr(a) = \vee \{ c \mid \abstr(c) \sqsubseteq a \}\);
-  \item \(\abstr\) maps concrete lubs to abstract lubs:
+  \item\label{prop:five} \(\abstr\) maps concrete lubs to abstract lubs:
     \begin{equation*}
       \forall X \subseteq C \quad \exists \vee X \Rightarrow \abstr(\vee X) = \sqcup \{\abstr(x) \mid x \in X\}
     \end{equation*}
@@ -142,16 +210,17 @@ following corollary:
   abstraction of \(c\).
 \end{corollary}
 
-In general we saw that for a Galois connection \(\concr \circ \abstr\)
+In general we saw that for a Galois connection \(\concr \conc \abstr\)
 is idempotent, and generally not the identity function, as abstracting
 looses precision. Concretizing however, should not loose precision, so
 we could expect \(\abstr \circ \concr\) to be the identity
 function. When this is the case, we have a \emph{Galois insertion}:
 
-\begin{definition}[Galois Insertion]
-  A Galois connection \(\tuple{\abstr, C, A, \concr}\) is a
-  \emph{Galois insertion} if one of the following, equivalent
-  properties hold:
+\begin{definition}[Galois Insertion]\label{def:insertion}
+  A Galois
+  connection \(\tuple{C, \leq} \galois{\abstr}{\concr} \tuple{A,
+    \sqsubseteq}\) is a \emph{Galois insertion} if one of the
+  following, equivalent properties hold:
   \begin{enumerate}
   \item \(\abstr\) is surjective: \(\forall a \in A\)
     \(\exists c \in C \mid \abstr(c) = a\);
@@ -159,7 +228,68 @@ function. When this is the case, we have a \emph{Galois insertion}:
     \(\concr(a) = \concr(a') \Rightarrow a = a'\);
   \item \(\abstr \circ \concr\) is the identity function.
   \end{enumerate}
+  We denote Galois insertions as
+  \(\tuple{C, \leq} \galoiS{\abstr}{\concr} \tuple{A, \sqsubseteq}\).
 \end{definition}
+
+Nexr, we can show that given a Galois connection and by doing a
+\emph{point-wise lifting} of the values in the concrete and abstract
+domain, we get another galois connection. This will later be useful in
+Chapter~\ref{chap:abstractdomains} to lift proofs from a domain to its
+point-wilse lifting.
+
+\begin{theorem}\label{th:pointwiseconn}
+  Given a Galois connection
+  \(\tuple{C, \leq} \galois{\abstr}{\concr} \tuple{A, \sqsubseteq}\)
+  we can derive a new Galois connection with the \emph{point wise
+    lifting}, i.e.
+  \(\tuple{S\to C, \ovdot{\leq}} \galois{\dot\abstr}{\ovdot{\concr}}
+  \tuple{S\to A, \ovdot{\sqsubseteq}}\) where
+  \begin{align*}
+    f \dot\leq f' & \defin \forall s \in S \quad f(s) \leq f'(s)\\
+    f \dot\sqsubseteq f' & \defin \forall s \in S \quad f(s) \sqsubseteq f'(s)\\
+    \dot\abstr(f) & \defin \lambda s \in S . \abstr(f(s)) \\
+    \dot\concr(f) & \defin \lambda s \in S . \concr(f(s)) \\
+  \end{align*}
+  and \(S\) is an arbitrary set.
+\end{theorem}
+
+\begin{proof}
+  \begin{align*}
+    \dot\abstr(c) \ovdot\sqsubseteq a & \iff \forall x\in S \quad \abstr(c)(x) \sqsubseteq a(x) & \text{by definition} \\
+                                      & \iff \forall x\in S \quad c(x) \leq a(x) & \text{by~\eqref{eq:conn}} \\
+                                      & \iff c \ovdot\leq \dot\concr(a) & \text{by definition}
+  \end{align*}
+\end{proof}
+
+from this, we can derive the following
+\begin{theorem}\label{th:liftingins}
+  if
+  \(\tuple{C, \leq} \galoiS{\abstr}{\concr} \tuple{A, \sqsubseteq}\)
+  is a Galois insertion, then its point-wise lifting is again a Galois
+  insertion:
+  \begin{equation*}
+    \tuple{S \to C, \ovdot\leq} \galoiS{\dot\abstr}{\dot\concr} \tuple{S\to A, \ovdot\sqsubseteq}
+  \end{equation*}
+\end{theorem}
+
+\begin{proof}
+  By Th.~\ref{th:pointwiseconn} it holds that
+  \(\tuple{S \to C, \ovdot\leq} \galois{\dot\abstr}{\dot\concr}
+  \tuple{S\to A, \ovdot\sqsubseteq}\). What we have to prove is that
+  \(\dot\abstr \circ \dot\concr = \id\) kowing that
+  \(\abstr \circ \concr = \id\).
+
+  \begin{align*}
+    (\dot\abstr \circ \dot\concr)(f) & = \dot\abstr(\lambda s\in S . \concr(f(s))) & \text{by definition} \\
+                                     & = \lambda s\in S . (\abstr \circ \concr)(f(s)) & \text{by definition} \\
+                                     & = \lambda s\in S . \id(f(s)) & \text{by hypothesis} \\
+                                     & = f & \text{by definition}
+  \end{align*}
+  hence \(\dot\abstr \circ \dot\concr = \id\), which means
+  \(\tuple{S \to C, \ovdot\leq} \galoiS{\dot\abstr}{\dot\concr}
+  \tuple{S\to A, \ovdot\sqsubseteq}\).
+\end{proof}
 
 In this context we also need a way of ensuring abstract operations are
 sound (and occasionally) correct. Even by only using the
@@ -191,13 +321,89 @@ introduce the notion of \emph{Best correct approximation}:
   \(f\) is given by \(\abstr \conc f \conc \concr\).
 \end{definition}
 
-\todo[inline]{fixpoint calculation problems}
+It is imperative to prioritize the modular and composable nature of
+our abstractions. As elaborated in subsequent chapters, the semantics
+of a program typically emerge from the composition of atomic semantic
+functions drawn from a finite library representing fundamental
+language operations. This framework lends itself well to a modular
+abstraction scheme, where abstract operators are designed exclusively
+for this foundational set of operations. By adhering to the same
+principles governing concrete semantics, these abstract operators can
+be composed effectively. This is facilitated by the inherent
+composability and accuracy of sound abstractions:
 
-In order to solve the convergence problem in abstract
-domains,~\cite{patrickradhia:one} introduced a specific binary
-operator, the widening operator \(\widen\):
+\begin{theorem}[Operator composition]\label{th:opcomp}
+  Let \(f, f' : C \to C\) be concrete operators and \(g, g' A \to A\)
+  abstract operators. The following properties hold:
+  \begin{enumerate}[label=(\arabic*)]
+  \item if \(g, g'\) are \emph{sound abstractions} of \(f\) and \(f'\)
+    respectively and \(f\) is monotonic, then \(g \circ g'\) is a
+    sound abstraction of \(f \circ f'\);
+  \item if \(g, g'\) are correct abstractions of \(f\) and \(f'\)
+    respectively then \(g \circ g'\) is a correct abstraction of
+    \(f \circ f'\).
+  \end{enumerate}
+\end{theorem}
 
-\begin{definition}[Widening operator]
+\begin{proof}
+  We proceed to prove the two properties in order:
+  \begin{enumerate}[label=(\arabic*)]
+  \item \(g'\) is a sound abstraction of \(f'\), hence
+    \begin{align*}
+      \forall a \in A \quad (f'\circ \concr)(a) & \leq (\concr \circ g') (a) \\
+      (f \circ f' \circ \concr)(a) & \leq (f \circ \concr \circ g')(a) & \text{by monotonicity of } f \\
+      (f \circ f' \circ \concr)(a) & \leq (f \circ \concr \circ g')(a) \leq (\concr \circ g \circ g')(a) & \text{by monotonicity of } g
+    \end{align*}
+  \item since both \({f \circ \concr = \concr \circ g}\) and
+    \({f' \circ \concr = \concr \circ g'}\) it holds that
+    \begin{equation*}
+      f \circ f' \circ \concr =  f \circ \concr \circ g' = \concr \circ g \circ g'
+    \end{equation*}
+  \end{enumerate}
+\end{proof}
+
+\subsection{Fixpoint approximations}\label{subsec:fixpointapprox}
+Critical parts of program semantics are defined trough the idea of
+least fixpoints \(\lfp f\) of some monotonic function or continuous
+operator \(f : C \to C\) over the concrete domain
+\(\tuple{C,\leq}\). In order to abstract the computation of \(\lfp f\)
+in the abstract domain \(\tuple{A,\sqsubseteq}\) the natural idea is
+to start with a sound abstraction \(g : A \to A\) of \(f\). Then there
+are many ways of approximate the fixpoint computation trough the use
+of \(g\). We mention two, in order to see what its main problems are.
+
+\begin{description}
+\item[Kleene fixpoint.] A first idea is to mimic the fixpoint
+  computation with \(g\) instead of \(f\). For instance by relying on
+  the constructive definition of \(\lfp f\) as the limit of an
+  iteration sequence from Kleene's Theorem~\ref{th:fixpoint}:
+  \begin{equation*}
+    \lfp(f) = \sqcup\{f^i(\bot) \mid i \in \n\} \sqsubseteq \sqcup\{g^i(\bot) \mid i \in \n\} = \lfp(g)
+  \end{equation*}
+  
+\item[Tarski fixpoint.] Tarski fixpoint is instead based on the Tarski
+  characterization of the fixpoint:
+  \begin{equation}\label{eq:tarski}
+    \lfp(f) = \sqcap \{x \in C \mid f(x) \sqsubseteq x\}
+  \end{equation}
+  i.e., the least fixpoint of a monotonic function \(f\) over a
+  complete lattice \(f\) is the greatest lower bound of the
+  postfixpoints.  The observation is that any abstract postfixpoint of
+  a sound abstract rapresents, trough \(\concr\), a concrete fixpoint
+  (by Theorem~\ref{th:galoisprop}). The theorem however does not state
+  how to compute a postfixpoint of \(g\) in the abstract, but is
+  nonetheless useful as it allows us to provide a sound answer (a
+  post-fixpoint) even with abstract fixpoints are difficult to compute
+  (as for infinite ascending chains) or non-existstent at all.
+\end{description}
+
+As mentioned before, in order to solve the convergence problem in
+abstract domains,Patrick and Radhia Cousot in~\cite{patrickradhia:one}
+prposed to use Tarski's characterization to provide post fixpoint of
+infinite ascending chains, introducing a binary operator: the
+\emph{widening} operator \(\widen\).
+
+\begin{definition}[Widening operator]\label{def:widen}
   A binary operator \(\widen : A \times X \to A\) is a \emph{widening
     operator} in an abstract domain \(\tuple{A, \sqsubseteq}\) if
   \begin{enumerate}
@@ -205,57 +411,7 @@ operator, the widening operator \(\widen\):
     \begin{equation*}
       \forall x, y \in A \quad x \sqsubseteq x \widen y \; \land \; y \sqsubseteq x \widen y;
     \end{equation*}
-  \item it enforces convergence: for any increasing sequence
-    \({\{y^i\}}_{i\in\n}\) in \(A\), the sequence \(\{x^i\}_{i\in\n}\)
-    computed as
-    \begin{align*}
-      x^0 & \defin y^0 \\
-      x^{i+1} & \defin x^i \widen y^{i+1}
-    \end{align*}
-    stabilizes in finite time: \(\exists k \geq 0 \mid x^{k+1} = x^k\).
-  \end{enumerate}
-\end{definition}
-
-the latter definition allows us to observe several things:
-\begin{itemize}
-\item the first point allows to construct increasing sequences by
-  iterating abstract operations that are not necessarily monotonic, and
-  the result of \(x \widen y\) is a sound approximation of the
-  concrete join \(\concr(a) \vee \concr(b)\);
-\item the second point ensures that all increasing sequences with
-  widening are finite: even if the abstract domain has infinite
-  strictly increasing chains.
-\end{itemize}
-
-A naïve widening operator that can be used in any abstract domain
-containing a top element \(\top\) could be the following:
-
-\begin{example}[Naïve widening]
-  \begin{equation*}
-    x \widen y \defin \begin{cases}
-      x & \text{if } y \sqsubseteq x \\
-      \top & \text{otherwise}
-    \end{cases}
-  \end{equation*}
-\end{example}
-
-which we can see respects all the properties of the widening
-definition and ensures convergence of strictly increasing chains.
-Notice however that in doing so we \emph{loose} precision. It can
-happen however that we can retrieve some of the lost precision by
-looking at the syntax of the program we are considering. We can do
-this by using the \emph{narrowing} operator:
-
-\begin{definition}[Narrowing]
-  A binary operator \(\narrowi : A \times A \to A\) is a
-  \emph{narrowing operator} in an abstract domain
-  \(\tuple{A, \sqsubseteq}\) if
-  \begin{enumerate}
-  \item it computes lower bounds:
-    \begin{equation*}
-      \forall x, y \in A \quad x \sqcap y \sqsubseteq x \narrowi y \sqsubseteq x;
-    \end{equation*}
-  \item it enforces convergence: for any decreasing sequence
+  \item\label{widen:prop1} it enforces convergence: for any sequence
     \({\{y^i\}}_{i\in\n}\) in \(A\), the sequence
     \({\{z^i\}}_{i\in\n}\) computed as
     \begin{align*}
@@ -266,6 +422,30 @@ this by using the \emph{narrowing} operator:
   \end{enumerate}
 \end{definition}
 
+With the widening operator we enforce the termination of a sound
+abstract analyzer for the computation of upper bounds:
+
+\begin{theorem}\label{th:convergence}
+  Let \(f\) be a monotonic operator in a complete concrete lattice and
+  \(g\) a sonud abstraction of \(f\). Then the following iteration
+  \begin{align*}
+    x^0 & \defin \bot \\
+    x^{i+1} & \defin x^i \widen g(x^i)
+  \end{align*}
+  converges in finite time, and its limit \(x\) is a sound abstraction
+  of the least fixpoint \(\lfp(f)\), i.e., \(\lfp(f) \leq \concr(x)\).
+\end{theorem}
+
+\begin{proof}
+  Convergence is ensured by Property~\ref{widen:prop1} of
+  Definition~\ref{def:widen}, while the soundness is because of
+  Equation~\eqref{eq:tarski} given that, when encountering a stable
+  value \(x^{i+1} = x^i\), then
+  \(f(x^i) \sqsubseteq x^i \widen f(x^i) = x^{i+1}\), i.e., \(x^i\) is
+  an abstract postfixpoint.
+\end{proof}
+
 Where the first point states that \(\narrowi\) refines its left
 argument while bringing a sound approximation, and the second point
 enforces termination.
+

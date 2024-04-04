@@ -1,7 +1,8 @@
 \subsection{Definition}
 \label{sub:intervals}
 
-\todo[inline]{intro da fare}
+We first define what the set of intervals \(\Int\) is and its
+abstraction and concretization map to the powerset of integers.
 
 \begin{definition}[Integer intervals]\label{def:int}
   We call
@@ -22,28 +23,29 @@ concretization and abstraction maps for the intervals domain
   We define the \emph{concretization map} \(\concr[\Int] : \Int \to
   \poset{\n}\) as
   \begin{align*}
-    \concr[\Int](\interval{a}{b}) & \defin \{x\in \n \mid a \leq x \leq b\} \\
-    \concr[\Int](\bot) & \defin \emptyset
+    \concr(\interval{a}{b}) & \defin \{x\in \n \mid a \leq x \leq b\} \\
+    \concr(\bot) & \defin \emptyset
   \end{align*}
 
   And the \emph{abstraction map} \(\abstr[\Int]:\poset{\z} \to \Int\) as
   \begin{align*}
-    \abstr[\Int](\emptyset) & \defin \bot \\
-    \abstr[\Int](X) & \defin
+    \abstr(\emptyset) & \defin \bot \\
+    \abstr(X) & \defin
     \begin{cases}
       \bot & \text{if } X = \emptyset \\
       \interval{\min(X)}{\max(X)} & \text{otherwise}
     \end{cases}
   \end{align*}
 \end{definition}
-
 The next step is to define some order on \(\Int\). For this purpose
 we define a partial order \(\sqsubseteq\) based on the concretization
-map.  For all \(I,J \in \Int\)
-\begin{equation*}
-  I \sqsubseteq J \iff \concr(I) \subseteq \concr(J)
-\end{equation*}
-\noindent
+map.
+\begin{definition}[\(\Int\) partial order]\label{def:intpo}
+  Let \(I,J \in \Int\). Then
+  \begin{equation*}
+    I \sqsubseteq J \iff \concr(I) \subseteq \concr(J)
+  \end{equation*}
+\end{definition}
 We also define least upper bound and greatest lower bound on the
 \(\Int\) domain. Let \({\interval{a}{b}, \interval{c}{d}\in \Int}\)
 \begin{align*}

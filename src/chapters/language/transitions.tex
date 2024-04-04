@@ -134,16 +134,103 @@ decomposition lemma.
   \(\stt{\com_2, \rho'} \to^{k_2}\rho''\), where \(k_1 + k_2 = k\)
 \end{lemma}
 
+\begin{proof}
+  The proof is on induction on\(k\in\n\), i.e., by induction on the
+  length of the derivation sequence.
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(k = 0\)).  Then
+  \begin{equation*}
+    \stt{\com_1\seq\com_2, \rho} \to^0 \rho''
+  \end{equation*}
+  holds vacuously since \(\stt{\com_1\seq\com_2, \rho}\) and
+  \(\rho''\) are different.
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(k \Rightarrow k+1\)). Then
+  \begin{equation*}
+    \stt{\com_1\seq\com_2, \rho} \to^{k+1} \rho''
+  \end{equation*}
+  can be written as
+  \begin{equation*}
+    \stt{\com_1\seq\com_2, \rho} \to \gamma \to^{k} \rho''
+  \end{equation*}
+  for some configuration \(\gamma\). Now two cases apply, depending on
+  the use of either comp\(_1\) or comp\(_2\) rules.
+
+  \medskip
+
+  \textbf{Case} \(\drule{comp_1}\).  Then
+  \({\gamma = \stt{\com_1'\seq\com_2, \rho'}}\) and
+  \({\stt{\com_1\seq\com_2, \rho} \to \stt{\com_1'\seq\com_2,
+      \rho'}}\) because
+  \({\stt{\com_1, \rho}\to\stt{\com_1', \rho'}}\). Therefore we have
+  \begin{equation*}
+    \stt{\com_1'\seq\com_2, \rho'} \to^k \rho''
+  \end{equation*}
+  Here we can use the induction hypothesis since the derivation
+  sequence is shorter than the one we started with. Hence
+  \(\exists \rho''\,' \in \env\) and natural numbers \(k_1, k_2\) s.t.
+  \begin{equation*}
+    \stt{\com_1'\seq\rho'}\to^{k_1}\rho''\,' \quad \wedge \quad \stt{\com_2, \rho''\,'} \to^{k_2} \rho''
+  \end{equation*}
+  where \(k_1 + k_2 = k\). Hence it holds that
+  \begin{equation*}
+    \stt{\com_1, \rho} \to^{k_1+1} \rho''\,'
+  \end{equation*}
+  and since \((k_1 + 1) + k_2 = k + 1\) it holds that
+  \begin{equation*}
+    \stt{\com_1\seq\com_2, \rho} \to^{k+1} \rho''
+  \end{equation*}
+  which is our thesis.
+
+  \medskip
+
+  \textbf{Case} \(\drule{comp_2}\). In this case
+  \({\gamma = \stt{\com_2, \rho'}}\) because
+  \({\stt{\com_1, \rho}\to\rho'}\) and it holds that
+  \begin{equation*}
+    \stt{\com_1\seq\com_2, \rho}\to\stt{\com_2, \rho'} \to^k \rho''
+  \end{equation*}
+  Hence our thesis follows by using the inductive hypothesis on
+  \(\stt{\com_2, \rho'}\) and by choosing \({k_1 = 1}, {k_2 = k}\).
+\end{proof}
+
+From the latter theorem follows its corollary, which abstracts the
+value of \(k\).
+
 \begin{corollary}\label{co:decomp}
   If \(\stt{\com_1;\com_2, \rho} \to^* \rho''\) then \(\exists \rho'\)
-  s.t. \(\stt{\com_1, \rho} \to^* \rho'\) and
+  s.t.~\(\stt{\com_1, \rho} \to^* \rho'\) and
   \(\stt{\com_2, \rho'}\to^* \rho''\).
 \end{corollary}
+
+The second lemma states a similar but inverted property:
 
 \begin{lemma}[Composition lemma]\label{le:comp}
   If \(\stt{\com_1, \rho} \to^k \rho'\) then
   \(\stt{\com_1; \com_2, \rho} \to^k \stt{\com_2, \rho'}\)
 \end{lemma}
+
+\begin{proof}
+  The proof works again by induction on the length \(k\) of the
+  derivation sequence:
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(k=0\)). In this case the statement vacuously holds
+  as \(\stt{\com_1, \rho}\) and \(\rho'\) are different.
+
+  \medskip
+
+  \noindent
+  \textbf{Case} (\(k \Rightarrow k + 1\)). In this case \(\dots\).
+\end{proof}
 
 \begin{corollary}\label{co:comp}
   If \(\stt{\com_1, \rho} \to^* \rho'\) then

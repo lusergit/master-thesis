@@ -2,10 +2,9 @@
 The following section aims at proving that by bounding the interval
 domain to a subdomain with no infinite ascending chains, i.e., where
 every chain converges in finite time, we can still compute the most
-precise interval representation for each variable in our program.
-
-\todo[inline]{intro} To do so, we first prove an easy graph-theoretic
-property which will later be helpful.
+precise interval representation for each variable in our program.  To
+do so, we first prove an easy graph-theoretic property which will
+later be helpful.
 % We focus on graphs with edges labelled over integer numbers. 
 Consider a finite directed and edge-weighted graph
 \(\langle X,\to\rangle\) where
@@ -517,12 +516,12 @@ Notice in particular that since
   We want to show that the thesis holds, i.e., that there exist
   \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\) with
   \(|h| \leq \bound{\fix{\com}}\) such that:
-  \begin{equation}\label{eq:maxendmaxstart}
+  \begin{equation}\label{eq:maxendmaxstartaxio}
     \max(\semi{\fix{\com}} \eta \var[y]) = \max(\eta \var[z]) + h
     \tag{i}
   \end{equation}
   and for all \(\eta' \sqsupseteq \eta\),
-  \begin{equation}\label{eq:maxmiddlemaxend}
+  \begin{equation}\label{eq:maxmiddlemaxendaxio}
     \max(\semi{\fix{\com}} \eta' \var[y]) \geq \max(\eta' \var[z]) + h
     \tag{ii}
   \end{equation}

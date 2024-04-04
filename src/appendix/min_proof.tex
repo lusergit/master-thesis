@@ -482,12 +482,12 @@ and recall the Lemma~\ref{co:inc} statement:
   \(n=|\mathit{vars}(\com)|\).  We want to show that the thesis holds,
   i.e., that there exist \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\)
   with \(|h| \leq \lbound{\fix{\com}}\) such that:
-  \begin{equation}\label{eq:maxendmaxstart}
+  \begin{equation}\label{eq:maxendmaxstartmin}
     \min(\semi{\fix{\com}} \eta \var[y]) = \min(\eta \var[z]) + h
     \tag{i}
   \end{equation}
   and for all \(\eta' \sqsupseteq \eta\),
-  \begin{equation}\label{eq:maxmiddlemaxend}
+  \begin{equation}\label{eq:maxmiddlemaxendmin}
     \min(\semi{\fix{\com}} \eta' \var[y]) \leq \min(\eta' \var[z]) + h
     \tag{ii}
   \end{equation}

@@ -64,6 +64,7 @@
 \newcommand{\semnr}[1]{\ensuremath{\lla #1 \rra}}
 \newcommand{\bsem}[1]{\ensuremath{\llp #1 \rrp}}
 \newcommand{\stt}[1]{\ensuremath{\langle #1 \rangle}}
+\newcommand{\drule}[1]{\ensuremath{\mathsf{\left[#1\right]}}}
 \newcommand{\envi}[1]{\ensuremath{[ #1 ]}}
 \newcommand{\interval}[2]{\ensuremath{[#1, #2]}}
 \newcommand{\red}[1]{\ensuremath{\mathsf{red}(\mathsf{#1})}}
@@ -87,7 +88,9 @@
 
 %% Interval analysis
 \newcommand{\concr}[1][]{\ensuremath{\gamma_{#1}}}
+\newcommand{\dconcr}[1][]{\ensuremath{\ovdot{\gamma}_{#1}}}
 \newcommand{\abstr}[1][]{\ensuremath{\alpha_{#1}}}
+\newcommand{\dabstr}[1][]{\ensuremath{\ovdot{\alpha}_{#1}}}
 \newcommand{\widen}{\ensuremath{ \; \triangledown \;}}
 \newcommand{\narrowi}{\ensuremath{\; \triangle \;}}
 \newcommand{\acup}{\ensuremath{\sqcup}}
@@ -106,6 +109,9 @@
 \newcommand{\nrsupseteq}{\ensuremath{\;\dot{\supseteq}\;}}
 \newcommand{\nrsubseteq}{\ensuremath{\;\dot{\subseteq}\;}}
 \newcommand{\nrdom}[1][]{\ensuremath{\mathit{NRel}_{#1}}}
+
+% other
+\newcommand{\ovdot}[1]{\ensuremath{\overset{\textbf{.}}{#1}}}
 
 % theorems and styling
 \theoremstyle{theorem}

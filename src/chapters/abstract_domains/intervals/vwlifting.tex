@@ -16,20 +16,19 @@ building a Galois connection with the concrete domain. We do so by
 overloading the \(\abstr\) and \(\concr\) functions, to refer also to
 the abstraction and concretization of abstract environments.
 
-\begin{definition}
-  \label{def:vwabstr}
+\begin{definition}\label{def:vwabstr}
   We define the \emph{concretization map} of abstract environments
   \(\eta \in \inte\), i.e., \(\concr : \inte \to \poset{\env}\) as
   follows
   \begin{align*}
-    \concr(\bot) & \defin \emptyset \\
-    \concr(\eta) & \defin \{\rho \in \env \mid \forall \var \in \Var \quad \rho(\var) \in \concr(\eta\var)\}
+    \dconcr(\bot) & \defin \emptyset \\
+    \dconcr(\eta) & \defin \{\rho \in \env \mid \forall \var \in \Var \quad \rho(\var) \in \concr(\eta\var)\}
   \end{align*}
   and the \emph{abstraction map} of sets of concrete environments
   \(X \in \poset{\env}\), i.e., \(\abstr : \poset{\env} \to \inte\) as
   \begin{align*}
-    \abstr(\emptyset) & \defin \bot \\
-    \abstr(X) & \defin \lambda \var \; . \; \abstr[\Int](\{\rho(\var) \mid \rho \in X\}) \\
+    \dabstr(\emptyset) & \defin \bot \\
+    \dabstr(X) & \defin \lambda \var \; . \; \abstr(\{\rho(\var) \mid \rho \in X\})
   \end{align*}
 \end{definition}
 
@@ -37,23 +36,22 @@ We can again define a notion of order for elements of \(\inte\) based
 on the concretization map. We do by overloading the 
 \(\sqsubseteq\) notation. Let \(\eta, \theta \in \inte\), then
 \begin{equation*}
-  \eta \sqsubseteq \theta \text{ iff } \concr(\eta) \subseteq \concr(\theta)
+  \eta \sqsubseteq \theta \text{ iff } \dconcr(\eta) \subseteq \dconcr(\theta)
 \end{equation*}
 
 Notice that because of the definition of the concretization map
 (Definition~\ref{def:vwabstr})
 \begin{equation*}
-  \eta \sqsubseteq \theta \iff \forall \var \in \Var \; \eta(\var) \sqsubseteq \theta(\var)
+  \eta \sqsubseteq \theta \iff \forall \var \in \Var \quad \eta(\var) \sqsubseteq \theta(\var)
 \end{equation*}
 i.e., two abstract environments are ordered if every variable's
 interval of the first environment is entirely contained in the
-interval of the second abstract environment.  \todo[inline]{Spiegare
-  meglio} Again, we can define least upper bounds and greatest lower
-bounds by lifting the \(\sqcup\) and \(\sqcap\) operations. i.e., let
-\(\eta, \theta \in \inte\), then
+interval of the second abstract environment.  Again, we can define
+least upper bounds and greatest lower bounds by lifting the \(\sqcup\)
+and \(\sqcap\) operations. i.e., let \(\eta, \theta \in \inte\), then
 \begin{align*}
   \eta \acap \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \sqcap \theta(\var) \quad \forall \var\in\Var \\
-  \eta \acup \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \sqcup \theta(\var) \quad \forall \var\in\Var \\
+  \eta \acup \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \sqcup \theta(\var) \quad \forall \var\in\Var
 \end{align*}
 
 Again we can notice that \(\tuple{\inte, \sqsubseteq}\) is a complete

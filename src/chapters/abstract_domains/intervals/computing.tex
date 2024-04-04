@@ -1,5 +1,4 @@
-\subsection{Computing the interval semantics} 
-\label{sub:computingint}
+\subsection{Computing the interval semantics} \label{sub:computingint}
 
 In this section we argue that for the language \(\imp\) the interval
 abstract semantics is computable in finite time without widening.
@@ -743,12 +742,12 @@ a finite path in \(\langle X,\to\rangle\)
   We want to show that the thesis holds, i.e., that there exist
   \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\) with
   \(|h| \leq \bound{\fix{\com}}\) such that:
-  \begin{equation}\label{eq:maxendmaxstart}
+  \begin{equation}\label{eq:maxendmaxstartint}
     \max(\semi{\fix{\com}} \eta \var[y]) = \max(\eta \var[z]) + h
     \tag{i}
   \end{equation}
   and for all \(\eta' \sqsupseteq \eta\),
-  \begin{equation}\label{eq:maxmiddlemaxend}
+  \begin{equation}\label{eq:maxmiddlemaxendint}
     \max(\semi{\fix{\com}} \eta' \var[y]) \geq \max(\eta' \var[z]) + h
     \tag{ii}
   \end{equation}
