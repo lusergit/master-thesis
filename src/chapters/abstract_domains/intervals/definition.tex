@@ -20,14 +20,14 @@ and relate it to the concrete environment \(\dom\) we need to define
 concretization and abstraction maps for the intervals domain
 
 \begin{definition}\label{def:concrint}
-  We define the \emph{concretization map} \(\concr[\Int] : \Int \to
-  \poset{\n}\) as
+  We define the \emph{concretization map} \(\concr : \Int \to
+  \poset{\z}\) as
   \begin{align*}
-    \concr(\interval{a}{b}) & \defin \{x\in \n \mid a \leq x \leq b\} \\
+    \concr(\interval{a}{b}) & \defin \{x\in \z \mid a \leq x \leq b\} \\
     \concr(\bot) & \defin \emptyset
   \end{align*}
 
-  And the \emph{abstraction map} \(\abstr[\Int]:\poset{\z} \to \Int\) as
+  And the \emph{abstraction map} \(\abstr:\poset{\z} \to \Int\) as
   \begin{align*}
     \abstr(\emptyset) & \defin \bot \\
     \abstr(X) & \defin
