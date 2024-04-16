@@ -1,6 +1,5 @@
 % !TeX root = mod.tex
-\section{Computing interval semantics}
-\label{sec:computingint}
+\section{Computing interval semantics}\label{sec:computingint}
 
 Lemma~\ref{le:inc} provides an effective algorithm for computing the abstract
 semantics of commands%  provided a domain that respects properties \ref{inc:hp1}
@@ -11,8 +10,8 @@ finite set of variables \(\Var_{\com} \veq \varsof{\com}\), and an
 interval environment \(\rho : \Var_{\com} \to \Int\), we define both
 the \(\min\) and the \(\max\) value of an interval environment:
 \begin{align*}
-\max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}\} \\
-\min(\rho) & \veq \max \{ \min(\rho(\var)) \mid \var \in \Var_{\com}\}
+  \max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}\} \\
+  \min(\rho) & \veq \max \{ \min(\rho(\var)) \mid \var \in \Var_{\com}\}
 \end{align*}
 
 % 
@@ -95,7 +94,7 @@ chains by definition.
   \end{tikzpicture}
   \caption{\(\bInt{k_1}{k_2}\) Hasse diagram}\label{fig:bound}
 \end{figure}
-%
+% 
 Now we can notice that given \(k_1, k_2 \in \z\) we can build a Galois
 Connection (Definition~\ref{def:galoiscon}) between the interval
 domain \(\inte\) (the \emph{concrete} domain) and the bounded interval
@@ -261,6 +260,45 @@ allows us to prove the soundness of the analysis over
   and that least upper bounds are sound (by Property~\ref{prop:five}
   of Theorem~\ref{th:galoisprop}).
 \end{proof}
+
+Now we define a new bound, it will be useful for the latter
+Theorem~\ref{th:bounded}.
+
+\begin{definition}\label{def:newbound}
+  Let \(\com\in\imp\). Then \(\nbound{\cdot} : \imp \to \n\) is the
+  \emph{updated bound}, recursively defined as follows:
+  \begin{align*}
+    \nbound{\com[e]} & \defin \bound{\com[e]} \\
+    \nbound{\com_1 \ndet \com_2} & \defin \nbound{\com_1} + \nbound{\com_2} \\
+    \nbound{\com_1 \seq \com_2} & \defin \nbound{\com_1} + \nbound{\com_2} \\
+    \nbound{\fix\com} & \defin (n+2)\nbound{\com} \\
+  \end{align*}
+  where \(n = \varsof{\com}\). Similarly,
+  \(\nlbound{\cdot} : \imp \to \n\) is the \emph{updated lower bound}
+  of commands, recursively defined as follows:
+  \begin{align*}
+    \nlbound{\com[e]} & \defin \lbound{\com[e]} \\
+    \nlbound{\com_1 \ndet \com_2} & \defin \nlbound{\com_1} + \nlbound{\com_2} \\
+    \nlbound{\com_1 \seq \com_2} & \defin \nlbound{\com_1} + \nlbound{\com_2} \\
+    \nlbound{\fix\com} & \defin (n+2)\nlbound{\com} \\
+  \end{align*}
+\end{definition}
+
+Notice that the updated bounds differ to bounds of
+Definition~\ref{def:bound} only in the case of the \(\fix\com\)
+command.  Thanks to the latter definition, we can now also define the
+notion of domain bounded by initial state and program.
+
+\begin{definition}\label{def:boundedbycom}
+  Let \(\com\in\imp\) and \(\rho \in \inte\). Then the \emph{bounded
+    interval domain} \(\inte_{\com,\rho}\) is a bounded interval
+  \(\binte{k_1}{k_2}\) where
+  \begin{align*}
+    k_1 & = \min(\rho) - \lbound{\com} \\
+    k_2 & = \max(\rho) + \bound{\com}
+  \end{align*}
+\end{definition}
+
 With this consideration we can now proceed to prove that the analysis
 on our bounded lattice \(\inte_{\com,\rho}\) produces the same result
 as the analysis on \(\inte\).
@@ -269,31 +307,41 @@ as the analysis on \(\inte\).
 % semantics for \(\com\) in a domain with intervals bounded by
 % \(\max(\rho) +\bound{\com}\)
 
-\begin{theorem}
+\begin{theorem}\label{th:bounded}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
-  \(\rho : \Var \to \Int\), and \(k_1, k_2\in \z\) s.t.
+  \(\rho : \Var \to \Int\) and \(k_1, k_2\in \z\) s.t.
   \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2}\), i.e.,
   \(k_1 \leq \min(\rho) - \lbound{\com}\) and
   \(k_2 \geq \max(\rho) + \bound{\com}\)
-  \begin{equation*}
-    \semi[\inte]{\com}\rho \sqsupseteq \semi[\binte{k_1}{k_2}]{\com}\rho
-  \end{equation*}
+  \begin{equation}\label{eq:equal}
+    \semi[\inte]{\com}\rho = \semi[\binte{k_1}{k_2}]{\com}\rho
+  \end{equation}
   i.e., the abstract semantics \(\semi{\com} \rho\)
   % 
   % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
   % \sqcup \rho}
-  computed in \(\inte\) is less precise than the one computed in
-  \(\binte{k_1}{k_2}\).
+  computed in \(\inte\) and the one computed in \(\binte{k_1}{k_2}\)
+  coincide.
 \end{theorem}
 
 \begin{proof}
+  Notice that because of Lemma~\ref{le:leq} the statement
+  \({\semi[\inte]{\com}\rho} \sqsubseteq
+  {\semi[\binte{k_1}{k_2}]{\com}\rho}\) already holds. Therefore what
+  we're left to prove is that
+  \begin{equation*}
+    \semi[\inte]{\com}\rho \sqsupseteq \semi[\binte{k_1}{k_2}]{\com}\rho
+  \end{equation*}
   The proof will proceed by induction on the command \(\com\in\imp\).
   \begin{inductive}
     \case{\(\var\in S\)} In this case we want to prove that
     \({\semi[\inte]{\var\in S}\rho \sqsupseteq
       \semi[\binte{k_1}{k_2}]{\var\in S}\rho}\). Recall that we are
-    considering \(k_1 \leq \min(\rho) - \lbound{\com}\) and
-    \(k_2 \geq \max(\rho) + \bound{\com}\). Notice that either
+    considering
+    \({k_1 \leq \min(\rho) - \lbound{\var\in S}} = {\min(\rho) -
+      \lbound{\var\in S}}\) and
+    \({k_2 \geq \max(\rho) + \bound{\var\in S}} = {\max(\rho) +
+      \bound{\var\in S}}\). Notice that either
     \(\rho\var \sqcap S = \bot\), which implies that
     \(\semi[\inte]{\var\in S}\rho = \bot\), and therefore
     \({\abstr[k_1,k_2](\semi[\inte]{\var\in S})\rho} =
@@ -311,19 +359,21 @@ as the analysis on \(\inte\).
     \begin{equation*}
       \semi[\inte]{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap S] = \dabstr[k_1,k_2]\left(\semi[\inte]{\var\in S}\rho\right) = \semi[\binte{k_1}{k_2}]{\var\in S}\rho
     \end{equation*}
-    which implies our thesis.
+    which is our thesis.
     
     \case{\(\var := k\)} In this case we have to prove that
     \(\semi[\inte]{\var := k}\rho \sqsupseteq
     \semi[\binte{k_1}{k_2}]{\var := k}\rho\). Recall that we are
-    considering \({k_1 \leq \min(\rho) - \lbound{\var := k}}\) and
+    considering
+    \({k_1 \leq \min(\rho) - \lbound{\var := k}} = {\min(\rho) -
+      \lbound{\var := k}}\) and
     \({k_2 \geq \max(\rho) + \bound{\var := k}}\).  We can notice
     similarly to the previous case, that because of the values of
     \(k_1\) and \(k_2\) it holds that
     \begin{equation*}
       \semi[\inte]{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}] = \dabstr[k_1,k_2]\left(\semi[\inte]{\var := k}\rho\right) = \semi[\binte{k_1}{k_2}]{\var := k}\rho
     \end{equation*}
-    hence our thesis is implied.
+    hence our thesis holds.
     
     \case{\(\var := \var[y] + k\)} In this case we have to prove that
     \(\semi[\inte]{\var := \var[y] + k}\rho \sqsupseteq
@@ -354,13 +404,13 @@ as the analysis on \(\inte\).
     \(k_2 \geq \max(\rho) + \bound{\com_1 \ndet \com_2}\).  By
     inductive hypothesis it holds that
     \begin{equation*}
-      \semi[\inte]{\com_1}\rho \sqsupseteq \semi[\binte{k_1}{k_2}]{\com_1}\rho
+      \semi[\inte]{\com_1}\rho = \semi[\binte{k_1}{k_2}]{\com_1}\rho
     \end{equation*}
     for all \(k_1 \leq \min(\rho) - \lbound{\com_1}\) and
     \(k_2 \geq \max(\rho) + \bound{\com_1}\). Again by inductive
     hypothesis it holds that
     \begin{equation*}
-      \semi[\inte]{\com_2}\rho \sqsupseteq \semi[\binte{k_1}{k_2}]{\com_2}\rho
+      \semi[\inte]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_2}\rho
     \end{equation*}
     for all \(k_1 \leq \min(\rho) - \lbound{\com_2}\) and
     \(k_2 \geq \max(\rho) + \bound{\com_2}\). In particular, both hold
@@ -371,7 +421,7 @@ as the analysis on \(\inte\).
     {\max(\rho) + \bound{\com_1 \ndet \com_2}}\), i.e., our initial
     choice of \(k_1, k_2\). We can conclude by closure over \(\sqcup\)
     \begin{equation*}
-      \semi[\inte]{\com_1 \ndet \com_2}\rho = \semi[\inte]{\com_1}\rho \sqcup \semi[\inte]{\com_2}\rho \sqsupseteq \semi[\binte{k_1}{k_2}]{\com_1}\rho \sqcup \semi[\binte{k_1}{k_2}]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_1\ndet\com_2}\rho
+      \semi[\inte]{\com_1 \ndet \com_2}\rho = \semi[\inte]{\com_1}\rho \sqcup \semi[\inte]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_1}\rho \sqcup \semi[\binte{k_1}{k_2}]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_1\ndet\com_2}\rho
     \end{equation*}
     which is our thesis.
 
@@ -385,20 +435,20 @@ as the analysis on \(\inte\).
         \circ \semi[\inte]{\com_1}\right)}\rho\). By inductive
     hypothesis it holds that
     \begin{align}
-      \semi[\inte]{\com_1}\rho & \sqsupseteq \semi[\binte{k_1}{k_2}]{\com_1}\rho & \forall k_1 \leq \min(\rho) - \lbound{\com_1} \; \land \; k_2 \geq \max(\rho) + \bound{\com_1}\tag{\dag}\label{eq:ind1}\\
-      \semi[\inte]{\com_2}\rho' & \sqsupseteq \semi[\binte{k_3}{k_4}]{\com_2}\rho' & \forall k_3 \leq \min(\rho') - \lbound{\com_2} \; \land \; k_4 \geq \max(\rho') + \bound{\com_2}\tag{\ddag}\label{eq:ind2}
+      \semi[\inte]{\com_1}\rho & = \semi[\binte{k_1}{k_2}]{\com_1}\rho & \forall k_1 \leq \min(\rho) - \lbound{\com_1} \; \land \; k_2 \geq \max(\rho) + \bound{\com_1}\tag{\dag}\label{eq:ind1}\\
+      \semi[\inte]{\com_2}\rho' & = \semi[\binte{k_3}{k_4}]{\com_2}\rho' & \forall k_3 \leq \min(\rho') - \lbound{\com_2} \; \land \; k_4 \geq \max(\rho') + \bound{\com_2}\tag{\ddag}\label{eq:ind2}
     \end{align}
     where \(\rho' = \semi[\inte]{\com_1}\rho\). In particular notice
     that both\ \eqref{eq:ind1} and\ \eqref{eq:ind2} hold for all
     \(n,m\) s.t.
     \begin{align*}
-      m & \leq \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \leq \min(\rho) - \lbound{\com_2} \\
-      n & \geq \max(\rho) + \bound{\com_1} + \bound{\com_2} \geq \max(\rho) + \bound{\com_2}.
+      m & \leq \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \\
+      n & \geq \max(\rho) + \bound{\com_1} + \bound{\com_2}
     \end{align*}
     Hence
     \begin{equation*}
       \semi[\inte]{\com_1 \seq \com_2}\rho =
-      \left( \semi[\inte]{\com_2} \circ \semi[\inte]{\com_1}\right)\rho \sqsupseteq
+      \left( \semi[\inte]{\com_2} \circ \semi[\inte]{\com_1}\right)\rho =
       \left(\semi[\binte{m}{n}]{\com_2} \circ \semi[\binte{m}{n}]{\com_1}\right)\rho =
       \semi[\binte{m}{n}]{\com_1 \seq \com_2}\rho
     \end{equation*}
@@ -411,11 +461,13 @@ as the analysis on \(\inte\).
     \(k_2 \geq \max(\rho) + \bound{\fix\com}\). Recall that by
     Lemma~\ref{le:sugar} \(\semi[\inte]{\fix\com}\) is syntactic sugar
     for \(\semi[\inte]{\kleene{(\com \ndet \tru)}}\), therefore
-    \(\semi[\inte]{\fix\com}\rho =
-    \semi[\inte]{\kleene{(\com\ndet\tru)}}\rho =
-    \textstyle\bigsqcup_{i\in\n}{(\com\ndet\tru)}^i\rho\), and we can
-    build the chain of iterands \(\rho_i\) inductively in the
-    following way
+    \begin{equation}\label{eq:fixtolub}
+      \semi[\inte]{\fix\com}\rho =
+      \semi[\inte]{\kleene{(\com\ndet\tru)}}\rho =
+      \textstyle\bigsqcup_{i\in\n}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho
+    \end{equation}
+    and we can build the chain of iterands \(\rho_i\) inductively in
+    the following way
     \begin{align*}
       \rho_0 & \defin \rho \\
       \rho_{i+1} & \defin \semi[\inte]{\com\ndet\tru}\rho_i = {\left(\semi[\inte]{\com\ndet\tru}\right)}^{i+1}\rho
@@ -456,68 +508,90 @@ as the analysis on \(\inte\).
       respectively
       \({\max(\semi[\inte]{\fix\com}\rho\var[y]) \neq + \infty}\) and
       \({\min(\semi[\inte]{\fix\com}\rho\var[y]) \neq -\infty}\). In
-      this case by Lemma~\ref{le:inc} and Lemma~\ref{co:inc}
-      respectively
+      this case we also build the chain of iterands over the bounded
+      analysis
       \begin{align*}
-        \max(\semi[\inte]{\fix\com}\rho\var[y]) & \leq \max(\rho) + \bound{\fix\com} \\
-        \min(\semi[\inte]{\fix\com}\rho\var[y]) & \geq \min(\rho) - \lbound{\fix\com}
+        \rho_0'& \defin \rho \\
+        \rho_{i+1}' & \defin \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i'
       \end{align*}
-      Now, we can observe that for every iterand \(\rho_i\) it holds
-      that
-      \begin{align*}
-        \rho_{i+1} & = \semi[\inte]{\com\ndet\tru}\rho_i \\
-                   & = {\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho \\
-                   & \sqsubseteq \textstyle\bigsqcup_{i\in\n}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho = \semi[\inte]{\fix\com}\rho  \\
-                   & \sqsubseteq \textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho = \semi[\binte{k_1}{k_2}]{\fix\com}\rho
-      \end{align*}
-      for all \(k_1 \leq \min(\rho) - \lbound{\fix\com}\) and
-      \(k_2 \geq \max(\rho) + \bound{\fix\com}\) by
-      Lemma~\ref{le:leq}. Hence for the max and min values it holds
-      that
-      \begin{align*}
-        \max(\rho_i\var[y]) \leq \max(\semi[\inte]{\fix\com}\rho) \leq \max(\rho) + \bound{\fix\com} \\
-        \min(\rho) - \lbound{\fix\com} \leq \min(\semi[\inte]{\fix\com}\rho) \leq \min(\rho_i\var[y])
-      \end{align*}
-      Now we can work by induction on \(\com\ndet\tru\) and \(i\) in
-      order to prove the following:
-      \(\semi[\inte]{\com\ndet\tru}\rho_i =
-      \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i\) for all
-      \(k_1 \leq \min(\rho_i) - \lbound{\com}\) and
-      \(k_2 \geq \max(\rho_i) + \bound{\com}\).\ \todo[inline]{Da
-        finire, non mi è chiaro come usare l'ipotesi induttiva.}
-      % \begin{description}
-      % \item[Case] (\(i=0\)). In this case we have to prove that
-      %   \(\semi[\inte]{\com\ndet\tru}\rho =
-      %   \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho\)
-      %   this works by induction on \(\com\ndet\tru\) 
-      % \end{description}
+      What we want to prove, is that \(\rho_{i+1} = \rho_{i+1}'\)
+      holds for every \(i\in\n\), this way the two chains hold the
+      same result. To do so we work by induction on \(i\):
+      \begin{description}
+      \item[Case] (\(i=0\)). In this case, by induction on
+        \(\com\ndet\tru\) we know that
+        \[\semi[\inte]{\com\ndet\tru}\rho =
+          \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho\] for all
+        \(k_1 \leq \min(\rho) - \lbound{\com\ndet\tru} = \min(\rho) -
+        \lbound{\com}\) and
+        \(k_2 \geq \max(\rho) + \bound{\com\ndet\tru} = \max(\rho) +
+        \bound{\com}\). Hence by our choice of \(k_1, k_2\) it holds.
+        
+      \item[Case] (\(i\Rightarrow i+1\)). In this case we have to
+        prove
+        \begin{equation*}
+          \rho_{i+1} = \semi[\inte]{\com\ndet\tru}\rho_i \quad = \quad \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i' = \rho_{i+1}'
+        \end{equation*}
+        To start, by induction on \(i\) we can say that
+        \(\rho_i = \rho_i' = \rho''\). By induction on \(\com\ndet\tru\) we can
+        say that
+        \begin{equation}
+          \semi[\inte]{\com\ndet\tru}\rho'' = \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho''
+        \end{equation}
+        for all \(k_1 \leq \min(\rho'') - \lbound{\com}\) and
+        \(k_2 \geq \max(\rho'') + \bound{\com}\). Now we can observe
+        that because of~\eqref{eq:fixtolub} and Lemma~\ref{le:inc} it
+        holds that
+        \begin{align*}
+          \min(\rho'') & \geq \min(\rho) - \lbound{\fix\com} = \min(\rho) - (n+1)\lbound{\com} \\
+          \max(\rho'') & \leq \max(\rho) + \bound{\fix\com} = \max(\rho) + (n+1)\bound{\com}
+        \end{align*}
+        hence by choosing
+        \begin{align*}
+          k_1 & \leq \min(\rho) - \lbound{\fix\com} - \lbound{\com} = \min(\rho) - (n+2)\lbound{\com} \\
+          k_2 & \geq \max(\rho) + \bound{\fix\com} + \bound{\com} = \max(\rho) + (n+2)\bound{\com}
+        \end{align*}
+        the inductive hypothesis holds and we can conclude that
+        \begin{equation}
+          \rho_{i+1} = \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i' = \rho_{i+1}'
+        \end{equation}
+      \end{description}
+      Hence the following
+      \begin{equation*}
+        \semi[\inte]{\fix\com}\rho =
+        \textstyle\bigsqcup_{i\in\n}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i \rho =
+        \textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i \rho =
+        \semi[\binte{k_1}{k_2}]{\fix\com}\rho
+      \end{equation*}
+      holds for every \(k_1 \leq \min(\rho) - (n+2)\lbound{\com}\) and
+      \(k_2 \geq \max(\rho) + (n+2)\bound{\com}\), which is our
+      thesis.
     \end{enumerate}
-    
   \end{inductive}
 \end{proof}
 
-Since both
-\({\semi[\inte]{\com}\rho \sqsubseteq
-  \semi[\binte{k_1}{k_2}]{\com}\rho}\) and
-\({\semi[\inte]{\com}\rho \sqsupseteq
-  \semi[\binte{k_1}{k_2}]{\com}\rho}\) hold for
-\(k_1 \leq \min(\rho) - \lbound{\com}\) and
-\(k_2 \geq \max(\rho) + \bound{\com}\), then the following theorem
-holds:
+% Since both
+% \({\semi[\inte]{\com}\rho \sqsubseteq
+% \semi[\binte{k_1}{k_2}]{\com}\rho}\) and
+% \({\semi[\inte]{\com}\rho \sqsupseteq
+% \semi[\binte{k_1}{k_2}]{\com}\rho}\) hold for
+% \(k_1 \leq \min(\rho) - \lbound{\com}\) and
+% \(k_2 \geq \max(\rho) + \bound{\com}\), then the following theorem
+% holds:
 
-\begin{theorem}[Bounding completeness]
-  Let \(\com\in \imp\) be a command. Then, for all
-  \({\rho : \Var_{\com} \to \Int}\), and \(k_1, k_2\in \z\) s.t.
-  \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2}\), i.e.,
-  \(k_1 \leq \min(\rho) - \lbound{\com}\) and
-  \(k_2 \geq \max(\rho) + \bound{\com}\)
-  \begin{equation*}
-    \semi[\inte]{\com}\rho = \semi[\binte{k_1}{k_2}]{\com}\rho
-  \end{equation*}
-  i.e., the abstract semantics \(\semi{\com} \rho\)
-  % 
-  % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
-  % \sqcup \rho}
-  computed in \(\inte\) and in \(\binte{k_1}{k_2}\) coincide.
-  \qed{}
-\end{theorem}
+% \begin{theorem}[Bounding completeness]
+%   Let \(\com\in \imp\) be a command. Then, for all
+%   \({\rho : \Var_{\com} \to \Int}\), and \(k_1, k_2\in \z\) s.t.
+%   \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2}\), i.e.,
+%   \(k_1 \leq \min(\rho) - \lbound{\com}\) and
+%   \(k_2 \geq \max(\rho) + \bound{\com}\)
+%   \begin{equation*}
+%     \semi[\inte]{\com}\rho = \semi[\binte{k_1}{k_2}]{\com}\rho
+%   \end{equation*}
+%   i.e., the abstract semantics \(\semi{\com} \rho\)
+%   %   
+%   %   \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
+%   %   \sqcup \rho}
+%   computed in \(\inte\) and in \(\binte{k_1}{k_2}\) coincide.
+%   \qed{}
+% \end{theorem}
