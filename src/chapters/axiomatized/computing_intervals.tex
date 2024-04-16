@@ -294,8 +294,8 @@ notion of domain bounded by initial state and program.
     interval domain} \(\inte_{\com,\rho}\) is a bounded interval
   \(\binte{k_1}{k_2}\) where
   \begin{align*}
-    k_1 & = \min(\rho) - \lbound{\com} \\
-    k_2 & = \max(\rho) + \bound{\com}
+    k_1 & = \min(\rho) - \nlbound{\com} \\
+    k_2 & = \max(\rho) + \nbound{\com}
   \end{align*}
 \end{definition}
 
@@ -311,8 +311,8 @@ as the analysis on \(\inte\).
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
   \(\rho : \Var \to \Int\) and \(k_1, k_2\in \z\) s.t.
   \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2}\), i.e.,
-  \(k_1 \leq \min(\rho) - \lbound{\com}\) and
-  \(k_2 \geq \max(\rho) + \bound{\com}\)
+  \(k_1 \leq \min(\rho) - \nlbound{\com}\) and
+  \(k_2 \geq \max(\rho) + \nbound{\com}\)
   \begin{equation}\label{eq:equal}
     \semi[\inte]{\com}\rho = \semi[\binte{k_1}{k_2}]{\com}\rho
   \end{equation}
@@ -338,9 +338,9 @@ as the analysis on \(\inte\).
     \({\semi[\inte]{\var\in S}\rho \sqsupseteq
       \semi[\binte{k_1}{k_2}]{\var\in S}\rho}\). Recall that we are
     considering
-    \({k_1 \leq \min(\rho) - \lbound{\var\in S}} = {\min(\rho) -
+    \({k_1 \leq \min(\rho) - \nlbound{\var\in S}} = {\min(\rho) -
       \lbound{\var\in S}}\) and
-    \({k_2 \geq \max(\rho) + \bound{\var\in S}} = {\max(\rho) +
+    \({k_2 \geq \max(\rho) + \nbound{\var\in S}} = {\max(\rho) +
       \bound{\var\in S}}\). Notice that either
     \(\rho\var \sqcap S = \bot\), which implies that
     \(\semi[\inte]{\var\in S}\rho = \bot\), and therefore
@@ -365,9 +365,9 @@ as the analysis on \(\inte\).
     \(\semi[\inte]{\var := k}\rho \sqsupseteq
     \semi[\binte{k_1}{k_2}]{\var := k}\rho\). Recall that we are
     considering
-    \({k_1 \leq \min(\rho) - \lbound{\var := k}} = {\min(\rho) -
+    \({k_1 \leq \min(\rho) - \nlbound{\var := k}} = {\min(\rho) -
       \lbound{\var := k}}\) and
-    \({k_2 \geq \max(\rho) + \bound{\var := k}}\).  We can notice
+    \({k_2 \geq \max(\rho) + \nbound{\var := k}}\).  We can notice
     similarly to the previous case, that because of the values of
     \(k_1\) and \(k_2\) it holds that
     \begin{equation*}
@@ -379,10 +379,10 @@ as the analysis on \(\inte\).
     \(\semi[\inte]{\var := \var[y] + k}\rho \sqsupseteq
     \semi[\binte{k_1}{k_2}]{\var:=\var[y]+k}\rho\).  Recall that we
     are considering
-    \({k_1 \leq \min(\rho) - \lbound{\var:=\var[y]+k}}\) and
-    \({k_2 \geq \max(\rho) + \bound{\var:=\var[y]+k}}\). Notice also
+    \({k_1 \leq \min(\rho) - \nlbound{\var:=\var[y]+k}}\) and
+    \({k_2 \geq \max(\rho) + \nbound{\var:=\var[y]+k}}\). Notice also
     that
-    \(\lbound{\var := \var[y]+k} = k = \bound{\var := \var[y] + k}\)
+    \(\nlbound{\var := \var[y]+k} = k = \nbound{\var := \var[y] + k}\)
     and since
     \(\semi[\inte]{\var:= \var[y] + k}\rho = \rho[\var \mapsto
     \rho\var[y] + k]\) we can notice that for each variable
@@ -400,25 +400,25 @@ as the analysis on \(\inte\).
     \(\semi[\inte]{\com_1 \ndet \com_2}\rho \sqsupseteq
     \semi[\binte{k_1}{k_2}]{\com_1 \ndet \com_2}\rho\). Recall that we
     are considering
-    \(k_1 \leq \min(\rho) - \lbound{\com_1 \ndet \com_2}\) and
-    \(k_2 \geq \max(\rho) + \bound{\com_1 \ndet \com_2}\).  By
+    \(k_1 \leq \min(\rho) - \nlbound{\com_1 \ndet \com_2}\) and
+    \(k_2 \geq \max(\rho) + \nbound{\com_1 \ndet \com_2}\).  By
     inductive hypothesis it holds that
     \begin{equation*}
       \semi[\inte]{\com_1}\rho = \semi[\binte{k_1}{k_2}]{\com_1}\rho
     \end{equation*}
-    for all \(k_1 \leq \min(\rho) - \lbound{\com_1}\) and
-    \(k_2 \geq \max(\rho) + \bound{\com_1}\). Again by inductive
+    for all \(k_1 \leq \min(\rho) - \nlbound{\com_1}\) and
+    \(k_2 \geq \max(\rho) + \nbound{\com_1}\). Again by inductive
     hypothesis it holds that
     \begin{equation*}
       \semi[\inte]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_2}\rho
     \end{equation*}
-    for all \(k_1 \leq \min(\rho) - \lbound{\com_2}\) and
-    \(k_2 \geq \max(\rho) + \bound{\com_2}\). In particular, both hold
+    for all \(k_1 \leq \min(\rho) - \nlbound{\com_2}\) and
+    \(k_2 \geq \max(\rho) + \nbound{\com_2}\). In particular, both hold
     for
-    \({k_1} \leq {\min(\rho) - \lbound{\com_1} - \lbound{\com_2}} =
-    {\min(\rho) - \lbound{\com_1 \ndet \com_2}}\) and
-    \({k_2} \geq {\max(\rho) + \bound{\com_1} + \bound{\com_2}} =
-    {\max(\rho) + \bound{\com_1 \ndet \com_2}}\), i.e., our initial
+    \({k_1} \leq {\min(\rho) - \nlbound{\com_1} - \nlbound{\com_2}} =
+    {\min(\rho) - \nlbound{\com_1 \ndet \com_2}}\) and
+    \({k_2} \geq {\max(\rho) + \nbound{\com_1} + \nbound{\com_2}} =
+    {\max(\rho) + \nbound{\com_1 \ndet \com_2}}\), i.e., our initial
     choice of \(k_1, k_2\). We can conclude by closure over \(\sqcup\)
     \begin{equation*}
       \semi[\inte]{\com_1 \ndet \com_2}\rho = \semi[\inte]{\com_1}\rho \sqcup \semi[\inte]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_1}\rho \sqcup \semi[\binte{k_1}{k_2}]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_1\ndet\com_2}\rho
@@ -428,22 +428,22 @@ as the analysis on \(\inte\).
     \case{\(\com_1 \seq \com_2\)} In this case we have to prove that
     \(\semi[\inte]{\com_1 \seq \com_2}\rho \sqsupseteq
     \semi[\binte{k_1}{k_2}]{\com_1 \seq \com_2}\rho\) for all
-    \({k_1 \leq \min(\rho) - \lbound{\com_1 \seq \com_2}}\) and
-    \({k_2 \geq \max(\com) + \bound{\com_1 \seq \com_2}}\). Recall
+    \({k_1 \leq \min(\rho) - \nlbound{\com_1 \seq \com_2}}\) and
+    \({k_2 \geq \max(\com) + \nbound{\com_1 \seq \com_2}}\). Recall
     that
     \(\semi[\inte]{\com_1\seq\com_2}\rho = {\left(\semi[\inte]{\com_2}
         \circ \semi[\inte]{\com_1}\right)}\rho\). By inductive
     hypothesis it holds that
     \begin{align}
-      \semi[\inte]{\com_1}\rho & = \semi[\binte{k_1}{k_2}]{\com_1}\rho & \forall k_1 \leq \min(\rho) - \lbound{\com_1} \; \land \; k_2 \geq \max(\rho) + \bound{\com_1}\tag{\dag}\label{eq:ind1}\\
-      \semi[\inte]{\com_2}\rho' & = \semi[\binte{k_3}{k_4}]{\com_2}\rho' & \forall k_3 \leq \min(\rho') - \lbound{\com_2} \; \land \; k_4 \geq \max(\rho') + \bound{\com_2}\tag{\ddag}\label{eq:ind2}
+      \semi[\inte]{\com_1}\rho & = \semi[\binte{k_1}{k_2}]{\com_1}\rho & \forall k_1 \leq \min(\rho) - \nlbound{\com_1} \; \land \; k_2 \geq \max(\rho) + \nbound{\com_1}\tag{\dag}\label{eq:ind1}\\
+      \semi[\inte]{\com_2}\rho' & = \semi[\binte{k_3}{k_4}]{\com_2}\rho' & \forall k_3 \leq \min(\rho') - \nlbound{\com_2} \; \land \; k_4 \geq \max(\rho') + \nbound{\com_2}\tag{\ddag}\label{eq:ind2}
     \end{align}
     where \(\rho' = \semi[\inte]{\com_1}\rho\). In particular notice
     that both\ \eqref{eq:ind1} and\ \eqref{eq:ind2} hold for all
     \(n,m\) s.t.
     \begin{align*}
-      m & \leq \min(\rho) - \lbound{\com_1} - \lbound{\com_2} \\
-      n & \geq \max(\rho) + \bound{\com_1} + \bound{\com_2}
+      m & \leq \min(\rho) - \nlbound{\com_1} - \nlbound{\com_2} \\
+      n & \geq \max(\rho) + \nbound{\com_1} + \nbound{\com_2}
     \end{align*}
     Hence
     \begin{equation*}
@@ -457,8 +457,8 @@ as the analysis on \(\inte\).
     \case{\(\fix{\com}\)} What we want to prove in this case is that
     \(\semi[\inte]{\fix\com}\rho \sqsupseteq
     \semi[\binte{k_1}{k_2}]{\fix\com}\rho\) for all
-    \(k_1 \leq \min(\rho) - \lbound{\fix\com}\) and
-    \(k_2 \geq \max(\rho) + \bound{\fix\com}\). Recall that by
+    \(k_1 \leq \min(\rho) - \nlbound{\fix\com}\) and
+    \(k_2 \geq \max(\rho) + \nbound{\fix\com}\). Recall that by
     Lemma~\ref{le:sugar} \(\semi[\inte]{\fix\com}\) is syntactic sugar
     for \(\semi[\inte]{\kleene{(\com \ndet \tru)}}\), therefore
     \begin{equation}\label{eq:fixtolub}
@@ -522,10 +522,10 @@ as the analysis on \(\inte\).
         \(\com\ndet\tru\) we know that
         \[\semi[\inte]{\com\ndet\tru}\rho =
           \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho\] for all
-        \(k_1 \leq \min(\rho) - \lbound{\com\ndet\tru} = \min(\rho) -
-        \lbound{\com}\) and
-        \(k_2 \geq \max(\rho) + \bound{\com\ndet\tru} = \max(\rho) +
-        \bound{\com}\). Hence by our choice of \(k_1, k_2\) it holds.
+        \(k_1 \leq \min(\rho) - \nlbound{\com\ndet\tru} = \min(\rho) -
+        \nlbound{\com}\) and
+        \(k_2 \geq \max(\rho) + \nbound{\com\ndet\tru} = \max(\rho) +
+        \nbound{\com}\). Hence by our choice of \(k_1, k_2\) it holds.
         
       \item[Case] (\(i\Rightarrow i+1\)). In this case we have to
         prove
@@ -538,18 +538,18 @@ as the analysis on \(\inte\).
         \begin{equation}
           \semi[\inte]{\com\ndet\tru}\rho'' = \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho''
         \end{equation}
-        for all \(k_1 \leq \min(\rho'') - \lbound{\com}\) and
-        \(k_2 \geq \max(\rho'') + \bound{\com}\). Now we can observe
+        for all \(k_1 \leq \min(\rho'') - \nlbound{\com}\) and
+        \(k_2 \geq \max(\rho'') + \nbound{\com}\). Now we can observe
         that because of~\eqref{eq:fixtolub} and Lemma~\ref{le:inc} it
         holds that
         \begin{align*}
-          \min(\rho'') & \geq \min(\rho) - \lbound{\fix\com} = \min(\rho) - (n+1)\lbound{\com} \\
-          \max(\rho'') & \leq \max(\rho) + \bound{\fix\com} = \max(\rho) + (n+1)\bound{\com}
+          \min(\rho'') & \geq \min(\rho) - \nlbound{\fix\com} = \min(\rho) - (n+1)\nlbound{\com} \\
+          \max(\rho'') & \leq \max(\rho) + \nbound{\fix\com} = \max(\rho) + (n+1)\nbound{\com}
         \end{align*}
         hence by choosing
         \begin{align*}
-          k_1 & \leq \min(\rho) - \lbound{\fix\com} - \lbound{\com} = \min(\rho) - (n+2)\lbound{\com} \\
-          k_2 & \geq \max(\rho) + \bound{\fix\com} + \bound{\com} = \max(\rho) + (n+2)\bound{\com}
+          k_1 & \leq \min(\rho) - \nlbound{\fix\com} - \nlbound{\com} = \min(\rho) - (n+2)\nlbound{\com} \\
+          k_2 & \geq \max(\rho) + \nbound{\fix\com} + \nbound{\com} = \max(\rho) + (n+2)\nbound{\com}
         \end{align*}
         the inductive hypothesis holds and we can conclude that
         \begin{equation}
@@ -563,8 +563,8 @@ as the analysis on \(\inte\).
         \textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i \rho =
         \semi[\binte{k_1}{k_2}]{\fix\com}\rho
       \end{equation*}
-      holds for every \(k_1 \leq \min(\rho) - (n+2)\lbound{\com}\) and
-      \(k_2 \geq \max(\rho) + (n+2)\bound{\com}\), which is our
+      holds for every \(k_1 \leq \min(\rho) - (n+2)\nlbound{\com}\) and
+      \(k_2 \geq \max(\rho) + (n+2)\nbound{\com}\), which is our
       thesis.
     \end{enumerate}
   \end{inductive}
