@@ -232,11 +232,11 @@ function. When this is the case, we have a \emph{Galois insertion}:
   \(\tuple{C, \leq} \galoiS{\abstr}{\concr} \tuple{A, \sqsubseteq}\).
 \end{definition}
 
-Nexr, we can show that given a Galois connection and by doing a
+Next, we can show that given a Galois connection and by doing a
 \emph{point-wise lifting} of the values in the concrete and abstract
-domain, we get another galois connection. This will later be useful in
+domain, we get another Galois connection. This will later be useful in
 Chapter~\ref{chap:abstractdomains} to lift proofs from a domain to its
-point-wilse lifting.
+point-wise lifting.
 
 \begin{theorem}\label{th:pointwiseconn}
   Given a Galois connection
@@ -277,7 +277,7 @@ from this, we can derive the following
   By Th.~\ref{th:pointwiseconn} it holds that
   \(\tuple{S \to C, \ovdot\leq} \galois{\dot\abstr}{\dot\concr}
   \tuple{S\to A, \ovdot\sqsubseteq}\). What we have to prove is that
-  \(\dot\abstr \circ \dot\concr = \id\) kowing that
+  \(\dot\abstr \circ \dot\concr = \id\) knowing that
   \(\abstr \circ \concr = \id\).
 
   \begin{align*}
@@ -388,18 +388,18 @@ of \(g\). We mention two, in order to see what its main problems are.
   \end{equation}
   i.e., the least fixpoint of a monotonic function \(f\) over a
   complete lattice \(f\) is the greatest lower bound of the
-  postfixpoints.  The observation is that any abstract postfixpoint of
-  a sound abstract rapresents, trough \(\concr\), a concrete fixpoint
+  post-fixpoints.  The observation is that any abstract post-fixpoint of
+  a sound abstract represents, trough \(\concr\), a concrete fixpoint
   (by Theorem~\ref{th:galoisprop}). The theorem however does not state
-  how to compute a postfixpoint of \(g\) in the abstract, but is
+  how to compute a post-fixpoint of \(g\) in the abstract, but is
   nonetheless useful as it allows us to provide a sound answer (a
   post-fixpoint) even with abstract fixpoints are difficult to compute
-  (as for infinite ascending chains) or non-existstent at all.
+  (as for infinite ascending chains) or non-existent at all.
 \end{description}
 
 As mentioned before, in order to solve the convergence problem in
 abstract domains,Patrick and Radhia Cousot in~\cite{patrickradhia:one}
-prposed to use Tarski's characterization to provide post fixpoint of
+proposed to use Tarski's characterization to provide post fixpoint of
 infinite ascending chains, introducing a binary operator: the
 \emph{widening} operator \(\widen\).
 
@@ -427,7 +427,7 @@ abstract analyzer for the computation of upper bounds:
 
 \begin{theorem}\label{th:convergence}
   Let \(f\) be a monotonic operator in a complete concrete lattice and
-  \(g\) a sonud abstraction of \(f\). Then the following iteration
+  \(g\) a sound abstraction of \(f\). Then the following iteration
   \begin{align*}
     x^0 & \defin \bot \\
     x^{i+1} & \defin x^i \widen g(x^i)
@@ -442,7 +442,7 @@ abstract analyzer for the computation of upper bounds:
   Equation~\eqref{eq:tarski} given that, when encountering a stable
   value \(x^{i+1} = x^i\), then
   \(f(x^i) \sqsubseteq x^i \widen f(x^i) = x^{i+1}\), i.e., \(x^i\) is
-  an abstract postfixpoint.
+  an abstract post-fixpoint.
 \end{proof}
 
 Where the first point states that \(\narrowi\) refines its left
