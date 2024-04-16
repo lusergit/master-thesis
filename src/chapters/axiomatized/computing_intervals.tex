@@ -538,18 +538,18 @@ as the analysis on \(\inte\).
         \begin{equation}
           \semi[\inte]{\com\ndet\tru}\rho'' = \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho''
         \end{equation}
-        for all \(k_1 \leq \min(\rho'') - \nlbound{\com}\) and
+        holds for all \(k_1 \leq \min(\rho'') - \nlbound{\com}\) and
         \(k_2 \geq \max(\rho'') + \nbound{\com}\). Now we can observe
         that because of~\eqref{eq:fixtolub} and Lemma~\ref{le:inc} it
         holds that
         \begin{align*}
-          \min(\rho'') & \geq \min(\rho) - \lbound{\fix\com} = \min(\rho) - (n+1)\lbound{\com} \\
-          \max(\rho'') & \leq \max(\rho) + \bound{\fix\com} = \max(\rho) + (n+1)\bound{\com}
+          \min(\rho'') & \geq \min(\rho) - \lbound{\fix\com} = \min(\rho) - (n+1)\lbound{\com} \geq \min(\rho) - \nlbound{\fix\com}\\
+          \max(\rho'') & \leq \max(\rho) + \bound{\fix\com} = \max(\rho) + (n+1)\bound{\com} \leq \max(\rho) + \nbound{\fix\com}
         \end{align*}
-        hence by choosing
+        hence for all
         \begin{align*}
-          k_1 & \leq \min(\rho) - \lbound{\fix\com} - \lbound{\com} = \min(\rho) - (n+2)\lbound{\com} \\
-          k_2 & \geq \max(\rho) + \bound{\fix\com} + \bound{\com} = \max(\rho) + (n+2)\bound{\com}
+          k_1 & \leq  \min(\rho) - \nlbound{\fix\com} \leq \min(\rho) - \lbound{\fix\com} - \lbound{\com} = \min(\rho) - (n+2)\lbound{\com} \\
+          k_2 & \geq \max(\rho) + \nbound{\fix\com} \geq \max(\rho) + \bound{\fix\com} + \bound{\com} = \max(\rho) + (n+2)\bound{\com}
         \end{align*}
         the inductive hypothesis holds and we can conclude that
         \begin{equation}
