@@ -387,9 +387,10 @@ as the analysis on \(\inte\).
     \(\semi[\inte]{\var:= \var[y] + k}\rho = \rho[\var \mapsto
     \rho\var[y] + k]\) we can notice that for each variable
     \(\var[w] \in \Var\) it holds that
-    \begin{equation*}
-      \min(\rho) - k \leq \left(\rho[\var \mapsto \rho\var[y] + k]\right) (\var[w]) \leq \max(\rho) + k
-    \end{equation*}
+    \begin{align*}
+      \min(\rho) - k \leq \min\left(\rho[\var \mapsto \rho\var[y] + k]\right \var[w]) \\
+      \max\left(\rho[\var \mapsto \rho\var[y] + k]\right \var[w]) \leq \max(\rho) + k
+    \end{align*}
     hence
     \begin{equation*}
       \semi[\binte{k_1}{k_2}]{\var := \var[y] + k}\rho = \dabstr[k_1,k_2]\left(\rho[\var \mapsto \rho\var[y] + k]\right) = \rho[\var \mapsto \rho\var[y] + k] = \semi[\inte]{\var := \var[y] + k}\rho
@@ -415,11 +416,12 @@ as the analysis on \(\inte\).
     for all \(k_1 \leq \min(\rho) - \nlbound{\com_2}\) and
     \(k_2 \geq \max(\rho) + \nbound{\com_2}\). In particular, both hold
     for
-    \({k_1} \leq {\min(\rho) - \nlbound{\com_1} - \nlbound{\com_2}} =
-    {\min(\rho) - \nlbound{\com_1 \ndet \com_2}}\) and
-    \({k_2} \geq {\max(\rho) + \nbound{\com_1} + \nbound{\com_2}} =
-    {\max(\rho) + \nbound{\com_1 \ndet \com_2}}\), i.e., our initial
-    choice of \(k_1, k_2\). We can conclude by closure over \(\sqcup\)
+    \begin{align*}
+      {k_1} \leq {\min(\rho) - \nlbound{\com_1} - \nlbound{\com_2}} & = {\min(\rho) - \nlbound{\com_1 \ndet \com_2}} \\
+      {k_2} \geq {\max(\rho) + \nbound{\com_1} + \nbound{\com_2}} & = {\max(\rho) + \nbound{\com_1 \ndet \com_2}}
+    \end{align*}
+    i.e., our initial choice of \(k_1, k_2\). We can conclude by
+    closure over \(\sqcup\)
     \begin{equation*}
       \semi[\inte]{\com_1 \ndet \com_2}\rho = \semi[\inte]{\com_1}\rho \sqcup \semi[\inte]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_1}\rho \sqcup \semi[\binte{k_1}{k_2}]{\com_2}\rho = \semi[\binte{k_1}{k_2}]{\com_1\ndet\com_2}\rho
     \end{equation*}
@@ -500,9 +502,9 @@ as the analysis on \(\inte\).
         +\infty = \max({\semi[\inte]{\fix\com}\rho\var[y]}) & \geq \max({\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]}) = +\infty \\
         -\infty = \min({\semi[\inte]{\fix\com}\rho\var[y]}) & \leq \min({\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]}) = -\infty
       \end{align*}
-    \item Otherwise we have to prove that
+    \item Otherwise we have to prove that for all \(\var[y]\in\Var\)
       \({\max(\semi[\inte]{\fix\com}\rho\var[y])} \geq
-      {\max(\semi[\binte{k_1}{k_2}]{\fix\com}\rho)}\) and
+      {\max(\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y])}\) and
       \({\min(\semi[\inte]{\fix\com}\rho\var[y])} \leq
       {\min(\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y])}\) when
       respectively
