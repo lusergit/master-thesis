@@ -292,12 +292,12 @@ from this, we can derive the following
 \end{proof}
 
 In this context we also need a way of ensuring abstract operations are
-sound (and occasionally) correct. Even by only using the
-concretization map and no Galois connection, the notion of sound and
-correct abstraction carries naturally from domain elements to domain
+sound (and occasionally) exact. Even by only using the concretization
+map and no Galois connection, the notion of sound and exact
+abstraction carries naturally from domain elements to domain
 operators:
 
-\begin{definition}[Sound and correct operator abstraction]
+\begin{definition}[Sound and exact operator abstraction]
   Let \(\concr : \tuple{A \sqsubseteq} \to \tuple{C, \leq}\) be a
   concretization map from an abstract domain
   \(\tuple{A, \sqsubseteq}\) to a concrete domain \(\tuple{C, \leq}\),
@@ -306,12 +306,12 @@ operators:
   \begin{enumerate}
   \item \(g\) is a \emph{sound abstraction} of \(f\) if
     \(\forall a \in A \quad f(\concr(a)) \leq \concr(g(a))\);
-  \item \(g\) is a \emph{correct abstraction} of \(f\) if
+  \item \(g\) is an \emph{exact abstraction} of \(f\) if
     \(f \circ \concr = \concr \circ g\).
   \end{enumerate}
 \end{definition}
 
-Notice that a correct abstraction is always sound.  Another remarkable
+Notice that an exact abstraction is always sound.  Another remarkable
 thing of Galois connections, is that along with this notion we can
 introduce the notion of \emph{Best correct approximation}:
 
@@ -339,8 +339,8 @@ composability and accuracy of sound abstractions:
   \item if \(g, g'\) are \emph{sound abstractions} of \(f\) and \(f'\)
     respectively and \(f\) is monotonic, then \(g \circ g'\) is a
     sound abstraction of \(f \circ f'\);
-  \item if \(g, g'\) are correct abstractions of \(f\) and \(f'\)
-    respectively then \(g \circ g'\) is a correct abstraction of
+  \item if \(g, g'\) are exact abstractions of \(f\) and \(f'\)
+    respectively then \(g \circ g'\) is an exact abstraction of
     \(f \circ f'\).
   \end{enumerate}
 \end{theorem}

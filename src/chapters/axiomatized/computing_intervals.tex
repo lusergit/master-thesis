@@ -5,15 +5,19 @@ Lemma~\ref{le:inc} provides an effective algorithm for computing the abstract
 semantics of commands%  provided a domain that respects properties \ref{inc:hp1}
 % and \ref{inc:hp2}
 . This means that we can apply Lemma~\ref{le:inc} on the intervals
-domain \(\inte\).  First, given a command \(\com\), the corresponding
-finite set of variables \(\Var_{\com} \veq \varsof{\com}\), and an
-interval environment \(\rho : \Var_{\com} \to \Int\), we define both
-the \(\min\) and the \(\max\) value of an interval environment:
-\begin{align*}
-  \max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com}\} \\
-  \min(\rho) & \veq \max \{ \min(\rho(\var)) \mid \var \in \Var_{\com}\}
-\end{align*}
+domain \(\inte\).  First, we define the max and min values of the
+point wise lifting intervals in the follwing way:
 
+\begin{definition}[\(\min\) and \(\max\)]\label{def:minmax}
+  Given a command \(\com\), the corresponding finite set of variables
+  \(\Var_{\com} \veq \varsof{\com}\), and an interval environment
+  \(\rho : \Var_{\com} \to \Int\), we define both the \(\min\) and the
+  \(\max\) value of an interval environment:
+  \begin{align*}
+    \max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com} \land \max(\rho(\var)) \neq + \infty\} \\
+    \min(\rho) & \veq \max \{ \min(\rho(\var)) \mid \var \in \Var_{\com} \land \min(\rho(\var)) \neq - \infty\}
+  \end{align*}
+\end{definition}
 % 
 Then, when computing \(\semi[\inte]{\com} \rho\) on such \(\rho\)
 having a finite domain, we can restrict to an interval domain bounded
@@ -388,8 +392,8 @@ as the analysis on \(\inte\).
     \rho\var[y] + k]\) we can notice that for each variable
     \(\var[w] \in \Var\) it holds that
     \begin{align*}
-      \min(\rho) - k \leq \min\left(\rho[\var \mapsto \rho\var[y] + k]\right \var[w]) \\
-      \max\left(\rho[\var \mapsto \rho\var[y] + k]\right \var[w]) \leq \max(\rho) + k
+      \min(\rho) - k & \leq \min\left(\rho[\var \mapsto \rho\var[y] + k] \var[w]\right) \\
+      \max(\rho) + k & \geq \max\left(\rho[\var \mapsto \rho\var[y] + k] \var[w]\right)
     \end{align*}
     hence
     \begin{equation*}
@@ -463,112 +467,65 @@ as the analysis on \(\inte\).
     \(k_2 \geq \max(\rho) + \nbound{\fix\com}\). Recall that by
     Lemma~\ref{le:sugar} \(\semi[\inte]{\fix\com}\) is syntactic sugar
     for \(\semi[\inte]{\kleene{(\com \ndet \tru)}}\), therefore
-    \begin{equation}\label{eq:fixtolub}
-      \semi[\inte]{\fix\com}\rho =
+    \begin{align}
+      \semi[\inte]{\fix\com}\rho & =
       \semi[\inte]{\kleene{(\com\ndet\tru)}}\rho =
-      \textstyle\bigsqcup_{i\in\n}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho
+      \textstyle\bigsqcup_{i\in\n}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i\rho \label{eq:fixtolub}\\
+      \semi[\binte{k_1}{k_2}]{\fix\com}\rho & =
+      \semi[\binte{k_1}{k_2}]{\kleene{(\com\ndet\tru)}}\rho =
+      \textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho \label{eq:fixtolubk}
+    \end{align}
+    By latter equation we can prove that for every \(i\in\n\) it holds
+    that
+    \begin{equation}
+      \semi[\inte]{\fix\com}\rho \sqsupseteq {\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho
     \end{equation}
-    and we can build the chain of iterands \(\rho_i\) inductively in
-    the following way
-    \begin{align*}
-      \rho_0 & \defin \rho \\
-      \rho_{i+1} & \defin \semi[\inte]{\com\ndet\tru}\rho_i = {\left(\semi[\inte]{\com\ndet\tru}\right)}^{i+1}\rho
-    \end{align*}
-    based on the value of \(\max(\semi[\inte]{\fix\com}\rho\var[y])\)
-    we want to prove that both
-    \(\max(\semi[\inte]{\fix\com}\rho\var[y]) \geq
-    \max(\semi[\binte{k_1}{k_2}]{\fix\com}\rho)\) and
-    \(\min(\semi[\inte]{\fix\com}\rho\var[y]) \leq
-    \min(\semi[\binte{k_1}{k_2}]{\fix\com}\rho)\). For every variable
-    \(\var[y] \in \Var_{\com}\) we have 2 cases:
-    \begin{enumerate}[label=(\roman*)]
-    \item If \(\max(\semi[\inte]{\fix\com}\rho\var[y]) = + \infty\)
-      (or \(\min(\semi[\inte]{\fix\com}\rho\var[y]) = - \infty\)) then
-      we can recall Lemma~\ref{le:leq} and notice that it holds that
-      \({\semi[\inte]{\fix\com}\rho} \sqsubseteq
-      {\semi[\binte{k_1}{k_2}]{\fix\com}\rho}\), hence
-      \begin{align*}
-        +\infty = \max({\semi[\inte]{\fix\com}\rho\var[y]}) & \leq \max({\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]}) = +\infty \\
-        -\infty = \min({\semi[\inte]{\fix\com}\rho\var[y]}) & \geq \min({\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]}) = -\infty
-      \end{align*}
-      but this means that
-      \(+\infty = {\max({\semi[\inte]{\fix\com}\rho\var[y]})} =
-      {\max\left({\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]}\right)}\)
-      and
-      \(-\infty = {\min({\semi[\inte]{\fix\com}\rho\var[y]})} =
-      {\min\left({\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]}\right)}\)
-      hold and the following inequality also hold:
-      \begin{align*}
-        +\infty = \max({\semi[\inte]{\fix\com}\rho\var[y]}) & \geq \max({\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]}) = +\infty \\
-        -\infty = \min({\semi[\inte]{\fix\com}\rho\var[y]}) & \leq \min({\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y]}) = -\infty
-      \end{align*}
-    \item Otherwise we have to prove that for all \(\var[y]\in\Var\)
-      \({\max(\semi[\inte]{\fix\com}\rho\var[y])} \geq
-      {\max(\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y])}\) and
-      \({\min(\semi[\inte]{\fix\com}\rho\var[y])} \leq
-      {\min(\semi[\binte{k_1}{k_2}]{\fix\com}\rho\var[y])}\) when
-      respectively
-      \({\max(\semi[\inte]{\fix\com}\rho\var[y]) \neq + \infty}\) and
-      \({\min(\semi[\inte]{\fix\com}\rho\var[y]) \neq -\infty}\). In
-      this case we also build the chain of iterands over the bounded
-      analysis
-      \begin{align*}
-        \rho_0'& \defin \rho \\
-        \rho_{i+1}' & \defin \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i'
-      \end{align*}
-      What we want to prove, is that \(\rho_{i+1} = \rho_{i+1}'\)
-      holds for every \(i\in\n\), this way the two chains hold the
-      same result. To do so we work by induction on \(i\):
-      \begin{description}
-      \item[Case] (\(i=0\)). In this case, by induction on
-        \(\com\ndet\tru\) we know that
-        \[\semi[\inte]{\com\ndet\tru}\rho =
-          \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho\] for all
-        \(k_1 \leq \min(\rho) - \nlbound{\com\ndet\tru} = \min(\rho) -
-        \nlbound{\com}\) and
-        \(k_2 \geq \max(\rho) + \nbound{\com\ndet\tru} = \max(\rho) +
-        \nbound{\com}\). Hence by our choice of \(k_1, k_2\) it holds.
-        
-      \item[Case] (\(i\Rightarrow i+1\)). In this case we have to
-        prove
-        \begin{equation*}
-          \rho_{i+1} = \semi[\inte]{\com\ndet\tru}\rho_i \quad = \quad \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i' = \rho_{i+1}'
-        \end{equation*}
-        To start, by induction on \(i\) we can say that
-        \(\rho_i = \rho_i' = \rho''\). By induction on \(\com\ndet\tru\) we can
-        say that
-        \begin{equation}
-          \semi[\inte]{\com\ndet\tru}\rho'' = \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho''
-        \end{equation}
-        holds for all \(k_1 \leq \min(\rho'') - \nlbound{\com}\) and
-        \(k_2 \geq \max(\rho'') + \nbound{\com}\). Now we can observe
-        that because of~\eqref{eq:fixtolub} and Lemma~\ref{le:inc} it
-        holds that
-        \begin{align*}
-          \min(\rho'') & \geq \min(\rho) - \lbound{\fix\com} = \min(\rho) - (n+1)\lbound{\com} \geq \min(\rho) - \nlbound{\fix\com}\\
-          \max(\rho'') & \leq \max(\rho) + \bound{\fix\com} = \max(\rho) + (n+1)\bound{\com} \leq \max(\rho) + \nbound{\fix\com}
-        \end{align*}
-        hence for all
-        \begin{align*}
-          k_1 & \leq  \min(\rho) - \nlbound{\fix\com} \leq \min(\rho) - \lbound{\fix\com} - \lbound{\com} = \min(\rho) - (n+2)\lbound{\com} \\
-          k_2 & \geq \max(\rho) + \nbound{\fix\com} \geq \max(\rho) + \bound{\fix\com} + \bound{\com} = \max(\rho) + (n+2)\bound{\com}
-        \end{align*}
-        the inductive hypothesis holds and we can conclude that
-        \begin{equation}
-          \rho_{i+1} = \semi[\inte]{\com\ndet\tru}\rho_i = \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\rho_i' = \rho_{i+1}'
-        \end{equation}
-      \end{description}
-      Hence the following
+    \begin{description}
+    \item[Case] (\(i=0\)). In this case we can observe that our thesis
       \begin{equation*}
-        \semi[\inte]{\fix\com}\rho =
-        \textstyle\bigsqcup_{i\in\n}{\left(\semi[\inte]{\com\ndet\tru}\right)}^i \rho =
-        \textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i \rho =
-        \semi[\binte{k_1}{k_2}]{\fix\com}\rho
+        \semi[\inte]{\fix\com}\rho \sqsupseteq {\left(\semi[\binte{k_1}{k_2}]{\fix\com}\right)}^0\rho = \id(\rho) = \rho
       \end{equation*}
-      holds for every \(k_1 \leq \min(\rho) - (n+2)\nlbound{\com}\) and
-      \(k_2 \geq \max(\rho) + (n+2)\nbound{\com}\), which is our
-      thesis.
-    \end{enumerate}
+      holds by~\eqref{eq:fixtolub}.
+      
+    \item[Case] (\(i \Rightarrow i+1\)). In this case we can first
+      notice that
+      \begin{align}
+        \semi[\inte]{\com\ndet\tru}{\left(\semi[\inte]{\fix\com}\rho\right)} & = \semi[\inte]{\com}{\left(\semi[\inte]{\fix\com}\rho\right)} \sqcup {\left(\semi[\inte]{\fix\com}\rho\right)} & \text{by definition of } \com\ndet\tru \nonumber \\
+                                                                             & = \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} \sqcup \left(\semi[\inte]{\fix\com}\rho\right) \label{eq:lastalign}
+      \end{align}
+      by definition of
+      \(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu\) it holds
+      that
+      \(\lfp\left(\lambda \mu . \rho \sqcup
+        \semi[\inte]{\com}\mu\right)\sqsupseteq \rho\), hence
+      \begin{equation}\label{eq:last}
+        \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} = \rho \sqcup \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} = {\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )}
+      \end{equation}
+      therefore in~\eqref{eq:lastalign}
+      \begin{align*}
+        \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} \sqcup \left(\semi[\inte]{\fix\com}\rho\right)
+        & = \semi[\inte]{\fix\com}\rho \sqcup \semi[\inte]{\fix\com}\rho & \text{by~\eqref{eq:last}}\\
+        & = \semi[\inte]{\fix\com}\rho.
+      \end{align*}
+      To conclude we have to preliminarly observe that if we call
+      \(\semi[\inte]{\fix\com}\rho = \beta\) it holds that
+      \begin{equation}
+        \semi[\inte]{\com\ndet\tru}\beta \sqsupseteq \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\beta.
+      \end{equation}
+      To start we can notice that for every
+      \(\var[y] \in \Var_{\com}\),
+      \(+ \infty \neq \max(\beta\var[y]) > \bound{\fix\com}\) implies
+      that \(\max(\beta\var[y]) \leq \max(\rho) + \bound{\fix\com}\)
+      by Lemma~\ref{le:inc}. Hence by Definition~\ref{def:minmax}
+      \(\max(\beta) \leq \max(\rho) + \bound{\fix\com}\), and by
+      calling \(n = \varsof{\com}\) we can notice the following:
+      \begin{align*}
+        \max(\beta) + \bound{\com} & \leq \max(\rho) + \bound{\fix\com} + \bonud{\com} \\
+                                   & = \max(\rho) + (n+2)\bound{\com} \\
+                                   & \leq \max(\rho) + (n+2)\nbound{\com} \\
+                                   & = \max(\rho) + \nbound{\fix\com}
+      \end{align*}
+    \end{description}
   \end{inductive}
 \end{proof}
 
