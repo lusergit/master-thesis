@@ -7,10 +7,11 @@
   inductively as follows:
   \begin{align*}
     % 
-    \bound{\var \in S}  
+    \bound{\var \in I}  
     & \veq \begin{cases}
-      |\min(S)| & \text{if } \max(S)=+\infty\\
-      |\max(S)| & \text{if } \max(S)\in\z
+      |\max(I)| & \text{if } \max(I)\in\z \\
+      |\min(I)| & \text{if } \max(I)=+\infty \land \min(S) \neq -\infty\\
+      0 & \text{otherwise}
     \end{cases}
     \\
     \bound{\var := k} 

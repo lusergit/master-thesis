@@ -1,4 +1,29 @@
-\section{Computing non-relational collecting semantics}
-\label{sec:computingnonrel}
+\section{Computing non-relational collecting semantics}\label{sec:computingnonrel}
 
-\todo[inline]{todo}
+In the following section we follow the same scheme used in
+Section~\ref{sec:computing} in order to prove that we can also bonud
+the non relational collecting domain to ensure convergence while
+obtaining the most precise interval.  To start, we rely on
+Definition~\ref{def:minmax} of \(\min\) and \(\max\) values of an
+abstract environment \(\rho\) to bound the non relational collecting
+domain \(\bCnr\) in this way:
+
+\begin{definition}[Bounded non relational collecting domain]
+  We define
+  \(\bbCnr{k_1}{k_2} \defin \Var_{\com} \to \bounded{\poset[*]{\z}}{k_1}{k_2}\) where
+  \begin{equation*}
+    {\poset[*]{\z}}_{k_1}^{k_2} = \{S \subseteq \z \mid S \neq \emptyset \land \forall x \in S \quad k_1 \leq x \leq k_2\} \cup \{\top\}
+  \end{equation*}
+\end{definition}
+Notice that contrary to \(\binte{k_1}{k_2}\) we have no way of
+rapresenting a diverging element. For bounded intervals we had the
+\(\interval{a}{+\infty}\) and \(\interval{-\infty}{b}\) elements with
+\(a,b\in\z\), but for arbitrary subsets of \(z\) we have to rely on a
+smashed \(\top\) element.
+
+\medskip
+
+\noindent
+We can already observe that by definition there are no infinite
+ascending nor descending chains, as every chain is bounded by abobve
+by some \(k_2 \in \z\) and below by some \(k_1\in\z\).

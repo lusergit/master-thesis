@@ -257,12 +257,18 @@ allows us to prove the soundness of the analysis over
 \end{lemma}
 
 \begin{proof}
-  The theorem follows from the fact that for basic expressions we're
-  using best correct approximations (from
-  Definition~\ref{def:boundedanalysis}), the Galois connection ensures
-  that composition preserves soundness (by Theorem~\ref{th:opcomp})
-  and that least upper bounds are sound (by Property~\ref{prop:five}
-  of Theorem~\ref{th:galoisprop}).
+  The theorem follows from the fact that there is a galois connection
+  \begin{equation*}
+    \inte\galois{\ovdot\abstr_{k_1, k_2}}{\id}\binte{k_1}{k_2}
+  \end{equation*}
+  between \(\inte\) and \(\binte{k_1}{k_2}\) for all
+  \(k_1, k_2 \in \z \mid k_1 \leq k_2\). Hence by
+  Theorem~\ref{th:sound} follows that for all
+  \(\com\in\imp, \rho \in \binte{k_1}{k_2}\)
+  \begin{equation*}
+    \left(\semi[\inte]{\com} \conc \id \right)\;\rho \sqsubseteq  \left(\id \conc \semi[\binte{k_1}{k_2}]{\com}\right)\;\rho
+  \end{equation*}
+  hence our thesis.
 \end{proof}
 
 Now we define a new bound, it will be useful for the latter
@@ -475,8 +481,8 @@ as the analysis on \(\inte\).
       \semi[\binte{k_1}{k_2}]{\kleene{(\com\ndet\tru)}}\rho =
       \textstyle\bigsqcup_{i\in\n}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho \label{eq:fixtolubk}
     \end{align}
-    By latter equation we can prove that for every \(i\in\n\) it holds
-    that
+    By latter equation we want to prove that for every \(i\in\n\) it
+    holds that
     \begin{equation}
       \semi[\inte]{\fix\com}\rho \sqsupseteq {\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho
     \end{equation}
@@ -498,9 +504,11 @@ as the analysis on \(\inte\).
       that
       \(\lfp\left(\lambda \mu . \rho \sqcup
         \semi[\inte]{\com}\mu\right)\sqsupseteq \rho\), hence
-      \begin{equation}\label{eq:last}
-        \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} = \rho \sqcup \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} = {\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )}
-      \end{equation}
+      \begin{align}
+        \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} & = \rho \sqcup \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} \nonumber\\
+                                                                                                & = {\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )} \nonumber \\
+                                                                                                & = \semi[\inte]{\fix\com}\rho \label{eq:last}
+      \end{align}
       therefore in~\eqref{eq:lastalign}
       \begin{align*}
         \semi[\inte]{\com}{\left(\lfp(\lambda \mu . \rho \sqcup \semi[\inte]{\com}\mu )\right)} \sqcup \left(\semi[\inte]{\fix\com}\rho\right)
@@ -509,22 +517,46 @@ as the analysis on \(\inte\).
       \end{align*}
       To conclude we have to preliminarly observe that if we call
       \(\semi[\inte]{\fix\com}\rho = \beta\) it holds that
-      \begin{equation}
+      \begin{equation}\label{eq:boundless}
         \semi[\inte]{\com\ndet\tru}\beta \sqsupseteq \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\beta.
       \end{equation}
-      To start we can notice that for every
-      \(\var[y] \in \Var_{\com}\),
-      \(+ \infty \neq \max(\beta\var[y]) > \bound{\fix\com}\) implies
-      that \(\max(\beta\var[y]) \leq \max(\rho) + \bound{\fix\com}\)
-      by Lemma~\ref{le:inc}. Hence by Definition~\ref{def:minmax}
+      for all \(k_1 \leq \min(\rho) - \nlbound{\fix\com}\) and
+      \(k_2 \geq \max(\rho) + \nbound{\fix\com}\). In other words what
+      we want to prove is that for every \(\var[y] \in \Var_{\com}\)
+      both \(\max(\semi[\inte]{\com\ndet\tru}\beta\var[y]) \leq k_2\)
+      and \(\min(\semi[\inte]{\com\ndet\tru}\beta\var[y]) \geq k_1\).
+
+      To start notice that
+      \(\max(\beta\var[y]) \leq \max(\rho) + \bound{\fix\com}\) by
+      Lemma~\ref{le:inc}. Hence by Definition~\ref{def:minmax}
       \(\max(\beta) \leq \max(\rho) + \bound{\fix\com}\), and by
       calling \(n = \varsof{\com}\) we can notice the following:
       \begin{align*}
-        \max(\beta) + \bound{\com} & \leq \max(\rho) + \bound{\fix\com} + \bonud{\com} \\
-                                   & = \max(\rho) + (n+2)\bound{\com} \\
-                                   & \leq \max(\rho) + (n+2)\nbound{\com} \\
-                                   & = \max(\rho) + \nbound{\fix\com}
+        \max(\semi[\inte]{\com\ndet\tru}\beta) & \leq \max(\beta) + \bound{\com} & \text{by Lemma~\ref{le:inc}}\\
+                                               & \leq \max(\rho) + \bound{\fix\com} + \bound{\com} \\
+                                               & = \max(\rho) + (n+2)\bound{\com} \\
+                                               & \leq \max(\rho) + (n+2)\nbound{\com} \\
+                                               & = \max(\rho) + \nbound{\fix\com} = k_2
       \end{align*}
+      A similar procedure can be applied on the minimum to observe
+      that
+      \[\min(\semi[\inte]{\com\ndet\tru}\beta) \geq \min(\rho) -
+        \nlbound{\com}= k_1\]
+
+      Hence we can conclude by observing that
+      \begin{align*}
+        \beta = \semi[\inte]{\com\ndet\tru}\beta & \sqsupseteq \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\beta  & \text{by~\eqref{eq:boundless}}\\
+                                                 & \sqsupseteq \semi[\binte{k_1}{k_2}]{\com\ndet\tru}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho & \text{by indutcion on } i \\
+        & = {\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^{i+1}\rho
+      \end{align*}
+      Therefore for all \(i\in\n\)
+      \(\semi[\inte]{\fix\com}\rho \sqsupseteq
+      {\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^{i}\rho\). By
+      this we can deduce that
+      \begin{equation*}
+        \beta = \semi[\inte]{\fix\com}\rho \sqsupseteq \bigsqcup_{i\in\n}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho = \semi[\binte{k_1}{k_2}]{\fix\com}\rho
+      \end{equation*}
+      which is our thesis.
     \end{description}
   \end{inductive}
 \end{proof}
@@ -554,3 +586,16 @@ as the analysis on \(\inte\).
 %   computed in \(\inte\) and in \(\binte{k_1}{k_2}\) coincide.
 %   \qed{}
 % \end{theorem}
+
+Our last theorem proved that by bounding the interval domain according
+to the constants that appear in a program and its initial state we can
+ensure termination of the analysis while achieving the most precise
+abstract invariant for the program. The result is analogous to the
+findings of~\cite{Gawlitza2009}, but is achieved by only looing at the
+maximal and minimal values of the intermediate elements of the
+analysis. This can already be seen as an hint on the goal of next
+sections: while we reasoned on the values of the intermediate
+analysis, we did not reason about the \emph{internal} values of
+intervals. In other words if instead of intervals we considered
+arbitrary sets (i.e., \emph{concave} sets) our results should still be
+valid.

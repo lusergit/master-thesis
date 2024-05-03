@@ -13,19 +13,19 @@ preliminarly introduce the abstract semantic.
   \(\eta \in \bA\)
 
   \begin{align*}
-    \semi[\bA]{\var \in S}\eta 
+    \semi[\bA]{\var \in I}\eta 
     & \veq  
       \begin{cases}
         % \var \mapsto \eta(\var)\sqcap \abstr(S)
-        \eta[\var \mapsto \abstr(\concr(\eta(\var)) \cap \concr[\Int](S))] & \text{if }\concr(\eta(\var)) \cap \concr[\Int](S) \neq \emptyset \\
+        \eta[\var \mapsto \abstr(\concr(\eta(\var)) \cap \concr[\Int](I))] & \text{if }\concr(\eta(\var)) \cap \concr[\Int](I) \neq \emptyset \\
         \bot & \text{otherwise}
       \end{cases}\\
     \semi[\bA]{\var := k}\eta 
     & \veq \eta[\var \mapsto \abstr(\{k\})]\\
     \semi[\bA]{\var := \var[y] + k}\eta 
     & \veq \eta[\var \mapsto \eta (\var[y]) + k]\\
-    \semi[\bA]{\var := \var[y] - k}\eta 
-    & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
+    % \semi[\bA]{\var := \var[y] - k}\eta 
+    % & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
     \semi[\bA]{\com_1 \ndet \com_2} \eta
     & \veq \semi[\bA]{\com_1} \eta \sqcup \semi[\bA]{\com_2} \eta\\
     \semi[\bA]{\com_1 \seq \com_2} \eta
@@ -36,9 +36,36 @@ preliminarly introduce the abstract semantic.
     & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi[\bA]{\com} \mu))
   \end{align*}
   where \(\concr[\Int]\) is the interval concretization map as defined
-  in Definition~\ref{def:concrint} and \(S \in \Int\), defined in
+  in Definition~\ref{def:concrint} and \(I \in \Int\), defined in
   Definition~\ref{def:int}.
 \end{definition}
+
+From this definition we can observe that if we have two domains
+\(\bA\) and \(\abstract{\bA}\) s.t.
+\(\bA \galois{\abstr}{\concr} \abstract{\bA}\) according to some
+anstraction and concretization maps \(\abstr\) and \(\concr\) then the
+analysis over \(\abstract{\bA}\) is \emph{sound} w.r.t.\ the analysis
+performed over \(\bA\), i.e., the following theorem holds:
+
+\begin{theorem}[Abstraction soundness]\label{th:sound}
+  Let
+  \(\tuple{\bA, \sqsubseteq}, \tuple{\abstract{\bA},
+    \abstract{\sqsubseteq}}\) be two domains equipped with their
+  parial order s.t.\ \(\bA \galois{\abstr}{\concr} \abstract{\bA}\)
+  for some abstraction and concretization maps \(\abstr, \concr\) and
+  \(\com\in\imp\). Then for all
+  \(\abstract{\eta} \in \abstract{\bA}\):
+  \begin{equation*}
+    ( \semi[\bA]{\com} \conc \gamma ) \; \abstract{\eta} \sqsubseteq (\gamma \conc \semi[\abstract{\bA}]{\com}) \; \abstract{\eta} 
+  \end{equation*}
+  i.e., the abstract analysis over \(\abstract{\bA}\) is sound w.r.t.\
+  the analysis over \(\bA\).
+\end{theorem}
+
+\begin{proof}
+  % Preliminare: Soundness viene preservata nei passi induttivi,
+  % chiudendo per lub, concatenazione e fixpoint
+\end{proof}
 
 % Se S è un intervallo non abbiamo più bisogno di non fare la BCA.
 

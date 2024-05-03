@@ -12,7 +12,7 @@ that \(+\infty + z = + \infty - z = + \infty\) and
 \(-\infty + z = -\infty + z = -\infty\).  We focus on the following
 non-deterministic language.
 \begin{align*}
-  \expr \ni \com[e] ::= & \; \var \in S % \mid \tru \mid \ff 
+  \expr \ni \com[e] ::= & \; \var \in I % \mid \tru \mid \ff 
                           \mid \var := k \mid \var := \var[y] + k % \mid \var := \var[y] - k 
   \\
   \imp\starless \ni \com[D] ::= & \; \com[e] \mid \com[D + D] \mid \com[D ; D] \\
@@ -21,7 +21,7 @@ non-deterministic language.
 
 where \(\var, \var[y] \in \Var\) a finite set of variables of
 interest, i.e., the variables appearing in the considered program,
-\(S\in\Int\) an \emph{interval} (as defined in
+\(I\in\Int\) an \emph{interval} (as defined in
 Definition~\ref{def:int}),
 \({a \in \z \cup \{-\infty\}}, {b \in \z \cup\{+\infty\}}, {a\leq b}\)
 and \({k \in \z}\) is any finite integer constant.

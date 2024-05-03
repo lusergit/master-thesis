@@ -1,0 +1,103 @@
+\section{Bounding non-relational collecting semantics}\label{sec:computingnonrel}
+
+In the following chaper we want to reflect the same results we
+observed for the interval domain on the non-relational domain
+\(\bCnr\). We will see how Lemma~\ref{le:inc} can be also proved for
+the non relational domain and the language \(\imp\), which will allow
+us to again bound the analysis on a lattice without infinite ascending
+chains, hence ensuring termination.  For an easier reading, we will
+refer to \(\semi[\bCnr]{\cdot}\) with the same notation we used in
+Section~\ref{sub:nonrelprop}: \(\semnr{\cdot} = \semi[\bCnr]{\cdot}\).
+
+\begin{lemma}\label{le:incnr}
+  Let \(\com\in \imp\).
+  % Then consider a function \({\max_{\Int} : \Int \to \z}\) s.t. for
+  % all \({a\in\Int}\) it holds that \(x \leq \max_\Int(a)\) for all
+  % \({x \in \concr[\Int](a)}\).
+  For all \(\eta \in \bCnr\) and \(\var[y] \in \Var\), if
+  \(\max(\semnr{\com} \eta \var[y]) \neq +\infty\) and
+  \(\max(\semnr{\com}\eta \var[y]) > \bound{\com}\) then there exist a
+  variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
+  such that \(|h| \leq \bound{\com}\) and the following two properties
+  hold:
+  \begin{enumerate}[label=(\roman*)]
+  \item\label{point1nr} \(\max(\semnr{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); 
+  \item\label{point2nr} for all \(\eta' \in \bCnr\), if \(\eta' \sqsupseteq \eta\)
+    % and \(\semnr{\com}\eta' \neq \top\)
+    then
+    \(\max(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\).
+  \end{enumerate}
+  % dually, if \(\min(\semnr{\com}\eta\var[y]) \neq - \infty\) and
+  % \(\min(\semnr{\com}\eta\var[y]) < \lbound{\com}\) then there exists a
+  % variable \(\var[w] \in \Var\) and an integer \(i \in \z\) s.t.
+  % \(|i| \leq \lbound{\com}\) and the following two properties hold:
+  % \begin{enumerate}[label=(\roman*)]
+  % \item \(\min(\semnr{\com}\eta \var[y]) = \min(\eta \var[w]) + i\); \label{point1min}
+  % \item  for all \(\eta' \in \Int\), if \(\eta' \sqsupseteq \eta\)
+  %   %   and \(\semnr{\com}\eta' \neq \top\)
+  %   then
+  %   \(\min(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[w]) + i\). \label{point2min}
+  % \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  The proof is left in Appendix~\ref{ap:proofleincrnr}, since it is
+  fundamentally similar to the one of Lemma~\ref{le:inc}. 
+\end{proof}
+
+\begin{remark}
+  \todo{remark sul fatto che funziona perchè abbiamo limitato il
+    linguaggio?}  The key point is that in the base case
+  (\(\var\in I\)) we can say the same things we said for
+  intervals. This is because the filtering happens on an interval
+  \(I \in \inte\) instead on an arbitrary decidable set
+  \(S \in \poset{\z}\). If that was the case and we consider
+  \(\var[y] = \var\) it happens that
+  \begin{equation}
+    \max(\semnr{\var\in S}\eta\var[y]) = \max(\eta[\var \mapsto \eta\var \cap S]\var) = \max(\eta\var \cap S)
+  \end{equation}
+  but since \(S\) is generally concave what happens is that generally
+  if \(\eta \var \cap S \neq \emptyset\) and \(\max(S) = +\infty\) then
+  \begin{equation}
+    \max(\eta\var \cap S) \leq \max(\eta\var)
+  \end{equation}
+  providing a potential counterexample to the Lemma. For example
+  consider the program \((\var\in\mathbb{P})\)
+  % \begin{lstlisting}[caption=Potential counterexample, label=code2, language=Imp]
+  %   x > 5;\end{lstlisting}
+  where \(\mathbb{P}\) is the set of even numbers and initial
+  environment \({\eta \defin [\var\mapsto \mathbb{D} \cup \{2\}]}\),
+  where \(\mathbb{D}\) is the set of odd numbers. Then
+  \begin{equation*}
+    {\semnr{\var\in\mathbb{P}}\eta\var} = \{2\}
+  \end{equation*}
+  and \(\max({\semnr{\var\in\mathbb{P}}\eta\var}) = 2\), while
+  \(\bound{\semnr{\var\in\mathbb{P}}\eta\var} = 0\).
+
+  \medskip
+
+  \noindent
+  Hence both
+  \(\max({\semnr{\var\in\mathbb{P}}\eta\var}) \neq +\infty\) and
+  \(\max({\semnr{\var\in\mathbb{P}}\eta\var}) >
+  \bound{\semnr{\var\in\mathbb{P}}\eta\var}\) hold and what the Lemma
+  would state is that \(\exists \var[w] \in (\var\in \mathbb{P})\) and
+  \(h \in \z \mid |h| \leq \bound{\var\in\mathbb{P}}\) s.t.
+  \begin{enumerate}[label=(\roman*)]
+  \item\label{eq:equality}
+    \(\max(\semnr{\var\in \mathbb{P}}\eta\var) = \max(\eta\var[w]) +
+    h\)
+  \item
+    \(\forall \eta'\sqsupseteq \eta \quad
+    \max(\semnr{\var\in\mathbb{P}}\eta'\var[y]) \geq
+    \max(\eta'\var[w]) + h\)
+  \end{enumerate}
+  and we can already see that~\ref{eq:equality} is false. In fact the
+  only variable in the program is \(\var\), hence \(\var[w] = \var\),
+  but \(\max(\eta\var) = +\infty\) and \(\forall h \in \z\) it happens
+  that \(+\infty + h = +\infty\), hence
+  \begin{equation*}
+    \max(\semnr{\var\in\mathbb{P}}\eta\var) = 2 = +\infty = \max(\eta\var) + h
+  \end{equation*}
+  which is false.
+\end{remark}

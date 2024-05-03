@@ -229,7 +229,33 @@ The second lemma states a similar but inverted property:
   \medskip
 
   \noindent
-  \textbf{Case} (\(k \Rightarrow k + 1\)). In this case \(\dots\).
+  \textbf{Case} (\(k \Rightarrow k + 1\)). In this case we have to
+  prove that if \(\stt{\com_1, \rho} \to^{k+1} \rho'\) then
+  \(\stt{\com_1\seq\com_2, \rho} \to^{k+1} \rho'\). To start we can
+  notice that \(\stt{\com_1, \rho} \to^{k+1} \rho'\) means that we
+  have 2 cases:
+  \begin{enumerate}[label=(\arabic*)]
+  \item either \(k = 0\), hence \(\stt{\com_1, \rho} \to \rho'\). But
+    in this case we can use \(\drule{comp_2}\) and deduce that
+    \begin{equation*}
+      \infer{\stt{\com_1\seq\com_2, \rho} \to \stt{\com_2, \rho'}}{\stt{\com_1, \rho} \to \rho'}
+    \end{equation*}
+    
+  \item Or \(k > 0\), which means
+    \begin{equation}\label{eq:key}
+      \stt{\com_1, \rho} \to \stt{\com_1', \rho''} \to^k \rho'.
+    \end{equation}
+    In this case we can use \(\drule{comp_1}\) and notice that
+    \begin{equation*}
+      \infer{\stt{\com_1\seq\com_2, \rho}\to\stt{\com_1'\seq\com_2, \rho''}}{\stt{\com_1, \rho} \to \stt{\com_1', \rho''}}
+    \end{equation*}
+    Now, by induction on \(k\) in~\eqref{eq:key} we know that
+    \(\stt{\com_1'\seq\com_2, \rho''}\to^k\rho'\), hence
+    \begin{equation*}
+      \stt{\com_1\seq\com_2, \rho} \to \stt{\com_1'\seq\com_2, \rho''} \to^k \rho'
+    \end{equation*}
+    which is our thesis.
+  \end{enumerate}
 \end{proof}
 
 \begin{corollary}\label{co:comp}

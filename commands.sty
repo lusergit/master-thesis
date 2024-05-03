@@ -11,19 +11,22 @@
 \newcommand{\ppath}[1][\tau]{\ensuremath{#1}}
 \newcommand{\Var}{\ensuremath{\mathit{Var}}}
 \newcommand{\Int}{\ensuremath{{\mathbb{I}}}}
-\newcommand{\bInt}[2]{\ensuremath{\Int_{#1}^{#2}}}
 \newcommand{\inte}{\ensuremath{\dot{\mathbb{I}}}}
-\newcommand{\binte}[2]{\ensuremath{\inte_{#1}^{#2}}}
+\newcommand{\bounded}[3]{\ensuremath{{#1}_{#2}^{#3}}}
+\newcommand{\bInt}[2]{\ensuremath{\bounded{\Int}{#1}{#2}}}
+\newcommand{\binte}[2]{\ensuremath{\bounded{\inte}{#1}{#2}}}
 \newcommand{\dom}{\ensuremath{\mathbb{C}}}
 \newcommand{\starless}{\ensuremath{_{s}}}
-\newcommand{\ifte}[3]{\ensuremath{\mathsf{if} \; #1 \; \mathsf{then} \; #2 \;\mathsf{else} \; #3}}
-\newcommand{\while}[2]{\ensuremath{\mathsf{while} \; #1 \; \mathsf{do} \; #2}}
-\newcommand{\plusplus}{\mathbin{\text{\ttfamily\upshape ++}}}
-\newcommand{\pplus}[1]{\ensuremath{#1 \plusplus}}
-\newcommand{\trans}[2]{\ensuremath{\mathsf{TS}(\la {#1}, {#2} \ra)}}
-\newcommand{\abstract}[1]{\ensuremath{{#1}^\sharp}}
-\newcommand{\varsof}[1]{\ensuremath{\mathit{vars}({#1})}}
-\newcommand{\smashed}[1]{\ensuremath{{#1}_\bot}}
+\newcommand{\ifte}[3]{\ensuremath{\mathsf{if} \; #1 \; \mathsf{then}
+      \; #2 \;\mathsf{else} \; #3}}
+  \newcommand{\while}[2]{\ensuremath{\mathsf{while} \; #1 \;
+      \mathsf{do} \; #2}}
+  \newcommand{\plusplus}{\mathbin{\text{\ttfamily\upshape ++}}}
+  \newcommand{\pplus}[1]{\ensuremath{#1 \plusplus}}
+  \newcommand{\trans}[2]{\ensuremath{\mathsf{TS}(\la {#1}, {#2} \ra)}}
+  \newcommand{\abstract}[1]{\ensuremath{{#1}^\sharp}}
+  \newcommand{\varsof}[1]{\ensuremath{\mathit{vars}({#1})}}
+  \newcommand{\smashed}[1]{\ensuremath{{#1}_\bot}}
 
 % domains
 \newcommand{\z}{\ensuremath{\mathbb{Z}}}
@@ -81,7 +84,7 @@
 \newcommand{\lub}{\ensuremath{\text{lub}}}
 \newcommand{\gfp}{\ensuremath{\text{gfp}}}
 \newcommand{\glb}{\ensuremath{\text{glb}}}
-\newcommand{\poset}[1]{\ensuremath{2^{#1}}}
+\newcommand{\poset}[2][]{\ensuremath{\wp^{#1}({#2})}}
 \newcommand{\partialrec}[1][]{\ensuremath{\n^{#1} \htor \n}}
 \newcommand{\tuple}[1]{\ensuremath{\la #1 \ra}}
 \newcommand{\sizeof}[1]{\ensuremath{\left| #1 \right|}}

@@ -18,7 +18,7 @@ program \emph{execution}.% The first building block are
   \(\bsem{ \cdot} : \expr \to \env \to \smashed{\env}\) is
   inductively defined by:
   \begin{align*}
-    \bsem{\var\in S} \rho & \defin \begin{cases} \rho & \rho(\var)\in S \\ \bot & \text{otherwise} \end{cases} \\
+    \bsem{\var\in I} \rho & \defin \begin{cases} \rho & \rho(\var)\in I \\ \bot & \text{otherwise} \end{cases} \\
     % \bsem{\var\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(\var)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
     % \bsem{\var\leq k} \rho & \defin \begin{cases} \rho & \rho(\var)\leq k \\ \bot & \text{otherwise} \end{cases} \\
     % \bsem{\var> k} \rho & \defin \begin{cases} \rho & \rho(\var) > k \\ \bot & \text{otherwise} \end{cases} \\
@@ -280,14 +280,14 @@ We define some syntactic sugar for the language. In the next chapters
 we will often use the syntactic sugar instead of its real equivalent
 for the sake of simplicity.
 \begin{align*}
-  \var \in \interval{a}{b} & = \var \in S & \text{with } S = \interval{a}{b}\\
+  \var \in \interval{a}{b} & = \var \in I & \text{with } I = \interval{a}{b}\\
   \var \leq k & = \var \in (-\infty, k]\\
   \var > k & = \var \in [k+1, + \infty) \\
-  \tru & = |\var| \in \n \\
+  \tru & = \var \in \z \\
   \ff & = \var \in \emptyset \\
-  \var \in S_1 \vee \var \in S_2 & = (\var \in S_1) + (\var \in S_2) \\ 
-  \var \in S_1 \wedge \var \in S_2 & = (\var \in S_1);(\var \in S_2) \\
-  %% \var \not\in S & = \var \in \neg S \\
+  \var \in I_1 \vee \var \in I_2 & = (\var \in I_1) + (\var \in I_2) \\ 
+  \var \in I_1 \wedge \var \in I_2 & = (\var \in I_1);(\var \in I_2) \\
+  %% \var \not\in I & = \var \in \neg I \\
   \ifte{b}{C_1}{C_2} & = (\com[e];\com_1) + (\com[\neg e];\com_2) \\
   \while{b}{C} & = \fix{b;\com};\neg b \\
   \pplus{\var} & = \var := \var + 1
