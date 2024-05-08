@@ -3,58 +3,62 @@
 In order to talk about analysis over some abstract domain \(\bA\), we
 preliminarly introduce the abstract semantic.
 
-\begin{definition}\label{def:abstrsem}
-  Given two domains \(\bA, \abstract\bA\) with bottom elements
-  \(\bot, \abstract\bot\) and an abstraction map
-  \({\alpha : \bA \to \abstract\bA}\) and a concretization map
-  \({\concr : \bA \to \abstract\bA}\) the \emph{analysis semantics}
-  over \(\bA\) is defined as the strict (i.e., preserving \(\bot\))
-  extension of the following function
-  \({\semi[\abstract\bA]{\cdot} : \imp \to \abstract\bA \to
-    \abstract\bA}\). For all \(\abstract\eta \in \abstract\bA\)
+\begin{definition}[\textbf{Abstract inductive semantic}]\label{def:abstrsem}
+  Given a domain \(\bA\) and an abstract semantics
+  \(\absem[\bA]{\cdot} : \expr \to \bA \to
+  \bA\) for base expressions, the \emph{abstract inductive
+    semantics} over \(\bA\) is defined as the strict (i.e.,
+  preserving \(\bot\)) extension of the following function
+  \({\semi[\bA]{\cdot} : \imp \to \bA \to
+    \bA}\). For all \(\eta \in \bA\)
 
   \begin{align*}
-    \semi[\abstract\bA]{\com[e]}\abstract\eta & \defin \abstr(\semi[\bA]{\com[e]}\concr(\abstract\eta)) \\
-    % \semi[\abstract\bA]{\var \in I}\abstract\eta 
+    \semi[\bA]{\com[e]}\eta & \defin \absem[ \bA]{\com[e]}\eta\\
+    % \semi[\bA]{\var \in I}\eta 
     % & \veq  
-    %   \begin{cases}
-    %     % \var \mapsto \abstract\eta(\var)\sqcap \abstr(S)
-    %     \abstract\eta[\var \mapsto \abstr(\concr(\abstract\eta\var) \sqcap \concr[\Int](I))] & \text{if }\concr(\abstract\eta\var) \sqcap \concr[\Int](I) \neq \bot \\
+    % \begin{cases}
+    %     %   \var \mapsto \eta(\var)\sqcap \abstr(S)
+  %   \eta[\var \mapsto \abstr(\concr(\eta\var) \sqcap \concr[\Int](I))] & \text{if }\concr(\eta\var) \sqcap \concr[\Int](I) \neq \bot \\
     %     \bot & \text{otherwise}
     %   \end{cases}\\
-    % \semi[\abstract\bA]{\var := k}\abstract\eta 
-    % & \veq \abstract\eta[\var \mapsto \abstr(\{k\})]\\
-    % \semi[\abstract\bA]{\var := \var[y] + k}\abstract\eta 
-    % & \veq \abstract\eta[\var \mapsto \abstract\eta\var[y] + k]\\
-    % % \semi[\abstract\bA]{\var := \var[y] - k}\abstract\eta 
-    % % & \veq \abstract\eta[\var \mapsto \abstract\eta (\var[y]) - k]\\
-    \semi[\abstract\bA]{\com_1 \ndet \com_2} \abstract\eta
-    & \veq \semi[\abstract\bA]{\com_1} \abstract\eta \sqcup \semi[\abstract\bA]{\com_2} \abstract\eta\\
-    \semi[\abstract\bA]{\com_1 \seq \com_2} \abstract\eta
-    & \veq \semi[\abstract\bA]{\com_2} (\semi[\abstract\bA]{\com_1} \abstract\eta)\\
-    \semi[\abstract\bA]{\kleene{\com}} \abstract\eta
-    & \veq \textstyle \bigsqcup_{i \in \nat} {\left(\semi[\abstract\bA]{\com}\right)}^i (\abstract\eta)\\
-    \semi[\abstract\bA]{\fix{\com}} \abstract\eta
-    & \veq  \lfp(\lambda \mu. (\abstract\eta \sqcup \semi[\abstract\bA]{\com} \mu))
+    % \semi[\bA]{\var := k}\eta 
+    % & \veq \eta[\var \mapsto \abstr(\{k\})]\\
+    % \semi[\bA]{\var := \var[y] + k}\eta 
+    % & \veq \eta[\var \mapsto \eta\var[y] + k]\\
+    % % \semi[\bA]{\var := \var[y] - k}\eta 
+    % % & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
+    \semi[\bA]{\com_1 \ndet \com_2} \eta
+    & \veq \semi[\bA]{\com_1} \eta \sqcup \semi[\bA]{\com_2} \eta\\
+    \semi[\bA]{\com_1 \seq \com_2} \eta
+    & \veq \semi[\bA]{\com_2} \left(\semi[\bA]{\com_1} \eta\right)\\
+    \semi[\bA]{\kleene{\com}} \eta
+    & \veq \textstyle \bigsqcup_{i \in \nat} {\left(\semi[\bA]{\com}\right)}^i (\eta)\\
+    \semi[\bA]{\fix{\com}} \eta
+    & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi[\bA]{\com} \mu))
   \end{align*}
   % where \(\concr[\Int] : \Int \to \bA\) is a concretization map for intervals
   % \(I \in \Int\) defined in Definition~\ref{def:int} into \(\bA\).
 \end{definition}
 
-From this definition we can observe that if we have two domains
-\(\bA\) and \(\abstract{\bA}\) s.t.
+From this definition we can observe that soundness is preserved from
+the base cases, i.e., if we have two domains \(\bA\) and
+\(\abstract{\bA}\) s.t.
 \(\bA \galois{\abstr}{\concr} \abstract{\bA}\) according to some
 anstraction and concretization maps \(\abstr\) and \(\concr\) then the
 analysis over \(\abstract{\bA}\) is \emph{sound} w.r.t.\ the analysis
-performed over \(\bA\), i.e., the following theorem holds:
+performed over \(\bA\), provided that the base cases are sound.
 
 \begin{theorem}[Abstraction soundness]\label{th:sound}
-  Let
+  Let \(C\in\imp\) and
   \(\tuple{\bA, \sqsubseteq}, \tuple{\abstract{\bA},
     \abstract{\sqsubseteq}}\) be two domains equipped with their
   parial order s.t.\ \(\bA \galois{\abstr}{\concr} \abstract{\bA}\)
-  for some abstraction and concretization maps \(\abstr, \concr\) and
-  \(\com\in\imp\). Then for all
+  for some abstraction and concretization maps \(\abstr, \concr\) such
+  that
+  \begin{equation*}
+    \forall  \com[e] \in \expr \quad (\absem[\bA]{\com[e]} \conc\concr) \abstract\eta \sqsubseteq (\concr \conc \absem[\abstract\bA]{\com[e]})
+  \end{equation*}
+  i.e., the analysis over the base cases are sound. Then for all
   \(\abstract{\eta} \in \abstract{\bA}\):
   \begin{equation*}
     ( \semi[\bA]{\com} \conc \gamma ) \; \abstract{\eta} \sqsubseteq (\gamma \conc \semi[\abstract{\bA}]{\com}) \; \abstract{\eta} 
@@ -68,22 +72,30 @@ performed over \(\bA\), i.e., the following theorem holds:
   % chiudendo per lub, concatenazione e fixpoint
   The proof will proceed again by induction on \(\com\).
   \begin{inductive}
-    \case{\(\com[e]\)} In this case we know that
-    \(\semi[\abstract\bA]{\com[e]}\abstract\eta =
-    \abstr(\semi[\bA]{\com[e]}\concr(\abstract\eta))\) and we have to
-    prove that
-    \[(\semi[\bA]{\com[e]} \conc \concr) \abstract\eta \sqsubseteq
-      (\concr \conc \semi[\abstract\bA]{\com[e]})\abstract\eta\]
-    hence we can substitute and end up with
-    \[\semi[\bA]{\com[e]}(\concr(\abstract\eta)) \sqsubseteq
-      \concr(\abstr(\semi[\bA]{\com[e]}\concr(\abstract\eta))).\] Here
-    we can call \(\rho = \semi[\bA]{\com[e]}(\concr(\abstract\eta))\)
-    and notice that by extensivity \(\forall \rho \in \bA\)
-    \begin{align*}
-      \rho & \sqsubseteq (\concr \conc \abstr) \rho \\
-      \semi[\bA]{\com[e]}(\concr(\abstract\eta)) & \sqsubseteq (\concr \conc \abstr) \left(\semi[\bA]{\com[e]}(\concr(\abstract\eta))\right)
-    \end{align*}
-    which is our thesis.
+    \case{\(\com[e]\)} In this case by hypothesis it holds that
+
+    \begin{equation*}
+      (\semi[\bA]{\com[e]} \conc \concr)\abstract\eta = (\absem[\bA]{\com[e]}\conc\concr)\abstract\eta \sqsubseteq (\concr\conc \absem[\abstract\bA]{\com[e]})\abstract\eta = (\concr\conc\semi[\abstract\bA]{\com[e]})\abstract\eta
+    \end{equation*}
+    Which is exactly our thesis.
+
+    % For bca induces soundness
+    % In this case we know that
+    % \(\semi[\abstract\bA]{\com[e]}\abstract\eta =
+    % \abstr(\semi[\bA]{\com[e]}\concr(\abstract\eta))\) and we have to
+    % prove that
+    % \[(\semi[\bA]{\com[e]} \conc \concr) \abstract\eta \sqsubseteq
+    %   (\concr \conc \semi[\abstract\bA]{\com[e]})\abstract\eta\]
+    % hence we can substitute and end up with
+    % \[\semi[\bA]{\com[e]}(\concr(\abstract\eta)) \sqsubseteq
+    %   \concr(\abstr(\semi[\bA]{\com[e]}\concr(\abstract\eta))).\] Here
+    % we can call \(\rho = \semi[\bA]{\com[e]}(\concr(\abstract\eta))\)
+    % and notice that by extensivity \(\forall \rho \in \bA\)
+    % \begin{align*}
+    %   \rho & \sqsubseteq (\concr \conc \abstr) \rho \\
+    %   \semi[\bA]{\com[e]}(\concr(\abstract\eta)) & \sqsubseteq (\concr \conc \abstr) \left(\semi[\bA]{\com[e]}(\concr(\abstract\eta))\right)
+    % \end{align*}
+    % which is our thesis.
     
     \case{\(\com_1 \ndet \com_2\)} In this case by inductive
     hypothesis we know that both the following hold:
@@ -160,7 +172,7 @@ performed over \(\bA\), i.e., the following theorem holds:
       =
       \concr(\lfp(\lambda \mu . \abstract\eta \sqcup \semi[\abstract\bA]{\com}\mu))
       =
-      \concr\left(\bigsqcup \left\{{\left(\lambda \mu . \abstract\eta \sqcup \semi[\abstract\bA]{\com}\mu\right)}^n\bot \mid n\in\n\right\}\right)
+      \concr\left(\bigsqcup \left\{{\left(\lambda \mu . \abstract\eta \sqcup \semi[\abstract\bA]{\com}\mu\right)}^n\abstract\bot \mid n\in\n\right\}\right)
     \end{equation*}
     \begin{equation*}
       \left(\semi[\bA]{\fix\com}\conc\concr\right) \abstract\eta
@@ -170,14 +182,97 @@ performed over \(\bA\), i.e., the following theorem holds:
       \bigsqcup \left\{{\left(\lambda \mu . \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\mu\right)}^n\bot \mid n\in\n\right\}
     \end{equation*}
     We can now prove by induction on \(n\) that the two are in a
-    \(\sqsubseteq\) relation.
+    \(\sqsubseteq\) relation. We do this by first proving that for all
+    \(k \in \n\)
+    \begin{equation*}
+       f^k\bot \sqsubseteq \concr\left({(\abstract f)}^k \abstract\bot\right)
+    \end{equation*}
+    by induction on \(k\).
     \begin{description}
       % bot is preserved
-    \item[Case] (\(n = 0\)). In this case 
+    \item[Case] (\(n = 0\)). In this case
+      \begin{equation*}
+        \concr\left({\left(\lambda \mu . \abstract\eta \sqcup \semi[\abstract\bA]{\com}\mu\right)}^0\abstract\bot\right) = \concr(\abstract\bot)
+      \end{equation*}
+      \begin{equation*}
+        {\left(\lambda \mu . \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\mu\right)}^0\bot = \bot
+      \end{equation*}
+      hence \(\bot \sqsubseteq \concr(\abstract\bot)\) and our thesis
+      holds.
       
-    \item[Case] (\(n \Rightarrow n + 1\)).
+    \item[Case] (\(n \Rightarrow n + 1\)). Let's call
+      \(\abstract f = \lambda \mu . \abstract\eta \sqcup
+      \semi[\abstract\bA]{\com}\mu\) and
+      \(f = \lambda \mu . \concr(\abstract\eta) \sqcup
+      \semi[\bA]{\com}\mu\). First we can observe that
+      \begin{equation*}
+        f^{n+1} \bot = f(f^n\bot) = \concr\left(\abstract\eta\right) \sqcup \semi[\bA]{\com}(f^n\bot)
+      \end{equation*}
+      \begin{equation*}
+        {\abstract f}^{n+1} \abstract\bot = \abstract f({\abstract f}^n\bot) = \abstract\eta \sqcup \semi[\abstract\bA]{\com}({\abstract f}^n\abstract\bot)
+      \end{equation*}
+      now consider the following
+      \begin{align*}
+        \concr\left(\abstract\eta \sqcup \semi[\abstract\bA]{\com}({\abstract f}^n\abstract\bot)\right) & = \bigsqcup \left\{c \in \bA \mid \abstr(c) \sqsubseteq \abstract\eta \sqcup \semi[\abstract\bA]{\com}({\abstract f}^n\abstract\bot)\right\} & \text{by Property~\ref{prop:four} of Galois connections.} \\
+        & \sqsupseteq \concr(\abstract\eta) \sqcup \concr\left(\semi[\abstract\bA]{\com}({\abstract f}^n \abstract\bot)\right) & \text{by } (\abstr\conc\concr) \text{ reductivity} \\
+        &\sqsupseteq \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\concr({\abstract f}^n \abstract \bot) & \text{by induction on }\com \\
+        &\sqsupseteq \concr(\abstract\eta) \sqcup \semi[\bA]{\com}(f^n \bot) & \text{by induction on } n \\
+      \end{align*}
+      which is our thesis.
     \end{description}
+    Hence \(f^n\bot \sqsubseteq \concr({\abstract f}^n \abstract\bot)\),
+    for all \(n\in\n\). Therefore again by Property~\ref{prop:four} of
+    Galois connections
+    \begin{align*}
+      \left(\semi[\bA]{\fix\com} \conc \concr \right)\abstract \eta & = \bigsqcup \left\{{\left(\lambda \mu . \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\mu\right)}^n\bot \mid n \in\n\right\} \\
+                                                                    & \sqsubseteq \concr\left(\bigsqcup \left\{{\left(\lambda \mu . \abstract\eta \sqcup \semi[\abstract\bA]{\com}\mu\right)}^n \abstract\bot \mid n \in\n\right\}\right) \\
+                                                                    & = \left(\concr \conc \semi[\abstract\bA]{\fix\com}\right) \abstract \eta
+    \end{align*}
+    Which is our thesis.
   \end{inductive}
+\end{proof}
+
+We can also observe that best correct approximations (from
+Definition~\ref{def:bca}) induce sound semantics:
+
+\begin{lemma}[\textbf{bca induces soundness}]
+  Let
+  \(\tuple{\bA, \sqsubseteq}, \tuple{\abstract\bA,
+    \abstract\sqsubseteq}\) be two abstract domains equipped with
+  their respective orders s.t.\
+  \(\bA \galois{\abstr}{\concr}\abstract\bA\). If for base expressions
+  \(\absem[\abstract\bA]{\cdot} : \abstract\bA \to \abstract\bA\) is defined
+  as
+  \begin{equation*}
+    \absem[\abstract\bA]{\com[e]} \abstract\eta  \defin \abstr\left(\absem[\bA]{\com[e]}\concr\left(\abstract\eta\right)\right)
+  \end{equation*}
+  Then
+  \begin{equation*}
+    \left(\semi[\bA]{\com} \conc\concr\right) \abstract\eta \sqsubseteq \left(\concr\conc \semi[\abstract\bA]{\com}\right)\abstract\eta
+  \end{equation*}
+  i.e., the abstract inductive semantics over \(\abstract\bA\) is
+  sound w.r.t.\ the abstract inductive semantics over \(\bA\).
+\end{lemma}
+
+\begin{proof}
+  The proof follows from Theorem~\ref{th:sound}, where we have to prove
+  that for base cases the two semantics are sound.  In this case we
+  know that
+  \(\absem[\abstract\bA]{\com[e]}\abstract\eta =
+  \abstr(\absem[\bA]{\com[e]}\concr(\abstract\eta))\) and we have to
+  prove that
+  \[(\absem[\bA]{\com[e]} \conc \concr) \abstract\eta \sqsubseteq
+    (\concr \conc \absem[\abstract\bA]{\com[e]})\abstract\eta\]
+  equivalently, we can substitute and notice that we can prove that
+  \[\absem[\bA]{\com[e]}(\concr(\abstract\eta)) \sqsubseteq
+    \concr(\abstr(\absem[\bA]{\com[e]}\concr(\abstract\eta))).\] Here
+  we can call \(\rho = \absem[\bA]{\com[e]}(\concr(\abstract\eta))\)
+  and notice that by extensivity \(\forall \rho \in \bA\)
+  \begin{align*}
+    \rho & \sqsubseteq (\concr \conc \abstr) \rho \\
+    \absem[\bA]{\com[e]}(\concr(\abstract\eta)) & \sqsubseteq (\concr \conc \abstr) \left(\absem[\bA]{\com[e]}(\concr(\abstract\eta))\right)
+  \end{align*}
+  which is our thesis.
 \end{proof}
 
 % Se S è un intervallo non abbiamo più bisogno di non fare la BCA.
