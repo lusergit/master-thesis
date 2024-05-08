@@ -177,7 +177,7 @@ soundness by construction of the analyzer:
     idempotent;
   \item\label{prop:three} \(\forall c \in C\)
     \(\abstr(c) = \sqcap \{a \mid c \leq \concr(a)\}\);
-  \item \(\forall a \in A\)
+  \item\label{prop:four} \(\forall a \in A\)
     \(\concr(a) = \vee \{ c \mid \abstr(c) \sqsubseteq a \}\);
   \item\label{prop:five} \(\abstr\) maps concrete lubs to abstract lubs:
     \begin{equation*}

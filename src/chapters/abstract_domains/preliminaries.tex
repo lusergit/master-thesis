@@ -4,40 +4,41 @@ In order to talk about analysis over some abstract domain \(\bA\), we
 preliminarly introduce the abstract semantic.
 
 \begin{definition}\label{def:abstrsem}
-  Given an abstract domain \(\bA\), with an abstraction map
-  \({\alpha : \poset{\z} \to \bA}\) and a concretization map
-  \({\concr : \bA \to \poset{\z}}\) the \emph{analysis semantics} over
-  \(\bA\) is defined as the strict (i.e., preserving \(\bot\))
+  Given two domains \(\bA, \abstract\bA\) with bottom elements
+  \(\bot, \abstract\bot\) and an abstraction map
+  \({\alpha : \bA \to \abstract\bA}\) and a concretization map
+  \({\concr : \bA \to \abstract\bA}\) the \emph{analysis semantics}
+  over \(\bA\) is defined as the strict (i.e., preserving \(\bot\))
   extension of the following function
-  \({\semi[\bA]{\cdot} : \imp \to \bA \to \bA}\). For all
-  \(\eta \in \bA\)
+  \({\semi[\abstract\bA]{\cdot} : \imp \to \abstract\bA \to
+    \abstract\bA}\). For all \(\abstract\eta \in \abstract\bA\)
 
   \begin{align*}
-    \semi[\bA]{\var \in I}\eta 
-    & \veq  
-      \begin{cases}
-        % \var \mapsto \eta(\var)\sqcap \abstr(S)
-        \eta[\var \mapsto \abstr(\concr(\eta(\var)) \cap \concr[\Int](I))] & \text{if }\concr(\eta(\var)) \cap \concr[\Int](I) \neq \emptyset \\
-        \bot & \text{otherwise}
-      \end{cases}\\
-    \semi[\bA]{\var := k}\eta 
-    & \veq \eta[\var \mapsto \abstr(\{k\})]\\
-    \semi[\bA]{\var := \var[y] + k}\eta 
-    & \veq \eta[\var \mapsto \eta (\var[y]) + k]\\
-    % \semi[\bA]{\var := \var[y] - k}\eta 
-    % & \veq \eta[\var \mapsto \eta (\var[y]) - k]\\
-    \semi[\bA]{\com_1 \ndet \com_2} \eta
-    & \veq \semi[\bA]{\com_1} \eta \sqcup \semi[\bA]{\com_2} \eta\\
-    \semi[\bA]{\com_1 \seq \com_2} \eta
-    & \veq \semi[\bA]{\com_2} (\semi[\bA]{\com_1} \eta)\\
-    \semi[\bA]{\kleene{\com}} \eta
-    & \veq \textstyle \bigsqcup_{i \in \nat} {\left(\semi[\bA]{\com}\right)}^i (\eta)\\
-    \semi[\bA]{\fix{\com}} \eta
-    & \veq  \lfp(\lambda \mu. (\eta \sqcup \semi[\bA]{\com} \mu))
+    \semi[\abstract\bA]{\com[e]}\abstract\eta & \defin \abstr(\semi[\bA]{\com[e]}\concr(\abstract\eta)) \\
+    % \semi[\abstract\bA]{\var \in I}\abstract\eta 
+    % & \veq  
+    %   \begin{cases}
+    %     % \var \mapsto \abstract\eta(\var)\sqcap \abstr(S)
+    %     \abstract\eta[\var \mapsto \abstr(\concr(\abstract\eta\var) \sqcap \concr[\Int](I))] & \text{if }\concr(\abstract\eta\var) \sqcap \concr[\Int](I) \neq \bot \\
+    %     \bot & \text{otherwise}
+    %   \end{cases}\\
+    % \semi[\abstract\bA]{\var := k}\abstract\eta 
+    % & \veq \abstract\eta[\var \mapsto \abstr(\{k\})]\\
+    % \semi[\abstract\bA]{\var := \var[y] + k}\abstract\eta 
+    % & \veq \abstract\eta[\var \mapsto \abstract\eta\var[y] + k]\\
+    % % \semi[\abstract\bA]{\var := \var[y] - k}\abstract\eta 
+    % % & \veq \abstract\eta[\var \mapsto \abstract\eta (\var[y]) - k]\\
+    \semi[\abstract\bA]{\com_1 \ndet \com_2} \abstract\eta
+    & \veq \semi[\abstract\bA]{\com_1} \abstract\eta \sqcup \semi[\abstract\bA]{\com_2} \abstract\eta\\
+    \semi[\abstract\bA]{\com_1 \seq \com_2} \abstract\eta
+    & \veq \semi[\abstract\bA]{\com_2} (\semi[\abstract\bA]{\com_1} \abstract\eta)\\
+    \semi[\abstract\bA]{\kleene{\com}} \abstract\eta
+    & \veq \textstyle \bigsqcup_{i \in \nat} {\left(\semi[\abstract\bA]{\com}\right)}^i (\abstract\eta)\\
+    \semi[\abstract\bA]{\fix{\com}} \abstract\eta
+    & \veq  \lfp(\lambda \mu. (\abstract\eta \sqcup \semi[\abstract\bA]{\com} \mu))
   \end{align*}
-  where \(\concr[\Int]\) is the interval concretization map as defined
-  in Definition~\ref{def:concrint} and \(I \in \Int\), defined in
-  Definition~\ref{def:int}.
+  % where \(\concr[\Int] : \Int \to \bA\) is a concretization map for intervals
+  % \(I \in \Int\) defined in Definition~\ref{def:int} into \(\bA\).
 \end{definition}
 
 From this definition we can observe that if we have two domains
@@ -65,6 +66,118 @@ performed over \(\bA\), i.e., the following theorem holds:
 \begin{proof}
   % Preliminare: Soundness viene preservata nei passi induttivi,
   % chiudendo per lub, concatenazione e fixpoint
+  The proof will proceed again by induction on \(\com\).
+  \begin{inductive}
+    \case{\(\com[e]\)} In this case we know that
+    \(\semi[\abstract\bA]{\com[e]}\abstract\eta =
+    \abstr(\semi[\bA]{\com[e]}\concr(\abstract\eta))\) and we have to
+    prove that
+    \[(\semi[\bA]{\com[e]} \conc \concr) \abstract\eta \sqsubseteq
+      (\concr \conc \semi[\abstract\bA]{\com[e]})\abstract\eta\]
+    hence we can substitute and end up with
+    \[\semi[\bA]{\com[e]}(\concr(\abstract\eta)) \sqsubseteq
+      \concr(\abstr(\semi[\bA]{\com[e]}\concr(\abstract\eta))).\] Here
+    we can call \(\rho = \semi[\bA]{\com[e]}(\concr(\abstract\eta))\)
+    and notice that by extensivity \(\forall \rho \in \bA\)
+    \begin{align*}
+      \rho & \sqsubseteq (\concr \conc \abstr) \rho \\
+      \semi[\bA]{\com[e]}(\concr(\abstract\eta)) & \sqsubseteq (\concr \conc \abstr) \left(\semi[\bA]{\com[e]}(\concr(\abstract\eta))\right)
+    \end{align*}
+    which is our thesis.
+    
+    \case{\(\com_1 \ndet \com_2\)} In this case by inductive
+    hypothesis we know that both the following hold:
+    \begin{align}
+      \left(\semi[\bA]{\com_1} \conc \concr\right) \abstract\eta & \sqsubseteq \left(\concr \conc \semi[\abstract\bA]{\com_1}\right) \abstract\eta \label{eq:induct1}\\
+      \left(\semi[\bA]{\com_2} \conc \concr\right) \abstract\eta & \sqsubseteq \left(\concr \conc \semi[\abstract\bA]{\com_2}\right) \abstract\eta \label{eq:induct2}
+    \end{align}
+    and
+    \(\semi[\abstract\bA]{\com_1 \ndet\com_2}\abstract\eta =
+    \semi[\abstract\bA]{\com_1}\abstract\eta \sqcup
+    \semi[\abstract\bA]{\com_2}\abstract\eta\). What we have to prove
+    is that
+    \begin{equation*}
+      \left(\semi[\bA]{\com_1 \ndet \com_2} \conc \concr \right) \abstract\eta
+      \sqsubseteq
+      \left(\concr \conc \semi[\abstract\bA]{\com_1 \ndet \com_2}\right) \abstract\eta
+    \end{equation*}
+    or, equivalently
+    \begin{align*}
+      \semi[\bA]{\com_1 \ndet \com_2}\left( \concr \abstract\eta \right) 
+      & \sqsubseteq \concr\left(\semi[\abstract\bA]{\com_1 \ndet \com_2} \abstract\eta\right) \\
+      \semi[\bA]{\com_1}\left( \concr \abstract\eta \right) \sqcup \semi[\bA]{\com_2}\left( \concr \abstract\eta \right)
+      & \sqsubseteq \concr\left(\semi[\abstract\bA]{\com_1} \abstract\eta \sqcup \semi[\abstract\bA]{\com_2} \abstract\eta\right)
+    \end{align*}
+    Now we can notice that by Property~\ref{prop:four} of Galois connections
+    \begin{equation}\label{eq:propconcr}
+      \concr\left(\semi[\abstract\bA]{\com_1} \abstract\eta \sqcup \semi[\abstract\bA]{\com_2} \abstract\eta\right) =
+      \bigsqcup\left\{\rho \in \bA \mid \abstr(\rho) \sqsubseteq \semi[\abstract\bA]{\com_1} \abstract\eta \sqcup \semi[\abstract\bA]{\com_2} \abstract\eta\right\}
+    \end{equation}
+    Now
+    \begin{align*}
+      \left(\abstr \conc \semi[\bA]{\com_1} \conc \concr\right) \abstract\eta & \sqsubseteq \left(\abstr \conc \concr \conc \semi[\abstract\bA]{\com_1}\right) \abstract\eta & \text{by monotonicity of } \abstr \text{ in~\eqref{eq:induct1}}\\
+                                                                              & \sqsubseteq \left(\semi[\abstract\bA]{\com_1}\right) \abstract\eta & \text{by reductivity of }\abstr
+    \end{align*}
+    and the same applies for~\eqref{eq:induct2}. Hence because
+    of~\eqref{eq:propconcr} we can observe that
+    \begin{align*}
+      \semi[\bA]{\com_1}\left( \concr \abstract\eta \right) \sqcup \semi[\bA]{\com_2}\left( \concr \abstract\eta \right)
+      & \sqsubseteq
+        \bigsqcup\left\{\rho \in \bA \mid \abstr(\rho) \sqsubseteq \semi[\abstract\bA]{\com_1} \abstract\eta \sqcup \semi[\abstract\bA]{\com_2} \abstract\eta\right\} \\
+      & =
+        \concr\left(\semi[\abstract\bA]{\com_1} \abstract\eta \sqcup \semi[\abstract\bA]{\com_2} \abstract\eta\right)
+    \end{align*}
+    which is our thesis.
+
+    \case{\(\com_1\seq\com_2\)} In this case we have to prove that
+    \begin{equation*}
+      \left(\semi[\bA]{\com_1\seq\com_2} \conc \concr\right) \abstract \eta \sqsubseteq \left(\concr \conc \semi[\abstract\bA]{\com_1\seq\com_2}\right)\abstract\eta
+    \end{equation*}
+    or equivalently
+    \begin{equation*}
+      \left(\semi[\bA]{\com_2} \conc \semi[\bA]{\com_1} \conc \concr\right) \abstract \eta \sqsubseteq \left(\concr \conc \semi[\abstract\bA]{\com_2} \conc \semi[\abstract\bA]{\com_1}\right)\abstract\eta
+    \end{equation*}
+    Now we can notice that by inductive hypothesis
+    \(\semi[\abstract\bA]{\com_1}\) and
+    \(\semi[\abstract\bA]{\com_2}\) are sound abstractions of
+    respectively \(\semi[\bA]{\com_1}\) and \(\semi[\bA]{\com_2}\),
+    hence we have the hypothesis to apply Theorem~\ref{th:opcomp} and
+    deduce that
+    \begin{equation*}
+      \left(\semi[\bA]{\com_2} \conc \semi[\bA]{\com_1} \conc \concr \right)
+      \sqsubseteq
+      \left(\concr \conc \semi[\abstract\bA]{\com_2} \conc \semi[\abstract\bA]{\com_1}\right)
+    \end{equation*}
+    which is our thesis.
+
+    \case{\(\fix\com\)} In this case we have to prove that
+    \begin{equation*}
+      \left(\semi[\bA]{\fix\com} \conc \concr\right) \abstract\eta \sqsubseteq \left(\concr \conc \semi[\abstract\bA]{\fix\com}\right) \abstract\eta
+    \end{equation*}
+    we know by definition and Fixpoint Theorem~\ref{th:fixpoint} that
+    \begin{equation*}
+      \left(\concr \conc \semi[\abstract\bA]{\fix\com}\right) \abstract\eta
+      =
+      \concr(\lfp(\lambda \mu . \abstract\eta \sqcup \semi[\abstract\bA]{\com}\mu))
+      =
+      \concr\left(\bigsqcup \left\{{\left(\lambda \mu . \abstract\eta \sqcup \semi[\abstract\bA]{\com}\mu\right)}^n\bot \mid n\in\n\right\}\right)
+    \end{equation*}
+    \begin{equation*}
+      \left(\semi[\bA]{\fix\com}\conc\concr\right) \abstract\eta
+      =
+      \lfp(\lambda \mu . \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\mu) 
+      =
+      \bigsqcup \left\{{\left(\lambda \mu . \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\mu\right)}^n\bot \mid n\in\n\right\}
+    \end{equation*}
+    We can now prove by induction on \(n\) that the two are in a
+    \(\sqsubseteq\) relation.
+    \begin{description}
+      % bot is preserved
+    \item[Case] (\(n = 0\)). In this case 
+      
+    \item[Case] (\(n \Rightarrow n + 1\)).
+    \end{description}
+  \end{inductive}
 \end{proof}
 
 % Se S è un intervallo non abbiamo più bisogno di non fare la BCA.

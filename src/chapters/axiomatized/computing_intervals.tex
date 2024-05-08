@@ -523,8 +523,11 @@ as the analysis on \(\inte\).
       for all \(k_1 \leq \min(\rho) - \nlbound{\fix\com}\) and
       \(k_2 \geq \max(\rho) + \nbound{\fix\com}\). In other words what
       we want to prove is that for every \(\var[y] \in \Var_{\com}\)
-      both \(\max(\semi[\inte]{\com\ndet\tru}\beta\var[y]) \leq k_2\)
-      and \(\min(\semi[\inte]{\com\ndet\tru}\beta\var[y]) \geq k_1\).
+      both
+      \begin{align*}
+        \max(\semi[\inte]{\com\ndet\tru}\beta\var[y]) & \leq k_2 \\
+        \min(\semi[\inte]{\com\ndet\tru}\beta\var[y]) & \geq k_1
+      \end{align*}
 
       To start notice that
       \(\max(\beta\var[y]) \leq \max(\rho) + \bound{\fix\com}\) by
