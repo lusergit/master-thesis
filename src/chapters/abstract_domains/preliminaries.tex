@@ -1,4 +1,4 @@
-\section{Abstract semantics}\label{sec:abstractsem}
+\section{Abstract inductive semantics}\label{sec:abstractsem}
 
 In order to talk about analysis over some abstract domain \(\bA\), we
 preliminarly introduce the abstract semantic.
@@ -6,12 +6,11 @@ preliminarly introduce the abstract semantic.
 \begin{definition}[\textbf{Abstract inductive semantic}]\label{def:abstrsem}
   Given a domain \(\bA\) and an abstract semantics
   \(\absem[\bA]{\cdot} : \expr \to \bA \to
-  \bA\) for base expressions, the \emph{abstract inductive
+  \bA\) for basic expressions, the \emph{abstract inductive
     semantics} over \(\bA\) is defined as the strict (i.e.,
   preserving \(\bot\)) extension of the following function
   \({\semi[\bA]{\cdot} : \imp \to \bA \to
     \bA}\). For all \(\eta \in \bA\)
-
   \begin{align*}
     \semi[\bA]{\com[e]}\eta & \defin \absem[ \bA]{\com[e]}\eta\\
     % \semi[\bA]{\var \in I}\eta 
@@ -56,7 +55,7 @@ performed over \(\bA\), provided that the base cases are sound.
   for some abstraction and concretization maps \(\abstr, \concr\) such
   that
   \begin{equation*}
-    \forall  \com[e] \in \expr \quad (\absem[\bA]{\com[e]} \conc\concr) \abstract\eta \sqsubseteq (\concr \conc \absem[\abstract\bA]{\com[e]})
+    \forall  \com[e] \in \expr \quad (\absem[\bA]{\com[e]} \conc\concr) \abstract\eta \sqsubseteq (\concr \conc \absem[\abstract\bA]{\com[e]}) \abstract\eta
   \end{equation*}
   i.e., the analysis over the base cases are sound. Then for all
   \(\abstract{\eta} \in \abstract{\bA}\):
@@ -211,18 +210,18 @@ performed over \(\bA\), provided that the base cases are sound.
       \begin{equation*}
         {\abstract f}^{n+1} \abstract\bot = \abstract f({\abstract f}^n\bot) = \abstract\eta \sqcup \semi[\abstract\bA]{\com}({\abstract f}^n\abstract\bot)
       \end{equation*}
-      now consider the following
+      From this we can observe that
       \begin{align*}
-        \concr\left(\abstract\eta \sqcup \semi[\abstract\bA]{\com}({\abstract f}^n\abstract\bot)\right) & = \bigsqcup \left\{c \in \bA \mid \abstr(c) \sqsubseteq \abstract\eta \sqcup \semi[\abstract\bA]{\com}({\abstract f}^n\abstract\bot)\right\} & \text{by Property~\ref{prop:four} of Galois connections.} \\
-        & \sqsupseteq \concr(\abstract\eta) \sqcup \concr\left(\semi[\abstract\bA]{\com}({\abstract f}^n \abstract\bot)\right) & \text{by } (\abstr\conc\concr) \text{ reductivity} \\
-        &\sqsupseteq \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\concr({\abstract f}^n \abstract \bot) & \text{by induction on }\com \\
-        &\sqsupseteq \concr(\abstract\eta) \sqcup \semi[\bA]{\com}(f^n \bot) & \text{by induction on } n \\
+        \concr\left(\abstract f({\abstract f}^n\abstract\bot)\right) & = \concr\left(\abstract\eta \sqcup \semi[\abstract\bA]{\com}({\abstract f}^n\abstract\bot)\right) \\
+                                                                     & = \bigsqcup \left\{c \in \bA \mid \abstr(c) \sqsubseteq \abstract\eta \sqcup \semi[\abstract\bA]{\com}({\abstract f}^n\abstract\bot)\right\} & \text{by Property~\ref{prop:four} of Galois connections.} \\
+                                                                     & \sqsupseteq \concr(\abstract\eta) \sqcup \concr\left(\semi[\abstract\bA]{\com}({\abstract f}^n \abstract\bot)\right) & \text{by } (\abstr\conc\concr) \text{ reductivity} \\
+                                                                     &\sqsupseteq \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\concr({\abstract f}^n \abstract \bot) & \text{by induction on }\com \\
+                                                                     &\sqsupseteq \concr(\abstract\eta) \sqcup \semi[\bA]{\com}(f^n \bot) & \text{by induction on } n \text{ and monotonicity of } \semi[\bA]{\cdot}\\
       \end{align*}
       which is our thesis.
     \end{description}
     Hence \(f^n\bot \sqsubseteq \concr({\abstract f}^n \abstract\bot)\),
-    for all \(n\in\n\). Therefore again by Property~\ref{prop:four} of
-    Galois connections
+    for all \(n\in\n\), therefore
     \begin{align*}
       \left(\semi[\bA]{\fix\com} \conc \concr \right)\abstract \eta & = \bigsqcup \left\{{\left(\lambda \mu . \concr(\abstract\eta) \sqcup \semi[\bA]{\com}\mu\right)}^n\bot \mid n \in\n\right\} \\
                                                                     & \sqsubseteq \concr\left(\bigsqcup \left\{{\left(\lambda \mu . \abstract\eta \sqcup \semi[\abstract\bA]{\com}\mu\right)}^n \abstract\bot \mid n \in\n\right\}\right) \\
