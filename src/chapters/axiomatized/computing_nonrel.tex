@@ -12,7 +12,7 @@ domain \(\bCnr\) in this way:
   We define
   \(\bbCnr{k_1}{k_2} \defin \Var_{\com} \to \bounded{\poset[*]{\z}}{k_1}{k_2}\) where
   \begin{equation*}
-    {\poset[*]{\z}}_{k_1}^{k_2} = \{S \subseteq \z \mid S \neq \emptyset \land \forall x \in S \quad k_1 \leq x \leq k_2\} \cup \{\top\}
+    \bposet[*]{k_1}{k_2}{\z} = \{S \subseteq \z \mid S \neq \emptyset \land \forall x \in S \quad k_1 \leq x \leq k_2\} \cup \{\top\}
   \end{equation*}
 \end{definition}
 Notice that contrary to \(\binte{k_1}{k_2}\) we have no way of
@@ -26,4 +26,182 @@ smashed \(\top\) element.
 \noindent
 We can already observe that by definition there are no infinite
 ascending nor descending chains, as every chain is bounded by abobve
-by some \(k_2 \in \z\) and below by some \(k_1\in\z\).
+by some \(k_2 \in \z\) and below by some \(k_1\in\z\). Moreover, there
+is a Galois connection between this abstract domain and its unbounded
+counterpart \(\poset\z\). First let's define the concretization and
+abstraction maps
+
+\begin{definition}\label{def:abstrnrb}
+  Let \(k_1,k_2\in\z\) s.t.\ \(k_1 \leq k_2\). We define a
+  concretization map
+  \(\concr[k_1,k_2] : \bposet[*]{k_1}{k_2}{\z} \to \poset[*]{\z}\) as
+  the identity function
+  \begin{equation*}
+    \concr[k_1,k_2] = \id
+  \end{equation*}
+  siilarly we define an abstraction map
+  \(\abstr[k_1,k_2] : \poset[*]{\z} \to \bposet[*]{k_1}{k_2}{\z}\) in
+  the follwing way
+  \begin{equation*}
+    \abstr[k_1,k_2](S) = \begin{cases}
+      S & \text{if } \min(S) \geq k_1 \land \max(S) \leq k_2 \\
+      \top & \text{otherwise}
+    \end{cases}
+  \end{equation*}
+\end{definition}
+
+\begin{lemma}
+  Given \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\).
+  \begin{equation*}
+    \tuple{\poset[*]\z, \subseteq} \galois{\abstr[k_1,k_2]}{\id} \tuple{\bposet[*]{k_1}{k_2}{\z}, \subseteq}
+  \end{equation*}
+  i.e.,
+  \(\tuple{\abstr[k_1,k_2], \poset[*]{\z},
+    {\bposet[*]{k_1}{k_2}{\z}}, \id}\) is a Galois connection.
+\end{lemma} 
+
+\begin{proof}
+  The proof consists in showing that \(\concr[k_1,k_2]\) and
+  \(\abstr[k_1,k_2]\) satisfy the properties of
+  Theorem~\ref{th:galoisprop}:
+  \begin{enumerate}[label={(\arabic*)}]
+  \item\label{itemone} \(\abstr[k_1,k_2]\), \(\id\) are monotonic;
+  \item\label{itemtwo} \(\id \conc \abstr[k_1, k_2]\) is extensive, i.e.,
+    \(\sigma \subseteq \abstr[k_1,k_2](\sigma)\) for all
+    \(\sigma \in \poset[*]{\z}\);
+  \item\label{itemthree} \(\abstr[k_1,k_2] \conc\concr\) is reductive, i.e.,
+    \(\abstr[k_1,k_2](\sigma_b) \subseteq \sigma_b\) for all
+    \(\sigma_b \in \bposet[*]{k_1}{k_2}{\z}\).
+  \end{enumerate}
+  To start let's prove~\ref{itemone}. Of course \(\id\) is monotone by
+  definition. For \(\abstr[k_1,k_2]\) we have to prove that given any
+  \(\sigma, \tau \in \poset[*]{\z}\) s.t.\ \(\sigma \subseteq \tau\)
+  it holds that
+  \(\abstr[k_1,k_2](\sigma) \subseteq \abstr[k_1,k_2](\tau)\). Notice
+  that since \(\sigma \subseteq \tau\) it holds that
+  \(\max(\sigma) \leq \max(\tau)\) and
+  \(\min(\sigma) \geq \min(\tau)\), which means by
+  Definition~\ref{def:abstrnrb}
+  \(\abstr[k_1,k_2]{\sigma} \subseteq \abstr[k_1,k_2]{\tau}\), which
+  is our thesis.
+
+  \medskip
+
+  \noindent
+  Both~\ref{itemtwo} and~\ref{itemthree} follow from
+  Definition~\ref{def:abstrnrb}. For~\ref{itemtwo} for all
+  \(\sigma \in \poset[*]{\z}\) either
+  \(\abstr[k_1,k_2]({\sigma}) = \sigma\) or
+  \(\abstr[k_1,k_2]({\sigma}) = \top\), hence in both cases
+  \(\sigma \subseteq \abstr[k_1,k_2]({\sigma})\)
+  holds. For~\ref{itemthree}, for all
+  \(\sigma_b \in \bposet[*]{k_1}{k_2}{\z}\) it holds that
+  \(\max(\sigma_b) \leq k_2\) and \(\min(\sigma_b) \geq k_1\), hence
+  \begin{equation}\label{eq:equality2}
+    \abstr[k_1,k_2]({\sigma_b}) = \sigma_b
+  \end{equation}
+  and therefore \(\abstr[k_1,k_2]({\sigma_b}) \subseteq \sigma_b\)
+  holds.  Moreover,~\eqref{eq:equality2} means that for all
+  \(\sigma_b \in \bposet[*]{k_1}{k_2}{\z}\) that
+  \(\abstr[k_1,k_2] \conc \id = \id\), which means by
+  Definition~\ref{def:insertion} that we formed a Galois insertion:
+  \begin{equation*}
+    \tuple{\poset[*]{\z}, \subseteq} \galoiS{\abstr[k_1,k_2]}{\id} \tuple{\bposet[*]{k_1}{k_2}{\z}, \subseteq}
+  \end{equation*}
+\end{proof}
+
+Notice that since \(\bCnr\) and \(\bbCnr{k_1}{k_2}\) are respectively
+the point-wise lifing of \(\poset[*]{\z}\) and
+\(\bposet[*]{k_1}{k_2}{\z}\) there is also a Galois insertion between
+them:
+\begin{equation*}
+  \tuple{\bCnr, \ovdot\subseteq}
+  \galoiS{\abstr[k_1,k_2]}{\id}
+  \tuple{\bbCnr{k_1}{k_2}, \ovdot\subseteq}
+\end{equation*}
+Since we have a galois connection between the non relational
+collecting domain \(\bCnr\) and its bounded version
+\(\bbCnr{k_1}{k_2}\) we can define an abstract inductive semantics
+which is sound by construction:
+\begin{definition}[\textbf{Abstract bounded non relational collecting semantics}]
+  Let \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\).  We define basic
+  expressions over the bounded non relational collecting semantics
+  \({\absem[\bbCnr{k_1}{k_2}]{\cdot} : \expr \to \bbCnr{k_1}{k_2} \to
+    \bbCnr{k_1}{k_2}}\) as
+  \begin{equation*}
+    \absem[\bbCnr{k_1}{k_2}]{\com[e]} \defin \abstr[k_1,k_2] \left(\absem[\bCnr]{\com[e]} \right)
+  \end{equation*}
+  i.e.\ the best correct abstraction.
+\end{definition}
+
+\begin{lemma}[\textbf{Bounded non relational collecting is sound}]\label{le:soundnr}
+  Let \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\). For all
+  \(\abstract\eta \in \bbCnr{k_1}{k_2}\) it holds that
+  \begin{equation*}
+    \left(\semnr{\com} \conc \id \right)\abstract\eta \ovdot\subseteq \left(\id \conc \bsemnr{k_1}{k_2}{\com}\right) \abstract\eta
+  \end{equation*}
+  i.e., \(\bsemnr{k_1}{k_2}{\cdot}\) is sound w.r.t.\ \(\semnr{\cdot}\).
+\end{lemma}
+
+\begin{proof}
+  The proof floowis from the fact that \(\bsemnr{k_1}{k_2}{\cdot}\) is
+  defined as the bca on basic expressions over \(\bCnr\) and there is
+  a Galois connection
+  \begin{equation*}
+    \tuple{\bCnr, \ovdot\subseteq} \galoiS{\abstr[k_1,k_2]}{\id} \tuple{\bbCnr{k_1}{k_2}, \ovdot\subseteq}
+  \end{equation*}
+  Hence by Lemma~\ref{le:bcainducessoundness} our thesis 
+  \begin{equation*}
+    \left(\semnr{\com} \conc \id \right) \abstract\eta \ovdot\subseteq \left(\id \conc \bsemnr{k_1}{k_2}{\com}\right) \abstract\eta
+  \end{equation*}
+  holds.
+\end{proof}
+
+The next step is to notice that as a consequence of bounds and
+Lemma~\ref{le:incnr} also bounded non collecting relational semantics
+can compute the same result of its unbounded counterpart, provided
+that the second one does not diverge.
+
+\begin{theorem}
+  Let \(\com\in\imp\) be a program. Then, for all finitely supported
+  \(\eta : \Var_{\com} \to \bCnr\) and \(k_1, k_2 \in \z\) s.t.\
+  \(\bCnr_{\com,\eta} \preceq \bbCnr{k_1}{k_2}\), i.e.,
+  \(k_1 \leq \min(\eta) - \nlbound{\com}\) and
+  \(k_2 \geq \max(\eta) + \nbound{\com}\) then for all
+  \(\var\in\Var_{\com}\):
+  \begin{equation*}
+    |\semnr{\com}\eta\var| \neq +\infty \quad \Rightarrow \quad \semnr{\com}\eta\var = \bsemnr{k_1}{k_2}{\com}\eta\var
+  \end{equation*}
+  i.e., if the analysis over \(\bCnr\) for some variable \(\var\) does
+  not diverge, then the analysis over \(\bbCnr{k_1}{k_2}\) for that
+  variable converges to the same result.
+\end{theorem}
+
+\begin{proof}
+  The proof will proceed by induction on the program \(\com\),
+  covering first the base cases of \(\expr\) expressions and then the
+  inductive cases of \(\imp\). Notice that because of
+  Lemma~\ref{le:soundnr}
+  \(\semnr{\com} \eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\com}\eta\)
+  already holds for every \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\),
+  hence what we have to prove for every case is that
+  \(|\semnr{\com}\eta\var| \neq +\infty \Rightarrow \semnr{\com} \eta
+  \var \ovdot\supseteq \bsemnr{k_1}{k_2}{\com}\eta\var\).
+  \begin{inductive}
+    \case{\(\var\in I\)} In this case we have to prove that for all
+    \(\var[y] \in \Var_{\com}\)
+    \[|\semnr{\var\in I}\eta\var[y]| \neq + \infty \Rightarrow
+      \semnr{\var\in I}\eta \var[y] \ovdot\supseteq
+      \bsemnr{k_1}{k_2}{\var\in I}\eta\var[y]\] with
+    \(k_1\leq \min(\eta) - \nlbound{\var \in I}\) and
+    \(k_1\geq \max(\eta) + \nbound{\var \in I}\). Notice that since
+    \(\semnr{\var \in I}\eta\) updates only the variable \(\var\), the
+    only case we're interested in is when \(\var[y] = \var\). This
+    applies also for next base cases, hence we will omit this
+    observation in future base cases.
+
+    \case{\(\var := k\)} In this case
+
+    \case{\(\var := \var[y] + k\)} In this case
+  \end{inductive}
+\end{proof}

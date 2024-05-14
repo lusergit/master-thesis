@@ -30,25 +30,25 @@ building a Galois connection with the concrete domain
 \end{definition}
 
 We can again define a notion of order for elements of \(\bCnr\) based
-on the concretization map. We do by overloading the notation
-\(\sqsubseteq\). Let \(\eta, \theta \in \bCnr\), then
+on the concretization map. Let \(\eta, \theta \in \bCnr\), then
 \begin{equation*}
-  \eta \sqsubseteq \theta \text{ iff } \concr(\eta) \subseteq \concr(\theta)
+  \eta \ovdot\subseteq \theta \text{ iff } \concr(\eta) \subseteq \concr(\theta)
 \end{equation*}
 
 Notice that because of the definition of the concretization map
 (Definition~\ref{def:vwgalios})
 \begin{equation*}
-  \eta \sqsubseteq \theta \iff \forall \var \in \Var \; \eta(\var) \sqsubseteq \theta(\var)
+  \eta \ovdot\subseteq \theta \iff \forall \var \in \Var \; \eta(\var) \ovdot\subseteq \theta(\var)
 \end{equation*}
 Again, we can define least upper bounds and greatest lower bounds by
 lifting the \(\sqcup\) and \(\sqcap\) operations. Let again
 \(\eta, \theta \in \bCnr\), then
 \begin{align*}
-  \eta \acap \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \cap \theta(\var) \quad \forall \var\in\Var \\
-  \eta \acup \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \cup \theta(\var) \quad \forall \var\in\Var
+  \eta \ovdot\cap \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \cap \theta(\var) \quad \forall \var\in\Var \\
+  \eta \ovdot\cup \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \cup \theta(\var) \quad \forall \var\in\Var
 \end{align*}
 
-Again we can notice that \(\tuple{\bCnr, \sqsubseteq}\) is a complete
-lattice, as for every two elements \(\eta,\theta\in\bCnr\) there
-exists both \(\eta \sqcup \theta\) and \(\eta \sqcap \theta\).
+Again we can notice that \(\tuple{\bCnr, \ovdot\subseteq}\) is a
+complete lattice, as for every two elements \(\eta,\theta\in\bCnr\)
+there exists both \(\eta \ovdot\cup \theta\) and
+\(\eta \ovdot\cap \theta\).

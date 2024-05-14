@@ -65,6 +65,7 @@
 \newcommand{\sem}[1]{\ensuremath{\la \cc{#1} \ra}}
 \newcommand{\semi}[2][]{\ensuremath{{\llb #2 \rrb^{#1}}}}
 \newcommand{\semnr}[1]{\ensuremath{\lla #1 \rra}}
+\newcommand{\bsemnr}[3]{\ensuremath{{\lla #3 \rra}_{#1}^{#2}}}
 \newcommand{\bsem}[1]{\ensuremath{\llp #1 \rrp}}
 \newcommand{\absem}[2][]{\ensuremath{{(\!( #2 )\!)}^{#1}}}
 \newcommand{\stt}[1]{\ensuremath{\langle #1 \rangle}}
@@ -86,6 +87,7 @@
 \newcommand{\gfp}{\ensuremath{\text{gfp}}}
 \newcommand{\glb}{\ensuremath{\text{glb}}}
 \newcommand{\poset}[2][]{\ensuremath{\wp^{#1}({#2})}}
+\newcommand{\bposet}[4][]{\ensuremath{{\poset[#1]{#4}}^{#3}_{#2}}}
 \newcommand{\partialrec}[1][]{\ensuremath{\n^{#1} \htor \n}}
 \newcommand{\tuple}[1]{\ensuremath{\la #1 \ra}}
 \newcommand{\sizeof}[1]{\ensuremath{\left| #1 \right|}}
@@ -142,3 +144,4 @@
 \let\geq\geqslant
 \let\epsilon\varepsilon
 \let\theta\vartheta
+\let\preceq\preccurlyeq

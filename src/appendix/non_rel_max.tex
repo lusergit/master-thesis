@@ -12,7 +12,7 @@
   hold:
   \begin{enumerate}[label=(\roman*)]
   \item\label{point1nr} \(\max(\semnr{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); 
-  \item\label{point2nr} for all \(\eta' \in \bCnr\), if \(\eta' \sqsupseteq \eta\)
+  \item\label{point2nr} for all \(\eta' \in \bCnr\), if \(\eta' \ovdot\supseteq \eta\)
     % and \(\semnr{\com}\eta' \neq \top\)
     then
     \(\max(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\).
@@ -23,7 +23,7 @@
   % \(|i| \leq \lbound{\com}\) and the following two properties hold:
   % \begin{enumerate}[label=(\roman*)]
   % \item \(\min(\semnr{\com}\eta \var[y]) = \min(\eta \var[w]) + i\); \label{point1min}
-  % \item  for all \(\eta' \in \Int\), if \(\eta' \sqsupseteq \eta\)
+  % \item  for all \(\eta' \in \Int\), if \(\eta' \ovdot\supseteq \eta\)
   %   %   and \(\semnr{\com}\eta' \neq \top\)
   %   then
   %   \(\min(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[w]) + i\). \label{point2min}
@@ -44,7 +44,7 @@
   thus \(\max(\semnr{\com} \eta \var[y]) = -\infty \leq \bound{\com}\),
   against the hypothesis
   \(\max(\semnr{\com}\eta \var[y]) > \bound{\com}\). Moreover, when
-  quantifying over \(\eta'\) such that \(\eta' \sqsupseteq \eta\)
+  quantifying over \(\eta'\) such that \(\eta' \ovdot\supseteq \eta\)
   in~\ref{point2nr}, if \(\max(\semnr{\com}\eta' \var[y]) = + \infty\)
   holds, then
   \(\max(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\)
@@ -64,7 +64,7 @@
     \begin{itemize}
       
     \item If \(\var[y] \neq \var\), then for all \(\eta' \in \bCnr\) such
-      that \(\eta \sqsubseteq \eta'\) it holds
+      that \(\eta \ovdot\subseteq \eta'\) it holds
       \[\bot \neq \semnr{\var \in I}\eta' = \eta'[\var \mapsto
         {\eta'\var \cap \concr[\Int](I)}]\]
       and thus
@@ -86,12 +86,12 @@
       % \ref{inc:hp1}
       \(\max ({\eta\var \cap \concr[\Int](I)}) = \max(\eta(\var)) =
       \max(\eta(\var)) + 0\). It is immediate to check that the same
-      holds for all \(\eta' \sqsupseteq \eta\), i.e.,
+      holds for all \(\eta' \ovdot\supseteq \eta\), i.e.,
       \begin{equation*}
         \max(\eta'\var \cap \concr[\Int](I)) = \max(\eta'\var) + 0
       \end{equation*}
       % \[
-      %   \max (\eta'(\var) \sqcap \abstr(I)) = \max(\eta'(\var))=
+      %   \max (\eta'(\var) \ovdot\cap \abstr(I)) = \max(\eta'(\var))=
       %   \max(\eta'(\var))+0
       % \]
       and thus the thesis follows with  \(\var[z]=\var[y]=\var[x]\) and \(h=0\).
@@ -114,7 +114,7 @@
     violating the assumption.
     % 
     Therefore, it must be \(\var[y] \neq \var\). Now, for all
-    \(\eta' \sqsupseteq \eta\), we have
+    \(\eta' \ovdot\supseteq \eta\), we have
     \({\semnr{\var := k}\eta' \var[y] = \eta' \var[y]}\) and thus
     \begin{center}
       \(\max(\semnr{\var := k}\eta' \var[y]) = \max(\eta' \var[y]) =
@@ -136,7 +136,7 @@
     We distinguish two cases:
     \begin{itemize}
       
-    \item If \(\var[y] \neq \var\), then for all \(\eta' \sqsupseteq \eta\), we have
+    \item If \(\var[y] \neq \var\), then for all \(\eta' \ovdot\supseteq \eta\), we have
       \(\semnr{\var := \var[w] + k}\eta' \var[y] = \eta' \var[y]\) and thus
       \begin{equation*}
         \max(\semnr{\var := \var[w] + k}\eta' \var[y]) = \max(\eta' \var[y])
@@ -145,7 +145,7 @@
       \(h =0 \leq \bound{\var := \var[w] + k}\) and \(\var[z] = \var[y]\).
       
     \item 
-      If \(\var = \var[y]\) then  for all \(\eta' \sqsupseteq \eta\), we have
+      If \(\var = \var[y]\) then  for all \(\eta' \ovdot\supseteq \eta\), we have
       \(\semnr{\var := \var[w] + k}\eta' \var[y] = \eta' \var[w] +
       k\) and thus
       \begin{equation*}
@@ -172,7 +172,7 @@
     
     % \item If \(\var[y] \neq \var\), then for all
     %   \(\eta' \in \Int\) such that
-    %   \(\eta \sqsubseteq \eta'\), we have
+    %   \(\eta \ovdot\subseteq \eta'\), we have
     %   \(\semnr{\var := \var[w] - k}\eta' \var[y] = \eta' \var[y]\) and thus
     %   \begin{center}
     %     \(\max(\semnr{\var := \var[w] - k}\eta' \var[y]) = \max(\eta' \var[y])\).
@@ -181,7 +181,7 @@
     %   \(h =0 \leq \bound{\var := \var[w] - k}\) and \(\var[z] = \var[y]\).
     
     % \item If \(\var = \var[y]\) then for all \(\eta' \in \Int\) such
-    %   that \(\eta \sqsubseteq \eta'\), we have
+    %   that \(\eta \ovdot\subseteq \eta'\), we have
     %   \(\semnr{\var := \var[w] - k}\eta' \var[y] = \eta' \var[w] - k\) and
     %   thus
     %   \begin{center}
@@ -203,7 +203,7 @@
     Take \(\eta \in \bCnr\) and assume
     \(\max(\semnr{\com_1 \ndet \com_2}\eta) > \bound{\com_1 \ndet \com_2}
     = \bound{\com_1} + \bound{\com_2}\).  Recall that
-    \(\semnr{\com_1 \ndet \com_2} \eta = \semnr{\com_1}\eta \sqcup
+    \(\semnr{\com_1 \ndet \com_2} \eta = \semnr{\com_1}\eta \ovdot\cup
     \semnr{\com_2}\eta\).
     % 
     Hence, since
@@ -227,7 +227,7 @@
     and state that there exists \(h \in \mathbb{Z}\) with
     \(|h| \leq \bound{\com_1}\) and \(\var[z] \in \Var\) such that
     \(\max(\semnr{\com_1}\eta \var[y]) = \max(\eta \var[z]) + h\) and for
-    all \(\eta' \in \bCnr\), \(\eta \sqsubseteq \eta'\),
+    all \(\eta' \in \bCnr\), \(\eta \ovdot\subseteq \eta'\),
     \[
       \max(\semnr{\com_1}\eta' \var[y]) \geq \max(\eta' \var[z]) + h
     \]
@@ -239,7 +239,7 @@
     \]
     % 
     and and for
-    all \(\eta' \in \bCnr\), \(\eta \sqsubseteq \eta'\),
+    all \(\eta' \in \bCnr\), \(\eta \ovdot\subseteq \eta'\),
     \begin{align*}
       \max(\semnr{\com_1 \ndet \com_2}\eta' \var[y])
       &= \max\{ \max(\semnr{\com_1}\eta' \var[y]),  \max(\semnr{\com_2}\eta' \var[y])\}\\
@@ -270,7 +270,7 @@
     are \(|h_2| \leq \bound{\com_2}\) and \(\var[w] \in \Var\) such that
     \(\max(\semnr{\com_2} \eta_1 \var[y]) = \max(\eta_1 \var[w]) + h_2\)
     and for all \(\eta_1' \in \bCnr\) with
-    \(\eta_1 \sqsubseteq \eta_1'\)
+    \(\eta_1 \ovdot\subseteq \eta_1'\)
     \begin{equation}
       \label{eq:seq2nr}
       \max(\semnr{\com_2} \eta_1' \var[y]) \geq \max(\eta_1' \var[w]) + h_2
@@ -294,7 +294,7 @@
     that there are \(|h_1| \leq \bound{\com_1}\) and
     \(\var[w]' \in \Var\) such that
     \(\max(\semnr{\com_1} \eta \var[w]) = \max(\eta \var[w]') + h_1\)
-    and for all \(\eta' \in \bCnr\) with \(\eta \sqsubseteq \eta'\)
+    and for all \(\eta' \in \bCnr\) with \(\eta \ovdot\subseteq \eta'\)
     \begin{equation}
       \label{eq:seq1nr}
       \max(\semnr{\com_1} \eta' \var[w]) \geq \max(\eta' \var[w]') + h_1
@@ -314,12 +314,12 @@
       % 
       & = \max(\eta \var[w]')+h_1 + h_2.
     \end{align*}
-    Now, for all \(\eta' \in \bCnr\) with \(\eta \sqsubseteq \eta'\) we have that:
+    Now, for all \(\eta' \in \bCnr\) with \(\eta \ovdot\subseteq \eta'\) we have that:
     \begin{align*}
       \max(\semnr{\com_1 \seq \com_2}\eta' \var[y]) & = & \\ 
       \max(\semnr{\com_2}(\semnr{\com_1}\eta') \var[y]) & \geq & \\ 
       \max(\semnr{\com_1}\eta' \var[w]) + h_2 & \geq & 
-                                                      \text{by\ \eqref{eq:seq2nr}, since } \eta_1 = \semnr{\com_1}\eta \sqsubseteq \semnr{\com_1}\eta' \text{ and monotonicity} \\
+                                                      \text{by\ \eqref{eq:seq2nr}, since } \eta_1 = \semnr{\com_1}\eta \ovdot\subseteq \semnr{\com_1}\eta' \text{ and monotonicity} \\
       (\max(\eta' \var[w]') +h_1) + h_2 & & \text{by\ \eqref{eq:seq1nr}}\
     \end{align*}
 
@@ -334,23 +334,23 @@
     Let \(\eta \in \bCnr\) such that
     \(\max(\semnr{\fix{\com}} \eta \var[y]) \neq + \infty\). Recall that
     \(\semnr{\fix{\com}} \eta = \lfp\left({\lambda \mu. (\semnr{\com} \mu
-        \sqcup\eta)}\right)\). Observe that the least fixpoint of
-    \(\lambda \mu. (\semnr{\com} \mu \sqcup\eta)\) coincides with the
+        \ovdot\cup\eta)}\right)\). Observe that the least fixpoint of
+    \(\lambda \mu. (\semnr{\com} \mu \ovdot\cup\eta)\) coincides with the
     least fixpoint of
-    \(\lambda \mu. (\semnr{\com} \mu \sqcup \mu) = \lambda \mu. \semnr{
+    \(\lambda \mu. (\semnr{\com} \mu \ovdot\cup \mu) = \lambda \mu. \semnr{
       \com\ndet \tru} \mu\) above \(\eta\). Hence, if
     \begin{align*}
     \eta_0 & \veq \eta \\
-    \text{for all } i\in \nat \quad \eta_{i+1} & \veq \semnr{\com} \eta_i \sqcup \eta_i= \semnr{\com \ndet \tru} \eta_i \sqsupseteq \eta_i
+    \text{for all } i\in \nat \quad \eta_{i+1} & \veq \semnr{\com} \eta_i \ovdot\cup \eta_i= \semnr{\com \ndet \tru} \eta_i \ovdot\supseteq \eta_i
     \end{align*}
     then we define an increasing chain
     \({\{\eta_i\}}_{i\in \nat}\subseteq \bCnr\) such that
     \[ 
-      \semnr{\fix{\com}} \eta = \textstyle\bigsqcup_{i \in \nat} \eta_i.
+      \semnr{\fix{\com}} \eta = \textstyle\ovdot\bigcup_{i \in \nat} \eta_i.
     \]
     Since \(\max(\semnr{\fix{\com}}) \eta \var[y] \neq +\infty\), we have
     that for all \(i\in \nat\), \(\max(\eta_i \var[y]) \neq
-    +\infty\). Moreover, \(\textstyle\bigsqcup_{i \in \nat} \eta_i\) on
+    +\infty\). Moreover, \(\textstyle\ovdot\bigcup_{i \in \nat} \eta_i\) on
     \(\var[y]\) is finitely reached in the chain
     \({\{\eta_i\}}_{i\in \nat}\), i.e., there exists
     \(m \in \mathbb{N}\) such that for all \(i \geq m+1\)
@@ -365,7 +365,7 @@
     there exist \(\var[z] \in \Var\) and \(h \in \mathbb{Z}\) such that \(|h| \leq \bound{\com}\) and 
     \begin{enumerate}[label=(\alph*)]
     \item\label{pointanr} \(+\infty \neq \max(\eta_{j+1} \var) = \max(\eta_j \var[z]) + h\),
-    \item\label{pointbnr} \(\forall \eta' \sqsupseteq \eta_j.
+    \item\label{pointbnr} \(\forall \eta' \ovdot\supseteq \eta_j.
       \max(\semnr{\com \ndet \tru}\eta'\var) \geq \max(\eta' \var[z]) + h\).
     \end{enumerate}
     To shortly denote that the two conditions (a) and (b) hold, we write
@@ -391,7 +391,7 @@
       \max(\semnr{\fix{\com}} \eta \var[y]) = \max(\eta \var[z]) + h
       \tag{i}
     \end{equation}
-    and for all \(\eta' \sqsupseteq \eta\),
+    and for all \(\eta' \ovdot\supseteq \eta\),
     \begin{equation}\label{eq:maxmiddlemaxendaxionr}
       \max(\semnr{\fix{\com}} \eta' \var[y]) \geq \max(\eta' \var[z]) + h
       \tag{ii}
@@ -443,7 +443,7 @@
     Thus,
     \[\max(\semnr{\com \ndet \tru}^{k_2-k_1} \eta_{k_1} \var[w]) = \max(\eta_{k_1}
       \var[w]) + h\] 
-    Observe that for all \(\eta' \sqsupseteq \eta_{k_1}\)
+    Observe that for all \(\eta' \ovdot\supseteq \eta_{k_1}\)
     \begin{equation}\label{prop2nr}
       \max\left(\semnr{\com \ndet \tru}^{k_2-k_1} \eta' \var[w]\right) \geq \max(\eta' \var[w]) + h
     \end{equation}
@@ -455,7 +455,7 @@
     % 
     Notice that by~\ref{pointbnr} used to build \(\pi\)
     in~\eqref{eq:pinr} it holds that
-    \(\forall \eta'\sqsupseteq \eta_{k_1}\sqsupseteq \eta\)
+    \(\forall \eta'\ovdot\supseteq \eta_{k_1}\ovdot\supseteq \eta\)
     \begin{equation*}
       \max\left(\semnr{\com\ndet\tru}\eta'\var[w]\right) \geq \max(\eta'\var[w]) + h
     \end{equation*}
@@ -464,7 +464,7 @@
     \item[Case] (\(\ell \Rightarrow \ell + 1\)).
     % 
     % In this case we can use the inductive hypothesis and state that
-    % \(\forall \eta'\sqsupseteq \eta_{k_1} \sqsupseteq \eta\)
+    % \(\forall \eta'\ovdot\supseteq \eta_{k_1} \ovdot\supseteq \eta\)
     % \begin{equation*}
     %   \max\left({\left(\semnr{\com\ndet\tru}\right)}^\ell\eta'\var[w]\right) \geq \max(\eta'\var[w]) + h
     % \end{equation*}
@@ -477,7 +477,7 @@
     \(\max\left({\left(\semnr{\com\ndet\tru}\right)}^\ell\eta'\var[w]\right)
     \geq \max\left(\eta'\var[w]\right) + h\). Recall that for all
     \(\eta'' \in \bCnr\) we know that
-    \(\semnr{\com\ndet \tru}\eta'' = \eta '' \sqcup
+    \(\semnr{\com\ndet \tru}\eta'' = \eta '' \ovdot\cup
     \semnr{\com}\eta''\).  Hence we can notice that
     \(\max(\semnr{\com\ndet\tru}\eta''\var) \geq \max(\eta''\var)\)
     for all \(\var \in \Var\). Therefore
@@ -497,7 +497,7 @@
     validity for \(r\geq 0\) then we have that
     \begin{align*}    
       & \max(\semnr{\com \ndet \tru}^{(r+1)(k_2-k_1)} \eta_{k_1} \var[w]) =\\
-      &\max(\semnr{\com \ndet \tru}^{k_2-k_1} ( \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{by \eqref{prop2nr} as \(\eta_{k_1} \sqsubseteq \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\) }\\
+      &\max(\semnr{\com \ndet \tru}^{k_2-k_1} ( \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{by~\eqref{prop2nr} as } \eta_{k_1} \ovdot\subseteq \semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\\
       &\max(\semnr{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) + h \geq & \mbox{by inductive hypothesis}\\
       &  \max(\eta_{k_1}\var[w])  + rh + h
         \geq 
@@ -510,17 +510,17 @@
     Inequality~\eqref{noppnr} would imply
     \begin{align*}
       \semnr{\fix{\com}} \eta \var[w]
-      & = \bigsqcup_{i \in \mathbb{N}} \semnr{\com
+      & = \ovdot\bigcup_{i \in \mathbb{N}} \semnr{\com
         \ndet \tru}^i \eta \var[w] =\\ 
-      & =  \bigsqcup_{i \in \mathbb{N}} \semnr{\com \ndet
+      & =  \ovdot\bigcup_{i \in \mathbb{N}} \semnr{\com \ndet
         \tru}^i \eta_{k_1} \var[w]\\ 
-      & = \bigsqcup_{r \in \mathbb{N}} \semnr{\com \ndet
+      & = \ovdot\bigcup_{r \in \mathbb{N}} \semnr{\com \ndet
         \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]\\
       & = +\infty
     \end{align*}
 
     Now, from~\eqref{eq:sigmapathnr} we deduce that for all
-    \(\eta' \sqsupseteq \eta_{k_1}\), for \(j \in \{ k_1, \ldots, m\}\),
+    \(\eta' \ovdot\supseteq \eta_{k_1}\), for \(j \in \{ k_1, \ldots, m\}\),
     if we let \(\mu_{k_1} = \eta'\) and
     \(\mu_{j+1} = \semnr{\com \ndet \tru} \mu_j\), by the choice of the
     subsequence, since \(k_1 \geq i\), we have that
@@ -531,7 +531,7 @@
       \var[y]_{m+1} \geq 
       \max(\var[y]_{k_1}) + \Sigma_{i=k_1}^m h_i = \max(\eta' \var[w]) + \Sigma_{i=k_1}^m h_i
     \]
-    Since \(\eta' = \semnr{\fix{\com}} \eta \sqsupseteq \eta_{k_1}\) we conclude
+    Since \(\eta' = \semnr{\fix{\com}} \eta \ovdot\supseteq \eta_{k_1}\) we conclude
     \begin{align*}
       \max\left({\semnr{\fix{\com}} \eta \var[y]}\right) & = \max\left({\semnr{\com \ndet \tru}^{m-k_1+1} \semnr{\fix{\com}} \eta \var[w]}\right)\\
                                                         & = \max\left(\semnr{\fix\com}\eta\var[w]\right) + {\Sigma_{i=k_1}}^m{h_i} \\
@@ -551,13 +551,13 @@
     \medskip
 
     Let us now show\ \eqref{eq:maxmiddlemaxendaxionr}. Given
-    \(\eta' \sqsupseteq \eta\) from\ \eqref{eq:sigmapathnr} we deduce that for
+    \(\eta' \ovdot\supseteq \eta\) from\ \eqref{eq:sigmapathnr} we deduce that for
     all \(j \in \{ 0, \ldots, m\}\), if we let \(\mu_0 = \eta'\) and
     \(\mu_{j+1} = \semnr{\com \ndet \tru} \mu_j\), we have that
     \[
       \max(\mu_{j+1} \var[y]_{j+1}) \geq \max(\mu_{j+1} \var[y]_{j}) +
       h_j. \]
-    Therefore, since \(\semnr{\fix{\com}} \eta' \sqsupseteq \mu_{m+1}\)
+    Therefore, since \(\semnr{\fix{\com}} \eta' \ovdot\supseteq \mu_{m+1}\)
     (observe that the convergence of \(\semnr{\fix{\com}} \eta' \) could
     be at an index greater than \(m+1\)), we conclude that:
     \[\max(\semnr{\fix{\com}} \eta' \var[y]) \geq \max(\mu_{m+1}
