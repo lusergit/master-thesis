@@ -200,8 +200,125 @@ that the second one does not diverge.
     applies also for next base cases, hence we will omit this
     observation in future base cases.
 
-    \case{\(\var := k\)} In this case
+    \medskip
 
-    \case{\(\var := \var[y] + k\)} In this case
+    \noindent
+    Hence we have 2 cases. Either
+    \(\eta\var \cap \concr[\inte](I) = \emptyset\), which means that
+    \(\abstr[k_1,k_2]({\emptyset}) = \emptyset \sqsupseteq \emptyset\)
+    our thesis holds. Otherwise
+    \(\eta\var \cap \concr[\inte](I) = S \neq \emptyset\). In this
+    case we're under the hypothesis that
+    \(|\eta\var\cap\concr[\inte](I)| = |\semnr{\var\in I}\eta\var|
+    \neq +\infty\), hence by Lemma~\ref{le:incnr}
+    \begin{align*}
+      \max(S) = \max(\semnr{\var\in I}\eta\var) & \leq \max(\eta) + \bound{\var \in I}\\
+      \min(S) = \min(\semnr{\var\in I}\eta\var) & \geq \min(\eta) - \lbound{\var \in I}
+    \end{align*}
+    which means that \(\abstr[k_1,k_2](S) = S\) and therefore
+    \begin{equation*}
+      \bsemnr{k_1}{k_2}{\var\in I}\eta\var = \abstr[k_1,k_2](\semnr{\var\in I}\eta\var) = \semnr{\var\in I}\eta\var
+    \end{equation*}
+    which is our thesis.
+
+    \case{\(\var := k\)} In this case we have to prove that
+    \[{|\semnr{\var := k}\eta\var[y]| \neq \infty} \Rightarrow
+      {\semnr{\var := k}\eta\var[y]} = {\bsemnr{k_1}{k_2}{\var :=
+          k}\eta\var[y]}\] when
+    \(k_1 \leq \min(\rho) - \nlbound{\var := k}\) and
+    \(k_2 \geq \max(\rho) + \nbound{\var := k}\). This follows from
+    the fact that if we consider \(\var[y] = \var\) then
+    \(\semnr{\var := k}\eta\var = \{k\}\), which is finite, and
+    \(\nlbound{\var := k} = \nbound{\var := k} = |k|\) this means that
+    \(k_1 \leq -|k|\) and \(k_2 \geq +|k|\), hence
+    \begin{equation*}
+      {\bsemnr{k_1}{k_2}{\var := k}\eta\var} = \abstr[k_1,k_2]({\semnr{\var := k}\eta\var}) = {\semnr{\var := k}\eta\var}
+    \end{equation*}
+    and therefore for \(\var[y] = \var\) our thesis holds. For every
+    other \(\var[y] \neq \var\) it holds that
+    \begin{equation*}
+      |\semnr{\var := k}\eta\var[y]| \neq \infty
+      \Rightarrow
+      \semnr{\var := k}\eta\var[y] = \eta\var[y]
+    \end{equation*}
+    and by hypothesis \(\eta \in \bbCnr{k_1}{k_2}\) for all
+    \(\bbCnr{k_1}{k_2}\) s.t.
+    \(\bCnr_{\com, \eta} \preceq \bbCnr{k_1}{k_2}\), which is our
+    case. Hence also in this case our thesis holds:
+    \begin{equation*}
+      |\semnr{\var := k}\eta\var[y]| \neq \infty
+      \Rightarrow
+      \semnr{\var := k}\eta\var[y] =
+      \abstr[k_1,k_2]({\semnr{\var := k}\eta\var[y]}) =
+      {\bsemnr{k_1}{k_2}{\var := k}\eta\var[y]}
+    \end{equation*}
+
+    \case{\(\var := \var[y] + k\)} In this case we have to prove that
+    for every \(\var[w] \in \Var_{\com}\)
+    \begin{equation*}
+      |{\semnr{\var := \var[y] + k}\eta\var[w]}| \neq \infty
+      \Rightarrow
+      {\semnr{\var := \var[y] + k}\eta\var[w]} = {\bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta\var[w]}
+    \end{equation*}
+    Similarly to the latter case, if \(\var[w] \neq \var\) it holds
+    that \(\semnr{\var := \var[y] + k}\eta\var[w] = \eta\var[w]\), and
+    since
+    \(\eta \in \bCnr_{\var := \var[y] + k, \eta} \preceq
+    \bbCnr{k_1}{k_2}\) it also holds that
+    \begin{equation*}
+      |\eta\var[w]| \neq \infty \Rightarrow \eta\var[w] = \abstr[k_1,k_2](\eta\var[w]) = \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta\var[w]
+    \end{equation*}
+    which is our thesis. Otherwise, if \(\var[w] = \var\) by
+    Lemma~\ref{le:incnr}
+    \begin{equation*}
+      \max(\semnr{\var := \var[y] + k}\eta\var) \leq \max(\eta) +
+      \bound{\var := \var[y] + k} = \max(\eta) + \nbound{\var := \var[y]
+        + k}
+    \end{equation*}
+    and by Lemma~\ref{le:decnr} 
+    \begin{equation*}
+      \min(\semnr{\var := \var[y] + k}\eta\var) \geq \min(\eta) -
+      \lbound{\var := \var[y] + k} = \min(\eta) - \nlbound{\var := \var[y]
+        + k}
+    \end{equation*}
+    hence by definition of \(\abstr[k_1,k_2]\) our thesis
+    \begin{equation*}
+      |\semnr{\var := \var[y] + k}\eta\var| \neq \infty \Rightarrow
+      \semnr{\var := \var[y] + k}\eta\var =
+      \abstr[k_1,k_2](\semnr{\var := \var[y] + k}) =
+      \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta\var
+    \end{equation*}
+    holds.
+
+    \case{\(\com_1 \ndet \com_2\)} In this case we have to prove that
+    for all \(\var \in \Var_{\com}\)
+    \begin{equation*}
+      |\semnr{\com_1 \ndet \com_2}\eta\var| \neq \infty \Rightarrow \semnr{\com_1 \ndet \com_2}\eta\var = \bsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta\var
+    \end{equation*}
+    with \(k_1 \leq \min(\eta) - \nlbound{\com_1 \ndet \com_2}\) and
+    \(k_2 \geq \max(\eta) + \nbound{\com_1 \ndet \com_2}\). First we
+    can ontice that since
+    \(\semnr{\com_1 \ndet \com_2}\eta\var = \semnr{\com_1}\eta\var
+    \cup \semnr{\com_2}\eta\var\) our hypothesis
+    \({|\semnr{\com_1 \ndet \com_2}\eta\var| \neq \infty}\) implies
+    both \({|\semnr{\com_1}\eta\var| \neq \infty}\) and
+    \(|{\semnr{\com_2}\eta\var| \neq \infty}\). Hence by choice of
+    \(k_1, k_2\) we can use the inductive hypothesis and state that
+    \begin{align*}
+      \semnr{\com_1}\eta\var & = \bsemnr{k_1}{k_2}{\com_1}\eta\var \\
+      \semnr{\com_2}\eta\var & = \bsemnr{k_1}{k_2}{\com_2}\eta\var
+    \end{align*}
+    and by closure over \(\cup\)
+    \begin{equation*}
+      \semnr{\com_1 \ndet\com_2}\eta\var =
+      \semnr{\com_1}\eta\var \cup \semnr{\com_2}\eta\var =
+      \bsemnr{k_1}{k_2}{\com_1}\eta\var \cup \bsemnr{k_1}{k_2}{\com_2}\eta\var =
+      \bsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta\var
+    \end{equation*}
+    which is our thesis.
+
+    \case{\(\com_1 \seq \com_2\)} In this case
+
+    \case{\(\fix\com\)} In this case
   \end{inductive}
 \end{proof}

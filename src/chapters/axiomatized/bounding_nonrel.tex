@@ -22,7 +22,8 @@ Section~\ref{sub:nonrelprop}: \(\semnr{\cdot} = \semi[\bCnr]{\cdot}\).
   hold:
   \begin{enumerate}[label=(\roman*)]
   \item\label{point1nr} \(\max(\semnr{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); 
-  \item\label{point2nr} for all \(\eta' \in \bCnr\), if \(\eta' \sqsupseteq \eta\)
+  \item\label{point2nr} for all \(\eta' \in \bCnr\), if
+    \(\eta' \ovdot\supseteq \eta\)
     % and \(\semnr{\com}\eta' \neq \top\)
     then
     \(\max(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\).
@@ -101,3 +102,38 @@ Section~\ref{sub:nonrelprop}: \(\semnr{\cdot} = \semi[\bCnr]{\cdot}\).
   \end{equation*}
   which is false.
 \end{remark}
+
+The same applies for the increment on the lower bound, in a smimilar
+fashion as for the intervals:
+
+\begin{lemma}\label{le:decnr}
+  Let \(\com\in \imp\).
+  % Then consider a function \({\max_{\Int} : \Int \to \z}\) s.t. for
+  % all \({a\in\Int}\) it holds that \(x \leq \max_\Int(a)\) for all
+  % \({x \in \concr[\Int](a)}\).
+  For all \(\eta \in \bCnr\) and \(\var[y] \in \Var\), if
+  \(\min(\semnr{\com} \eta \var[y]) \neq -\infty\) and
+  \(\min(\semnr{\com}\eta \var[y]) < -\bound{\com}\) then there exist a
+  variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
+  such that \(|h| \leq \bound{\com}\) and the following two properties
+  hold:
+  \begin{enumerate}[label=(\roman*)]
+  \item\label{point1nrmin} \(\min(\semnr{\com}\eta \var[y]) = \min(\eta \var[z]) + h\); 
+  \item\label{point2nrmin} for all \(\eta' \in \bCnr\), if
+    \(\eta' \ovdot\supseteq \eta\)
+    % and \(\semnr{\com}\eta' \neq \top\)
+    then
+    \(\min(\semnr{\com}\eta' \var[y]) \leq \min(\eta' \var[z]) + h\).
+  \end{enumerate}
+  % dually, if \(\min(\semnr{\com}\eta\var[y]) \neq - \infty\) and
+  % \(\min(\semnr{\com}\eta\var[y]) < \lbound{\com}\) then there exists a
+  % variable \(\var[w] \in \Var\) and an integer \(i \in \z\) s.t.
+  % \(|i| \leq \lbound{\com}\) and the following two properties hold:
+  % \begin{enumerate}[label=(\roman*)]
+  % \item \(\min(\semnr{\com}\eta \var[y]) = \min(\eta \var[w]) + i\); \label{point1min}
+  % \item  for all \(\eta' \in \Int\), if \(\eta' \sqsupseteq \eta\)
+  %   %   and \(\semnr{\com}\eta' \neq \top\)
+  %   then
+  %   \(\min(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[w]) + i\). \label{point2min}
+  % \end{enumerate}
+\end{lemma}

@@ -14,14 +14,17 @@ point wise lifting intervals in the follwing way:
   \(\rho : \Var_{\com} \to \Int\), we define both the \(\min\) and the
   \(\max\) value of an interval environment:
   \begin{align*}
-    \max(\rho) & \veq \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com} \land \max(\rho(\var)) \neq + \infty\} \\
-    \min(\rho) & \veq \max \{ \min(\rho(\var)) \mid \var \in \Var_{\com} \land \min(\rho(\var)) \neq - \infty\}
+    \max(\rho) & \veq \max\left\{\; \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com} \land \max(\rho(\var)) \neq + \infty\} \; , \; 0 \; \right\} \\
+    \min(\rho) & \veq \min\left\{\; \min \{ \min(\rho(\var)) \mid \var \in \Var_{\com} \land \min(\rho(\var)) \neq - \infty\} \; , \; 0 \; \right\}
   \end{align*}
 \end{definition}
 % 
-Then, when computing \(\semi[\inte]{\com} \rho\) on such \(\rho\)
-having a finite domain, we can restrict to an interval domain bounded
-by some constant \(k\in\n\):
+Notice that it holds that \(\max(\rho) \geq 0\) and
+\(\min(\rho) \leq 0\). This will later be useful for the base cases of
+Lemma~\ref{le:inc} and Lemma~\ref{le:incnr}.  Now, when computing
+\(\semi[\inte]{\com} \rho\) on such \(\rho\) having a finite domain,
+we can restrict to an interval domain bounded by some constant
+\(k\in\n\):
 
 \begin{definition}[Bounded interval]\label{def:boundedint}
   We define
