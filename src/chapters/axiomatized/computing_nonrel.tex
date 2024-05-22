@@ -1,7 +1,7 @@
 \section{Computing non-relational collecting semantics}\label{sec:computingnonrel}
 
 In the following section we follow the same scheme used in
-Section~\ref{sec:computing} in order to prove that we can also bonud
+Section~\ref{sec:computing} in order to prove that we can also bound
 the non relational collecting domain to ensure convergence while
 obtaining the most precise interval.  To start, we rely on
 Definition~\ref{def:minmax} of \(\min\) and \(\max\) values of an
@@ -433,8 +433,8 @@ that the second one does not diverge.
         |\beta\var| \neq\infty \Rightarrow \semnr{\com\ndet\tru}\beta\var \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var
       \end{equation*}
       \begin{align*}
-        \max(\semnr{\com\ndet\tru}\beta\var) & \leq \max(\beta) + \bonud{\com\ndet\tru} = \max(\beta) + \bonud{\com} \\
-                                             & \leq \max(\eta) \bound{\fix\com} + \bound{\com} & \text{by Lemma~\ref{le:incnr}} \\
+        \max(\semnr{\com\ndet\tru}\beta\var) & \leq \max(\beta) + \bound{\com\ndet\tru} = \max(\beta) + \bound{\com} \\
+                                             & \leq \max(\eta) + \bound{\fix\com} + \bound{\com} & \text{by Lemma~\ref{le:incnr}} \\
                                              & \leq \max(\eta) + (n+2)\bound{\com} \\
                                              & \leq \max(\eta) + (n+2)\nbound{\com} \\
                                              & \leq \max(\eta) + \nbound{\fix\com} = k_2
@@ -443,6 +443,28 @@ that the second one does not diverge.
       \begin{equation*}
         \min(\semnr{\com\ndet\tru}\beta\var) \geq \min(\eta) - \nlbound{\fix\com} = k_1
       \end{equation*}
+      hence
+      \begin{align*}
+        \beta\var = \semnr{\com\ndet\tru}\beta\var & \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var \\
+                                                   & \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}{\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\eta & \text{by induction on } i\\
+                                                   & = {\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^{i+1}\eta
+      \end{align*}
     \end{description}
+    Hence our thesis, for all \(\var \in \Var_{\com}, i \in \n\)
+    \begin{equation*}
+      |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow
+      % 
+      \semnr{\fix\com}\eta\var \supseteq
+      {\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\eta
+    \end{equation*}
+    holds.  We can now conclude since our original thesis
+    \begin{equation*}
+      |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow
+      % 
+      \semnr{\fix\com}\eta\var \supseteq
+      \bigcup_{i\in\n}{\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\eta =
+      \bsemnr{k_1}{k_2}{\fix\com}\eta\var
+    \end{equation*}
+    also holds.
   \end{inductive}
 \end{proof}
