@@ -157,6 +157,14 @@ which is sound by construction:
   holds.
 \end{proof}
 
+By using \(k_1, k_2\) properly, we can introduce a notion of order
+between bounded non relational collecting domain. More in detail,
+given \(a,b,c,d \in \z\) s.t.\ \(a\leq b\) and \(c \leq d\). Then
+\(\preceq\) is a relation order s.t.
+\begin{equation*}
+  \bbCnr{a}{b} \preceq \bbCnr{c}{d} \iff a \leq c \land d \leq b
+\end{equation*}
+
 The next step is to notice that as a consequence of bounds and
 Lemma~\ref{le:incnr} also bounded non collecting relational semantics
 can compute the same result of its unbounded counterpart, provided
@@ -297,13 +305,14 @@ that the second one does not diverge.
     \end{equation*}
     with \(k_1 \leq \min(\eta) - \nlbound{\com_1 \ndet \com_2}\) and
     \(k_2 \geq \max(\eta) + \nbound{\com_1 \ndet \com_2}\). First we
-    can ontice that since
+    can notice that since
     \(\semnr{\com_1 \ndet \com_2}\eta\var = \semnr{\com_1}\eta\var
     \cup \semnr{\com_2}\eta\var\) our hypothesis
     \({|\semnr{\com_1 \ndet \com_2}\eta\var| \neq \infty}\) implies
     both \({|\semnr{\com_1}\eta\var| \neq \infty}\) and
     \(|{\semnr{\com_2}\eta\var| \neq \infty}\). Hence by choice of
-    \(k_1, k_2\) we can use the inductive hypothesis and state that
+    \(k_1\) and \(k_2\) we can use the inductive hypothesis and state
+    that
     \begin{align*}
       \semnr{\com_1}\eta\var & = \bsemnr{k_1}{k_2}{\com_1}\eta\var \\
       \semnr{\com_2}\eta\var & = \bsemnr{k_1}{k_2}{\com_2}\eta\var
@@ -317,8 +326,123 @@ that the second one does not diverge.
     \end{equation*}
     which is our thesis.
 
-    \case{\(\com_1 \seq \com_2\)} In this case
-
-    \case{\(\fix\com\)} In this case
+    \case{\(\com_1 \seq \com_2\)} In this case we have to prove that
+    \begin{equation*}
+      |\semnr{\com_1\seq\com_2}\eta\var| \neq \infty \Rightarrow \semnr{\com_1 \seq\com_2} \eta\var = \bsemnr{k_1}{k_2}{\com_1 \seq\com_2}\eta\var
+    \end{equation*}
+    for all \(k_1 \leq \min(\eta) -\nlbound{\com_1\seq\com_2}\) and
+    \(k_2 \geq \max(\eta) + \nbound{\com_1\seq\com_2}\). First let's
+    recall that
+    \begin{equation*}
+      \semnr{\com_1\seq\com_2}\eta\var = \semnr{\com_2}\left(\semnr{\com_1}\eta\right)(\var)
+    \end{equation*}
+    and we are under the hypothesis
+    \(|\semnr{\com_1\seq\com_2}\eta\var| \neq \infty\). By inductive
+    hypothesis for all \(\var \in \Var_{\com}\) if
+    \(|\semnr{\com_1}\eta\var| \neq \infty\) then
+    \(\semnr{\com_1}\eta\var = \bsemnr{k_1}{k_2}{\com_1}\eta\var\) for
+    all \(k_1 \leq \min(\eta) - \nlbound{\com_1}\) and
+    \(k_2 \geq \max(\eta) + \nbound{\com_2}\). We can now call
+    \(\eta' = \semnr{\com_1}\eta\) and by inductive hypothesis again,
+    for all \(\var\in\Var_{\com}\)
+    \begin{equation*}
+      |\semnr{\com_2}\eta'\var| \neq \infty \Rightarrow \semnr{\com_2}\eta'\var = \bsemnr{k_1}{k_2}{\com_2}\eta'\var
+    \end{equation*}
+    for all \(k_1 \leq \min(\eta') - \nlbound{\com_2}\) and
+    \(k_2 \geq \max(\eta') + \nbound{\com}\). Notice that
+    \(\min(\eta') \geq \min(\eta) - \nlbound{\com_1}\) and
+    \(\max(\eta') \leq \max(\eta) + \nbound{\com_1}\) and therefore we
+    can chose
+    \(k_1 \leq \min(\eta) - \nlbound{\com_1} - \nlbound{\com_2}\) and
+    \(k_2 \geq \max(\eta) + \nbound{\com_1} + \nbound{\com_2}\) and
+    notice that both inductive hypothesis hold, and therefore the
+    following holds
+    \begin{equation*}
+      |\semnr{\com_1\seq\com_2}\eta\var| \neq \infty \Rightarrow \semnr{\com_1\seq\com_2}\eta\var = \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var
+    \end{equation*}
+    which is our thesis.
+    
+    \case{\(\fix\com\)} In this case we want to prove that
+    \begin{equation*}
+      |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow \semnr{\fix\com}\eta\var = \bsemnr{k_1}{k_2}{\fix\com}\eta\var
+    \end{equation*}
+    for all \(k_1 \geq \min(\eta) - \nlbound{\fix\com}\) and
+    \(k_2 \leq \max(\eta) + \nbound{\fix\com}\). Recall that by
+    Lemma~\ref{le:soundnr} it always holds that
+    \begin{equation*}
+      \semnr{\fix\com}\eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\fix\com}\eta
+    \end{equation*}
+    hence for every variable \(\var \in \Var_{\com}\)
+    \(\semnr{\fix\com}\eta\var \subseteq
+    \bsemnr{k_1}{k_2}{\fix\com}\eta\var\). We have therefore to prove
+    that for all \(\var\in \Var_{\com}\)
+    \begin{equation}\label{eq:geq}
+      |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow \semnr{\fix\com}\eta\var \supseteq \bsemnr{k_1}{k_2}{\fix\com}\eta\var
+    \end{equation}
+    for all \(k_1 \leq \min(\eta) - \nlbound{\fix\com}\) and
+    \(k_2 \geq \max(\eta) + \nbound{\fix\com}\). To start notice that
+    according to Theorem~\ref{th:fixsugarnr}\todo{Da dimostrare, ma
+      credo sia fattibile, o in alternativa farlo per le semantiche
+      induttive in generale} hence we will prove that
+    \begin{equation*}
+      |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow \semnr{\fix\com}\eta\var \supseteq \left(\bigcup_{i\in\n} {\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta\right)(\var)
+    \end{equation*}
+    which implies Equation~\ref{eq:geq}. To start we will initially
+    prove that for every \(\var\in\Var_{\com}\), \(i\in\n\) it holds
+    that
+    \begin{equation*}
+      |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow
+      %
+      \semnr{\fix\com}\eta\var \supseteq
+      \left({\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta\right)(\var)
+    \end{equation*}
+    to then prove the first one by closure over \(\cup\). We will
+    prove it by induction on \(i\):
+    \begin{description}
+      
+    \item[Case] (\(i=0\)). In this case we have to prove that
+      \[|\semnr{\fix\com}\eta\var| \neq \infty\fix\com \Rightarrow
+        \semnr{\fix\com}\eta\var \supseteq \eta\var\] We can notice
+      that by monotonicity of \(\semnr{\fix\com}\) the thesis holds.
+      
+    \item[Case] (\(i \Rightarrow i+1\)). In this case we have to prove
+      that
+      \begin{equation*}
+        |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow \semnr{\fix\com}\eta\var \supseteq {\left(\bsemnr{k_1}{k_2}\com\ndet\tru\right)}^{i+1}\eta\var
+      \end{equation*}
+      First we can notice that
+      \begin{align*}
+        \semnr{\com\ndet\tru}(\semnr{\fix\com}\eta) & = \semnr{\com}(\semnr{\fix\com}\eta) \cup \semnr{\fix\com}\eta \\
+                                                    & = \semnr{\com}(\lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\eta \\
+                                                    & = \eta \cup \semnr{\com}(\lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\eta & \text{since } \eta \subseteq \lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)\\
+                                                    & = (\lambda \mu . \eta \cup \semnr{\com}\mu)(\lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\eta \\
+                                                    & = (\lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\eta & \text{by def.\ of } \lfp\\
+                                                    & = \semnr{\fix\com}\eta \cup \semnr{\fix\com}\eta \\
+                                                    & = \semnr{\fix\com}\eta
+      \end{align*}
+      now we % can notice that since by hypothesis
+      % \(|\semnr{\fix\com}\eta\var| \neq \infty\), we can leverage
+      % Lemma~\ref{le:incnr} and state that for all
+      % \(\var\in \Var_{\com}\) the follwing hold
+      % \begin{align*}
+      %   \max(\semnr{\fix\com}\eta\var) & \leq \max(\eta) + \bound{\fix\com} \\
+      %   \min(\semnr{\fix\com}\eta\var) & \geq \min(\eta) - \lbound{\fix\com}
+      % \end{align*}
+      we preliminarly observe that by calling \(\beta = \semnr{\fix\com}\eta\)
+      \begin{equation*}
+        |\beta\var| \neq\infty \Rightarrow \semnr{\com\ndet\tru}\beta\var \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var
+      \end{equation*}
+      \begin{align*}
+        \max(\semnr{\com\ndet\tru}\beta\var) & \leq \max(\beta) + \bonud{\com\ndet\tru} = \max(\beta) + \bonud{\com} \\
+                                             & \leq \max(\eta) \bound{\fix\com} + \bound{\com} & \text{by Lemma~\ref{le:incnr}} \\
+                                             & \leq \max(\eta) + (n+2)\bound{\com} \\
+                                             & \leq \max(\eta) + (n+2)\nbound{\com} \\
+                                             & \leq \max(\eta) + \nbound{\fix\com} = k_2
+      \end{align*}
+      similarly for the min value
+      \begin{equation*}
+        \min(\semnr{\com\ndet\tru}\beta\var) \geq \min(\eta) - \nlbound{\fix\com} = k_1
+      \end{equation*}
+    \end{description}
   \end{inductive}
 \end{proof}
