@@ -33,58 +33,6 @@ iterating over least upper bounds.
   invariant is strictly more precise than the Fix one.
 \end{example}
 
-\begin{lemma}[\(\fix{\com}\) \textbf{is syntactic sugar}]\label{le:sugar}
-  For all \(\eta\),
-  \(\semi[\inte]{\fix{\com}} \eta = \semi[\inte]{\kleene{(\tru + \com)}} \eta\).
-\end{lemma}
-
-\begin{proof}
-  Let us first show by induction that 
-  \begin{equation}\label{prop2}
-    \forall i\geq 0.\: (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+1} \bot = (\tru \sqcup \semi[\inte]{\com})^{i} \eta \tag{\(\sharp\)}
-  \end{equation}
-
-  \noindent
-  \(i=0\): \( (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{1} \bot = \eta \sqcup \bot \sqcup \semi[\inte]{\com}\bot = \eta = 
-  (\tru \sqcup \semi[\inte]{\com})^{0} \eta\).
-  
-  % \medskip
-  \noindent
-  \(i+1\):  
-  \begin{align*}
-    (\tru \sqcup \semi[\inte]{\com})^{i+1} \eta & = & \\
-    (\tru \sqcup \semi[\inte]{\com})((\tru \sqcup \semi[\inte]{\com})^{i} \eta) & = & \\
-    ((\tru \sqcup \semi[\inte]{\com})^{i} \eta) \sqcup  \semi[\inte]{\com}((\tru \sqcup \semi[\inte]{\com})^{i} \eta) & = & \text{By induction}\\
-    (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+1} \bot \sqcup \semi[\inte]{\com}((\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+1}\bot ) &= & \text{As } \eta \sqsubseteq (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+1} \bot \\
-    \eta \sqcup (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+1} \bot \sqcup \semi[\inte]{\com}((\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+1}\bot ) & = & \\
-    (\eta \sqcup \tru \sqcup \semi[\inte]{\com}) ((\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+1} \bot) & = & \\
-    (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+2} \bot & &
-  \end{align*}
-
-  Let us also show that:
-  \begin{equation}\label{prop3}
-    \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)} =
-    \lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi[\inte]{\com} \mu)}\tag{\(\diamond\)}
-  \end{equation}
-  Observe that \(\lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)} = \eta \sqcup  \semi[\inte]{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)})\), so that we have that:
-  \[
-    \eta \sqcup  \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)} \sqcup \semi[\inte]{\com}(\lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)})
-    \sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)}
-  \]
-  As a consequence, \(\lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi[\inte]{\com} \mu)}\sqsubseteq \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)}\) holds. The reverse inequality follows because, for all \(\mu\), 
-  \(\eta \sqcup \semi[\inte]{\com} \mu \sqsubseteq \eta \sqcup \mu \sqcup \semi[\inte]{\com} \mu\).
-
-  Then, we have that:
-  \begin{align*}
-    \semi[\inte]{\fix{\com}} \eta & = \\
-    \lfp{\lambda \mu. (\eta \sqcup \semi[\inte]{\com} \mu)} & = &  \text{By \eqref{prop3}}\\
-    \lfp{\lambda \mu. (\eta \sqcup \mu \sqcup \semi[\inte]{\com} \mu)} & = & \text{By Knaster-Tarski Theorem} \\
-    \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^i \bot & = \\
-    \bot \sqcup \bigsqcup_{i \in \nat} (\eta \sqcup \tru \sqcup \semi[\inte]{\com})^{i+1} \bot & = & \text{By \eqref{prop2}}\\
-    \bigsqcup_{i \in \nat} (\tru \sqcup \semi[\inte]{\com})^{i} \eta & = \\
-    \semi[\inte]{\kleene{(\tru + \com)}} \eta. &
-  \end{align*}  
-\end{proof}
 
 \begin{remark}
   Let us remark that in case we were interested in studying

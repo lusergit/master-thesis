@@ -298,3 +298,60 @@ Definition~\ref{def:bca}) induce sound semantics:
 % widely used in programming, namely we can cite the fact that they are
 % part of the nasa programming guidelines on writing analyzer-friendly
 % code as stated in \cite{nasa:ten}.
+
+\begin{lemma}[\(\fix{\com}\) \textbf{is syntactic sugar}]\label{le:sugar}
+  For all \(\eta \in \bA\),
+  \(\semi[\bA]{\fix{\com}} \eta = \semi[\bA]{\kleene{(\tru + \com)}} \eta\).
+\end{lemma}
+
+\begin{proof}
+  First, let's call
+  \begin{align*}
+    f & = \lambda \mu . \eta \sqcup \mu \sqcup \semi[\bA]{\com}\mu \\
+    g & = \lambda \mu . \mu \sqcup \semi[\bA]{\com}\mu
+  \end{align*}
+  Let us first show by induction that 
+  \begin{equation}\label{prop2}
+    \forall i\geq 0 \quad f^{i+1} (\bot) = g^{i} (\eta) \tag{\(\sharp\)}
+  \end{equation}
+
+  \noindent
+  \begin{inductive}
+    \case{\(i=0\)} \(f(\bot) = \eta \sqcup \bot \sqcup \semi[\bA]{\com}\bot = \eta = g^0 (\eta)\).
+    \case{\(i+1\)} 
+    \begin{align*}
+      g^{i+1}(\eta) & = g (g^i (\eta)) \\
+                    & = g(f^{i+1}(\bot)) & \text{By induction on } i \\
+                    & = f^{i+1}(\bot) \sqcup \semi[\bA]{\com}f^{i+1}(\bot) \\
+                    & = \eta \sqcup f^{i+1}(\bot) \sqcup \semi[\bA]{\com}f^{i+1}(\bot) & \text{Since } \eta \sqsubseteq f(\bot)\\
+                    & = f ( f^{i+1}(\bot)) \\
+                    & = f^{i+2}(\bot)
+    \end{align*}
+  \end{inductive}
+  
+  Let us also show that:
+  \begin{equation}\label{prop3}
+    \lfp{(g)} = \lfp{(f)}\tag{\(\diamond\)}
+  \end{equation}
+  Observe that
+  \(\lfp{(g)} = g(\lfp(g)) = \eta \sqcup
+  \semi[\bA]{\com}(\lfp{(g)})\), so we have that:
+  \[
+    \eta \sqcup \lfp{(g)} \sqcup \semi[\bA]{\com}(\lfp{(g)})
+    \sqsubseteq \lfp{(g)}
+  \]
+  As a consequence, \(\lfp{(f)}\sqsubseteq \lfp{(g)}\) holds. The
+  reverse inequality follows because, for all \(\mu\),
+  \begin{equation*}
+    g(\mu) = \eta \sqcup \semi[\bA]{\com} \mu \sqsubseteq \eta \sqcup \mu \sqcup \semi[\bA]{\com} \mu = f(\mu)
+  \end{equation*}
+  Then, we have that:
+  \begin{align*}
+    \semi[\bA]{\fix{\com}} \eta & = \lfp\left({\lambda \mu. \left(\eta \sqcup \semi[\bA]{\com} \mu\right)}\right) \\
+    & = \lfp\left({\lambda \mu. \left(\eta \sqcup \mu \sqcup \semi[\bA]{\com} \mu\right)}\right) &  \text{By~\eqref{prop3}}\\
+    & = \bigsqcup_{i \in \nat} {\left(\eta \sqcup \tru \sqcup \semi[\bA]{\com}\right)}^i \bot & \text{By Knaster-Tarski Theorem} \\
+    & = \bot \sqcup \bigsqcup_{i \in \nat} {\left(\eta \sqcup \tru \sqcup \semi[\bA]{\com}\right)}^{i+1} \bot \\
+    & = \bigsqcup_{i \in \nat} {\left(\tru \sqcup \semi[\bA]{\com}\right)}^{i} \eta & \text{By~\eqref{prop2}}\\
+    & = \semi[\bA]{\kleene{\left(\tru + \com\right)}} \eta
+  \end{align*}  
+\end{proof}

@@ -420,7 +420,7 @@ that the second one does not diverge.
                                                     & = \semnr{\fix\com}\eta \cup \semnr{\fix\com}\eta \\
                                                     & = \semnr{\fix\com}\eta
       \end{align*}
-      now we % can notice that since by hypothesis
+      % can notice that since by hypothesis
       % \(|\semnr{\fix\com}\eta\var| \neq \infty\), we can leverage
       % Lemma~\ref{le:incnr} and state that for all
       % \(\var\in \Var_{\com}\) the follwing hold
@@ -428,7 +428,8 @@ that the second one does not diverge.
       %   \max(\semnr{\fix\com}\eta\var) & \leq \max(\eta) + \bound{\fix\com} \\
       %   \min(\semnr{\fix\com}\eta\var) & \geq \min(\eta) - \lbound{\fix\com}
       % \end{align*}
-      we preliminarly observe that by calling \(\beta = \semnr{\fix\com}\eta\)
+      Now we can preliminarly observe that by calling
+      \(\beta = \semnr{\fix\com}\eta\)
       \begin{equation*}
         |\beta\var| \neq\infty \Rightarrow \semnr{\com\ndet\tru}\beta\var \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var
       \end{equation*}
@@ -457,7 +458,7 @@ that the second one does not diverge.
       \semnr{\fix\com}\eta\var \supseteq
       {\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\eta
     \end{equation*}
-    holds.  We can now conclude since our original thesis
+    holds.  We can now conclude by noticing that our original thesis
     \begin{equation*}
       |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow
       % 
@@ -468,3 +469,20 @@ that the second one does not diverge.
     also holds.
   \end{inductive}
 \end{proof}
+
+The latter theorem is a result similar to the result for the interval
+domain with Theorem~\ref{th:bounded}. In its essence it states that
+when doing static analysis with abstract interpretation using the non
+relational collecting domain \(\bCnr\) for some program
+\(\com\in\imp\) and an initial environment \(\eta \in \bCnr\) we can
+consider a bounded version of the domain \(\bbCnr{k_1}{k_2}\) with
+\(k_1 = \min(\eta) - \nlbound{\com}\) and
+\(k_2 = \max(\eta) + \nbound{\com}\) (hence computed accordingly to
+\(\com\) and \(\eta\)). Each variable \(\var \in \Var_{\com}\) either
+% Possiamo fare analisi statica secondo la semantica induttiva di cui
+% sopra. Se la variabile ha come risultato un set finito, questo è
+% garantito essere nel reticolo ristretto. Altrimenti, dato che
+% l'analisi è comunque sound per il teorema di prima, la semantica
+% induttiva farà divergere la variabile a \(\top\), dato che è
+% l'elemento del reticolo che identifica tutto \(\z\), ovvero l'unico
+% set infinito che consideriamo.

@@ -551,10 +551,10 @@ Notice in particular that since
     \[\max(\semi{\com \ndet \tru}^{k_2-k_1} \eta_{k_1} \var[w]) = \max(\eta_{k_1}
       \var[w]) + h\] 
     Observe that for all \(\eta' \sqsupseteq \eta_{k_1}\)
-    \begin{equation}\label{prop2}
+    \begin{equation}\label{incprop2}
       \max\left(\semi{\com \ndet \tru}^{k_2-k_1} \eta' \var[w]\right) \geq \max(\eta' \var[w]) + h
     \end{equation}
-    Let us show Property~\eqref{prop2} by induction on \(\ell = k_2-k_1 \geq 1\).
+    Let us show Property~\eqref{incprop2} by induction on \(\ell = k_2-k_1 \geq 1\).
 
     \begin{description}
     \item[Case] (\(\ell = 1\)).
@@ -590,7 +590,7 @@ Notice in particular that since
     \begin{equation*}
       \max\left(\semi{\com\ndet\tru}\left({(\semi{\com\ndet\tru})}^\ell\eta'\right)\var[w]\right) \geq \max\left({(\semi{\com\ndet\tru})}^\ell\eta'\var[w]\right) \geq \max(\eta'\var[w]) + h
     \end{equation*}
-    which is our thesis for Property~\eqref{prop2}.
+    which is our thesis for Property~\eqref{incprop2}.
     \end{description}
     
     \noindent    
@@ -603,7 +603,7 @@ Notice in particular that since
     validity for \(r\geq 0\) then we have that
     \begin{align*}    
       & \max(\semi{\com \ndet \tru}^{(r+1)(k_2-k_1)} \eta_{k_1} \var[w]) =\\
-      &\max(\semi{\com \ndet \tru}^{k_2-k_1} ( \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{by \eqref{prop2} as \(\eta_{k_1} \sqsubseteq \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\) }\\
+      &\max(\semi{\com \ndet \tru}^{k_2-k_1} ( \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}) \var[w]) \geq & \mbox{by~\eqref{incprop2} as \(\eta_{k_1} \sqsubseteq \semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1}\) }\\
       &\max(\semi{\com \ndet \tru}^{r(k_2-k_1)} \eta_{k_1} \var[w]) + h \geq & \mbox{by inductive hypothesis}\\
       &  \max(\eta_{k_1}\var[w])  + rh + h
         \geq 
