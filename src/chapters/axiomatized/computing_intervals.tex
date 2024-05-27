@@ -6,7 +6,7 @@ semantics of commands%  provided a domain that respects properties \ref{inc:hp1}
 % and \ref{inc:hp2}
 . This means that we can apply Lemma~\ref{le:inc} on the intervals
 domain \(\inte\).  First, we define the max and min values of the
-point wise lifting intervals in the follwing way:
+point wise lifting intervals in the following way:
 
 \begin{definition}[\(\min\) and \(\max\)]\label{def:minmax}
   Given a command \(\com\), the corresponding finite set of variables
@@ -260,7 +260,7 @@ allows us to prove the soundness of the analysis over
 \end{lemma}
 
 \begin{proof}
-  The theorem follows from the fact that there is a galois connection
+  The theorem follows from the fact that there is a Galois connection
   \begin{equation*}
     \inte\galois{\ovdot\abstr_{k_1, k_2}}{\id}\binte{k_1}{k_2}
   \end{equation*}
@@ -552,7 +552,7 @@ as the analysis on \(\inte\).
       Hence we can conclude by observing that
       \begin{align*}
         \beta = \semi[\inte]{\com\ndet\tru}\beta & \sqsupseteq \semi[\binte{k_1}{k_2}]{\com\ndet\tru}\beta  & \text{by~\eqref{eq:boundless}}\\
-                                                 & \sqsupseteq \semi[\binte{k_1}{k_2}]{\com\ndet\tru}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho & \text{by indutcion on } i \\
+                                                 & \sqsupseteq \semi[\binte{k_1}{k_2}]{\com\ndet\tru}{\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^i\rho & \text{by induction on } i \\
         & = {\left(\semi[\binte{k_1}{k_2}]{\com\ndet\tru}\right)}^{i+1}\rho
       \end{align*}
       Therefore for all \(i\in\n\)
@@ -597,7 +597,7 @@ Our last theorem proved that by bounding the interval domain according
 to the constants that appear in a program and its initial state we can
 ensure termination of the analysis while achieving the most precise
 abstract invariant for the program. The result is analogous to the
-findings of~\cite{Gawlitza2009}, but is achieved by only looing at the
+findings of~\cite{Gawlitza2009}, but is achieved by only looking at the
 maximal and minimal values of the intermediate elements of the
 analysis. This can already be seen as an hint on the goal of next
 sections: while we reasoned on the values of the intermediate
