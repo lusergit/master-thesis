@@ -381,9 +381,9 @@ that the second one does not diverge.
     \end{equation}
     for all \(k_1 \leq \min(\eta) - \nlbound{\fix\com}\) and
     \(k_2 \geq \max(\eta) + \nbound{\fix\com}\). To start notice that
-    according to Theorem~\ref{th:fixsugarnr}\todo{Da dimostrare, ma
-      credo sia fattibile, o in alternativa farlo per le semantiche
-      induttive in generale} hence we will prove that
+    according to Lemma~\ref{le:sugar}
+    \(\semnr{\fix\com}\eta = \semnr{\kleene{(\com\ndet\tru)}}\eta\),
+    hence we can alternatively prove that
     \begin{equation*}
       |\semnr{\fix\com}\eta\var| \neq \infty \Rightarrow \semnr{\fix\com}\eta\var \supseteq \left(\bigcup_{i\in\n} {\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta\right)(\var)
     \end{equation*}
