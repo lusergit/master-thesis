@@ -1,4 +1,4 @@
-\section{Bounding non-relational collecting semantics}\label{sec:computingnonrel}
+\section{Bounding non-relational collecting semantics}\label{sec:boundingnonrel}
 
 In the following chapter we want to reflect the same results we
 observed for the interval domain on the non-relational domain
@@ -21,8 +21,9 @@ Section~\ref{sub:nonrelprop}: \(\semnr{\cdot} = \semi[\bCnr]{\cdot}\).
   such that \(|h| \leq \bound{\com}\) and the following two properties
   hold:
   \begin{enumerate}[label=(\roman*)]
-  \item\label{point1nr} \(\max(\semnr{\com}\eta \var[y]) = \max(\eta \var[z]) + h\); 
-  \item\label{point2nr} for all \(\eta' \in \bCnr\), if
+  \item\label{point1nrdef}
+    \(\max(\semnr{\com}\eta \var[y]) = \max(\eta \var[z]) + h\);
+  \item\label{point2nrdef} for all \(\eta' \in \bCnr\), if
     \(\eta' \ovdot\supseteq \eta\)
     % and \(\semnr{\com}\eta' \neq \top\)
     then

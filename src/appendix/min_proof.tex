@@ -149,7 +149,7 @@ and recall the Lemma~\ref{co:inc} statement:
       \min(\semi{\var \in S}\eta \var[y]) = \min(\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S)))
     \end{equation*}
     Note that it cannot be \(\min(S)\in \z\). Otherwise, by
-    Definition~\ref{de:bound},
+    Definition~\ref{def:bound},
     \(\min ({\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S))})
     \geq \min(S)= \lbound{\var \in S}\), violating the assumption
     \(\min(\semi{\var \in S}\eta \var[y]) < - \lbound{\var \in S}\).
@@ -362,9 +362,8 @@ and recall the Lemma~\ref{co:inc} statement:
   and for all \(\eta_1' \in \inte\) with
   \(\eta_1 \sqsubseteq \eta_1'\)
   \begin{equation}
-    \label{eq:seq2}
+    \label{eq:seq2min}
     \min(\semi{\com_2} \eta_1' \var[y]) \leq \min(\eta_1' \var[w]) + h_2
-    \tag{\dag}
   \end{equation}
   
   Now observe that
@@ -386,9 +385,8 @@ and recall the Lemma~\ref{co:inc} statement:
   \(\min(\semi{\com_1} \eta \var[w]) = \min(\eta \var[w]') + h_1\) and
   for all \(\eta' \in \inte\) with \(\eta \sqsubseteq \eta'\)
   \begin{equation}
-    \label{eq:seq1}
+    \label{eq:seq1min}
     \min(\semi{\com_1} \eta' \var[w]) \leq \min(\eta' \var[w]') + h_1
-    \tag{\ddag}
   \end{equation}
 
   Now, for all \(\eta' \in \inte\) with \(\eta \sqsubseteq \eta'\) we have that:
@@ -409,8 +407,8 @@ and recall the Lemma~\ref{co:inc} statement:
     \min(\semi{\com_1 \seq \com_2}\eta' \var[y]) & = & \\ 
     \min(\semi{\com_2}(\semi{\com_1}\eta') \var[y]) & \leq & \\ 
     \min(\semi{\com_1}\eta' \var[w]) + h_2 & \leq & 
-    \text{by \eqref{eq:seq2}, since } \eta_1 = \semi{\com_1}\eta \sqsubseteq \semi{\com_1}\eta' \\
-    (\min(\eta' \var[w]') +h_1) + h_2 & & \text{by \eqref{eq:seq1}}\
+    \text{by~\eqref{eq:seq2min}, since } \eta_1 = \semi{\com_1}\eta \sqsubseteq \semi{\com_1}\eta' \\
+    (\min(\eta' \var[w]') +h_1) + h_2 & & \text{by~\eqref{eq:seq1min}}\
   \end{align*}
 
   Thus, the thesis holds with \(h= h_1+h_2\), as
@@ -484,15 +482,13 @@ and recall the Lemma~\ref{co:inc} statement:
   with \(|h| \leq \lbound{\fix{\com}}\) such that:
   \begin{equation}\label{eq:maxendmaxstartmin}
     \min(\semi{\fix{\com}} \eta \var[y]) = \min(\eta \var[z]) + h
-    \tag{i}
   \end{equation}
   and for all \(\eta' \sqsupseteq \eta\),
   \begin{equation}\label{eq:maxmiddlemaxendmin}
     \min(\semi{\fix{\com}} \eta' \var[y]) \leq \min(\eta' \var[z]) + h
-    \tag{ii}
   \end{equation}
   
-  Let us consider\ \ref{point1min}. We first observe that we
+  Let us consider~\ref{point1min}. We first observe that we
   can define a path
   \begin{equation}
     \label{eq:fixn}

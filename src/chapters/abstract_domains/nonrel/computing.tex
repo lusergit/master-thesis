@@ -1,5 +1,4 @@
-\section{Computing Non-relational collecting}
-\label{sec:computingnonrel}
+\section{Computing Non-relational collecting}\label{sec:computingnonrel}
 
 In this section we argue that the same method we used in
 section~\ref{sec:computingint} can be applied to the non-relational
@@ -319,7 +318,6 @@ Problem~\ref{p:nonrel}.
   \begin{equation}
     \label{eq:seq2nr}
     \max(\semnr{\com_2} \eta_1' \var[y]) \geq \max(\eta_1' \var[w]) + h_2
-    \tag{\dag}
   \end{equation}
   
   Now observe that
@@ -342,7 +340,6 @@ Problem~\ref{p:nonrel}.
   \begin{equation}
     \label{eq:seq1nr}
     \max(\semnr{\com_1} \eta' \var[w]) \geq \max(\eta' \var[w]') + h_1
-    \tag{\ddag}
   \end{equation}
 
   Now, for all \(\eta' \in \bCnr\) with \(\eta \nrsubseteq \eta'\) we have that:
@@ -439,15 +436,13 @@ Problem~\ref{p:nonrel}.
   \(|h| \leq \bound{\fix{\com}}\) such that:
   \begin{equation}\label{eq:maxendmaxstartnr}
     \max(\semnr{\fix{\com}} \eta \var[y]) = \max(\eta \var[z]) + h
-    \tag{i}
   \end{equation}
   and for all \(\eta' \nrsupseteq \eta\),
   \begin{equation}\label{eq:maxmiddlemaxendnr}
     \max(\semnr{\fix{\com}} \eta' \var[y]) \geq \max(\eta' \var[z]) + h
-    \tag{ii}
   \end{equation}
   
-  Let us consider \eqref{eq:maxendmaxstart}. We first observe that we
+  Let us consider~\eqref{eq:maxendmaxstart}. We first observe that we
   can define a path
   \begin{equation}
     \label{eq:fixnr}

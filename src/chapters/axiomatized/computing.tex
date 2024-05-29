@@ -184,7 +184,7 @@ Notice in particular that since
         \max(\semi{\var \in S}\eta \var[y]) = \max(\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S)))
       \end{equation*}
       Note that it cannot be \(\max(S)\in \z\). Otherwise, by
-      Definition~\ref{de:bound},
+      Definition~\ref{def:bound},
       \(\max ({\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S))})
       \leq \max(S)= \bound{\var \in S}\), violating the assumption
       \(\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
@@ -382,7 +382,6 @@ Notice in particular that since
     \begin{equation}
       \label{eq:seq2}
       \max(\semi{\com_2} \eta_1' \var[y]) \geq \max(\eta_1' \var[w]) + h_2
-      \tag{\dag}
     \end{equation}
     
     Now observe that
@@ -406,7 +405,6 @@ Notice in particular that since
     \begin{equation}
       \label{eq:seq1}
       \max(\semi{\com_1} \eta' \var[w]) \geq \max(\eta' \var[w]') + h_1
-      \tag{\ddag}
     \end{equation}
 
     Summing up:
@@ -496,12 +494,10 @@ Notice in particular that since
     \(|h| \leq \bound{\fix{\com}}\) such that:
     \begin{equation}\label{eq:maxendmaxstartaxio}
       \max(\semi{\fix{\com}} \eta \var[y]) = \max(\eta \var[z]) + h
-      \tag{i}
     \end{equation}
     and for all \(\eta' \sqsupseteq \eta\),
     \begin{equation}\label{eq:maxmiddlemaxendaxio}
       \max(\semi{\fix{\com}} \eta' \var[y]) \geq \max(\eta' \var[z]) + h
-      \tag{ii}
     \end{equation}
     
     Let us consider\ \eqref{eq:maxendmaxstartaxio}. We first observe that we
@@ -688,11 +684,12 @@ each variable's interval. I.e., the following property also holds:
   \(|h| \leq \lbound{\com}\) s.t. the following two properties hold:
   
   \begin{enumerate}[label=(\roman*)]
-  \item \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[z]) + h\); \label{point1min}
-  \item  for all \(\eta' \in \inte\), if \(\eta' \sqsupseteq \eta\)
+  \item \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[z]) + h\);
+  \item for all \(\eta' \in \inte\), if \(\eta' \sqsupseteq \eta\)
     % and \(\semi{\com}\eta' \neq \top\)
     then
-    \(\min(\semi{\com}\eta' \var[y]) \leq \min(\eta' \var[z]) + h\). \label{point2min}
+    \(\min(\semi{\com}\eta' \var[y]) \leq \min(\eta' \var[z]) +
+    h\).
   \end{enumerate}
 \end{lemma}
 

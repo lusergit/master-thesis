@@ -430,9 +430,9 @@ that the second one does not diverge.
       % \end{align*}
       Now we can preliminarly observe that by calling
       \(\beta = \semnr{\fix\com}\eta\)
-      \begin{equation*}
+      \begin{equation}\label{eq:comfixbound}
         |\beta\var| \neq\infty \Rightarrow \semnr{\com\ndet\tru}\beta\var \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var
-      \end{equation*}
+      \end{equation}
       \begin{align*}
         \max(\semnr{\com\ndet\tru}\beta\var) & \leq \max(\beta) + \bound{\com\ndet\tru} = \max(\beta) + \bound{\com} \\
                                              & \leq \max(\eta) + \bound{\fix\com} + \bound{\com} & \text{by Lemma~\ref{le:incnr}} \\
@@ -446,7 +446,7 @@ that the second one does not diverge.
       \end{equation*}
       hence
       \begin{align*}
-        \beta\var = \semnr{\com\ndet\tru}\beta\var & \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var \\
+        \beta\var = \semnr{\com\ndet\tru}\beta\var & \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var & \text{by~\eqref{eq:comfixbound}}\\
                                                    & \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}{\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\eta & \text{by induction on } i\\
                                                    & = {\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^{i+1}\eta
       \end{align*}
