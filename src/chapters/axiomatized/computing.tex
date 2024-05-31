@@ -101,6 +101,19 @@ intervals. More in detail \(\max : \Int \to \z\) is defined as follows
 Notice in particular that since
 \(\top = \interval{-\infty}{+\infty}\), \(\max(\top) = +\infty\).
 
+We will now prove a fundamental property of analaysis over the lattice
+of intervals: if a variable in a program does not diverge, then the
+increment of that variable is bounded by the constants in the
+program. This property will later be useful to restrict the domain of
+intervals (which incorporates infinite ascending and descending
+chains) to one of its subsets that does not contain such chains.
+
+\begin{notation}
+  For the following proof and whenever we will refer to the abstract
+  semantics over intervals we will use the notation \(\semi{\cdot}\)
+  to refer to \(\semi[\inte]{\cdot}\).
+\end{notation}
+
 % Increment lemma
 \begin{lemma}\label{le:inc}
   Let \(\com\in \imp\).
