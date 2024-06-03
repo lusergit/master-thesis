@@ -349,9 +349,9 @@ Definition~\ref{def:bca}) induce sound semantics:
   \begin{align*}
     \semi[\bA]{\fix{\com}} \eta & = \lfp\left({\lambda \mu. \left(\eta \sqcup \semi[\bA]{\com} \mu\right)}\right) \\
     & = \lfp\left({\lambda \mu. \left(\eta \sqcup \mu \sqcup \semi[\bA]{\com} \mu\right)}\right) &  \text{By~\eqref{prop3}}\\
-    & = \bigsqcup_{i \in \nat} {\left(\eta \sqcup \tru \sqcup \semi[\bA]{\com}\right)}^i \bot & \text{By Knaster-Tarski Theorem} \\
-    & = \bot \sqcup \bigsqcup_{i \in \nat} {\left(\eta \sqcup \tru \sqcup \semi[\bA]{\com}\right)}^{i+1} \bot \\
-    & = \bigsqcup_{i \in \nat} {\left(\tru \sqcup \semi[\bA]{\com}\right)}^{i} \eta & \text{By~\eqref{prop2}}\\
+    & = \bigsqcup_{i \in \nat} {f}^i \bot & \text{By Knaster-Tarski Theorem} \\
+    & = \bot \sqcup \bigsqcup_{i \in \nat} {f}^{i+1} \bot \\
+    & = \bigsqcup_{i \in \nat} {g}^{i} \eta & \text{By~\eqref{prop2}}\\
     & = \semi[\bA]{\kleene{\left(\tru + \com\right)}} \eta
   \end{align*}  
 \end{proof}
