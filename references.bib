@@ -154,27 +154,19 @@ doi = {10.4064/fm-8-1-114-134}}
   doi={10.1090/qam/102435}
 }
 
-@Inbook{Gawlitza2009,
-author="Gawlitza, Thomas
-and Leroux, J{\'e}r{\^o}me
-and Reineke, Jan
-and Seidl, Helmut
-and Sutre, Gr{\'e}goire
-and Wilhelm, Reinhard",
-editor="Albers, Susanne
-and Alt, Helmut
-and N{\"a}her, Stefan",
-title="Polynomial Precise Interval Analysis Revisited",
-bookTitle="Efficient Algorithms: Essays Dedicated to Kurt Mehlhorn on the Occasion of His 60th Birthday",
-year="2009",
-publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
-pages="422--437",
-abstract="We consider a class of arithmetic equations over the complete lattice of integers (extended with -∞ and ∞) and provide a polynomial time algorithm for computing least solutions. For systems of equations with addition and least upper bounds, this algorithm is a smooth generalization of the Bellman-Ford algorithm for computing the single source shortest path in presence of positive and negative edge weights. The method then is extended to deal with more general forms of operations as well as minima with constants. For the latter, a controlled widening is applied at loops where unbounded increase occurs. We apply this algorithm to construct a cubic time algorithm for the class of interval equations using least upper bounds, addition, intersection with constant intervals as well as multiplication.",
-isbn="978-3-642-03456-5",
-doi="10.1007/978-3-642-03456-5_28",
-url="https://doi.org/10.1007/978-3-642-03456-5_28"
-}
+@book{Gawlitza2009,
+author={Gawlitza, Thomas and Leroux, J{\'e}r{\^o}me and Reineke, Jan and Seidl, Helmut and Sutre, Gr{\'e}goire and Wilhelm, Reinhard},
+editor={Albers, Susanne and Alt, Helmut and N{\"a}her, Stefan},
+title={Polynomial Precise Interval Analysis Revisited},
+bookTitle={Efficient Algorithms: Essays Dedicated to Kurt Mehlhorn on the Occasion of His 60th Birthday},
+year={2009},
+publisher={Springer Berlin Heidelberg},
+address={Berlin, Heidelberg},
+pages={422--437},
+abstract={We consider a class of arithmetic equations over the complete lattice of integers (extended with -∞ and ∞) and provide a polynomial time algorithm for computing least solutions. For systems of equations with addition and least upper bounds, this algorithm is a smooth generalization of the Bellman-Ford algorithm for computing the single source shortest path in presence of positive and negative edge weights. The method then is extended to deal with more general forms of operations as well as minima with constants. For the latter, a controlled widening is applied at loops where unbounded increase occurs. We apply this algorithm to construct a cubic time algorithm for the class of interval equations using least upper bounds, addition, intersection with constant intervals as well as multiplication.},
+isbn={978-3-642-03456-5},
+doi={10.1007/978-3-642-03456-5_28},
+url={https://doi.org/10.1007/978-3-642-03456-5_28}}
 
 @article{nasa:ten,
   author={Holzmann, G.J.},
@@ -186,3 +178,220 @@ url="https://doi.org/10.1007/978-3-642-03456-5_28"
   pages={95-99},
   keywords={Upper bound;Testing;Software safety;NASA;Laboratories;Statistical analysis;Job shop scheduling;Guidelines;Performance evaluation;Data encapsulation;software technologies;coding rules;software development},
   doi={10.1109/MC.2006.212}}
+
+@inproceedings{art:meltdown,
+ author = {Moritz Lipp and Michael Schwarz and Daniel Gruss and Thomas Prescher and Werner Haas and Anders Fogh and Jann Horn and Stefan Mangard and Paul Kocher and Daniel Genkin and Yuval Yarom and Mike Hamburg},
+ title = {Meltdown: Reading Kernel Memory from User Space},
+ booktitle = {27th {USENIX} Security Symposium ({USENIX} Security 18)},
+ year = {2018}}
+
+@inproceedings{art:spectre,
+ author = {Paul Kocher and Jann Horn and Anders Fogh and Daniel Genkin and Daniel Gruss and Werner Haas and Mike Hamburg and Moritz Lipp and Stefan Mangard and Thomas Prescher and Michael Schwarz and Yuval Yarom},
+ title = {Spectre Attacks: Exploiting Speculative Execution},
+ booktitle = {40th IEEE Symposium on Security and Privacy},
+ year = {2019}}
+
+@article{art:worm1,
+author = {Spafford, Eugene H.},
+title = {The internet worm program: an analysis},
+year = {1989},
+issue_date = {Jan. 1989},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {19},
+number = {1},
+issn = {0146-4833},
+url = {https://doi.org/10.1145/66093.66095},
+doi = {10.1145/66093.66095},
+abstract = {On the evening of 2 November 1988, someone infected the Internet with a worm program. That program exploited flaws in utility programs in systems based on BSD-derived versions of UNIX. The flaws allowed the program to break into those machines and copy itself, thus infecting those systems. This program eventually spread to thousands of machines, and disrupted normal activities and Internet connectivity for many days.This report gives a detailed description of the components of the worm program---data and functions. It is based on study of two completely independent reverse-compilations of the worm and a version disassembled to VAX assembly language. Almost no source code is given in the paper because of current concerns about the state of the "immune system" of Internet hosts, but the description should be detailed enough to allow the reader to understand the behavior of the program.The paper contains a review of the security flaws exploited by the worm program, and gives some recommendations on how to eliminate or mitigate their future use. The report also includes an analysis of the coding style and methods used by the author(s) of the worm, and draws some conclusions about his abilities and intent.},
+journal = {SIGCOMM Comput. Commun. Rev.},
+month = {jan},
+pages = {17–57},
+numpages = {41}
+}
+
+@inproceedings{art:worm2,
+  title={A Tour of the Worm},
+  author={Seeley, Donn},
+  booktitle={Proceedings of 1989 Winter USENIX Conference, Usenix Association, San Diego, CA, February},
+  year={1989}
+}
+
+@article{art:worm3,
+  author={Orman, H.},
+  journal={IEEE Security \& Privacy}, 
+  title={The Morris worm: a fifteen-year perspective}, 
+  year={2003},
+  volume={1},
+  number={5},
+  pages={35-43},
+  keywords={Computer worms;Computer security;Application software;IP networks;Operating systems;Web and internet services;Privacy;Brushes;Fires;Mobile agents},
+  doi={10.1109/MSECP.2003.1236233}}
+
+@article{art:worm4,
+author = {Eisenberg, T. and Gries, D. and Hartmanis, J. and Holcomb, D. and Lynn, M. S. and Santoro, T.},
+title = {The Cornell commission: on Morris and the worm},
+year = {1989},
+issue_date = {June 1989},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {32},
+number = {6},
+issn = {0001-0782},
+url = {https://doi.org/10.1145/63526.63530},
+doi = {10.1145/63526.63530},
+abstract = {After careful examination of the evidence, the Cornell commission publishes its findings in a detailed report that sheds new light and dispels some myths about Robert T. Morris and the Internet worm.},
+journal = {Commun. ACM},
+month = {jun},
+pages = {706–709},
+numpages = {4}
+}
+
+@article{10.1145/251880.251992,
+author = {Dowson, Mark},
+title = {The Ariane 5 software failure},
+year = {1997},
+issue_date = {March 1997},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {22},
+number = {2},
+issn = {0163-5948},
+url = {https://doi.org/10.1145/251880.251992},
+doi = {10.1145/251880.251992},
+journal = {SIGSOFT Softw. Eng. Notes},
+month = {mar},
+pages = {84},
+numpages = {1}
+}
+
+@inproceedings{art:arianecode,
+       author = {{Lacan}, Ph. and {Monfort}, J.~N. and {Ribal}, L.~V.~Q. and {Deutsch}, A. and {Gonthier}, G.},
+        title = "{ARIANE 5 - The Software Reliability Verification Process}",
+    booktitle = {DASIA 98 - Data Systems in Aerospace},
+         year = 1998,
+       editor = {{Kaldeich-Sch{\"u}rmann}, B.},
+       series = {ESA Special Publication},
+       volume = {422},
+        month = jul,
+        pages = {201},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/1998ESASP.422..201L},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+@inproceedings{art:arianeabstract,
+  author={Le Lann, G.},
+  booktitle={Proceedings International Conference and Workshop on Engineering of Computer-Based Systems}, 
+  title={An analysis of the Ariane 5 flight 501 failure-a system engineering perspective}, 
+  year={1997},
+  volume={},
+  number={},
+  pages={339-346},
+  keywords={Failure analysis;Aerospace engineering;Systems engineering and theory;Cascading style sheets;Computer industry;Delay;Appraisal;Terminology;Bridges;Engineering drawings},
+  doi={10.1109/ECBS.1997.581900}}
+
+@inproceedings{10.1145/3209108.3209109,
+author = {O'Hearn, Peter W.},
+title = {Continuous Reasoning: Scaling the impact of formal methods},
+year = {2018},
+isbn = {9781450355834},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3209108.3209109},
+doi = {10.1145/3209108.3209109},
+abstract = {This paper describes work in continuous reasoning, where formal reasoning about a (changing) codebase is done in a fashion which mirrors the iterative, continuous model of software development that is increasingly practiced in industry. We suggest that advances in continuous reasoning will allow formal reasoning to scale to more programs, and more programmers. The paper describes the rationale for continuous reasoning, outlines some success cases from within industry, and proposes directions for work by the scientific community.},
+booktitle = {Proceedings of the 33rd Annual ACM/IEEE Symposium on Logic in Computer Science},
+pages = {13–25},
+numpages = {13},
+keywords = {Reasoning, Continuous Integration},
+location = {Oxford, United Kingdom},
+series = {LICS '18}
+}
+
+@article{10.1145/3371078,
+author = {O'Hearn, Peter W.},
+title = {Incorrectness logic},
+year = {2019},
+issue_date = {January 2020},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {4},
+number = {POPL},
+url = {https://doi.org/10.1145/3371078},
+doi = {10.1145/3371078},
+abstract = {Program correctness and incorrectness are two sides of the same coin. As a programmer, even if you would like to have correctness, you might find yourself spending most of your time reasoning about incorrectness. This includes informal reasoning that people do while looking at or thinking about their code, as well as that supported by automated testing and static analysis tools. This paper describes a simple logic for program incorrectness which is, in a sense, the other side of the coin to Hoare's logic of correctness.},
+journal = {Proc. ACM Program. Lang.},
+month = {dec},
+articleno = {10},
+numpages = {32},
+keywords = {none}
+}
+
+@article{10.1145/3338112,
+author = {Distefano, Dino and F\"{a}hndrich, Manuel and Logozzo, Francesco and O'Hearn, Peter W.},
+title = {Scaling static analyses at Facebook},
+year = {2019},
+issue_date = {August 2019},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {62},
+number = {8},
+issn = {0001-0782},
+url = {https://doi.org/10.1145/3338112},
+doi = {10.1145/3338112},
+abstract = {Key lessons for designing static analyses tools deployed to find bugs in hundreds of millions of lines of code.},
+journal = {Commun. ACM},
+month = {jul},
+pages = {62–70},
+numpages = {9}
+}
+
+@article{1621009,
+  author={Jones, C. and O'Hearn, P. and Woodcock, J.},
+  journal={Computer}, 
+  title={Verified software: a grand challenge}, 
+  year={2006},
+  volume={39},
+  number={4},
+  pages={93-95},
+  keywords={Warranties;Computer architecture;Software tools;Application software;Computer science;Costs;Software testing;Physics computing;Snow;Tires;Software technologies;Verification Challenge;Formal methods},
+  doi={10.1109/MC.2006.145}}
+
+@Inbook{Hoare2008,
+author={Hoare, Tony and Misra, Jay},
+editor={Meyer, Bertrand
+and Woodcock, Jim},
+title={Verified Software: Theories, Tools, Experiments Vision of a Grand Challenge Project},
+bookTitle={Verified Software: Theories, Tools, Experiments: First IFIP TC 2/WG 2.3 Conference, VSTTE 2005, Zurich, Switzerland, October 10-13, 2005, Revised Selected Papers and Discussions},
+year={2008},
+publisher={Springer Berlin Heidelberg},
+address={Berlin, Heidelberg},
+pages={1--18},
+abstract={The ideal of correct software has long been the goal of research in Computer Science. We now have a good theoretical understanding of how to describe what programs do, how they do it, and why they work.This understanding has already been applied to the design, development and manual verification of simple programs of moderate size that are used in critical applications.Automatic verification could greatly extend the benefits of this technology.},
+isbn={978-3-540-69149-5},
+doi={10.1007/978-3-540-69149-5_1},
+url={https://doi.org/10.1007/978-3-540-69149-5_1}}
+
+@article{1707636,
+  author={Woodcock, J.},
+  journal={Computer}, 
+  title={First Steps in the Verified Software Grand Challenge}, 
+  year={2006},
+  volume={39},
+  number={10},
+  pages={57-64},
+  keywords={Computer industry;Collaborative software;Computer bugs;Software reliability;Production;Software engineering;Computer science;Productivity;Software maintenance;Software design;software engineering;verified software grand challenge},
+  doi={10.1109/MC.2006.340}}
+
+@incollection{10.7551/mitpress/12274.003.0008,
+    author = {Turing, Alan Mathison},
+    isbn = {9780262363174},
+    title = "{On Computable Numbers, with an Application to the Entscheidungsproblem (1936)}",
+    booktitle = "{Ideas That Created the Future: Classic Papers of Computer Science}",
+    publisher = {The MIT Press},
+    year = {2021},
+    month = {02},
+    doi = {10.7551/mitpress/12274.003.0008},
+    url = {https://doi.org/10.7551/mitpress/12274.003.0008},
+    eprint = {https://direct.mit.edu/book/chapter-pdf/2248314/9780262363174\_c000500.pdf},
+}

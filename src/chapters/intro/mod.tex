@@ -1,0 +1,65 @@
+\chapter*{Introduction}\label{ch:intro}
+\addcontentsline{toc}{chapter}{Introduction}
+% \section{Introduction and related work}\label{sec:prev}
+
+Because of its widespread adoption software has become a crucial
+aspect of everyone's life for all sorts of tasks, from the more
+mundane ones -- like sending text messages or view online content --
+to the most crucial ones. Banking, aviation, space industry, car
+controls are only a small example of important everyday tasks that
+software runs in the modern era. Such tasks demand requirements of
+safety and reliability which are difficult to pair with the growing
+complexity and size of contemporary software. Errors can be exphensive
+both in monetary and in human lives terms, hence preventing them
+becomes more and more valuable as well as detecting them early.
+
+A notable example of such bugs are Meltdown and
+Spectre~\cite{art:meltdown,art:spectre}. Those vulnerabilities
+exploted an hardware related bug in floating-point division to access
+data outside the bounds imposed to a program y the operating system,
+resulting in the theft of arbitrary data, meaning a malicius actor
+could access -- for example -- passwords stored locally or -- more
+realistically -- data of other customers in a cloud environment.
+
+Another notable example is the first internet worm, which allowed the
+deployer to run arbitrary code on a significant portion of the
+computers on the internet at the
+time~\cite{art:worm1,art:worm2,art:worm3,art:worm4}.
+
+The last example is set on 4 June 1996, when the Ariane 501 satellite
+launch failed catastrophically 40 seconds after initiation of the
+flight sequence, incurring a direct cost of approximately 370 million
+US dollars~\cite{10.1145/251880.251992}. To asses the causes of the
+incident, the automated analysis of the Ariane
+code~\cite{art:arianecode} was done using a static analyzer based on
+Abstract Interpretation~\cite{art:arianeabstract}.
+
+\emph{Software verification} is therefore a crucial task, which cannot
+be accomplished using testing practices alone: testing in fact can be
+used to show the \emph{presence} of bugs (if a test fails the bug
+occur), but they do not offer any \emph{mathematical guarantee} of
+their absence. The latter can be obtained trough \emph{formal
+  methods}, i.e., by mathematical proving the correctness of a program
+with respect to some \emph{specification}.
+
+\paragraph*{Formal methods.} Despite the progress done to bring the
+usefulness of formal methods to everyone (e.g.\
+with~\cite{10.1145/3371078, 10.1145/3338112} or with the Grand
+Challenge of software verification~\cite{1621009,Hoare2008,1707636})
+their use is still restricted to specific niches of developers. This
+is due to some prblems with the technique itself. Firstly, the problem
+is intrinsic in the theory of computation. Consider the following
+program in a pseudo-C language
+
+\begin{lstlisting}[language=C,escapechar=|]
+  int* p = NULL;
+  arbitrary_function();
+  *p = 0;|\label{line:crash}|
+\end{lstlisting}
+
+If control reaches Line~\ref{line:crash} the program will crash (as we
+are trying to access address \(\mathsf{0x0}\)). Hence we have to prove
+that \(\mathsf{arbitrary\_function()}\) does not halt. Unfortunately
+Turing~\cite{10.7551/mitpress/12274.003.0008} shows that this problem
+is undecidable. Moreover, because of Rice's
+Theorem~\cite{rice1953classes}

@@ -1,7 +1,7 @@
 \section{Computing non-relational collecting semantics}\label{sec:computingnonrel}
 
 In the following section we follow the same scheme used in
-Section~\ref{sec:computing} in order to prove that we can also bound
+\secref{sec:computing} in order to prove that we can also bound
 the non relational collecting domain to ensure convergence while
 obtaining the most precise interval.  To start, we rely on
 Definition~\ref{def:minmax} of \(\min\) and \(\max\) values of an
@@ -204,7 +204,7 @@ that the second one does not diverge.
     \(k_1\leq \min(\eta) - \nlbound{\var \in I}\) and
     \(k_1\geq \max(\eta) + \nbound{\var \in I}\). Notice that since
     \(\semnr{\var \in I}\eta\) updates only the variable \(\var\), the
-    only case we're interested in is when \(\var[y] = \var\). This
+    only case we are interested in is when \(\var[y] = \var\). This
     applies also for next base cases, hence we will omit this
     observation in future base cases.
 
@@ -216,7 +216,7 @@ that the second one does not diverge.
     \(\abstr[k_1,k_2]({\emptyset}) = \emptyset \sqsupseteq \emptyset\)
     our thesis holds. Otherwise
     \(\eta\var \cap \concr[\inte](I) = S \neq \emptyset\). In this
-    case we're under the hypothesis that
+    case we are under the hypothesis that
     \(|\eta\var\cap\concr[\inte](I)| = |\semnr{\var\in I}\eta\var|
     \neq +\infty\), hence by Lemma~\ref{le:incnr}
     \begin{align*}

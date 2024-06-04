@@ -253,11 +253,10 @@ of best correct approximations over \(\binte{k_1}{k_2}\).
   where \(\com[e]\in\expr\). 
 \end{definition}
 \noindent
-Notice that for basic expressions we're using the best correct
-approximation
-\(\dabstr[k_1,k_2] \circ \semi{\com[e]} \circ \id\), which
-allows us to prove the soundness of the analysis over
-\(\binte{k_1}{k_2}\) w.r.t. the analysis over \(\inte\):
+Notice that for basic expressions we are using the best correct
+approximation \(\dabstr[k_1,k_2] \circ \semi{\com[e]} \circ \id\),
+which allows us to prove the soundness of the analysis over
+\(\binte{k_1}{k_2}\) w.r.t.\ the analysis over \(\inte\):
 \begin{lemma}\label{le:leq}
   for all \(k_1, k_2\in\z\) s.t.\ \(k_1 \leq k_2\),
   \(\rho \in \binte{k_1}{k_2}\)
@@ -347,9 +346,8 @@ as the analysis on \(\inte\).
 
 \begin{proof}
   Notice that because of Lemma~\ref{le:leq} the statement
-  \({\semi{\com}\rho} \sqsubseteq
-  {\bsemi{k_1}{k_2}{\com}\rho}\) already holds. Therefore what
-  we're left to prove is that
+  \({\semi{\com}\rho} \sqsubseteq {\bsemi{k_1}{k_2}{\com}\rho}\)
+  already holds. Therefore what we are left to prove is that
   \begin{equation*}
     \semi{\com}\rho \sqsupseteq \bsemi{k_1}{k_2}{\com}\rho
   \end{equation*}
