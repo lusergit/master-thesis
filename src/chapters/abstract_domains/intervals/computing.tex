@@ -121,10 +121,9 @@ respect to that variable becomes stable. % We also introduce an
 \end{definition}
 
 In order to compute the bound of a program we introduce bounded
-environments, that we'll later use for lemma~\ref{le:computebounds}
+environments, that we will later use for Lemma~\ref{le:computebounds}
 
-\begin{definition}[\textbf{Bound Environment}]
-  \label{de:boundenv}
+\begin{definition}[\textbf{Bound Environment}]\label{de:boundenv}
   A bound environment (benv for short) is a total function \(b:\Var
   \to \nat\). We define \(\benv \veq \{ b \mid b:\Var \to \nat\}\).
   Each command \(\com\in \imp\) induces a benv transformer

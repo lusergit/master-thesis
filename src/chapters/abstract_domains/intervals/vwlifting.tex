@@ -1,5 +1,4 @@
-\subsection{Variable-wise lifting}
-\label{sub:vwintervals}
+\subsection{Variable-wise lifting}\label{sub:vwintervals}
 
 We can therefore proceed to introduce the variable-wise lifting of the
 \(\Int\) domain, building the abstract domain \(\inte\):
@@ -56,4 +55,24 @@ and \(\sqcap\) operations. i.e., let \(\eta, \theta \in \inte\), then
 
 Again we can notice that \(\tuple{\inte, \sqsubseteq}\) is a complete
 lattice, as for every two elements \(\eta,\theta\in\inte\) there
-exists both \(\eta \sqcup \theta\) and \(\eta \sqcap \theta\).
+exists both \(\eta \sqcup \theta\) and \(\eta \sqcap \theta\).  With
+these premises we can define our abstract inductive semantics on
+intervals, by defining the base operations
+\(\absem[\inte]{\cdot} : \expr \to \inte \to \inte\)
+
+\begin{definition}[Base expressions on intervals]
+  Let \(\eta \in \inte\) then the base expressions semantics
+  \(\absem[\inte]{\cdot} : \expr \to \inte \to \inte\) is recursively
+  defined as
+  \begin{align*}
+    \absem[\inte]{\var\in I}\eta & \defin
+                                   \begin{cases}
+                                     \eta[\var\mapsto\eta\var\sqcap I] & \text{if } \eta\var\sqcap I \neq \bot \\
+                                     \bot & \text{otherwise}
+                                   \end{cases} \\
+    \absem[\inte]{\var := k}\eta & \defin \eta[\var\mapsto\interval{k}{k}] \\
+    \absem[\inte]{\var := \var[y] + k}\eta & \defin \eta[\var\mapsto \eta\var[y] + k] \\
+  \end{align*}
+\end{definition}
+With these base operations, \(\semi[\inte]{\cdot}\) is defined
+accordingly to Definition~\ref{def:abstrsem}.

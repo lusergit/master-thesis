@@ -129,7 +129,7 @@ which is sound by construction:
   \({\absem[\bbCnr{k_1}{k_2}]{\cdot} : \expr \to \bbCnr{k_1}{k_2} \to
     \bbCnr{k_1}{k_2}}\) as
   \begin{equation*}
-    \absem[\bbCnr{k_1}{k_2}]{\com[e]} \defin \abstr[k_1,k_2] \left(\absem[\bCnr]{\com[e]} \right)
+    \absem[\bbCnr{k_1}{k_2}]{\com[e]} \defin \abstr[k_1,k_2] \conc \absem[\bCnr]{\com[e]}
   \end{equation*}
   i.e.\ the best correct abstraction.
 \end{definition}
@@ -165,10 +165,53 @@ given \(a,b,c,d \in \z\) s.t.\ \(a\leq b\) and \(c \leq d\). Then
   \bbCnr{a}{b} \preceq \bbCnr{c}{d} \iff a \leq c \land d \leq b
 \end{equation*}
 
-The next step is to notice that as a consequence of bounds and
-Lemma~\ref{le:incnr} also bounded non collecting relational semantics
-can compute the same result of its unbounded counterpart, provided
-that the second one does not diverge.
+We bounded our analysis the same way we did with interval analysis in
+Definition~\ref{def:boundedint}. This initial solution however has a
+problem. Consider the following code snippet:
+\begin{lstlisting}[language=Imp,caption=Snippet where bounded analysis diverges from the unbounded counterpart, label=code3]
+  x := 0
+  y := 0
+  while (x < 1)
+    x := x + 1
+    y := y + 2
+  if (y = 1)
+    x := 2
+\end{lstlisting}
+before entering the \textcolor{blue}{\texttt{while}} loop variables
+are bounded to singleton sets
+\(\var \mapsto \{0\}, \var[y] \mapsto \{0\}\). Non-relational
+collecting semantics can infer for \(\var\) the set
+\(\var\mapsto \{0,1\}\), since the condition to enter the loop filters
+for \(\var \mapsto \{0\}\). For \(\var[y]\) however the guard does not
+filter anything (since the condition is on \(\var\) and the domain is
+non-relational). Hence after the loop non-relational collecting
+analysis infers the set of even numbers \(\mathbb{P}\):
+\(\var[y] \mapsto \mathbb{P}\). Since the set is infinite at some
+point it will surely exceed the program bound, which is a number in
+\(\n\). Hence the bounded analysis, after the loop can infer
+\(\var\mapsto\{0,1\}, \var[y] \mapsto \top\). The last
+\textcolor{blue}{\texttt{if}} is however where the two analysis
+diverge completely (while remaining sound): the original
+non-relational collecting, since inferred
+
+\begin{definition}[Smashed \(\top\) non realtional collecting]
+  Let
+  \begin{equation*}
+    \bposet{k_1}{k_2}{\z} \defin \{S \subseteq \z \mid S \neq \emptyset \land \forall x \in S \quad k_1 \leq x \leq k_2\}.
+  \end{equation*}
+  We define \(\btbCnr{k_1}{k_2}\) as
+  \begin{equation*}
+    \btbCnr{k_1}{k_2} \defin (\Var \to \bposet{k_1}{k_2}{\z}) \cup \{\bot, \top\}
+  \end{equation*}
+\end{definition}
+Notice that contrary to latter definition of \(\bbCnr{k_1}{k_2}\) in
+this case we have a smashed top element. The idea is that whenever a
+variable divergeswe would conclude that the whole precise analysis
+diverges, in order to solve Problem~\ref{problem1} and decide analysis
+termination.
+
+In the following chapter we will refer to
+\(\semi[\btbCnr{k_1}{k_2}]{\cdot}\) as \(\bsemnr{k_1}{k_2}{\cdot}\).
 
 \begin{theorem}
   Let \(\com\in\imp\) be a program. Then, for all finitely supported
@@ -178,7 +221,7 @@ that the second one does not diverge.
   \(k_2 \geq \max(\eta) + \nbound{\com}\) then for all
   \(\var\in\Var_{\com}\):
   \begin{equation*}
-    |\semnr{\com}\eta\var| \neq +\infty \quad \Rightarrow \quad \semnr{\com}\eta\var = \bsemnr{k_1}{k_2}{\com}\eta\var
+    \bsemnr{k_1}{k_2}{\com}\eta \neq \top \quad \Rightarrow \quad \semnr{\com}\eta = \bsemnr{k_1}{k_2}{\com}\eta
   \end{equation*}
   i.e., if the analysis over \(\bCnr\) for some variable \(\var\) does
   not diverge, then the analysis over \(\bbCnr{k_1}{k_2}\) for that
@@ -190,7 +233,9 @@ that the second one does not diverge.
   covering first the base cases of \(\expr\) expressions and then the
   inductive cases of \(\imp\). Notice that because of
   Lemma~\ref{le:soundnr}
-  \(\semnr{\com} \eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\com}\eta\)
+  \begin{equation*}
+    \semnr{\com} \eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\com}\eta \ovdot\subseteq \concr\left(\bsemnr{k_1}{k_2}{\com}\eta\right)
+  \end{equation*}
   already holds for every \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\),
   hence what we have to prove for every case is that
   \(|\semnr{\com}\eta\var| \neq +\infty \Rightarrow \semnr{\com} \eta

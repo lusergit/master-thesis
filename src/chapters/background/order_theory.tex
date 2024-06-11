@@ -35,8 +35,8 @@ order and lattice theory.
   \(Z \subseteq X\). We say that \(\overline{z} \in Z\) is an
   \emph{upper bound} of \(Z\) if \(\forall z \in Z\)
   \(z \sqsubseteq \overline{z}\). It is the \emph{least upper bound}
-  of \(Z\) (denoted as \(\sqcup{Z}\)) if \(\forall z'\) upper bounds
-  of \(Z\), \(\overline{z} \sqsubseteq z'\).
+  of \(Z\) if \(\forall z'\) upper bounds of \(Z\),
+  \(\overline{z} \sqsubseteq z'\).
 \end{definition}
 
 \begin{definition}[Greatest lower bound]
@@ -44,13 +44,13 @@ order and lattice theory.
   \(Z \subseteq X\). We say that \(\overline{z}\in Z\) is a
   \emph{lower bound} of \(Z\) if \(\forall z \in Z\)
   \(\overline{z} \sqsubseteq z\). It is the \emph{greatest lower
-    bound} of \(Z\) (denoted as \(\sqcap{Z}\)) if \(\forall z'\) upper
-  bounds of \(Z\), \(z' \sqsubseteq \overline{z}\).
+    bound} of \(Z\) if \(\forall z'\) upper bounds of \(Z\),
+  \(z' \sqsubseteq \overline{z}\).
 \end{definition}
 
 Usually then we are talking about least and greatest lower bound the
 host set is often implicit, and we therefore simply write
-\(\lubof{Z}\) and \(\glbof{Z}\).  In abstract interpretation we often
+\(\lub({Z})\) and \(\glb({Z})\).  In abstract interpretation we often
 rely on special kinds of POSets, where the existence of the greatest
 lower bound and the least upper bound is ensured for each subset of
 the original POSet. These sets are called complete lattices
@@ -74,9 +74,9 @@ concept of chains:
   \end{equation*}
 \end{definition}
 
-\begin{definition}
-  \(\tuple{D, \sqsubseteq}\) is a chain complete partially ordered set
-  (ccpo) if every chain of \(D\) has a least upper bound.
+\begin{definition}[\textbf{CCPOs}] A chain complete partially ordered
+  set (ccpo) is a poset \(\tuple{D, \sqsubseteq}\) such that every
+  chain of \(D\) has a least upper bound.
 \end{definition}
 
 % We're also interested in join morphisms

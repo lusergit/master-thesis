@@ -42,7 +42,7 @@
 \RequirePackage{xcolor}
 \RequirePackage{emptypage}
 \RequirePackage[size=tiny]{todonotes}
-\bibliography{references}
+% \RequirePackage[Glenn]{fncychap}
 
 \RequirePackage{import}
 
@@ -51,6 +51,9 @@
 \RequirePackage{intervalc}
 \RequirePackage{inductive}
 
+% ===================== PACKAGE INITIALIZATION AND SETUP =====================
+
+\bibliography{references}
 \definecolor{unipdred}{RGB}{155,0,20}
 
 \geometry{
@@ -69,7 +72,7 @@
 
 \hypersetup{
     %hyperfootnotes=false,
-    %pdfpagelabels,
+    pdfpagelabels,
     colorlinks=true,
     linktocpage=true,
     pdfstartpage=1,

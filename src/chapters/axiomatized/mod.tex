@@ -1,5 +1,5 @@
 % !TeX root = ../mod.tex
-\chapter{Program bounds and analysis termination}\label{chap:axiomatized}
+\chapter{Program bounds and analysis termination}\label{ch:axiomatized}
 
 %% Framework, introduzione al linguaggio e alle sue proprietà, si
 %% definisce la semantica e si dimostrano un paio di cose
@@ -37,14 +37,14 @@ problem we want to solve.
 
 \begin{problem}[Analysis termination]\label{problem1}
   Given a program \(\com\in \imp\) and an abstract domain \(\bA\) with
-  \(\eta \in \bA\), decide
+  some top element \(\top\), for all \(\eta \in \bA\), decide
   \begin{equation*}
-    \semi{\com} \eta =^? \top
+    \semi[\bA]{\com} \eta =^? \top
   \end{equation*}
 \end{problem}
 
-To do so we present a novel technique, based on the idea of
-\emph{bounds}. Each program is associated to a bound, an ideal value
+The main idea, based on previous research is to \emph{bound} the
+domain \(\bA\). Each program is associated to a bound, an ideal value
 above which for each variable we can safely assume that the program
 diverges.  First, given a program, we associate the program with a
 \emph{lower bound} and an \emph{upper bound}. The rough idea is that,

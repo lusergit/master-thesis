@@ -1,12 +1,9 @@
-\section{Recursion theory}
-\label{sec:recursionth}
+\section{Recursion theory}\label{sec:recursionth}
 This first section aims to provide background and terminology for the
-parts in recursion theory that will follow. More in detail, we'll take
-some notation from \cite{cutland1980computability} and introduce some
-new notation based on the same book.
-
-We start with functions: total and partial functions are essential to
-recursion theory:
+parts in recursion theory that will follow. More in detail, we will
+take some notation from~\cite{cutland1980computability} and introduce
+some notation based on the same book.  We start with functions: total
+and partial functions are essential to recursion theory:
 
 \begin{definition}[Total and partial functions]
   Let \(X,Y\) be two sets. We denote by \[X \to Y\] the set of all
@@ -22,7 +19,7 @@ Partial functions are actually functions from a subset
 \begin{definition}[Domain of partial functions]
   Let \(f : X \hto Y\). We write \(f(x)\downarrow\) to indicate that
   \(f\) is defined on \(x\), and \(f(x)\uparrow\) to indicate that
-  \(f\) is undefined on \(x\). Hence
+  \(f\) is undefined on \(x\). The domain of \(f\) is
   \[dom(f) = \{x \in X \mid f(x)\downarrow\}\]
 \end{definition}
 
@@ -36,7 +33,7 @@ Partial functions are actually functions from a subset
 %   dom(g)\) and for any \(x \in dom(f) = dom(g)\), \(f(x) = g(x)\).
 % \end{notation}
 
-We then need, mostly in \secref{sec:functionsimp} to talk about
+We then need (mostly in \secref{sec:functionsimp}) to talk about
 partial recursive functions and their properties. We therefore define
 partial recursive and total recursive functions as follows:
 
@@ -61,31 +58,33 @@ sets.
   \[f = \lambda n . (n \in A) ? 1 : 0\]
 \end{definition}
 
-\begin{lemma}[Computable function over a recursive set]\label{le:comprec}
-  Given \(f : A \tor B\), let the domain \(A\) to be recursive. \(B\)
-  is at least r. e.
-\end{lemma}
+% Not used after
 
-\begin{proof}
-  \(f : A \tor B\) total recursive function over a recursive set
-  \(A\). We can write the function
-  \[\bigx_B = \lambda x . sg(\mu z . |f(z) - x|)\] which is computable
-  as it is composition of computable functions. In other terms, this
-  function
-  \begin{equation*}
-    \bigx_B(x) =
-    \begin{cases}
-      1 & x \in B \\
-      \uparrow & \text{otherwise}
-    \end{cases}
-  \end{equation*}
-  is the semi-decision function for \(B\)
-\end{proof}
+% \begin{lemma}[Computable function over a recursive set]\label{le:comprec}
+%   Given \(f : A \tor B\), let the domain \(A\) to be recursive. \(B\)
+%   is at least r.\ e.
+% \end{lemma}
 
-\begin{observation}\label{obs:comprec}
-  In general, \(B\) is not recursive, as it would means that both \(A
-  \leq_m B\) and \(B \leq_m A\), which is not always the case, but it
-  is r.e., as we could always write the inverse function as in lemma
-  \ref{le:comprec} and derive a semi-decision function for the image
-  of the function.
-\end{observation}
+% \begin{proof}
+%   \(f : A \tor B\) total recursive function over a recursive set
+%   \(A\). We can write the function
+%   \[\bigx_B = \lambda x . sg(\mu z . |f(z) - x|)\] which is computable
+%   as it is composition of computable functions. In other terms, this
+%   function
+%   \begin{equation*}
+%     \bigx_B(x) =
+%     \begin{cases}
+%       1 & x \in B \\
+%       \uparrow & \text{otherwise}
+%     \end{cases}
+%   \end{equation*}
+%   is the semi-decision function for \(B\)
+% \end{proof}
+
+% \begin{observation}\label{obs:comprec}
+%   In general, \(B\) is not recursive, as it would means that both
+%   \(A \leq_m B\) and \(B \leq_m A\), which is not always the case, but
+%   it is r.e., as we could always write the inverse function as in
+%   Lemma~\ref{le:comprec} and derive a semi-decision function for the
+%   image of the function.
+% \end{observation}

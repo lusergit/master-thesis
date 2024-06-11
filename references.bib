@@ -395,3 +395,83 @@ url={https://doi.org/10.1007/978-3-540-69149-5_1}}
     url = {https://doi.org/10.7551/mitpress/12274.003.0008},
     eprint = {https://direct.mit.edu/book/chapter-pdf/2248314/9780262363174\_c000500.pdf},
 }
+
+@InProceedings{10.1007/978-3-031-30820-8_37,
+author="Monat, Rapha{\"e}l
+and Ouadjaout, Abdelraouf
+and Min{\'e}, Antoine",
+editor="Sankaranarayanan, Sriram
+and Sharygina, Natasha",
+title="Mopsa-C: Modular Domains and Relational Abstract Interpretation for C Programs (Competition Contribution)",
+booktitle="Tools and Algorithms for the Construction and Analysis of Systems",
+year="2023",
+publisher="Springer Nature Switzerland",
+address="Cham",
+pages="565--570",
+abstract="Mopsa is a multilanguage static analysis platform relying on abstract interpretation. It is able to analyze C, Python, and programs mixing these two languages; we focus on the C analysis here. It provides a novel way to combine abstract domains, in order to offer extensibility and cooperation between them, which is especially beneficial when relational numerical domains are used. The analyses are currently flow-sensitive and fully context-sensitive. We focus only on proving programs to be correct, as our analyses are designed to be sound and terminating but not complete. We present our first participation to SV-Comp, where Mopsa earned a bronze medal in the SoftwareSystems category.",
+isbn="978-3-031-30820-8"
+}
+
+@InProceedings{10.1007/978-3-540-31987-0_3,
+author="Cousot, Patrick
+and Cousot, Radhia
+and Feret, Jer{\^o}me
+and Mauborgne, Laurent
+and Min{\'e}, Antoine
+and Monniaux, David
+and Rival, Xavier",
+editor="Sagiv, Mooly",
+title="The ASTRE{\'E} Analyzer",
+booktitle="Programming Languages and Systems",
+year="2005",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="21--30",
+abstract="ASTR{\'E}E is an abstract interpretation-based static program analyzer aiming at proving automatically the absence of run time errors in programs written in the C programming language. It has been applied with success to large embedded control-command safety critical real-time software generated automatically from synchronous specifications, producing a correctness proof for complex software without any false alarm in a few hours of computation.",
+isbn="978-3-540-31987-0"
+}
+
+@InProceedings{10.1007/3-540-55844-6_142,
+author="Cousot, Patrick
+and Cousot, Radhia",
+editor="Bruynooghe, Maurice
+and Wirsing, Martin",
+title="Comparing the Galois connection and widening/narrowing approaches to abstract interpretation",
+booktitle="Programming Language Implementation and Logic Programming",
+year="1992",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="269--295",
+abstract="The use of infinite abstract domains with widening and narrowing for accelerating the convergence of abstract interpretations is shown to be more powerful than the Galois connection approach restricted to finite lattices (or lattices satisfying the chain condition).",
+isbn="978-3-540-47297-1"
+}
+
+
+@article{SU2005122,
+title = {A class of polynomially solvable range constraints for interval analysis without widenings},
+journal = {Theoretical Computer Science},
+volume = {345},
+number = {1},
+pages = {122-138},
+year = {2005},
+note = {Tools and Algorithms for the Construction and Analysis of Systems (TACAS 2004)},
+issn = {0304-3975},
+doi = {https://doi.org/10.1016/j.tcs.2005.07.035},
+url = {https://www.sciencedirect.com/science/article/pii/S0304397505003889},
+author = {Zhendong Su and David Wagner},
+keywords = {Range constraints, Interval analysis, Algorithms, Complexity},
+abstract = {In this paper, we study the problem of solving integer range constraints that arise in many static program analysis problems. In particular, we present the first polynomial time algorithm for a general class of integer range constraints. In contrast with abstract interpretation techniques based on widenings and narrowings, our algorithm computes, in polynomial time, the optimal solution of the arising fixpoint equations. Our result implies that “precise” range analysis can be performed in polynomial time without widening and narrowing operations.}
+}
+
+@article{Lefaucheux2024,
+author={Lefaucheux, Engel and Ouaknine, Jo{\"e}l and Purser, David and Worrell, James},
+title={Porous invariants for linear systems},
+journal={Formal Methods in System Design},
+year={2024},
+month={Feb},
+day={28},
+abstract={We introduce the notion of porous invariants for multipath affine loops over the integers. These are invariants definable in (fragments of) Presburger arithmetic and, as such, lack certain tame geometrical properties, such a convexity and connectedness. Nevertheless, we show that in many cases such invariants can be automatically synthesised, and moreover can be used to settle reachability questions for various non-trivial classes of affine loops and target sets. For the class of \(\mathbb{Z}\)-linear invariants (those defined as conjunctions of linear equations with integer coefficients), we show that a strongest such invariant can be computed in polynomial time. For the more general class of \(\mathbb{N}\)-semi-linear invariants (those defined as Boolean combinations of linear inequalities with integer coefficients), such a strongest invariant need not exist. Here we show that for point targets the existence of a separating invariant is undecidable in general. However we show that such separating invariants can be computed either by restricting the number of program variables or by restricting from multipath to single-path loops. Additionally, we consider porous targets, represented as \(\mathbb{Z}\)-semi-linear sets (those defined as Boolean combinations of equations with integer coefficients). We show that an invariant can be computed providing the target spans the whole space. We present our tool porous, which computes porous invariants.},
+issn={1572-8102},
+doi={10.1007/s10703-024-00444-3},
+url={https://doi.org/10.1007/s10703-024-00444-3}
+}

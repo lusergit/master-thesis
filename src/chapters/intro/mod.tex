@@ -1,5 +1,4 @@
-\chapter*{Introduction}\label{ch:intro}
-\addcontentsline{toc}{chapter}{Introduction}
+\chapter*{Introduction}\label{ch:intro}\addcontentsline{toc}{chapter}{Introduction}
 % \section{Introduction and related work}\label{sec:prev}
 
 Because of its widespread adoption software has become a crucial
@@ -13,26 +12,28 @@ complexity and size of contemporary software. Errors can be exphensive
 both in monetary and in human lives terms, hence preventing them
 becomes more and more valuable as well as detecting them early.
 
-A notable example of such bugs are Meltdown and
+\medskip
+
+Notable examples of such bugs are Meltdown and
 Spectre~\cite{art:meltdown,art:spectre}. Those vulnerabilities
 exploted an hardware related bug in floating-point division to access
 data outside the bounds imposed to a program y the operating system,
 resulting in the theft of arbitrary data, meaning a malicius actor
 could access -- for example -- passwords stored locally or -- more
 realistically -- data of other customers in a cloud environment.
-
 Another notable example is the first internet worm, which allowed the
 deployer to run arbitrary code on a significant portion of the
 computers on the internet at the
-time~\cite{art:worm1,art:worm2,art:worm3,art:worm4}.
-
-The last example is set on 4 June 1996, when the Ariane 501 satellite
-launch failed catastrophically 40 seconds after initiation of the
-flight sequence, incurring a direct cost of approximately 370 million
-US dollars~\cite{10.1145/251880.251992}. To asses the causes of the
+time~\cite{art:worm1,art:worm2,art:worm3,art:worm4}.  The last example
+is set on 4 June 1996, when the Ariane 501 satellite launch failed
+catastrophically 40 seconds after initiation of the flight sequence,
+incurring a direct cost of approximately 370 million US
+dollars~\cite{10.1145/251880.251992}. To asses the causes of the
 incident, the automated analysis of the Ariane
 code~\cite{art:arianecode} was done using a static analyzer based on
 Abstract Interpretation~\cite{art:arianeabstract}.
+
+\medskip
 
 \emph{Software verification} is therefore a crucial task, which cannot
 be accomplished using testing practices alone: testing in fact can be
@@ -51,7 +52,7 @@ is due to some prblems with the technique itself. Firstly, the problem
 is intrinsic in the theory of computation. Consider the following
 program in a pseudo-C language
 
-\begin{lstlisting}[language=C,escapechar=|]
+\begin{lstlisting}[language=C,escapechar=|,]
   int* p = NULL;
   arbitrary_function();
   *p = 0;|\label{line:crash}|
@@ -59,7 +60,202 @@ program in a pseudo-C language
 
 If control reaches Line~\ref{line:crash} the program will crash (as we
 are trying to access address \(\mathsf{0x0}\)). Hence we have to prove
-that \(\mathsf{arbitrary\_function()}\) does not halt. Unfortunately
+that \texttt{arbitrary\_function()} does not halt. Unfortunately
 Turing~\cite{10.7551/mitpress/12274.003.0008} shows that this problem
-is undecidable. Moreover, because of Rice's
-Theorem~\cite{rice1953classes}
+is undecidable. Moreover, Rice's Theorem~\cite{rice1953classes}
+expands on this stating that \emph{all non-trivial semantics
+  properties} of programs are undecidable. The consequence is that we
+cannot have an \emph{universal verifier}, i.e., a verification tool
+that proves or disproves the correctness of every program with respect
+to some specification. However we do not need to solve such a general
+problem. We as humans tend to use patterns and structures, even to
+write our logic. The outcome is that we work with just a small subset
+of all possible programs, and therefore to work in practice our
+analyzers have to trace the correctness of just that small subset of
+programs.
+
+\medskip
+
+Moreover the result of our analysis does not have to be the most
+precise description of the outcome of the program we are analyzing. We
+need a tool that can state that our program satisfies a property (an
+\emph{invariant}) which is \emph{sound} to the real property of the
+program, i.e., a property which is \emph{less precise} than the real
+one. Notable example of such analyzers are well known and available
+today on the internet. For example
+Astreè~\cite{10.1007/978-3-540-31987-0_3} and
+Mopsa~\cite{10.1007/978-3-031-30820-8_37} are two sound analyzers of C
+and python code, which can infer program properties and catch bugs
+ahead of time. They both use a technique called \emph{abstract
+  interpretation} which (roughly) involves interpreting a given
+program by mapping variables to an abstract rapresentation of some
+properties we are interested in.
+
+\paragraph*{Abstract interpretation.} Since universal program
+verification is a fundamentally undecidable problem, the best we can
+do is to consider non-universal verification, at the cost of getting
+non-conclusive answers. In this work we focus on one of the major
+technique for software analysis that can be used to implement a sound
+verifier: abstract interpretation. To best introduce the technique we
+start from an example. Consider the following fragment of pseudo-C
+code:
+
+\begin{lstlisting}[language=C, label=codeexample, caption=Incrementing or decrementing randomly]
+  int x = 0;
+  for(int i = 0; i < 5; i++){
+    int val = rand();
+    if (val > 0.5) x += 2;
+    else x -= 2;
+  }
+  printf("%d", x);
+\end{lstlisting}
+
+Each execution of the snippet could result in a different value of
+\texttt{x} being printed on screen. From a mathematical point of view,
+before entering the loop the value of \texttt{x} is fixed, it can only
+be \(0\). Abstracting the execution means \emph{abstracting} the
+values the variables can assume. For this example variables can assume
+\emph{interval} values, e.g., \(\var \in \interval{0}{0}\) at the
+beginning of the interval. Assuming \texttt{rand()} returns a
+\texttt{float} value in \(\interval{0}{1}\), at each iteration either
+\(\var\) is incremented or decremented by 2. Hence, after the first
+iteration \(\var \in \interval{-2}{+2}\), after the second
+\(\var \in \interval{-4}{+4}\), and so on. The loop could carry on
+forever, however, because of the \texttt{for} guard \(\var[i] < 5\) we
+reach a stall at \(\var \in \interval{-10}{+10}\). Therefore at the end
+of the loop, what our analysis can infer is that
+\(\var \in \interval{-10}{+10}\).
+
+\medskip
+
+\noindent
+The analysis is sound: the most precise property of the value of
+\(\var\) would be being in the set
+\({S = \{-10, -8, -6, -4, -2, 0, +2, +4, +6, +8, +10\}}\), as for each
+iteration the value of \(\var\) can increment or decrement by \(2\),
+and our result \(\interval{-10}{+10}\) is a \emph{superset} of \(S\).
+
+\medskip
+
+\noindent
+\emph{Abstract interpretation}, introduced by Radhia and Patrick
+Cousot in~\cite{patrickradhia:one, patrickradhia:two} is therefore a
+framework that generalizes this idea by providing tools to compute
+efficently general abstractions. As a result, a sound verifier can be
+obtained by comparing the resulting abstraction with the program
+specification: if the latter satisfies the former (i.e.\ it is a
+\emph{superset}) then also the pregram does and therefore it is
+correct, otherwise noting can be said about the program, as the
+abstraction is an \emph{over-approximation}.
+
+\medskip
+
+\noindent
+With the example we already introduced the idea of the framework of
+abstract interpretation:
+\begin{itemize}
+\item We start from a \emph{concrete semantics}, describing the
+  meaning of program commands in a \emph{computational domain};
+\item We define an \emph{abstract domain}, which models some
+  properties of interest of the concrete computation and leaves out
+  the details (in our example, the \emph{interval} domain);
+\item We induce an \emph{abstract semantics}, based on the concrete
+  semantics and our abstract domain, which allows to \emph{abstractly
+    execute} our program on the abstract domain in order to compute
+  the program properties modeled by the abstract domain;
+\item The result of our abstract execution is the final property of
+  the program.
+\end{itemize}
+Generally the abstract execution of our program (i.e.\ the abstract
+interpretation) involves \emph{fixpoint computations} on algebraic
+structures called \emph{lattices}. Lattices are sets equipped with a
+notion of \emph{order} between elements, while fixpoint computaitons
+usually involve computing a minimal element in a \emph{chain} of
+lattice elements such that the computaiton does not proceed further.
+In other words, at which point the guard of a loop is not satisfied
+anymore and which guarantees can we infer for the program \emph{after}
+the loop? Consider the snipped of Code~\ref{codeexample}. We argued
+that our computation of the abstract value of the variable \(\var\)
+could start from \(\interval{0}{0}\) and proceed with
+\(\interval{-2}{+2}, \interval{-4}{+4}, \dots\) In this case we find a
+fixpoint with \(\interval{-8}{+8}\), since the guard of the loop is
+not respected anymore (because of the variable \(\var[i]\)) and
+therefore ``executing'' the loop again would result in the same
+initial value \(\interval{-8}{+8}\), hence a \emph{fixpoint} is
+reached.
+
+\medskip
+
+\noindent
+However this is not always the case. Consider instead the following
+snippet
+\begin{lstlisting}[language=C, label=exampleloop]
+  int x = 0;
+  while(true) {
+    x += 1;
+  }
+\end{lstlisting}
+Obviously the concrete computaion does not halt, but looking at the
+chain of iterands for our program for the variable \(\var\) we could
+infer the chain
+\begin{equation*}
+  \interval{0}{0}, \interval{+1}{+1}, \dots, \interval{+k}{+k}, \dots
+\end{equation*}
+and therefore (intuitively) at the end of the loop we might want to
+say that our variable has a value in the range
+\(\interval{0}{+\infty}\), which is sound to the \emph{real} property
+of non-termination (i.e., \(\var\in\emptyset\), \(\var\) has
+\emph{no} final value).
+
+To infer properties while dealing with infinite chains the standard
+approach is to use \emph{widening} operators
+(from~\cite{10.1007/3-540-55844-6_142}, usually denoted as \(\widen\))
+to infer the \emph{divergence} of a variable after some round of
+increments. Such technique however, while still providing a sound
+analysis and ensuring termination, limits a lot the precision of the
+analysis itself. For example, we could widen our analysis after the
+second step with a naive widening
+\(\interval{-2}{+2} \widen \interval{-4}{+4} =
+\interval{-\infty}{+\infty}\) and infer that our variable after the
+end of the loop has a value between \(+\infty\) and \(-\infty\). This
+is certanly true, but is however very imprecise.
+
+To recover some information loss with the widening we can use
+narrowing operators, but these work only when the information to
+refine our anaysis is explicit. In our example a narrowing would be
+sufficent to infer that the variable is between \(-10\) and \(+10\),
+but in general it is not.
+
+This opens a question, is it possible to have a precise analysis of
+abstract properties, while ensuring the termination of the analyzer?
+
+\paragraph*{Precise interval analysis} Because the presence of
+infinite ascending chains in the domain of intervals, the analysis
+over that domain was considered an algorithmic challenge: ordinary
+fixpoint iteration (trough kleene iteration) will not result in
+terminating analysis algoritm, while widening and narrowing do not
+compute the least solution of a system of equations, but only a safe
+over approximation of it, while ensuring termination. Initially
+in~\cite{SU2005122} Su and Wagner identify a class of interval
+equations for which the least solution can be computed precisely in
+polinomial time. Later~\cite{Gawlitza2009} expands on the latter
+article by providing an algorithm to compute least solutions that also
+deals with the arbitrary multiplication of intervals.
+
+\paragraph*{Outline}
+The following document consists of 5
+chapters. Chapter~\ref{ch:background} provides the necessary
+background and fixes the necessary notation that will later be used in
+the following chapters: from recursion and order theory to talk about
+program termination and undecidability to abstract interpretation to
+prove some properties of our analysis. Chapter~\ref{ch:framework}
+Introduces the framework of the thesis: the \(\imp\) language (and its
+constraints), its \emph{concrete} semantics and its properties (namely
+undecidability of some properties of the programs written in the
+language). Chapter~\ref{ch:abstractdomains} introduces and shows the
+properties of interval and non-relational collecting analysis on the
+\(\imp\) language, while Chapter~\ref{ch:axiomatized} proves that,
+similarly to previous work, it is possible to bound the domains we
+previously introduced to remove infinite ascending chains, hence
+ensuring analysis termination. Some contraits will emerge and the
+results will later be exposed in Chapter~\ref{ch:conclusion}.
