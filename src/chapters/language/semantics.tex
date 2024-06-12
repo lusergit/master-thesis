@@ -115,7 +115,7 @@ We observe that the semantics we described is additive:
   \begin{itemize}
   \item the base case is \(i = 0\) then \(X \cup Y = X \cup Y\).
   \item For the inductive case we need to show that
-    \(i \Rightarrow i+1\):
+    \(i \implies i+1\):
     \begin{align*}
       \sem{\com}^{i+1}\left(X\cup Y\right) & = \sem{\com}\left(\sem{\com}^i \left(X \cup Y\right)\right) \\
                                            & = \sem{\com}\left(\sem{\com}^iX \cup \sem{\com}^iY\right) & \text{by induction hypothesis on } i \\
@@ -153,9 +153,9 @@ concrete domain \(\dom\):
     \sem{\com[e]}X & = \{\seme{\com[e]}\rho \mid \rho \in X , \seme{\com[e]}\rho \neq \bot\} \\
     \sem{\com[e]}Y & = \{\seme{\com[e]}\rho \mid \rho \in Y , \seme{\com[e]}\rho \neq \bot\}
   \end{align*}
-  \(X\subseteq Y\) therefore \(\rho \in X \Rightarrow \rho \in Y\)
+  \(X\subseteq Y\) therefore \(\rho \in X \implies \rho \in Y\)
   which also means that
-  \(\rho' \in \sem{\com[e]}X \Rightarrow \rho' \in \sem{\com[e]}Y\),
+  \(\rho' \in \sem{\com[e]}X \implies \rho' \in \sem{\com[e]}Y\),
   therefore \(\sem{\com[e]}X \subseteq \sem{\com[e]}Y\)
 
   \medskip
@@ -205,7 +205,7 @@ concrete domain \(\dom\):
   \item \(j=0\) therefore \(X\subseteq Y\) which is true by
     hypothesis.
   \item Now we need to work on the inductive case
-    \(j \Rightarrow j+1\). Notice that it holds that
+    \(j \implies j+1\). Notice that it holds that
     \begin{align*}
       \bigcup_{i=0}^{k+1}\sem{\com}^i X & = X \cup \bigcup_{i=1}^{k+1}\sem{\com}^i X & \text{by definition} \\
                                         & = X \cup \sem{\com}\left(\bigcup_{i=0}^{k}\sem{\com}^i X\right) & \text{by additivity}

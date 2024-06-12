@@ -45,7 +45,7 @@ is a \emph{concretization} functions
   \(\gamma : \tuple{A , \sqsubseteq} \to \tuple{C, \leq}\) is a
   \emph{monotonic} function, i.e.
   \begin{equation*}
-    \forall a,a' \in A \quad a \sqsubseteq a' \Rightarrow \gamma(a) \leq \gamma(a')
+    \forall a,a' \in A \quad a \sqsubseteq a' \implies \gamma(a) \leq \gamma(a')
   \end{equation*}
 \end{definition}
 
@@ -135,12 +135,12 @@ Connections, which is easier to prove:
     i.e., \(\abstr\circ\concr\) is reductive, which is our second
     thesis.
   \item By~\ref{proof:one} \(\forall c, c'\in C\) it holds that
-    \(c \leq c' \Rightarrow c \leq \concr(\abstr(c'))\). Hence, we can
+    \(c \leq c' \implies c \leq \concr(\abstr(c'))\). Hence, we can
     apply again~\eqref{eq:conn} with \(a \defin \abstr(c')\) and get
     that \(\abstr(c) \sqsubseteq \abstr(c')\), i.e., \(\abstr\) is
     monotonic.
   \item By~\ref{proof:two} \(\forall a, a'\in C\) it holds that
-    \(a \sqsubseteq a' \Rightarrow \abstr(\concr(a)) \sqsubseteq
+    \(a \sqsubseteq a' \implies \abstr(\concr(a)) \sqsubseteq
     a\). Hence, we can apply~\eqref{eq:conn} with
     \(c \defin \concr(a)\) and get that
     \(\concr(a)\leq\concr(a')\), i.e., \(\concr\) is
@@ -150,7 +150,7 @@ Connections, which is easier to prove:
   Assume conversely that the four properties hold. Then we want to
   prove that~\eqref{eq:conn} holds.
   \begin{description}
-  \item[(\(\Rightarrow\))] First assume that \(c \leq
+  \item[(\(\implies\))] First assume that \(c \leq
     \concr(a)\). Then \(\abstr(c) \sqsubseteq \abstr(\concr(a))\) by
     monotonicity of \(\abstr\) and \(\abstr(\concr(a)) \sqsubseteq a\)
     by reductivity, hence \(\abstr(c) \sqsubseteq a\).
@@ -181,11 +181,11 @@ soundness by construction of the analyzer:
     \(\concr(a) = \vee \{ c \mid \abstr(c) \sqsubseteq a \}\);
   \item\label{prop:five} \(\abstr\) maps concrete lubs to abstract lubs:
     \begin{equation*}
-      \forall X \subseteq C \quad \exists \vee X \Rightarrow \abstr(\vee X) = \sqcup \{\abstr(x) \mid x \in X\}
+      \forall X \subseteq C \quad \exists \vee X \implies \abstr(\vee X) = \sqcup \{\abstr(x) \mid x \in X\}
     \end{equation*}
   \item \(\concr\) maps abstract glbs to concrete glbs:
     \begin{equation*}
-      \forall X \subseteq A \quad \exists \sqcap X \Rightarrow \concr(\sqcap X) = \wedge \{\concr(x) \mid x \in X\}
+      \forall X \subseteq A \quad \exists \sqcap X \implies \concr(\sqcap X) = \wedge \{\concr(x) \mid x \in X\}
     \end{equation*}
   \end{enumerate}
 \end{theorem}
@@ -225,7 +225,7 @@ function. When this is the case, we have a \emph{Galois insertion}:
   \item \(\abstr\) is surjective: \(\forall a \in A\)
     \(\exists c \in C \mid \abstr(c) = a\);
   \item \(\concr\) is injective: \(\forall a, a'\in A\)
-    \(\concr(a) = \concr(a') \Rightarrow a = a'\);
+    \(\concr(a) = \concr(a') \implies a = a'\);
   \item \(\abstr \circ \concr\) is the identity function.
   \end{enumerate}
   We denote Galois insertions as
