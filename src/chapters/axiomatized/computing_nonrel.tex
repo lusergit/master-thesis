@@ -281,11 +281,15 @@ arithmetics (which are outside of scope in this thesis).
   \(k_1 \leq \min(\eta) - \nlbound{\com}\) and
   \(k_2 \geq \max(\eta) + \nbound{\com}\) then
   \begin{equation*}
-    \forall \var\in\Var \; |\semnr{\com}\eta\var| \neq \infty \quad \implies \quad \semnr{\com}\eta = \bsemnr{k_1}{k_2}{\com}\eta
+    \forall \var\in\Var \; \bsemnr{k_1}{k_2}{\com}\eta\var \neq \top
+    \quad
+    \implies
+    \quad
+    \semnr{\com}\eta = \bsemnr{k_1}{k_2}{\com}\eta
   \end{equation*}
-  i.e., if the analysis over \(\bCnr\) for some variable \(\var\) does
-  not diverge, then the analysis over \(\bbCnr{k_1}{k_2}\) for that
-  variable converges to the same result.
+  i.e., if the analysis over \(\bCnr\) for all the variables \(\var\)
+  does not diverge, then the analysis over \(\bbCnr{k_1}{k_2}\)
+  converges to the same result.
 \end{theorem}
 
 \begin{proof}
@@ -294,20 +298,20 @@ arithmetics (which are outside of scope in this thesis).
   inductive cases of \(\imp\). Notice that because of
   Lemma~\ref{le:soundnr}
   \begin{equation*}
-    \semnr{\com} \eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\com}\eta \ovdot\subseteq \tconcr[k_1,k_2]\left(\bsemnr{k_1}{k_2}{\com}\eta\right)
+    \semnr{\com} \eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\com}\eta
+    % \ovdot\subseteq \tconcr[k_1,k_2]\left(\bsemnr{k_1}{k_2}{\com}\eta\right)
   \end{equation*}
   already holds for every \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\),
   hence what we have to prove for every case is that
-  \[\semnr{\com}\eta \neq \top \implies \semnr{\com} \eta
-    \var \ovdot\supseteq \bsemnr{k_1}{k_2}{\com}\eta\var \quad \forall
-    \var\in\Var\]
+  \begin{equation*}
+    \forall \var\in\Var \; \bsemnr{k_1}{k_2}{\com}\eta\var \neq \top \implies \semnr{\com} \eta \var \ovdot\supseteq \bsemnr{k_1}{k_2}{\com}\eta\var \quad \forall \var\in\Var
+  \end{equation*}
   \begin{inductive}
-    \case{\(\var\in I\)} In this case we have to prove that for all
-    \(\var[y] \in \Var_{\com}\)
-    \[|\semnr{\var\in I}\eta\var[y]| \neq + \infty \implies
-      \semnr{\var\in I}\eta \var[y] \ovdot\supseteq
-      \bsemnr{k_1}{k_2}{\var\in I}\eta\var[y]\] with
-    \(k_1\leq \min(\eta) - \nlbound{\var \in I}\) and
+    \case{\(\var\in I\)} In this case we have to prove that
+    \begin{equation*}
+      \forall \var[y] \in \Var_{\com} \quad \bsemnr{k_1}{k_2}{\var\in I}\eta\var[y] \neq \top \implies \semnr{\var\in I}\eta \var[y] \ovdot\supseteq \bsemnr{k_1}{k_2}{\var\in I}\eta\var[y]
+    \end{equation*}
+    with \(k_1\leq \min(\eta) - \nlbound{\var \in I}\) and
     \(k_1\geq \max(\eta) + \nbound{\var \in I}\). Notice that since
     \(\semnr{\var \in I}\eta\) updates only the variable \(\var\), the
     only case we are interested in is when \(\var[y] = \var\). This
@@ -318,12 +322,16 @@ arithmetics (which are outside of scope in this thesis).
 
     \noindent
     Hence we have 2 cases. Either
-    \(\eta\var \cap \concr[\inte](I) = \emptyset\), which means that
-    \(\tabstr[k_1,k_2]({\emptyset}) = \emptyset \sqsupseteq \emptyset\)
-    our thesis holds. Otherwise
+    \(\eta\var \cap \concr[\inte](I) = \emptyset\), hence
+    \(\semnr{\var\in I}\eta = \bot = \bsemnr{k_1}{k_2}{\var\in
+      I}\eta\) and our thesis hold. Otherwise
     \(\eta\var \cap \concr[\inte](I) = S \neq \emptyset\). In this
-    case we are under the hypothesis that
-    \(\semnr{\var\in I}\eta\var[y] \neq \top\), hence for all the variables 
+    case we are under the hypothesis that for all \(\var[y] \in \Var\)
+    \(\semnr{\var\in I}\eta\var[y] \neq \top\), hence both
+    \({\max(\semnr{\var\in I}\eta\var[y]) \neq +\infty}\) and
+    \({\min(\semnr{\var\in I}\eta\var[y]) \neq -\infty}\) hold.
+    Therefore by Lemma~\ref{le:incnr} and Lemma~\ref{le:decnr}, for
+    all the variables \(\var[y] \in \Var\)
     \begin{align*}
       \max(S) = \max(\semnr{\var\in I}\eta\var) & \leq \max(\eta) + \bound{\var \in I}\\
       \min(S) = \min(\semnr{\var\in I}\eta\var) & \geq \min(\eta) - \lbound{\var \in I}
@@ -332,81 +340,88 @@ arithmetics (which are outside of scope in this thesis).
     \begin{equation*}
       \bsemnr{k_1}{k_2}{\var\in I}\eta\var = \abstr[k_1,k_2](\semnr{\var\in I}\eta\var) = \semnr{\var\in I}\eta\var
     \end{equation*}
-    which is our thesis.
+    which means that our thesis is respected.
 
     \case{\(\var := k\)} In this case we have to prove that
-    \[{|\semnr{\var := k}\eta\var[y]| \neq \infty} \implies
-      {\semnr{\var := k}\eta\var[y]} = {\bsemnr{k_1}{k_2}{\var :=
-          k}\eta\var[y]}\] when
-    \(k_1 \leq \min(\rho) - \nlbound{\var := k}\) and
-    \(k_2 \geq \max(\rho) + \nbound{\var := k}\). This follows from
-    the fact that if we consider \(\var[y] = \var\) then
-    \(\semnr{\var := k}\eta\var = \{k\}\), which is finite, and
-    \(\nlbound{\var := k} = \nbound{\var := k} = |k|\) this means that
-    \(k_1 \leq -|k|\) and \(k_2 \geq +|k|\), hence
     \begin{equation*}
-      {\bsemnr{k_1}{k_2}{\var := k}\eta\var} = \abstr[k_1,k_2]({\semnr{\var := k}\eta\var}) = {\semnr{\var := k}\eta\var}
-    \end{equation*}
-    and therefore for \(\var[y] = \var\) our thesis holds. For every
-    other \(\var[y] \neq \var\) it holds that
-    \begin{equation*}
-      |\semnr{\var := k}\eta\var[y]| \neq \infty
+      \forall \var[y] \in \Var \quad {\bsemnr{k_1}{k_2}{\var := k}\eta\var[y] \neq \infty}
       \implies
-      \semnr{\var := k}\eta\var[y] = \eta\var[y]
+      {\semnr{\var := k}\eta} = {\bsemnr{k_1}{k_2}{\var := k}\eta}
     \end{equation*}
-    and by hypothesis \(\eta \in \bbCnr{k_1}{k_2}\) for all
-    \(\bbCnr{k_1}{k_2}\) s.t.
-    \(\bCnr_{\com, \eta} \preceq \bbCnr{k_1}{k_2}\), which is our
-    case. Hence also in this case our thesis holds:
+    when \(k_1 \leq \min(\rho) - \nlbound{\var := k}\) and
+    \(k_2 \geq \max(\rho) + \nbound{\var := k}\). % This follows from
+    % the fact that if we consider \(\var[y] = \var\) then
+    % \(\semnr{\var := k}\eta\var = \{k\}\), which is finite, and
+    % \(\nlbound{\var := k} = \nbound{\var := k} = |k|\) this means that
+    % \(k_1 \leq -|k|\) and \(k_2 \geq +|k|\), hence
+    % \begin{equation*}
+    %   {\bsemnr{k_1}{k_2}{\var := k}\eta\var} = \abstr[k_1,k_2]({\semnr{\var := k}\eta\var}) = {\semnr{\var := k}\eta\var}
+    % \end{equation*}
+    % and therefore for \(\var[y] = \var\) our thesis holds. For every
+    % other \(\var[y] \neq \var\) it holds that
+    % \begin{equation*}
+    %   |\semnr{\var := k}\eta\var[y]| \neq \infty
+    %   \implies
+    %   \semnr{\var := k}\eta\var[y] = \eta\var[y]
+    % \end{equation*}
+    % and by hypothesis \(\eta \in \bbCnr{k_1}{k_2}\) for all
+    % \(\bbCnr{k_1}{k_2}\) s.t.
+    % \(\bCnr_{\com, \eta} \preceq \bbCnr{k_1}{k_2}\), which is our
+    % case. Hence also in this case our thesis holds:
+    % \begin{equation*}
+    %   |\semnr{\var := k}\eta\var[y]| \neq \infty
+    %   \implies
+    %   \semnr{\var := k}\eta\var[y] =
+    %   \abstr[k_1,k_2]({\semnr{\var := k}\eta\var[y]}) =
+    %   {\bsemnr{k_1}{k_2}{\var := k}\eta\var[y]}
+    % \end{equation*}
+    This follows from the fact that we're under the hypothesis that
+    \(\forall \var[y]\in\Var\)
+    \(\bsemnr{k_1}{k_2}{\var:= k}\eta\var[y]\neq\top\), hence
+    \begin{align*}
+      \max(\semnr{\var:= k}\eta\var[y]) & \leq \max(\eta) + \bound{\var := k} = k_2  & \text{By Lemma~\ref{le:incnr}}\\
+      \min(\semnr{\var:= k}\eta\var[y]) & \geq \min(\eta) - \lbound{\var := k} = k_1 & \text{By Lemma~\ref{le:decnr}}
+    \end{align*}
+    therefore by \(\abstr[k_1,k_2]\)
     \begin{equation*}
-      |\semnr{\var := k}\eta\var[y]| \neq \infty
-      \implies
-      \semnr{\var := k}\eta\var[y] =
-      \abstr[k_1,k_2]({\semnr{\var := k}\eta\var[y]}) =
-      {\bsemnr{k_1}{k_2}{\var := k}\eta\var[y]}
+      \bsemnr{k_1}{k_2}{\var := k}\eta = \abstr[k_1,k_2]\left(\semnr{\var := k}\eta\right) = \semnr{\var := k}\eta
     \end{equation*}
+    which is our thesis.
 
     \case{\(\var := \var[y] + k\)} In this case we have to prove that
-    for every \(\var[w] \in \Var_{\com}\)
     \begin{equation*}
-      |{\semnr{\var := \var[y] + k}\eta\var[w]}| \neq \infty
+      \forall \var[w] \in \Var_{\com} \quad |{\semnr{\var := \var[y] + k}\eta\var[w]}| \neq \infty
       \implies
-      {\semnr{\var := \var[y] + k}\eta\var[w]} = {\bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta\var[w]}
+      {\semnr{\var := \var[y] + k}\eta} = {\bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta}
     \end{equation*}
     Similarly to the latter case, if \(\var[w] \neq \var\) it holds
     that \(\semnr{\var := \var[y] + k}\eta\var[w] = \eta\var[w]\), and
     since
     \(\eta \in \bCnr_{\var := \var[y] + k, \eta} \preceq
     \bbCnr{k_1}{k_2}\) it also holds that
-    \begin{equation*}
-      |\eta\var[w]| \neq \infty \implies \eta\var[w] = \abstr[k_1,k_2](\eta\var[w]) = \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta\var[w]
-    \end{equation*}
-    which is our thesis. Otherwise, if \(\var[w] = \var\) by
-    Lemma~\ref{le:incnr}
-    \begin{equation*}
-      \max(\semnr{\var := \var[y] + k}\eta\var) \leq \max(\eta) +
-      \bound{\var := \var[y] + k} = \max(\eta) + \nbound{\var := \var[y]
-        + k}
-    \end{equation*}
-    and by Lemma~\ref{le:decnr} 
-    \begin{equation*}
-      \min(\semnr{\var := \var[y] + k}\eta\var) \geq \min(\eta) -
-      \lbound{\var := \var[y] + k} = \min(\eta) - \nlbound{\var := \var[y]
-        + k}
-    \end{equation*}
-    hence by definition of \(\abstr[k_1,k_2]\) our thesis
+    \(\min(\eta\var[w]) \geq k_1 \max(\eta\var[w]) \leq k_2
+    \). Otherwise, if \(\var[w] = \var\)
+    \begin{align*}
+      \max(\semnr{\var := \var[y] + k}\eta\var) & \leq \max(\eta) + \bound{\var := \var[y] + k} & \text{by Lemma~\ref{le:incnr}} \\
+      \min(\semnr{\var := \var[y] + k}\eta\var) & \geq \min(\eta) + \lbound{\var := \var[y] + k} & \text{by Lemma~\ref{le:decnr}}
+    \end{align*}
+    Therefore in every case each variable is inside the domain bounds
+    \(k_1, k_2\), which means that by definition of
+    \(\abstr[k_1,k_2]\) our thesis
     \begin{equation*}
       |\semnr{\var := \var[y] + k}\eta\var| \neq \infty \implies
-      \semnr{\var := \var[y] + k}\eta\var =
-      \abstr[k_1,k_2](\semnr{\var := \var[y] + k}) =
-      \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta\var
+      \semnr{\var := \var[y] + k}\eta =
+      \abstr[k_1,k_2](\semnr{\var := \var[y] + k}\eta) =
+      \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta
     \end{equation*}
     holds.
 
     \case{\(\com_1 \ndet \com_2\)} In this case we have to prove that
     for all \(\var \in \Var_{\com}\)
     \begin{equation*}
-      |\semnr{\com_1 \ndet \com_2}\eta\var| \neq \infty \implies \semnr{\com_1 \ndet \com_2}\eta\var = \bsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta\var
+      \forall \var[y]\in\Var \quad |\semnr{\com_1 \ndet \com_2}\eta\var[y]| \neq \infty
+      \implies
+      \semnr{\com_1 \ndet \com_2}\eta = \bsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta
     \end{equation*}
     with \(k_1 \leq \min(\eta) - \nlbound{\com_1 \ndet \com_2}\) and
     \(k_2 \geq \max(\eta) + \nbound{\com_1 \ndet \com_2}\). First we
@@ -433,7 +448,9 @@ arithmetics (which are outside of scope in this thesis).
 
     \case{\(\com_1 \seq \com_2\)} In this case we have to prove that
     \begin{equation*}
-      |\semnr{\com_1\seq\com_2}\eta\var| \neq \infty \implies \semnr{\com_1 \seq\com_2} \eta\var = \bsemnr{k_1}{k_2}{\com_1 \seq\com_2}\eta\var
+      \forall \var[y]\in\Var \quad |\semnr{\com_1\seq\com_2}\eta\var[y]| \neq \infty
+      \implies
+      \semnr{\com_1 \seq\com_2} \eta = \bsemnr{k_1}{k_2}{\com_1 \seq\com_2}\eta
     \end{equation*}
     for all \(k_1 \leq \min(\eta) -\nlbound{\com_1\seq\com_2}\) and
     \(k_2 \geq \max(\eta) + \nbound{\com_1\seq\com_2}\). First let's
@@ -442,8 +459,13 @@ arithmetics (which are outside of scope in this thesis).
       \semnr{\com_1\seq\com_2}\eta\var = \semnr{\com_2}\left(\semnr{\com_1}\eta\right)(\var)
     \end{equation*}
     and we are under the hypothesis
-    \(|\semnr{\com_1\seq\com_2}\eta\var| \neq \infty\). By inductive
-    hypothesis for all \(\var \in \Var_{\com}\) if
+    \(\forall \var[y] \in \Var \; |\semnr{\com_1\seq\com_2}\eta\var|
+    \neq \infty\), which means that both
+    \({\forall \var[y] \in \Var} \; {|\semnr{\com_1}\eta\var[y]| \neq
+      \infty}\) and
+    \({\forall \var[y] \in \Var} \; {|\semnr{\com_2}\eta'\var[y]| \neq
+      \infty}\). By inductive hypothesis for all
+    \(\var \in \Var_{\com}\) if
     \(|\semnr{\com_1}\eta\var| \neq \infty\) then
     \(\semnr{\com_1}\eta\var = \bsemnr{k_1}{k_2}{\com_1}\eta\var\) for
     all \(k_1 \leq \min(\eta) - \nlbound{\com_1}\) and
