@@ -106,19 +106,23 @@ abstraction maps
   \(\abstr[k_1,k_2] \conc \id = \id\), which means by
   Definition~\ref{def:insertion} that we formed a Galois insertion:
   \begin{equation*}
-    \tuple{\poset[*]{\z}, \subseteq} \galoiS{\abstr[k_1,k_2]}{\id} \tuple{\bposet[*]{k_1}{k_2}{\z}, \subseteq}
+    \tuple{\poset[*]{\z}, \subseteq}
+    \galoiS{\abstr[k_1,k_2]}{\id}
+    \tuple{\bposet[*]{k_1}{k_2}{\z}, \subseteq}
+    \qedhere
   \end{equation*}
 \end{proof}
-
 Notice that since \(\bCnr\) and \(\bbCnr{k_1}{k_2}\) are respectively
 the point-wise lifting of \(\poset[*]{\z}\) and
 \(\bposet[*]{k_1}{k_2}{\z}\) there is also a Galois insertion between
 them:
 \begin{equation*}
   \tuple{\bCnr, \ovdot\subseteq}
-  \galoiS{\abstr[k_1,k_2]}{\id}
+  \galoiS{\dabstr[k_1,k_2]}{\id}
   \tuple{\bbCnr{k_1}{k_2}, \ovdot\subseteq}
 \end{equation*}
+Where
+\(\dabstr[k_1,k_2](\eta) = \lambda \var . \abstr[k_1,k_2](\eta\var)\).
 Since we have a Galois connection between the non relational
 collecting domain \(\bCnr\) and its bounded version
 \(\bbCnr{k_1}{k_2}\) we can define an abstract inductive semantics
@@ -129,7 +133,7 @@ which is sound by construction:
   \({\absem[\bbCnr{k_1}{k_2}]{\cdot} : \expr \to \bbCnr{k_1}{k_2} \to
     \bbCnr{k_1}{k_2}}\) as
   \begin{equation*}
-    \absem[\bbCnr{k_1}{k_2}]{\com[e]} \defin \abstr[k_1,k_2] \conc \absem[\bCnr]{\com[e]}
+    \absem[\bbCnr{k_1}{k_2}]{\com[e]} \defin \dabstr[k_1,k_2] \conc \absem[\bCnr]{\com[e]}
   \end{equation*}
   i.e.\ the best correct abstraction.
 \end{definition}
@@ -344,7 +348,7 @@ arithmetics (which are outside of scope in this thesis).
 
     \case{\(\var := k\)} In this case we have to prove that
     \begin{equation*}
-      \forall \var[y] \in \Var \quad {\bsemnr{k_1}{k_2}{\var := k}\eta\var[y] \neq \infty}
+      \forall \var[y] \in \Var \quad {\bsemnr{k_1}{k_2}{\var := k}\eta\var[y] \neq \top}
       \implies
       {\semnr{\var := k}\eta} = {\bsemnr{k_1}{k_2}{\var := k}\eta}
     \end{equation*}
@@ -382,7 +386,8 @@ arithmetics (which are outside of scope in this thesis).
       \max(\semnr{\var:= k}\eta\var[y]) & \leq \max(\eta) + \bound{\var := k} = k_2  & \text{By Lemma~\ref{le:incnr}}\\
       \min(\semnr{\var:= k}\eta\var[y]) & \geq \min(\eta) - \lbound{\var := k} = k_1 & \text{By Lemma~\ref{le:decnr}}
     \end{align*}
-    therefore by \(\abstr[k_1,k_2]\)
+    must be true, and therefore by definition of
+    \(\bsemnr{k_1}{k_2}{\cdot}\)
     \begin{equation*}
       \bsemnr{k_1}{k_2}{\var := k}\eta = \abstr[k_1,k_2]\left(\semnr{\var := k}\eta\right) = \semnr{\var := k}\eta
     \end{equation*}
@@ -390,7 +395,7 @@ arithmetics (which are outside of scope in this thesis).
 
     \case{\(\var := \var[y] + k\)} In this case we have to prove that
     \begin{equation*}
-      \forall \var[w] \in \Var_{\com} \quad |{\semnr{\var := \var[y] + k}\eta\var[w]}| \neq \infty
+      \forall \var[w] \in \Var_{\com} \quad {\semnr{\var := \var[y] + k}\eta\var[w]} \neq \top
       \implies
       {\semnr{\var := \var[y] + k}\eta} = {\bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta}
     \end{equation*}
@@ -399,8 +404,8 @@ arithmetics (which are outside of scope in this thesis).
     since
     \(\eta \in \bCnr_{\var := \var[y] + k, \eta} \preceq
     \bbCnr{k_1}{k_2}\) it also holds that
-    \(\min(\eta\var[w]) \geq k_1 \max(\eta\var[w]) \leq k_2
-    \). Otherwise, if \(\var[w] = \var\)
+    \(\min(\eta\var[w]) \geq k_1\) and \(\max(\eta\var[w]) \leq
+    k_2\). Otherwise, if \(\var[w] = \var\)
     \begin{align*}
       \max(\semnr{\var := \var[y] + k}\eta\var) & \leq \max(\eta) + \bound{\var := \var[y] + k} & \text{by Lemma~\ref{le:incnr}} \\
       \min(\semnr{\var := \var[y] + k}\eta\var) & \geq \min(\eta) + \lbound{\var := \var[y] + k} & \text{by Lemma~\ref{le:decnr}}
@@ -409,7 +414,7 @@ arithmetics (which are outside of scope in this thesis).
     \(k_1, k_2\), which means that by definition of
     \(\abstr[k_1,k_2]\) our thesis
     \begin{equation*}
-      |\semnr{\var := \var[y] + k}\eta\var| \neq \infty \implies
+      \forall \var[w] \in \Var \quad \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta\var[w] \neq \top \implies
       \semnr{\var := \var[y] + k}\eta =
       \abstr[k_1,k_2](\semnr{\var := \var[y] + k}\eta) =
       \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta
@@ -419,20 +424,21 @@ arithmetics (which are outside of scope in this thesis).
     \case{\(\com_1 \ndet \com_2\)} In this case we have to prove that
     for all \(\var \in \Var_{\com}\)
     \begin{equation*}
-      \forall \var[y]\in\Var \quad |\semnr{\com_1 \ndet \com_2}\eta\var[y]| \neq \infty
+      \forall \var[y]\in\Var \quad \bsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta\var[y] \neq \top
       \implies
       \semnr{\com_1 \ndet \com_2}\eta = \bsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta
     \end{equation*}
     with \(k_1 \leq \min(\eta) - \nlbound{\com_1 \ndet \com_2}\) and
     \(k_2 \geq \max(\eta) + \nbound{\com_1 \ndet \com_2}\). First we
     can notice that since
-    \(\semnr{\com_1 \ndet \com_2}\eta\var = \semnr{\com_1}\eta\var
-    \cup \semnr{\com_2}\eta\var\) our hypothesis
-    \({|\semnr{\com_1 \ndet \com_2}\eta\var| \neq \infty}\) implies
-    both \({|\semnr{\com_1}\eta\var| \neq \infty}\) and
-    \(|{\semnr{\com_2}\eta\var| \neq \infty}\). Hence by choice of
-    \(k_1\) and \(k_2\) we can use the inductive hypothesis and state
-    that
+    \(\bsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta\var =
+    \bsemnr{k_1}{k_2}{\com_1}\eta\var \cup
+    \bsemnr{k_1}{k_2}{\com_2}\eta\var\) our hypothesis
+    \({\bsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta\var \neq \top}\)
+    implies both \({\bsemnr{k_1}{k_2}{\com_1}\eta\var \neq \top}\) and
+    \({\bsemnr{k_1}{k_2}{\com_2}\eta\var \neq \top}\). Hence by choice
+    of \(k_1\) and \(k_2\) we can use the inductive hypothesis and
+    state that
     \begin{align*}
       \semnr{\com_1}\eta\var & = \bsemnr{k_1}{k_2}{\com_1}\eta\var \\
       \semnr{\com_2}\eta\var & = \bsemnr{k_1}{k_2}{\com_2}\eta\var
@@ -448,7 +454,7 @@ arithmetics (which are outside of scope in this thesis).
 
     \case{\(\com_1 \seq \com_2\)} In this case we have to prove that
     \begin{equation*}
-      \forall \var[y]\in\Var \quad |\semnr{\com_1\seq\com_2}\eta\var[y]| \neq \infty
+      \forall \var[y]\in\Var \quad \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var[y] \neq \top
       \implies
       \semnr{\com_1 \seq\com_2} \eta = \bsemnr{k_1}{k_2}{\com_1 \seq\com_2}\eta
     \end{equation*}
@@ -456,24 +462,27 @@ arithmetics (which are outside of scope in this thesis).
     \(k_2 \geq \max(\eta) + \nbound{\com_1\seq\com_2}\). First let's
     recall that
     \begin{equation*}
-      \semnr{\com_1\seq\com_2}\eta\var = \semnr{\com_2}\left(\semnr{\com_1}\eta\right)(\var)
+      \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var = \bsemnr{k_1}{k_2}{\com_2}\left(\bsemnr{k_1}{k_2}{\com_1}\eta\right)(\var)
     \end{equation*}
     and we are under the hypothesis
-    \(\forall \var[y] \in \Var \; |\semnr{\com_1\seq\com_2}\eta\var|
-    \neq \infty\), which means that both
-    \({\forall \var[y] \in \Var} \; {|\semnr{\com_1}\eta\var[y]| \neq
-      \infty}\) and
-    \({\forall \var[y] \in \Var} \; {|\semnr{\com_2}\eta'\var[y]| \neq
-      \infty}\). By inductive hypothesis for all
-    \(\var \in \Var_{\com}\) if
-    \(|\semnr{\com_1}\eta\var| \neq \infty\) then
+    \(\forall \var[y] \in \Var \;
+    \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var[y] \neq \top\), which
+    means that both the following hold
+    \begin{align*}
+      {\forall \var[y] \in \Var} \; \bsemnr{k_1}{k_2}{\com_1}\eta\var[y] & \neq \top \\
+      {\forall \var[y] \in \Var} \; \bsemnr{k_1}{k_2}{\com_2}\eta'\var[y] & \neq \top
+    \end{align*}
+    where \(\eta' = \semnr{\com_1}\eta\).  By inductive hypothesis if
+    for all \(\var[y] \in \Var_{\com}\)
+    \(\semnr{\com_1}\eta\var[y] \neq \top\) then
     \(\semnr{\com_1}\eta\var = \bsemnr{k_1}{k_2}{\com_1}\eta\var\) for
     all \(k_1 \leq \min(\eta) - \nlbound{\com_1}\) and
-    \(k_2 \geq \max(\eta) + \nbound{\com_2}\). We can now call
-    \(\eta' = \semnr{\com_1}\eta\) and by inductive hypothesis again,
-    for all \(\var\in\Var_{\com}\)
+    \(k_2 \geq \max(\eta) + \nbound{\com_2}\). We can now call and by
+    inductive hypothesis again:
     \begin{equation*}
-      |\semnr{\com_2}\eta'\var| \neq \infty \implies \semnr{\com_2}\eta'\var = \bsemnr{k_1}{k_2}{\com_2}\eta'\var
+      \forall \var[y] \in \Var \quad \bsemnr{k_1}{k_2}{\com_2}\eta'\var \neq \top
+      \implies
+      \semnr{\com_2}\eta'\var = \bsemnr{k_1}{k_2}{\com_2}\eta'\var
     \end{equation*}
     for all \(k_1 \leq \min(\eta') - \nlbound{\com_2}\) and
     \(k_2 \geq \max(\eta') + \nbound{\com}\). Notice that
@@ -485,13 +494,17 @@ arithmetics (which are outside of scope in this thesis).
     notice that both inductive hypothesis hold, and therefore the
     following holds
     \begin{equation*}
-      |\semnr{\com_1\seq\com_2}\eta\var| \neq \infty \implies \semnr{\com_1\seq\com_2}\eta\var = \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var
+      \forall \var[y] \in \Var \quad \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var \neq \top
+      \implies
+      \semnr{\com_1\seq\com_2}\eta\var = \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var
     \end{equation*}
     which is our thesis.
     
     \case{\(\fix\com\)} In this case we want to prove that
     \begin{equation*}
-      |\semnr{\fix\com}\eta\var| \neq \infty \implies \semnr{\fix\com}\eta\var = \bsemnr{k_1}{k_2}{\fix\com}\eta\var
+      \forall \var[y] \in \Var \quad \bsemnr{k_1}{k_2}{\fix\com}\eta\var \neq \top
+      \implies
+      \semnr{\fix\com}\eta = \bsemnr{k_1}{k_2}{\fix\com}\eta
     \end{equation*}
     for all \(k_1 \geq \min(\eta) - \nlbound{\fix\com}\) and
     \(k_2 \leq \max(\eta) + \nbound{\fix\com}\). Recall that by
@@ -499,12 +512,11 @@ arithmetics (which are outside of scope in this thesis).
     \begin{equation*}
       \semnr{\fix\com}\eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\fix\com}\eta
     \end{equation*}
-    hence for every variable \(\var \in \Var_{\com}\)
-    \(\semnr{\fix\com}\eta\var \subseteq
-    \bsemnr{k_1}{k_2}{\fix\com}\eta\var\). We have therefore to prove
-    that for all \(\var\in \Var_{\com}\)
+    We have therefore to prove that 
     \begin{equation}\label{eq:geq}
-      |\semnr{\fix\com}\eta\var| \neq \infty \implies \semnr{\fix\com}\eta\var \supseteq \bsemnr{k_1}{k_2}{\fix\com}\eta\var
+      \forall \var\in\Var \quad \bsemnr{k_1}{k_2}{\fix\com}\eta\var \neq \top
+      \implies
+      \semnr{\fix\com}\eta \ovdot\supseteq \bsemnr{k_1}{k_2}{\fix\com}\eta
     \end{equation}
     for all \(k_1 \leq \min(\eta) - \nlbound{\fix\com}\) and
     \(k_2 \geq \max(\eta) + \nbound{\fix\com}\). To start notice that
@@ -512,30 +524,38 @@ arithmetics (which are outside of scope in this thesis).
     \(\semnr{\fix\com}\eta = \semnr{\kleene{(\com\ndet\tru)}}\eta\),
     hence we can alternatively prove that
     \begin{equation*}
-      |\semnr{\fix\com}\eta\var| \neq \infty \implies \semnr{\fix\com}\eta\var \supseteq \left(\bigcup_{i\in\n} {\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta\right)(\var)
+      \forall \var[y] \in \Var \bsemnr{k_1}{k_2}{\fix\com}\eta\var \neq \top
+      \implies
+      \semnr{\fix\com}\eta \supseteq \bigcup_{i\in\n} {\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta
     \end{equation*}
     which implies Equation~\ref{eq:geq}. To start we will initially
-    prove that for every \(\var\in\Var_{\com}\), \(i\in\n\) it holds
-    that
+    prove that for every \(i\in\n\) it holds that
     \begin{equation*}
-      |\semnr{\fix\com}\eta\var| \neq \infty \implies
+      \forall \var \in \Var\quad \semnr{\fix\com}\eta\var \neq \top
+      \implies
       %
       \semnr{\fix\com}\eta\var \supseteq
-      \left({\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta\right)(\var)
+      {\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta
     \end{equation*}
     to then prove the first one by closure over \(\cup\). We will
     prove it by induction on \(i\):
     \begin{description}
       
     \item[Case] (\(i=0\)). In this case we have to prove that
-      \[|\semnr{\fix\com}\eta\var| \neq \infty\fix\com \implies
-        \semnr{\fix\com}\eta\var \supseteq \eta\var\] We can notice
-      that by monotonicity of \(\semnr{\fix\com}\) the thesis holds.
+      \begin{equation*}
+        \forall \var[y] \in \Var \quad \bsemnr{k_1}{k_2}{\fix\com}\eta\var[y] \neq \top
+        \implies
+        \semnr{\fix\com}\eta \supseteq \eta
+      \end{equation*}
+      We can notice that by definition of \(\semnr{\fix\com}\) the
+      thesis holds.
       
     \item[Case] (\(i \implies i+1\)). In this case we have to prove
       that
       \begin{equation*}
-        |\semnr{\fix\com}\eta\var| \neq \infty \implies \semnr{\fix\com}\eta\var \supseteq {\left(\bsemnr{k_1}{k_2}\com\ndet\tru\right)}^{i+1}\eta\var
+        \forall \var \in \Var \quad \semnr{\fix\com}\eta\var \neq \top
+        \implies
+        \bsemnr{k_1}{k_2}{\fix\com}\eta \supseteq {\left(\bsemnr{k_1}{k_2}\com\ndet\tru\right)}^{i+1}\eta
       \end{equation*}
       First we can notice that
       \begin{align*}

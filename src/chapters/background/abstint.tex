@@ -2,12 +2,12 @@
 
 Abstract interpretation is among the most well known methods of static
 analysis of programs. First introduced by Patrick and Radhia Cousot
-in~\cite{patrickradhia:one, patrickradhia:two} and consists in a
+in~\cite{patrickradhia:one, patrickradhia:two}, it consists in a
 sound-by-construction method to infer program properties given a model
 of their behavior. The general idea is that we can approximate the
 semantics of a program with monotonic functions over ordered sets
 (usually \emph{complete lattices}). To do so we usually first
-introduce \emph{Abstract Domains} that capture some essential aspect
+introduce \emph{Abstract Domains} that capture some essential aspects
 of program execution while ignoring the details of the computation,
 which would make the analysis computationally infeasible.  This
 analysis however carries the issue of completeness, which is closely
@@ -43,17 +43,17 @@ is a \emph{concretization} functions
 \begin{definition}[Concretization]
   A concretization function
   \(\gamma : \tuple{A , \sqsubseteq} \to \tuple{C, \leq}\) is a
-  \emph{monotonic} function, i.e.
-  \begin{equation*}
-    \forall a,a' \in A \quad a \sqsubseteq a' \implies \gamma(a) \leq \gamma(a')
-  \end{equation*}
+  \emph{monotonic} function from an \emph{abstract} partially ordered
+  set \(\tuple{A , \sqsubseteq}\) to a \emph{concrete} partially
+  ordered set \(\tuple{C, \leq}\)
 \end{definition}
 
 Trough concretization we have a first notion of \emph{soundness}
 
 \begin{definition}[Soundness]\label{def:soundness}
-  \(a \in A\) is a \emph{sound} abstraction of \(c\in C\) iff
-  \(c \leq \gamma(a)\).
+  Given an \emph{abstract} domain \(A\) and a \emph{concrete} domain
+  \(C\), we call \(a \in A\) a \emph{sound} abstraction of \(c\in C\)
+  iff \(c \leq \gamma(a)\).
 \end{definition}
 
 While monotonic concretizations are sufficient to reason about
@@ -100,7 +100,7 @@ some monotonic \emph{abstraction function}
 \end{figure}
 
 Usually though we use an alternative characterization of Galois
-Connections, which is easier to prove:
+Connections:
 
 \begin{theorem}\label{th:alternate}
   \(\tuple{C, \leq} \galois{\abstr}{\concr} \tuple{A, \sqsubseteq}\)
@@ -398,10 +398,10 @@ of \(g\). We mention two, in order to see what its main problems are.
 \end{description}
 
 As mentioned before, in order to solve the convergence problem in
-abstract domains,Patrick and Radhia Cousot in~\cite{patrickradhia:one}
-proposed to use Tarski's characterization to provide post fixpoint of
-infinite ascending chains, introducing a binary operator: the
-\emph{widening} operator \(\widen\).
+abstract domains in~\cite{patrickradhia:one} the authors proposed to
+use Tarski's characterization to provide post fixpoint of infinite
+ascending chains, introducing a binary operator: the \emph{widening}
+operator \(\widen\).
 
 \begin{definition}[Widening operator]\label{def:widen}
   A binary operator \(\widen : A \times X \to A\) is a \emph{widening
