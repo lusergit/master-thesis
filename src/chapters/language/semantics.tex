@@ -233,29 +233,36 @@ concrete domain \(\dom\):
   \end{itemize}
 \end{proof}
 
-Since concrete semantics is additive, the Kleene star (\(\com^*\)) and
-the fixpoint (\(\fix{\com}\)) have the same concrete semantics
-\(\sem{\com^*} = \sem{\fix{\com}}\). In order to notice this, let
-\(X \in \dom, f = \lambda Y \in\dom . \left(X \cup
-  \sem{\com}Y\right)\) and recall that \(f^0 X = X\) and 
-\(f^{n+1} X = X \cup \sem{\com}\left(f^n X\right)\).
-\begin{align*}
-  \sem{\fix{\com}}X = \lfp(f) & = \bigcup \{ f^n \; \bot \mid n \in \n \} & \text{by fixpoint theorem (\ref{th:fixpoint})} \\
-                              & = \bigcup_{i\in\n} \left( X \cup \sem{\com}^iX \right) & \text{by definition} \\
-                              & = \bigcup_{i\in\n} \sem{\com}^i X \\
-                              & = \sem{\com^*}X
-\end{align*}
+\begin{proposition}
+  Kleene star (\(\com^*\)) and the fixpoint (\(\fix{\com}\)) share the
+  same concrete semantics:
+  \begin{equation*}
+    \sem{\com^*} = \sem{\fix{\com}}
+  \end{equation*}
+\end{proposition}
+\begin{proof}
+  To start, let
+  \(X \in \dom, f = \lambda Y \in\dom . \left(X \cup
+    \sem{\com}Y\right)\) and recall that \(f^0 X = X\) and
+  \(f^{n+1} X = X \cup \sem{\com}\left(f^n X\right)\).
+  \begin{align*}
+    \sem{\fix{\com}}X = \lfp(f) & = \bigcup \{ f^n \; \bot \mid n \in \n \} & \text{by fixpoint theorem (\ref{th:fixpoint})} \\
+                                & = \bigcup_{i\in\n} \left( X \cup \sem{\com}^iX \right) & \text{by definition} \\
+                                & = \bigcup_{i\in\n} \sem{\com}^i X \\
+                                & = \sem{\com^*}X
+  \end{align*}
+\end{proof}
 
-This will not be the case for the abstract semantics (cf. example
-\ref{ex:fix}), where the Kleene star can be more precise than the
-fixpoint semantics, but harder to compute and, as such, less suited
-for analysis. For the concrete semantics, however, since they are the
-same in the next proofs we only explore the case \(\com^*\) since it
-captures also \(\fix{\com}\). Since for a given program \(\com\) and a
-set of initial states \(X \in \dom\) the collecting semantics
-\(\sem{\com}X\) expresses properties that hold at the end of the
-execution of \(\com\) we will in the following chapters usually refer
-to \(\sem{\com}X\) as program \emph{invariant}.
+This will not be the case for the abstract semantics
+(cf. Example~\ref{ex:fix}), where the Kleene star can be more precise
+than the fixpoint semantics, but harder to compute and, as such, less
+suited for analysis. For the concrete semantics, however, since they
+are the same in the next proofs we only explore the case \(\com^*\)
+since it captures also \(\fix{\com}\). Since for a given program
+\(\com\) and a set of initial states \(X \in \dom\) the collecting
+semantics \(\sem{\com}X\) expresses properties that hold at the end of
+the execution of \(\com\) we will in the following chapters usually
+refer to \(\sem{\com}X\) as program \emph{invariant}.
 
 \begin{notation}[Singleton shorthand]
   Sometimes we need to consider the semantics over the singleton set

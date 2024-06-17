@@ -1,8 +1,8 @@
 \section{Transition system}
 
 With the set of states \(\state\), the set of environments \(\env\)
-and the small operational semantics \(\to\) we define a transition
-system, this will be useful to define universal and partial
+and the small step operational semantics \(\to\) we define a
+transition system, this will be useful to define universal and partial
 termination and to reason about program properties in the next
 chapters.
 
@@ -29,13 +29,14 @@ With the concept of derivation sequences we can define what we mean for
   \[ \stt{\com, \rho} \ehalts \iff \exists k \in \n \mid \stt{\com,
       \rho} \to^k \rho'.\] Dually
   \[ \stt{\com, \rho} \nahalts \iff \neg \; \stt{\com, \rho}
-    \ehalts \] a program \emph{always loops} if there's no finite derivation sequence
-  in its transition system that leads to a final environment.
+    \ehalts \] a program \emph{always loops} if there is no finite
+  derivation sequence in its transition system that leads to a final
+  environment.
 \end{definition}
 \begin{definition}[Universal termination]
   Let \(\com \in \imp, \rho \in \env\). We say\(\com\) \emph{partially
     loops} on \(\rho\) when there is at least one derivation sequence
-  of infinite length in the transition system tarting from
+  of infinite length in the transition system starting from
   \(\stt{\com, \rho}\):
   \[ \stt{\com, \rho} \nehalts \iff \forall k \in \n \; \stt{\com,
       \rho} \to^k \stt{\com', \rho'} \quad \text{for some }
@@ -135,7 +136,7 @@ decomposition lemma.
 \end{lemma}
 
 \begin{proof}
-  The proof is on induction on\(k\in\n\), i.e., by induction on the
+  The proof is on induction on \(k\in\n\), i.e., by induction on the
   length of the derivation sequence.
 
   \medskip
