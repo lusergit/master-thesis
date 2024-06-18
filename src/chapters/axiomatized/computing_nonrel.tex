@@ -202,7 +202,7 @@ collecting before the \textcolor{blue}{\texttt{if}} infers
 \textcolor{blue}{\texttt{if}} the invariant remains
 \([\var\mapsto\{0,1\}, \var[y]\mapsto\mathbb{P}]\). The bounded
 analysis however filters \([\var\mapsto\{0,1\}, \var[y]\mapsto\{1\}]\)
-and threfore after the \textcolor{blue}{\texttt{if}} the inferred
+and therefore after the \textcolor{blue}{\texttt{if}} the inferred
 invariant is \([\var\mapsto\{0,1,2\}, \var[y]\mapsto\top]\), hence
 diverging. The idea is that by being non-relational and smashing all
 infinite elements of \(\poset{\z}\) to \(\top\) the loss of
@@ -211,13 +211,13 @@ variables with finite mappings.
 
 Our guess is that it is possible to infer the precise infinite
 invariant, since all the information used to generate it are
-syntattically available: previous work on such matter is from James
+syntactically available: previous work on such matter is from James
 Worrell in~\cite{Lefaucheux2024}, which however deals with Presburger
 arithmetics (which are outside of scope in this thesis).
 
 For this reason our approach consists in smashing the \(\top\) element
 of our analysis. Remember that the original problem we want to solve
-(roughly) is the non-termination of the anlaysis,
+(roughly) is the non-termination of the analysis,
 
 che accade quando l'analisi di una variabile diverge all'interno di
 un loop usando le iterazioni di kleene.
@@ -394,7 +394,12 @@ We preliminarly prove a simple but useful property of
   First notice that it cannot be \(\overline\eta = \top\), otherwise
   by Lemma~\ref{le:btsemnrtop} \(\btsemnr{k_1}{k_2}{\com}\top = \top\)
   and therefore the hypothesis
-  \(\btsemnr{k_1}{k_2}{\com}\top \neq \top\) is not respceted.
+  \(\btsemnr{k_1}{k_2}{\com}\top \neq \top\) is not
+  respceted. Furthermore, notice that
+  \(\btsemnr{k_1}{k_2}{\com}\overline\eta \neq \top\) implies that
+  \(\tconcr[k_1,k_2](\btsemnr{k_1}{k_2}{\com}\overline\eta) =
+  \btsemnr{k_1}{k_2}{\com}\overline\eta\), due to the definition of
+  \(\tconcr[k_1,k_2]\).
   \begin{inductive}
     \case{\(\com[e]\)} In this case we have to prove that
     \begin{equation*}
