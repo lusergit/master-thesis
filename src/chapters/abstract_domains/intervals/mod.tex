@@ -1,12 +1,12 @@
 \section{Interval domain}\label{sec:intervals}
 
-Interval analysis are among the most well known abstract
-interpretation standard abstract domains. They are generally studied
-as simple non-relational domains, as intervals are not able to capture
+Interval analysis are among the most well known standard abstract
+domains in abstract interpretation. They are generally studied as
+simple non-relational domains, as intervals are not able to capture
 the relation between variables occurring in the program.  The
-following chapter aims to prove the fact that interval analysis is
-decidable without a widening operator, i.e., infinite ascending chains
-can be decided.
+following chapter aims at proving that interval analysis is decidable
+without a widening operator, i.e., despite the presence of infinite
+ascending chains the exact value of the analysis can be computed.
 
 \subimport{./}{definition}
 \subimport{./}{vwlifting}

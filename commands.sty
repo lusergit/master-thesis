@@ -2,7 +2,7 @@
 \ProvidesPackage{commands}[2023/03/17 Package providing custom commands for the document]
 
 %% domains and defined sets
-\newcommand{\imp}{\text{Imp}}
+\newcommand{\imp}{\mathsf{Imp}}
 \newcommand{\expr}{\ensuremath{\mathsf{Exp}}}
 \newcommand{\env}{\ensuremath{\mathsf{Env}}}
 \newcommand{\state}{\ensuremath{\mathsf{State}}}
@@ -67,7 +67,7 @@
 \newcommand{\bsemi}[3]{\ensuremath{{{\llb #3 \rrb}_{#1}^{#2}}}}
 \newcommand{\semnr}[1]{\ensuremath{\lla #1 \rra}}
 \newcommand{\bsemnr}[3]{\ensuremath{{\lla #3 \rra}_{#1}^{#2}}}
-\newcommand{\btsemnr}[3]{\ensuremath{{_{\top}{\lla #3 \rra}}_{#1}^{#2}}}
+\newcommand{\btsemnr}[3]{\ensuremath{{\overline{\lla #3 \rra}}_{#1}^{#2}}}
 \newcommand{\bsem}[1]{\ensuremath{\llp #1 \rrp}}
 \newcommand{\absem}[2][]{\ensuremath{{(\!( #2 )\!)}^{#1}}}
 \newcommand{\stt}[1]{\ensuremath{\langle #1 \rangle}}

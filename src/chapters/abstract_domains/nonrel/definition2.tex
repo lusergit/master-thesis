@@ -1,17 +1,15 @@
 % \subsection{Definition}\label{sub:nonrel}
 
-We first define \emph{non-relational collecting} analysis the the
+We first define \emph{non-relational collecting} analysis for the
 \(\imp\) language in a standard way, taking again the best correct
 approximation (bca) for the basic expressions in \(\expr\).  Unlike
 the Intervals domain, where we needed to define the set of intervals,
 the non-relational collecting analysis will rely on \(\poset{\z}\) for
-the abstract values of each variable in the variable-wise lifting.
-Notice that since we are already in \(\poset{\z}\) we do not need to
-abstract and concretize the values of our lattice.  As we already
-observed, \(\tuple{\poset{\z}, \subseteq}\) is a complete lattice,
-where the notions of \(\cap\) and \(\cup\) are well-known.  The next
-building block is the definition of some more operations on intervals,
-namely the addition and subtraction of an integer constant:
+the abstract values of each variable in the variable-wise lifting.  As
+we already observed, \(\tuple{\poset{\z}, \subseteq}\) is a complete
+lattice, where the notions of \(\cap\) and \(\cup\) are well-known.
+The next building block is the definition of some more operations on
+intervals, namely the addition and subtraction of an integer constant:
 
 \begin{definition}[Set addition and subtraction]
   For a nonempty set \(S \in \poset{\z}\) and \(c \in \n\) define

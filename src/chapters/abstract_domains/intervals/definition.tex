@@ -37,27 +37,28 @@ concretization and abstraction maps for the intervals domain
 The next step is to define some order on \(\Int\). For this purpose
 we define a partial order \(\sqsubseteq\) based on the concretization
 map.
-\begin{definition}[\(\Int\) partial order]\label{def:intpo}
+\begin{definition}[Partial order on \(\Int\)]\label{def:intpo}
   Let \(I,J \in \Int\). Then
   \begin{equation*}
     I \sqsubseteq J \iff \concr(I) \subseteq \concr(J)
   \end{equation*}
 \end{definition}
-We also define least upper bound and greatest lower bound on the
-\(\Int\) domain. Let \({\interval{a}{b}, \interval{c}{d}\in \Int}\)
+Observe that \(\tuple{\Int,\sqsubseteq}\) is a complete lattice. We
+next characterise least upper bound and greatest lower bound on the
+domain \(\Int\). Let \({\interval{a}{b}, \interval{c}{d}\in \Int}\)
 \begin{align*}
   \interval{a}{b} \; \acup \; \interval{c}{d} & \defin \interval{\min(a,c)}{\max(b,d)} \\
   \interval{a}{b} \; \acap \; \interval{c}{d} & \defin
                                                 \begin{cases} \
-                                                  \interval{\max(a,c)}{\min(b,d)} & \text{if } \min < \max \\
+                                                  \interval{\max(a,c)}{\min(b,d)} & \text{if } \min(b,d) < \max(a,c) \\
                                                   \bot & \text{otherwise}
                                                 \end{cases}
 \end{align*}
+The generalization to infinite sets is obtained in the obvious way, by
+replacing \(\min\) and \(max\) with \(\inf\) and \(\sup\).
 \noindent
-Observe that because of \(\sqsubseteq\) and \(\acup\) definitions
-\(\tuple{\Int,\sqsubseteq}\) is a complete lattice.  The next building
-block is the definition of some more operations on intervals, namely
-the addition and subtraction of an integer constant:
+The next building block is the definition of some more operations on
+intervals, namely the addition and subtraction of an integer constant:
 
 \begin{definition}[Interval addition and subtraction]
   For a nonempty interval \(\interval{a}{b} \in \Int\) and

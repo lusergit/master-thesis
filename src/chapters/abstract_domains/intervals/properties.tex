@@ -10,14 +10,14 @@ iterating over least upper bounds.
   Code~\ref{codedec}, for instance, the following program \(P\)
   represents the difference between the Kleene Star and the Fix
   operator:
-  \begin{lstlisting}[caption=\(\fix{\com}\) and \(\com^*\) difference, label=codedec, language=Imp]
+  \begin{lstlisting}[caption=Program P\, denoting \(\fix{\com}\) and \(\com^*\) difference, label=codedec, language=Imp]
   while x < 8 do
     if x = 2
-      then x := x+6;
+      x := x+6;
     endif;
     x := x-3;
     if x <= 0
-      then x:=0;
+      x:=0;
     endif;
   done;\end{lstlisting}
   starting with the finite interval \(\interval{3}{4}\) we get the

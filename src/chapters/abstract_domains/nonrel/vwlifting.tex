@@ -1,7 +1,7 @@
 \subsection{Variable-wise lifting}\label{sub:vwnonrel}
 
-We can therefore proceed to introduce the variable-wise lifting of the
-\(\poset{\z}\) domain, building the abstract domain \(\bCnr\):
+We can therefore proceed by introducing the variable-wise lifting of
+the domain \(\poset{\z}\), building the abstract domain \(\bCnr\):
 
 \begin{definition}[Abstract Non relational collecting domain]
   Let \(\poset[*]{\z} = \poset{\z} \setminus \{\emptyset\}\). The
@@ -40,18 +40,18 @@ Notice that because of the definition of the concretization map
 \begin{equation*}
   \eta \ovdot\subseteq \theta \iff \forall \var \in \Var \; \eta(\var) \ovdot\subseteq \theta(\var)
 \end{equation*}
-Again, we can define least upper bounds and greatest lower bounds by
-lifting the \(\sqcup\) and \(\sqcap\) operations. Let again
+we can notice that \(\tuple{\bCnr, \ovdot\subseteq}\) is a complete
+lattice, as for every two elements \(\eta,\theta\in\bCnr\) there
+exists both \(\eta \ovdot\cup \theta\) and \(\eta \ovdot\cap \theta\)
+by characterising least upper bounds and greatest lower bounds as the
+lifting of \(\sqcup\) and \(\sqcap\) operations. Let again
 \(\eta, \theta \in \bCnr\), then
 \begin{align*}
   \eta \ovdot\cap \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \cap \theta(\var) \quad \forall \var\in\Var \\
   \eta \ovdot\cup \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \cup \theta(\var) \quad \forall \var\in\Var
 \end{align*}
 
-Again we can notice that \(\tuple{\bCnr, \ovdot\subseteq}\) is a
-complete lattice, as for every two elements \(\eta,\theta\in\bCnr\)
-there exists both \(\eta \ovdot\cup \theta\) and
-\(\eta \ovdot\cap \theta\). With these premises we can now define base
+Again With these premises we can now define base
 operations on the non-relational collecting abstraction:
 \begin{definition}[Base expressions on non-relational collecting]
   Let \(\eta \in \bCnr\) and \(\concr\) from

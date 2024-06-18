@@ -1,7 +1,8 @@
 \section{Abstract inductive semantics}\label{sec:abstractsem}
 
 In order to talk about analysis over some abstract domain \(\bA\), we
-preliminarly introduce the abstract semantic.
+preliminarly introduce the definition of abstract semantics provided
+an abstract domain.
 
 \begin{definition}[\textbf{Abstract inductive semantic}]\label{def:abstrsem}
   Given a domain \(\bA\) and an abstract semantics
@@ -234,7 +235,7 @@ performed over \(\bA\), provided that the base cases are sound.
 We can also observe that best correct approximations (from
 Definition~\ref{def:bca}) induce sound semantics:
 
-\begin{lemma}[\textbf{bca induces soundness}]\label{le:bcainducessoundness}
+\begin{corollary}[\textbf{bca induces soundness}]\label{le:bcainducessoundness}
   Let
   \(\tuple{\bA, \sqsubseteq}, \tuple{\abstract\bA,
     \abstract\sqsubseteq}\) be two abstract domains equipped with
@@ -251,7 +252,7 @@ Definition~\ref{def:bca}) induce sound semantics:
   \end{equation*}
   i.e., the abstract inductive semantics over \(\abstract\bA\) is
   sound w.r.t.\ the abstract inductive semantics over \(\bA\).
-\end{lemma}
+\end{corollary}
 
 \begin{proof}
   The proof follows from Theorem~\ref{th:sound}, where we have to prove
@@ -305,10 +306,10 @@ Definition~\ref{def:bca}) induce sound semantics:
 \end{lemma}
 
 \begin{proof}
-  First, let's call
+  First, let
   \begin{align*}
-    f & = \lambda \mu . \eta \sqcup \mu \sqcup \semi[\bA]{\com}\mu \\
-    g & = \lambda \mu . \mu \sqcup \semi[\bA]{\com}\mu
+    f & = \lambda \mu . (\eta \sqcup \mu \sqcup \semi[\bA]{\com}\mu)\\
+    g & = \lambda \mu .(\mu \sqcup \semi[\bA]{\com}\mu)
   \end{align*}
   Let us first show by induction that 
   \begin{equation}\label{prop2}

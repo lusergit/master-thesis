@@ -8,7 +8,7 @@ Definition~\ref{def:minmax} of \(\min\) and \(\max\) values of an
 abstract environment \(\rho\) to bound the non relational collecting
 domain \(\bCnr\) in this way:
 
-\begin{definition}[Bounded non relational collecting domain]
+\begin{definition}[Bounded non-relational collecting domain]
   We define
   \(\bbCnr{k_1}{k_2} \defin \Var_{\com} \to \bounded{\poset[*]{\z}}{k_1}{k_2}\) where
   \begin{equation*}
@@ -44,7 +44,7 @@ abstraction maps
   the following way
   \begin{equation*}
     \abstr[k_1,k_2](S) = \begin{cases}
-      S & \text{if } \min(S) \geq k_1 \land \max(S) \leq k_2 \\
+      S & \text{if } \inf(S) \geq k_1 \land \sup(S) \leq k_2 \\
       \top & \text{otherwise}
     \end{cases}
   \end{equation*}
@@ -215,85 +215,161 @@ syntattically available: previous work on such matter is from James
 Worrell in~\cite{Lefaucheux2024}, which however deals with Presburger
 arithmetics (which are outside of scope in this thesis).
 
-% For this reason our approach consists in smashing the \(\top\) element
-% of our analysis. Remember that the original problem we want to solve
-% (roughly) is the non-termination of the anlaysis,
+For this reason our approach consists in smashing the \(\top\) element
+of our analysis. Remember that the original problem we want to solve
+(roughly) is the non-termination of the anlaysis,
 
-% che accade quando l'analisi di una variabile diverge all'interno di
-% un loop usando le iterazioni di kleene.
+che accade quando l'analisi di una variabile diverge all'interno di
+un loop usando le iterazioni di kleene.
 
-% \begin{definition}[Smashed \(\top\) non realtional collecting]
-%   Let
-%   \begin{equation*}
-%     \bposet{k_1}{k_2}{\z} \defin \{S \subseteq \z \mid S \neq \emptyset \land \forall x \in S \quad k_1 \leq x \leq k_2\}.
-%   \end{equation*}
-%   We define \(\btbCnr{k_1}{k_2}\) as
-%   \begin{equation*}
-%     \btbCnr{k_1}{k_2} \defin (\Var \to \bposet{k_1}{k_2}{\z}) \cup \{\bot, \top\}
-%   \end{equation*}
-% \end{definition}
+\begin{definition}[Smashed \(\top\) non realtional collecting]
+  Let
+  \begin{equation*}
+    \bposet{k_1}{k_2}{\z} \defin \{S \subseteq \z \mid S \neq \emptyset \land \forall x \in S \quad k_1 \leq x \leq k_2\}.
+  \end{equation*}
+  We define \(\btbCnr{k_1}{k_2}\) as
+  \begin{equation*}
+    \btbCnr{k_1}{k_2} \defin (\Var \to \bposet{k_1}{k_2}{\z}) \cup \{\bot, \top\}
+  \end{equation*}
+\end{definition}
 
-% we can build a Galois connection with \(\bbCnr{k_1}{k_2}\) for some
-% fixed \(k_1, k_2 \in \z\):
+we can build a Galois connection with \(\bbCnr{k_1}{k_2}\) for some
+fixed \(k_1, k_2 \in \z\):
 
-% \begin{definition}
-%   Let \(k_1, k_2 \in \z\) s.t.\ \(k_1 \leq k_2\),
-%   \(\eta \in \bbCnr{k_1}{k_2}\) and
-%   \(\overline\eta \in \btbCnr{k_1}{k_2}\). Then the abstraction map
-%   \({\tabstr[k_1,k_2]} : \bbCnr{k_1}{k_2} \to \btbCnr{k_1}{k_2}\) is
-%   defined as
-%   \begin{equation*}
-%     {\tabstr[k_1,k_2]}(\eta) = \begin{cases}
-%       \top & \text{if } \exists\var\in\Var \text{ s.t. } \eta\var = \top \\
-%       \eta & \text{otherwise}
-%     \end{cases}
-%   \end{equation*}
-%   while concretization map
-%   \({\tconcr[k_1,k_2]} : \btbCnr{k_1}{k_2} \to \bbCnr{k_1}{k_2}\)
-%   is defined as
-%   \begin{align*}
-%     \tconcr[k_1,k_2](\top) & = \lambda \var \in \Var . \top \\
-%     \tconcr[k_1,k_2](\overline\eta) & = \overline\eta
-%   \end{align*}
-% \end{definition}
+\begin{definition}
+  Let \(k_1, k_2 \in \z\) s.t.\ \(k_1 \leq k_2\),
+  \(\eta \in \bbCnr{k_1}{k_2}\) and
+  \(\overline\eta \in \btbCnr{k_1}{k_2}\). Then the abstraction map
+  \({\tabstr[k_1,k_2]} : \bbCnr{k_1}{k_2} \to \btbCnr{k_1}{k_2}\) is
+  defined as
+  \begin{equation*}
+    {\tabstr[k_1,k_2]}(\eta) = \begin{cases}
+      \top & \text{if } \exists\var\in\Var \text{ s.t. } \eta\var = \top \\
+      \eta & \text{otherwise}
+    \end{cases}
+  \end{equation*}
+  while concretization map
+  \({\tconcr[k_1,k_2]} : \btbCnr{k_1}{k_2} \to \bbCnr{k_1}{k_2}\)
+  is defined as
+  \begin{align*}
+    \tconcr[k_1,k_2](\top) & = \lambda \var \in \Var . \top \\
+    \tconcr[k_1,k_2](\overline\eta) & = \overline\eta
+  \end{align*}
+\end{definition}
 
-% We can now define base expressions based on the bca with the bounded
-% non relational collecting semantics:
+We can now define base expressions based on the bca with the bounded
+non relational collecting semantics:
 
-% \begin{definition}
-%   Let \(\com[e] \in \expr\). The semantics of base expressions over
-%   \(\btbCnr{k_1}{k_2}\) is defined as
-%   \begin{equation*}
-%     \absem[\btbCnr{k_1}{k_2}]{\com[e]} \defin {\tabstr[k_1,k_2]}\conc \absem[\bbCnr{k_1}{k_2}]{\com[e]}
-%   \end{equation*}
-%   i.e., the bca on the semantics of base expressions on bounded
-%   non-relational collecting analysis.
-% \end{definition}
-% Once again, \(\semi[\btbCnr{k_1}{k_2}]{\cdot}\) is defined accordingly
-% to the abstract inductive semantics of Definition~\ref{def:abstrsem}.
-% Notice that contrary to latter definition of \(\bbCnr{k_1}{k_2}\) in
-% this case we have a smashed top element. The idea is that whenever a
-% variable divergeswe would conclude that the whole precise analysis
-% diverges, in order to solve Problem~\ref{problem1} and decide analysis
-% termination.  For simplicity, from now on we will refer to
-% \(\semi[\btbCnr{k_1}{k_2}]{\cdot}\) as \(\bsemnr{k_1}{k_2}{\cdot}\).
+\begin{definition}
+  Let \(\com[e] \in \expr\). The semantics of base expressions over
+  \(\btbCnr{k_1}{k_2}\) is defined as
+  \begin{equation*}
+    \absem[\btbCnr{k_1}{k_2}]{\com[e]} \defin {\tabstr[k_1,k_2]}\conc \absem[\bbCnr{k_1}{k_2}]{\com[e]}
+  \end{equation*}
+  i.e., the bca on the semantics of base expressions on bounded
+  non-relational collecting analysis.
+\end{definition}
+Once again, \(\semi[\btbCnr{k_1}{k_2}]{\cdot}\) is defined accordingly
+to the abstract inductive semantics of Definition~\ref{def:abstrsem}.
+Notice that contrary to latter definition of \(\bbCnr{k_1}{k_2}\) in
+this case we have a smashed top element. The idea is that whenever a
+variable diverges we infer that the whole precise analysis diverges,
+in order to solve Problem~\ref{problem1} and decide analysis
+termination.  For simplicity, from now on we will refer to
+\(\semi[\btbCnr{k_1}{k_2}]{\cdot}\) as \(\btsemnr{k_1}{k_2}{\cdot}\).
+
+We preliminarly prove a simple but useful property of
+\(\btsemnr{k_1}{k_2}{\cdot}\): it preserves the \(\top\) element.
+
+\begin{lemma}[\(\btsemnr{k_1}{k_2}{\cdot}\) preserves \(\top\)]\label{le:btsemnrtop}
+  Let \(k_1, k_2 \in \z\) s.t.\ \(k_1 \leq k_2\) and \(\com\in\imp\)
+  \begin{equation*}
+    \btsemnr{k_1}{k_2}{\com}\top = \top
+  \end{equation*}
+\end{lemma}
+
+\begin{proof}
+  We proceed by induction on the program \(\com\) to prove that
+  \begin{equation*}
+    \btsemnr{k_1}{k_2}{\com}\top = \top
+  \end{equation*}
+  \begin{inductive}
+    \case{\(\var\in I\)} In this case
+    \begin{align*}
+      \btsemnr{k_1}{k_2}{\var \in I}\top & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) (\semnr{\var\in I}(\lambda \var[y] . \top)) \\
+      & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) f
+    \end{align*}
+    where
+    \begin{equation*}
+      f (\var[y]) = \begin{cases}
+        \concr[k_1,k_2](I) & \text{if } \var[y] = \var \\
+        \top & \text{otherwise}
+      \end{cases}
+    \end{equation*}
+    Now notice that for all \(\var[y] \neq \var\) it holds that
+    \(\dabstr[k_1,k_2](f)(\var[y]) = \top\), hence
+    \((\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2])(f) = \top\), which is
+    our thesis.
+
+    \case{\(\var := k\)} In this case
+    \begin{align*}
+      \btsemnr{k_1}{k_2}{\var := k}\top & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) (\semnr{\var:= k}(\lambda \var[y] . \top)) \\
+      & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) f
+    \end{align*}
+    where
+    \begin{equation*}
+      f (\var[y]) = \begin{cases}
+        \{k\} & \text{if } \var[y] = \var \\
+        \top & \text{otherwise}
+      \end{cases}
+    \end{equation*}
+    Now notice that for all \(\var[y] \neq \var\) it holds that
+    \(\dabstr[k_1,k_2](f)(\var[y]) = \top\), hence
+    \((\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2])(f) = \top\), which is
+    our thesis.
+
+    \case{\(\var := \var[y] + k\)} In this case
+    \begin{align*}
+      \btsemnr{k_1}{k_2}{\var := \var[y] + k}\top & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) (\semnr{\var := \var[y] + k}(\lambda \var[w] . \top)) \\
+                                                  & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) (\lambda \var[w] . \top) & \text{since } \top + k = \top \\
+                                                  & = \top
+    \end{align*}
+
+    \case{\(\com_1 \ndet \com_2\)} In this case
+    \begin{align*}
+      \btsemnr{k_1}{k_2}{\com_1\ndet\com_2}\top & = \btsemnr{k_1}{k_2}{\com_1}\top \ovdot\cup \btsemnr{k_1}{k_2}{\com_2}\top \\
+                                                & = \top \ovdot\cup \top & \text{By inductive hypothesis} \\
+                                                & = \top
+    \end{align*}
+    \case{\(\com_1 \seq \com_2\)} In this case
+    \begin{align*}
+      \btsemnr{k_1}{k_2}{\com_1\seq\com_2}\top & = \btsemnr{k_1}{k_2}{\com_2}\left(\btsemnr{k_1}{k_2}{\com_1}\top\right) \\
+                                               & = \btsemnr{k_1}{k_2}{\com_2}\top & \text{By induction on }\com_1 \\
+                                               & = \top & \text{By induction on }\com_2
+    \end{align*}
+    \case{\(\fix\com\)} In this case
+    \begin{align*}
+      \btsemnr{k_1}{k_2}{\fix\com}\top & = \lfp\left(\lambda \mu . \top \ovdot\cup \btsemnr{k_1}{k_2}{\com}\mu\right) \ovdot\supseteq \top & \text{By definition of }\lfp \\
+                                       & = \top & \text{By definition of }\top
+    \end{align*}
+  \end{inductive}
+\end{proof}
 
 \begin{theorem}
   Let \(\com\in\imp\) be a program. Then, for all finitely supported
-  \(\eta : \Var_{\com} \to \bCnr\) and \(k_1, k_2 \in \z\) s.t.\
+  \(\eta \in \btbCnr{k_1}{k_2}\) and \(k_1, k_2 \in \z\) s.t.\
   \(\bCnr_{\com,\eta} \preceq \bbCnr{k_1}{k_2}\), i.e.,
   \(k_1 \leq \min(\eta) - \nlbound{\com}\) and
   \(k_2 \geq \max(\eta) + \nbound{\com}\) then
   \begin{equation*}
-    \forall \var\in\Var \; \bsemnr{k_1}{k_2}{\com}\eta\var \neq \top
+    \btsemnr{k_1}{k_2}{\com}\eta \neq \top
     \quad
     \implies
     \quad
-    \semnr{\com}\eta = \bsemnr{k_1}{k_2}{\com}\eta
+    \semnr{\com}\eta = \btsemnr{k_1}{k_2}{\com}\eta
   \end{equation*}
-  i.e., if the analysis over \(\bCnr\) for all the variables \(\var\)
-  does not diverge, then the analysis over \(\bbCnr{k_1}{k_2}\)
-  converges to the same result.
+  i.e., if the analysis over \(\btbCnr{k_1}{k_2}\) does not diverge,
+  then the analysis over \(\bCnr\) converges to the same result.
 \end{theorem}
 
 \begin{proof}
@@ -302,187 +378,119 @@ arithmetics (which are outside of scope in this thesis).
   inductive cases of \(\imp\). Notice that because of
   Lemma~\ref{le:soundnr}
   \begin{equation*}
-    \semnr{\com} \eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\com}\eta
-    % \ovdot\subseteq \tconcr[k_1,k_2]\left(\bsemnr{k_1}{k_2}{\com}\eta\right)
+    \semnr{\com}\tconcr[k_1,k_2](\overline\eta)
+    \ovdot\subseteq
+    \semi[\bbCnr{k_1}{k_2}]{\com}\tconcr[k_1,k_2](\overline\eta)
+    \ovdot\subseteq
+    \tconcr[k_1,k_2](\btsemnr{k_1}{k_2}{\com}\overline\eta)
+    % \ovdot\subseteq \tconcr[k_1,k_2]\left(\btsemnr{k_1}{k_2}{\com}\eta\right)
   \end{equation*}
-  already holds for every \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\),
-  hence what we have to prove for every case is that
+  already holds for every \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\)
+  and \(\overline\eta \in \btbCnr{k_1}{k_2}\), hence what we have to
+  prove for every case is that
   \begin{equation*}
-    \forall \var\in\Var \; \bsemnr{k_1}{k_2}{\com}\eta\var \neq \top \implies \semnr{\com} \eta \var \ovdot\supseteq \bsemnr{k_1}{k_2}{\com}\eta\var \quad \forall \var\in\Var
+    \btsemnr{k_1}{k_2}{\com}\eta \neq \top \implies \semnr{\com} \eta \ovdot\supseteq \btsemnr{k_1}{k_2}{\com}\eta
   \end{equation*}
+  First notice that it cannot be \(\overline\eta = \top\), otherwise
+  by Lemma~\ref{le:btsemnrtop} \(\btsemnr{k_1}{k_2}{\com}\top = \top\)
+  and therefore the hypothesis
+  \(\btsemnr{k_1}{k_2}{\com}\top \neq \top\) is not respceted.
   \begin{inductive}
-    \case{\(\var\in I\)} In this case we have to prove that
+    \case{\(\com[e]\)} In this case we have to prove that
     \begin{equation*}
-      \forall \var[y] \in \Var_{\com} \quad \bsemnr{k_1}{k_2}{\var\in I}\eta\var[y] \neq \top \implies \semnr{\var\in I}\eta \var[y] \ovdot\supseteq \bsemnr{k_1}{k_2}{\var\in I}\eta\var[y]
+      \btsemnr{k_1}{k_2}{\com[e]}\overline{\eta} \neq \top \implies
+      \semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta) = \tconcr[k_1,k_2](\btsemnr{k_1}{k_2}{\com[e]}\overline\eta)
     \end{equation*}
-    with \(k_1\leq \min(\eta) - \nlbound{\var \in I}\) and
-    \(k_1\geq \max(\eta) + \nbound{\var \in I}\). Notice that since
-    \(\semnr{\var \in I}\eta\) updates only the variable \(\var\), the
-    only case we are interested in is when \(\var[y] = \var\). This
-    applies also for next base cases, hence we will omit this
-    observation in future base cases.
-
-    \medskip
-
-    \noindent
-    Hence we have 2 cases. Either
-    \(\eta\var \cap \concr[\inte](I) = \emptyset\), hence
-    \(\semnr{\var\in I}\eta = \bot = \bsemnr{k_1}{k_2}{\var\in
-      I}\eta\) and our thesis hold. Otherwise
-    \(\eta\var \cap \concr[\inte](I) = S \neq \emptyset\). In this
-    case we are under the hypothesis that for all \(\var[y] \in \Var\)
-    \(\semnr{\var\in I}\eta\var[y] \neq \top\), hence both
-    \({\max(\semnr{\var\in I}\eta\var[y]) \neq +\infty}\) and
-    \({\min(\semnr{\var\in I}\eta\var[y]) \neq -\infty}\) hold.
-    Therefore by Lemma~\ref{le:incnr} and Lemma~\ref{le:decnr}, for
-    all the variables \(\var[y] \in \Var\)
-    \begin{align*}
-      \max(S) = \max(\semnr{\var\in I}\eta\var) & \leq \max(\eta) + \bound{\var \in I}\\
-      \min(S) = \min(\semnr{\var\in I}\eta\var) & \geq \min(\eta) - \lbound{\var \in I}
-    \end{align*}
-    which means that \(\abstr[k_1,k_2](S) = S\) and therefore
+    First, if \(\overline\eta = \bot\) we can notice that
     \begin{equation*}
-      \bsemnr{k_1}{k_2}{\var\in I}\eta\var = \abstr[k_1,k_2](\semnr{\var\in I}\eta\var) = \semnr{\var\in I}\eta\var
-    \end{equation*}
-    which means that our thesis is respected.
-
-    \case{\(\var := k\)} In this case we have to prove that
-    \begin{equation*}
-      \forall \var[y] \in \Var \quad {\bsemnr{k_1}{k_2}{\var := k}\eta\var[y] \neq \top}
-      \implies
-      {\semnr{\var := k}\eta} = {\bsemnr{k_1}{k_2}{\var := k}\eta}
-    \end{equation*}
-    when \(k_1 \leq \min(\rho) - \nlbound{\var := k}\) and
-    \(k_2 \geq \max(\rho) + \nbound{\var := k}\). % This follows from
-    % the fact that if we consider \(\var[y] = \var\) then
-    % \(\semnr{\var := k}\eta\var = \{k\}\), which is finite, and
-    % \(\nlbound{\var := k} = \nbound{\var := k} = |k|\) this means that
-    % \(k_1 \leq -|k|\) and \(k_2 \geq +|k|\), hence
-    % \begin{equation*}
-    %   {\bsemnr{k_1}{k_2}{\var := k}\eta\var} = \abstr[k_1,k_2]({\semnr{\var := k}\eta\var}) = {\semnr{\var := k}\eta\var}
-    % \end{equation*}
-    % and therefore for \(\var[y] = \var\) our thesis holds. For every
-    % other \(\var[y] \neq \var\) it holds that
-    % \begin{equation*}
-    %   |\semnr{\var := k}\eta\var[y]| \neq \infty
-    %   \implies
-    %   \semnr{\var := k}\eta\var[y] = \eta\var[y]
-    % \end{equation*}
-    % and by hypothesis \(\eta \in \bbCnr{k_1}{k_2}\) for all
-    % \(\bbCnr{k_1}{k_2}\) s.t.
-    % \(\bCnr_{\com, \eta} \preceq \bbCnr{k_1}{k_2}\), which is our
-    % case. Hence also in this case our thesis holds:
-    % \begin{equation*}
-    %   |\semnr{\var := k}\eta\var[y]| \neq \infty
-    %   \implies
-    %   \semnr{\var := k}\eta\var[y] =
-    %   \abstr[k_1,k_2]({\semnr{\var := k}\eta\var[y]}) =
-    %   {\bsemnr{k_1}{k_2}{\var := k}\eta\var[y]}
-    % \end{equation*}
-    This follows from the fact that we're under the hypothesis that
-    \(\forall \var[y]\in\Var\)
-    \(\bsemnr{k_1}{k_2}{\var:= k}\eta\var[y]\neq\top\), hence
-    \begin{align*}
-      \max(\semnr{\var:= k}\eta\var[y]) & \leq \max(\eta) + \bound{\var := k} = k_2  & \text{By Lemma~\ref{le:incnr}}\\
-      \min(\semnr{\var:= k}\eta\var[y]) & \geq \min(\eta) - \lbound{\var := k} = k_1 & \text{By Lemma~\ref{le:decnr}}
-    \end{align*}
-    must be true, and therefore by definition of
-    \(\bsemnr{k_1}{k_2}{\cdot}\)
-    \begin{equation*}
-      \bsemnr{k_1}{k_2}{\var := k}\eta = \abstr[k_1,k_2]\left(\semnr{\var := k}\eta\right) = \semnr{\var := k}\eta
+      (\tabstr[k_1k_2] \conc \dabstr[k_1,k_2] \conc \semnr{\com[e]})\bot
+      = \bot =
+      \semnr{\com[e]}\tconcr[k_1,k_2](\bot)
     \end{equation*}
     which is our thesis.
 
-    \case{\(\var := \var[y] + k\)} In this case we have to prove that
-    \begin{equation*}
-      \forall \var[w] \in \Var_{\com} \quad {\semnr{\var := \var[y] + k}\eta\var[w]} \neq \top
-      \implies
-      {\semnr{\var := \var[y] + k}\eta} = {\bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta}
-    \end{equation*}
-    Similarly to the latter case, if \(\var[w] \neq \var\) it holds
-    that \(\semnr{\var := \var[y] + k}\eta\var[w] = \eta\var[w]\), and
-    since
-    \(\eta \in \bCnr_{\var := \var[y] + k, \eta} \preceq
-    \bbCnr{k_1}{k_2}\) it also holds that
-    \(\min(\eta\var[w]) \geq k_1\) and \(\max(\eta\var[w]) \leq
-    k_2\). Otherwise, if \(\var[w] = \var\)
+    The last case is when \(\top \neq \overline\eta\neq\bot\) and
+    therefore for all \(\var\in\Var\)
+    \(\overline\eta\var \in \bposet{k_1}{k_2}{\z}\). In this case by
+    Lemma~\ref{le:incnr} and Lemma~\ref{le:decnr} for all
+    \(\var[y]\in\Var\) both
     \begin{align*}
-      \max(\semnr{\var := \var[y] + k}\eta\var) & \leq \max(\eta) + \bound{\var := \var[y] + k} & \text{by Lemma~\ref{le:incnr}} \\
-      \min(\semnr{\var := \var[y] + k}\eta\var) & \geq \min(\eta) + \lbound{\var := \var[y] + k} & \text{by Lemma~\ref{le:decnr}}
+      \max(\semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)\var[y]) & \leq \max(\tconcr[k_1,k_2](\overline\eta)) + \bound{\com[e]} \leq \max(\tconcr[k_1,k_2](\overline\eta)) + \nbound{\com[e]} = k_2 \\
+      \min(\semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)\var[y]) & \geq \min(\tconcr[k_1,k_2](\overline\eta)) - \lbound{\com[e]} \geq \min(\tconcr[k_1,k_2](\overline\eta)) - \nlbound{\com[e]} = k_1
     \end{align*}
-    Therefore in every case each variable is inside the domain bounds
-    \(k_1, k_2\), which means that by definition of
-    \(\abstr[k_1,k_2]\) our thesis
+    hence by definition of \(\dabstr[k_1,k_2]\) and
+    \(\tabstr[k_1,k_2]\)
     \begin{equation*}
-      \forall \var[w] \in \Var \quad \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta\var[w] \neq \top \implies
-      \semnr{\var := \var[y] + k}\eta =
-      \abstr[k_1,k_2](\semnr{\var := \var[y] + k}\eta) =
-      \bsemnr{k_1}{k_2}{\var := \var[y] + k}\eta
+      \left(\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]\right)\left(\semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)\right)
+      =
+      \semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)
     \end{equation*}
-    holds.
+    which is our thesis.
 
     \case{\(\com_1 \ndet \com_2\)} In this case we have to prove that
-    for all \(\var \in \Var_{\com}\)
     \begin{equation*}
-      \forall \var[y]\in\Var \quad \bsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta\var[y] \neq \top
+      \btsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta \neq \top
       \implies
-      \semnr{\com_1 \ndet \com_2}\eta = \bsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta
+      \semnr{\com_1 \ndet \com_2}\eta = \btsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta
     \end{equation*}
     with \(k_1 \leq \min(\eta) - \nlbound{\com_1 \ndet \com_2}\) and
     \(k_2 \geq \max(\eta) + \nbound{\com_1 \ndet \com_2}\). First we
     can notice that since
-    \(\bsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta\var =
-    \bsemnr{k_1}{k_2}{\com_1}\eta\var \cup
-    \bsemnr{k_1}{k_2}{\com_2}\eta\var\) our hypothesis
-    \({\bsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta\var \neq \top}\)
-    implies both \({\bsemnr{k_1}{k_2}{\com_1}\eta\var \neq \top}\) and
-    \({\bsemnr{k_1}{k_2}{\com_2}\eta\var \neq \top}\). Hence by choice
+    \(\btsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta\var =
+    \btsemnr{k_1}{k_2}{\com_1}\eta\var \cup
+    \btsemnr{k_1}{k_2}{\com_2}\eta\var\) our hypothesis
+    \({\btsemnr{k_1}{k_2}{\com_1 \ndet \com_2}\eta\var \neq \top}\)
+    implies both \({\btsemnr{k_1}{k_2}{\com_1}\eta\var \neq \top}\) and
+    \({\btsemnr{k_1}{k_2}{\com_2}\eta\var \neq \top}\). Hence by choice
     of \(k_1\) and \(k_2\) we can use the inductive hypothesis and
     state that
     \begin{align*}
-      \semnr{\com_1}\eta\var & = \bsemnr{k_1}{k_2}{\com_1}\eta\var \\
-      \semnr{\com_2}\eta\var & = \bsemnr{k_1}{k_2}{\com_2}\eta\var
+      \semnr{\com_1}\eta\var & = \btsemnr{k_1}{k_2}{\com_1}\eta\var \\
+      \semnr{\com_2}\eta\var & = \btsemnr{k_1}{k_2}{\com_2}\eta\var
     \end{align*}
     and by closure over \(\cup\)
     \begin{equation*}
       \semnr{\com_1 \ndet\com_2}\eta\var =
       \semnr{\com_1}\eta\var \cup \semnr{\com_2}\eta\var =
-      \bsemnr{k_1}{k_2}{\com_1}\eta\var \cup \bsemnr{k_1}{k_2}{\com_2}\eta\var =
-      \bsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta\var
+      \btsemnr{k_1}{k_2}{\com_1}\eta\var \cup \btsemnr{k_1}{k_2}{\com_2}\eta\var =
+      \btsemnr{k_1}{k_2}{\com_1 \ndet\com_2}\eta\var
     \end{equation*}
     which is our thesis.
 
     \case{\(\com_1 \seq \com_2\)} In this case we have to prove that
     \begin{equation*}
-      \forall \var[y]\in\Var \quad \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var[y] \neq \top
+      \btsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta \neq \top
       \implies
-      \semnr{\com_1 \seq\com_2} \eta = \bsemnr{k_1}{k_2}{\com_1 \seq\com_2}\eta
+      \semnr{\com_1 \seq\com_2} \eta = \btsemnr{k_1}{k_2}{\com_1 \seq\com_2}\eta
     \end{equation*}
     for all \(k_1 \leq \min(\eta) -\nlbound{\com_1\seq\com_2}\) and
     \(k_2 \geq \max(\eta) + \nbound{\com_1\seq\com_2}\). First let's
     recall that
     \begin{equation*}
-      \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var = \bsemnr{k_1}{k_2}{\com_2}\left(\bsemnr{k_1}{k_2}{\com_1}\eta\right)(\var)
+      \btsemnr{k_1}{k_2}{\com_1\seq\com_2}\overline\eta
+      =
+      \btsemnr{k_1}{k_2}{\com_2}\left(\btsemnr{k_1}{k_2}{\com_1}\overline\eta\right)
     \end{equation*}
     and we are under the hypothesis
-    \(\forall \var[y] \in \Var \;
-    \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var[y] \neq \top\), which
-    means that both the following hold
-    \begin{align*}
-      {\forall \var[y] \in \Var} \; \bsemnr{k_1}{k_2}{\com_1}\eta\var[y] & \neq \top \\
-      {\forall \var[y] \in \Var} \; \bsemnr{k_1}{k_2}{\com_2}\eta'\var[y] & \neq \top
-    \end{align*}
-    where \(\eta' = \semnr{\com_1}\eta\).  By inductive hypothesis if
-    for all \(\var[y] \in \Var_{\com}\)
-    \(\semnr{\com_1}\eta\var[y] \neq \top\) then
-    \(\semnr{\com_1}\eta\var = \bsemnr{k_1}{k_2}{\com_1}\eta\var\) for
-    all \(k_1 \leq \min(\eta) - \nlbound{\com_1}\) and
-    \(k_2 \geq \max(\eta) + \nbound{\com_2}\). We can now call and by
-    inductive hypothesis again:
+    \(\btsemnr{k_1}{k_2}{\com_1\seq\com_2}\overline\eta \neq \top\),
+    which means that
+    \(\btsemnr{k_1}{k_2}{\com_2}\overline\eta\neq \top \neq
+    \btsemnr{k_1}{k_2}{\com_2}\overline\eta'\) where
+    \(\overline\eta' = \btsemnr{k_1}{k_2}{\com_1}\overline\eta\),
+    otherwise by Lemma~\ref{le:btsemnrtop} we would contraddict the
+    hypothesis
+    \(\btsemnr{k_1}{k_2}{\com_1\ndet\com_2}\overline\eta\neq\top\).
+    Then, by inductive hypothesis
+    \(\semnr{\com_1}\overline\eta =
+    \btsemnr{k_1}{k_2}{\com_1}\overline\eta\) for all
+    \(k_1 \leq \min(\eta) - \nlbound{\com_1}\) and
+    \(k_2 \geq \max(\eta) + \nbound{\com_2}\). We can now call
+    \(\overline\eta' = \btsemnr{k_1}{k_2}{\com_1}\overline\eta\) and
+    by inductive hypothesis again:
     \begin{equation*}
-      \forall \var[y] \in \Var \quad \bsemnr{k_1}{k_2}{\com_2}\eta'\var \neq \top
+      \btsemnr{k_1}{k_2}{\com_2}\eta' \neq \top
       \implies
-      \semnr{\com_2}\eta'\var = \bsemnr{k_1}{k_2}{\com_2}\eta'\var
+      \semnr{\com_2}\eta' = \btsemnr{k_1}{k_2}{\com_2}\eta'
     \end{equation*}
     for all \(k_1 \leq \min(\eta') - \nlbound{\com_2}\) and
     \(k_2 \geq \max(\eta') + \nbound{\com}\). Notice that
@@ -490,52 +498,53 @@ arithmetics (which are outside of scope in this thesis).
     \(\max(\eta') \leq \max(\eta) + \nbound{\com_1}\) and therefore we
     can chose
     \(k_1 \leq \min(\eta) - \nlbound{\com_1} - \nlbound{\com_2}\) and
-    \(k_2 \geq \max(\eta) + \nbound{\com_1} + \nbound{\com_2}\) and
-    notice that both inductive hypothesis hold, and therefore the
-    following holds
+    \(k_2 \geq \max(\eta) + \nbound{\com_1} + \nbound{\com_2}\). Since
+    both inductive hypothesis hold, then following holds
     \begin{equation*}
-      \forall \var[y] \in \Var \quad \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var \neq \top
+      \btsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta \neq \top
       \implies
-      \semnr{\com_1\seq\com_2}\eta\var = \bsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta\var
+      \semnr{\com_1\seq\com_2}\eta = \btsemnr{k_1}{k_2}{\com_1\seq\com_2}\eta
     \end{equation*}
     which is our thesis.
     
     \case{\(\fix\com\)} In this case we want to prove that
     \begin{equation*}
-      \forall \var[y] \in \Var \quad \bsemnr{k_1}{k_2}{\fix\com}\eta\var \neq \top
+      \btsemnr{k_1}{k_2}{\fix\com}\overline\eta \neq \top
       \implies
-      \semnr{\fix\com}\eta = \bsemnr{k_1}{k_2}{\fix\com}\eta
+      \semnr{\fix\com}\overline\eta = \btsemnr{k_1}{k_2}{\fix\com}\overline\eta
     \end{equation*}
-    for all \(k_1 \geq \min(\eta) - \nlbound{\fix\com}\) and
-    \(k_2 \leq \max(\eta) + \nbound{\fix\com}\). Recall that by
+    for all \(k_1 \geq \min(\overline\eta) - \nlbound{\fix\com}\) and
+    \(k_2 \leq \max(\overline\eta) + \nbound{\fix\com}\). Recall that by
     Lemma~\ref{le:soundnr} it always holds that
     \begin{equation*}
-      \semnr{\fix\com}\eta \ovdot\subseteq \bsemnr{k_1}{k_2}{\fix\com}\eta
+      \semnr{\fix\com}\overline\eta \ovdot\subseteq \btsemnr{k_1}{k_2}{\fix\com}\overline\eta
     \end{equation*}
     We have therefore to prove that 
     \begin{equation}\label{eq:geq}
-      \forall \var\in\Var \quad \bsemnr{k_1}{k_2}{\fix\com}\eta\var \neq \top
+      \btsemnr{k_1}{k_2}{\fix\com}\overline\eta \neq \top
       \implies
-      \semnr{\fix\com}\eta \ovdot\supseteq \bsemnr{k_1}{k_2}{\fix\com}\eta
+      \semnr{\fix\com}\overline\eta \ovdot\supseteq \btsemnr{k_1}{k_2}{\fix\com}\overline\eta
     \end{equation}
-    for all \(k_1 \leq \min(\eta) - \nlbound{\fix\com}\) and
-    \(k_2 \geq \max(\eta) + \nbound{\fix\com}\). To start notice that
+    for all \(k_1 \leq \min(\overline\eta) - \nlbound{\fix\com}\) and
+    \(k_2 \geq \max(\overline\eta) + \nbound{\fix\com}\). To start notice that
     according to Lemma~\ref{le:sugar}
-    \(\semnr{\fix\com}\eta = \semnr{\kleene{(\com\ndet\tru)}}\eta\),
+    \(\semnr{\fix\com}\overline\eta = \semnr{\kleene{(\com\ndet\tru)}}\overline\eta\),
     hence we can alternatively prove that
     \begin{equation*}
-      \forall \var[y] \in \Var \bsemnr{k_1}{k_2}{\fix\com}\eta\var \neq \top
+      \btsemnr{k_1}{k_2}{\fix\com}\overline\eta\neq \top
       \implies
-      \semnr{\fix\com}\eta \supseteq \bigcup_{i\in\n} {\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta
+      \semnr{\fix\com}\overline\eta
+      \ovdot\supseteq
+      \bigcup_{i\in\n} {\left(\btsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\overline\eta
     \end{equation*}
     which implies Equation~\ref{eq:geq}. To start we will initially
     prove that for every \(i\in\n\) it holds that
     \begin{equation*}
-      \forall \var \in \Var\quad \semnr{\fix\com}\eta\var \neq \top
+      \semnr{\fix\com}\overline\eta \neq \top
       \implies
       %
-      \semnr{\fix\com}\eta\var \supseteq
-      {\left(\bsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\eta
+      \semnr{\fix\com}\overline\eta \ovdot\supseteq
+      {\left(\btsemnr{k_1}{k_2}{\com \ndet \tru}\right)}^i\overline\eta
     \end{equation*}
     to then prove the first one by closure over \(\cup\). We will
     prove it by induction on \(i\):
@@ -543,9 +552,9 @@ arithmetics (which are outside of scope in this thesis).
       
     \item[Case] (\(i=0\)). In this case we have to prove that
       \begin{equation*}
-        \forall \var[y] \in \Var \quad \bsemnr{k_1}{k_2}{\fix\com}\eta\var[y] \neq \top
+        \btsemnr{k_1}{k_2}{\fix\com}\overline\eta \neq \top
         \implies
-        \semnr{\fix\com}\eta \supseteq \eta
+        \semnr{\fix\com}\overline\eta \ovdot\supseteq \overline\eta
       \end{equation*}
       We can notice that by definition of \(\semnr{\fix\com}\) the
       thesis holds.
@@ -553,65 +562,67 @@ arithmetics (which are outside of scope in this thesis).
     \item[Case] (\(i \implies i+1\)). In this case we have to prove
       that
       \begin{equation*}
-        \forall \var \in \Var \quad \semnr{\fix\com}\eta\var \neq \top
+        \semnr{\fix\com}\overline\eta \neq \top
         \implies
-        \bsemnr{k_1}{k_2}{\fix\com}\eta \supseteq {\left(\bsemnr{k_1}{k_2}\com\ndet\tru\right)}^{i+1}\eta
+        \semnr{\fix\com}\overline\eta \supseteq {\left(\btsemnr{k_1}{k_2}\com\ndet\tru\right)}^{i+1}\overline\eta
       \end{equation*}
       First we can notice that
       \begin{align*}
-        \semnr{\com\ndet\tru}(\semnr{\fix\com}\eta) & = \semnr{\com}(\semnr{\fix\com}\eta) \cup \semnr{\fix\com}\eta \\
-                                                    & = \semnr{\com}(\lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\eta \\
-                                                    & = \eta \cup \semnr{\com}(\lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\eta & \text{since } \eta \subseteq \lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)\\
-                                                    & = (\lambda \mu . \eta \cup \semnr{\com}\mu)(\lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\eta \\
-                                                    & = (\lfp(\lambda \mu . \eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\eta & \text{by def.\ of } \lfp\\
-                                                    & = \semnr{\fix\com}\eta \cup \semnr{\fix\com}\eta \\
-                                                    & = \semnr{\fix\com}\eta
+        \semnr{\com\ndet\tru}(\semnr{\fix\com}\overline\eta) & = \semnr{\com}(\semnr{\fix\com}\overline\eta) \cup \semnr{\fix\com}\overline\eta \\
+                                                    & = \semnr{\com}(\lfp(\lambda \mu . \overline\eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\overline\eta \\
+                                                    & = \overline\eta \cup \semnr{\com}(\lfp(\lambda \mu . \overline\eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\overline\eta & \text{since } \overline\eta \subseteq \lfp(\lambda \mu . \overline\eta \cup \semnr{\com}\mu)\\
+                                                    & = (\lambda \mu . \overline\eta \cup \semnr{\com}\mu)(\lfp(\lambda \mu . \overline\eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\overline\eta \\
+                                                    & = (\lfp(\lambda \mu . \overline\eta \cup \semnr{\com}\mu)) \cup \semnr{\fix\com}\overline\eta & \text{by def.\ of } \lfp\\
+                                                    & = \semnr{\fix\com}\overline\eta \cup \semnr{\fix\com}\overline\eta \\
+                                                    & = \semnr{\fix\com}\overline\eta
       \end{align*}
       % can notice that since by hypothesis
-      % \(|\semnr{\fix\com}\eta\var| \neq \infty\), we can leverage
+      % \(|\semnr{\fix\com}\overline\eta\var| \neq \infty\), we can leverage
       % Lemma~\ref{le:incnr} and state that for all
       % \(\var\in \Var_{\com}\) the follwing hold
       % \begin{align*}
-      %   \max(\semnr{\fix\com}\eta\var) & \leq \max(\eta) + \bound{\fix\com} \\
-      %   \min(\semnr{\fix\com}\eta\var) & \geq \min(\eta) - \lbound{\fix\com}
+      %   \max(\semnr{\fix\com}\overline\eta\var) & \leq \max(\overline\eta) + \bound{\fix\com} \\
+      %   \min(\semnr{\fix\com}\overline\eta\var) & \geq \min(\overline\eta) - \lbound{\fix\com}
       % \end{align*}
       Now we can preliminarly observe that by calling
-      \(\beta = \semnr{\fix\com}\eta\)
+      \(\beta = \semnr{\fix\com}\overline\eta\)
       \begin{equation}\label{eq:comfixbound}
-        |\beta\var| \neq\infty \implies \semnr{\com\ndet\tru}\beta\var \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var
+       % \forall \var\in\Var \quad  \beta\var \neq\top \implies 
+       \semnr{\com\ndet\tru}\beta \supseteq \btsemnr{k_1}{k_2}{\com\ndet\tru}\beta
       \end{equation}
+      In fact, for all \(\var\in \Var\)
       \begin{align*}
         \max(\semnr{\com\ndet\tru}\beta\var) & \leq \max(\beta) + \bound{\com\ndet\tru} = \max(\beta) + \bound{\com} \\
-                                             & \leq \max(\eta) + \bound{\fix\com} + \bound{\com} & \text{by Lemma~\ref{le:incnr}} \\
-                                             & \leq \max(\eta) + (n+2)\bound{\com} \\
-                                             & \leq \max(\eta) + (n+2)\nbound{\com} \\
-                                             & \leq \max(\eta) + \nbound{\fix\com} = k_2
+                                             & \leq \max(\overline\eta) + \bound{\fix\com} + \bound{\com} & \text{by Lemma~\ref{le:incnr}} \\
+                                             & \leq \max(\overline\eta) + (n+2)\bound{\com} \\
+                                             & \leq \max(\overline\eta) + (n+2)\nbound{\com} \\
+                                             & \leq \max(\overline\eta) + \nbound{\fix\com} = k_2
       \end{align*}
       similarly for the min value
       \begin{equation*}
-        \min(\semnr{\com\ndet\tru}\beta\var) \geq \min(\eta) - \nlbound{\fix\com} = k_1
+        \min(\semnr{\com\ndet\tru}\beta\var) \geq \min(\overline\eta) - \nlbound{\fix\com} = k_1
       \end{equation*}
       hence
       \begin{align*}
-        \beta\var = \semnr{\com\ndet\tru}\beta\var & \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}\beta\var & \text{by~\eqref{eq:comfixbound}}\\
-                                                   & \supseteq \bsemnr{k_1}{k_2}{\com\ndet\tru}{\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\eta & \text{by induction on } i\\
-                                                   & = {\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^{i+1}\eta
+        \beta = \semnr{\com\ndet\tru}\beta & \supseteq \btsemnr{k_1}{k_2}{\com\ndet\tru}\beta & \text{by~\eqref{eq:comfixbound}}\\
+                                           & \supseteq \btsemnr{k_1}{k_2}{\com\ndet\tru}{\left(\btsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\overline\eta & \text{by induction on } i\\
+                                           & = {\left(\btsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^{i+1}\overline\eta
       \end{align*}
     \end{description}
-    Hence our thesis, for all \(\var \in \Var_{\com}, i \in \n\)
+    Hence our thesis, for all \(i \in \n\)
     \begin{equation*}
-      |\semnr{\fix\com}\eta\var| \neq \infty \implies
+      \btsemnr{k_1}{k_2}{\fix\com}\overline\eta \top \implies
       % 
-      \semnr{\fix\com}\eta\var \supseteq
-      {\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\eta
+      \semnr{\fix\com}\overline\eta \supseteq
+      {\left(\btsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\overline\eta
     \end{equation*}
     holds.  We can now conclude by noticing that our original thesis
     \begin{equation*}
-      |\semnr{\fix\com}\eta\var| \neq \infty \implies
+      \btsemnr{k_1}{k_2}{\fix\com}\overline\eta \neq \top \implies
       % 
-      \semnr{\fix\com}\eta\var \supseteq
-      \bigcup_{i\in\n}{\left(\bsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\eta =
-      \bsemnr{k_1}{k_2}{\fix\com}\eta\var
+      \semnr{\fix\com}\overline\eta \supseteq
+      \bigcup_{i\in\n}{\left(\btsemnr{k_1}{k_2}{\com\ndet\tru}\right)}^i\overline\eta =
+      \btsemnr{k_1}{k_2}{\fix\com}\overline\eta
     \end{equation*}
     also holds.
   \end{inductive}

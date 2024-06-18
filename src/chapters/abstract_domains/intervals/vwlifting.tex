@@ -1,7 +1,7 @@
 \subsection{Variable-wise lifting}\label{sub:vwintervals}
 
 We can therefore proceed to introduce the variable-wise lifting of the
-\(\Int\) domain, building the abstract domain \(\inte\):
+\(\Int\) domain, building the abstract domain \(\inte\).
 
 \begin{definition}[Abstract integer domain]
   Let \(\Int_* \defin \Int \setminus \{\bot\}\). The abstract domain
@@ -44,10 +44,10 @@ Notice that because of the definition of the concretization map
   \eta \sqsubseteq \theta \iff \forall \var \in \Var \quad \eta(\var) \sqsubseteq \theta(\var)
 \end{equation*}
 i.e., two abstract environments are ordered if every variable's
-interval of the first environment is entirely contained in the
-interval of the second abstract environment.  Again, we can define
-least upper bounds and greatest lower bounds by lifting the \(\sqcup\)
-and \(\sqcap\) operations. i.e., let \(\eta, \theta \in \inte\), then
+interval of the first environment is contained in the interval of the
+second abstract environment.  Also, the least upper bounds and
+greatest lower bounds are obtained by lifting the \(\sqcup\) and
+\(\sqcap\) operations, i.e., let \(\eta, \theta \in \inte\), then
 \begin{align*}
   \eta \acap \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \sqcap \theta(\var) \quad \forall \var\in\Var \\
   \eta \acup \theta = \sigma & \quad \text{if } \sigma(\var) = \eta(\var) \sqcup \theta(\var) \quad \forall \var\in\Var

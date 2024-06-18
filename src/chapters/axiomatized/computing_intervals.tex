@@ -37,9 +37,9 @@ we can restrict to an interval domain bounded by some constant
   \end{align*}
 \end{definition}
 
-We can visualize the Hasse diagram of the bounded integer domain in
-Figure~\ref{fig:bound} and notice that there are no infinite ascending
-chains by definition.
+We visualize the Hasse diagram of the bounded integer domain in
+Figure~\ref{fig:bound} and notice that by definition there are no
+infinite ascending chains.
 % 
 \begin{figure}
   \centering
@@ -104,18 +104,17 @@ chains by definition.
 % 
 Now we can notice that given \(k_1, k_2 \in \z\) we can build a Galois
 Connection (Definition~\ref{def:galoiscon}) between the interval
-domain \(\inte\) (the \emph{concrete} domain) and the bounded interval
-domain \(\binte{k_1}{k_2}\) (the \emph{abstract} domain). To do so we
-first need to define a concretization and abstraction maps.
+domain \(\inte\) and the bounded interval domain \(\binte{k_1}{k_2}\)
+playing here the role of concrete and abstract domain respectively. To
+do so we first need to define a concretization and abstraction maps.
 
 \begin{definition}\label{def:abstrcons}
   Given \(k_1, k_2\in\z\) we define a concretization map
-  \(\concr[k_1,k_2] : \bInt{k_1}{k_2} \to \Int\) as the
-  identity function
+  \(\concr[k_1,k_2] : \bInt{k_1}{k_2} \to \Int\) as the function
   \begin{equation*}
-    \concr[k_1,k_2] = \id
+    \forall a \in \binte{k_1}{k_2} \quad \concr[k_1,k_2](a) = a
   \end{equation*}
-  while we define an abstraction map
+  i.e., \(\concr[k_1,k_2] = \id\). While we define an abstraction map
   \(\abstr[k_1, k_2] : \Int \to \bInt{k_1}{k_2}\) in the following way
   \begin{align*}
     \abstr[k_1,k_2](\bot) & = \bot \\
@@ -143,7 +142,7 @@ Connection:
 
 \begin{proof}
   We want to prove that \(\id\) and \(\abstr[k_1,k_2]\) satisfy the
-  property of Theorem~\ref{th:alternate}:
+  property as in Theorem~\ref{th:alternate}:
   \begin{enumerate}[label=(\arabic*)]
   \item\label{prop1gal} \(\abstr[k_1,k_2], \id\) are monotonic;
   \item\label{prop2gal} \(\id \circ \abstr[k_1, k_2]\) is
@@ -158,10 +157,10 @@ Connection:
   \medskip
 
   \noindent
-  Let us show~\ref{prop1gal}.\ \(\id\) is monotone since
+  Let us show~\ref{prop1gal}. The function\(\id\) is monotone since
   \(\forall \iota, \kappa \in \bInt{k_1}{k_2}\) it holds that
-  \(\iota \sqsubseteq \kappa \implies \iota \sqsubseteq
-  \kappa\). For \(\abstr[k_1,k_2]\) we have to prove that for all
+  \(\iota \sqsubseteq \kappa \implies \iota \sqsubseteq \kappa\). For
+  \(\abstr[k_1,k_2]\) we have to prove that for all
   \(\iota, \kappa \in \Int\) it holds that
   \(\iota \sqsubseteq \kappa \implies \abstr[k_1,k_2](\iota)
   \sqsubseteq \abstr[k_1,k_2](\kappa)\). Now notice that
@@ -206,8 +205,8 @@ Connection:
 \end{proof}
 
 Notice that because of Equation~\eqref{eq:injection} holds we know
-that \(\abstr[k_1,k_2] \circ\id = \id\), hence we not only have a
-Galois Connection but a Galois Injection
+that \(\abstr[k_1,k_2] \circ\concr[k_1,k_2] = \id\), hence we not only
+have a Galois Connection but a Galois Injection
 (Definition~\ref{def:insertion}):
 \begin{equation}
   \tuple{\Int, \sqsubseteq} \galoiS{\abstr[k_1, k_2]}{\id} \tuple{\bInt{k_1}{k_2}, \sqsubseteq}
@@ -281,7 +280,7 @@ which allows us to prove the soundness of the analysis over
   hence our thesis.
 \end{proof}
 
-Now we define a new bound, it will be useful for the latter
+Now we define a new bound, it will be useful later in
 Theorem~\ref{th:bounded}.
 
 \begin{definition}\label{def:newbound}
@@ -312,7 +311,7 @@ notion of domain bounded by initial state and program.
 \begin{definition}\label{def:boundedbycom}
   Let \(\com\in\imp\) and \(\rho \in \inte\). Then the \emph{bounded
     interval domain} \(\inte_{\com,\rho}\) is a bounded interval
-  \(\binte{k_1}{k_2}\) where
+  domain \(\binte{k_1}{k_2}\) where
   \begin{align*}
     k_1 & = \min(\rho) - \nlbound{\com} \\
     k_2 & = \max(\rho) + \nbound{\com}
@@ -603,11 +602,11 @@ Our last theorem proved that by bounding the interval domain according
 to the constants that appear in a program and its initial state we can
 ensure termination of the analysis while achieving the most precise
 abstract invariant for the program. The result is analogous to the
-findings of~\cite{Gawlitza2009}, but is achieved by only looking at the
-maximal and minimal values of the intermediate elements of the
+findings of~\cite{Gawlitza2009}, but is achieved by only looking at
+the maximal and minimal values of the intermediate elements of the
 analysis. This can already be seen as an hint on the goal of next
 sections: while we reasoned on the values of the intermediate
 analysis, we did not reason about the \emph{internal} values of
 intervals. In other words if instead of intervals we considered
-arbitrary sets (i.e., \emph{concave} sets) our results should still be
-valid.
+arbitrary sets (i.e., possibly \emph{non-convex} sets) our results
+should still be valid.
