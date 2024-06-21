@@ -609,12 +609,17 @@ as the analysis on \(\inte\).
 Our last theorem proved that by bounding the interval domain according
 to the constants that appear in a program and its initial state we can
 ensure termination of the analysis while achieving the most precise
-abstract invariant for the program. The result is analogous to the
-findings of~\cite{Gawlitza2009}, but is achieved by only looking at
-the maximal and minimal values of the intermediate elements of the
-analysis. This can already be seen as an hint on the goal of next
-sections: while we reasoned on the values of the intermediate
-analysis, we did not reason about the \emph{internal} values of
-intervals. In other words if instead of intervals we considered
-arbitrary sets (i.e., possibly \emph{non-convex} sets) we expect the
-same result.
+abstract invariant for the program, effectively solving
+Problem~\ref{problem1}. The result is analogous to the findings
+of~\cite{Gawlitza2009}, but we achieve it by bounding the abstract
+domain. Notice that we achieved such result only by looking at maximal
+and minimal values of the analysis w.r.t.\ the considered program
+\(\com\) and the initial environment \(\eta \in \inte\). By this
+observation one might think that the same result would be possible to
+achieve for the non-relational collecting semantics
+\(\semnr{\cdot}\). While our guess is that such thing should be
+possible, in the next section we will provide some examples that show
+that by using a simple kleene iteration technique it is not possible
+to infer the most precise abstract invariant in \(\bCnr\), it is only
+possible to infer the termination of the abstract interpreter
+\(\semnr{\cdot}\).
