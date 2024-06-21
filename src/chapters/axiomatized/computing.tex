@@ -679,16 +679,15 @@ We can now notice that this proof also works for the \(\min\) value of
 each variable's interval. I.e., the following property also holds:
 
 % Dual formulation of the same lemma
-\begin{lemma}\label{co:inc}
+\begin{lemma}\label{le:dec}
   Let \(\com \in \imp\).
   
   \noindent
-  For all \(\eta \in \inte\) and
-  \(\var[y] \in \Var\), if
+  For all \(\eta \in \inte\) and \(\var[y] \in \Var\), if
   \(\min(\semi{\com}\eta\var[y]) \neq -\infty\) and
   \(\min(\semi{\com}\eta\var[y]) < -\lbound{\com}\) then there exist a
   variable \(\var[z] \in\Var\) and an integer \(h \in \z\) s.t.
-  \(|h| \leq \lbound{\com}\) s.t. the following two properties hold:
+  \(|h| \leq \lbound{\com}\) s.t.\ the following two properties hold:
   
   \begin{enumerate}[label=(\roman*)]
   \item \(\min(\semi{\com}\eta \var[y]) = \min(\eta \var[z]) + h\);

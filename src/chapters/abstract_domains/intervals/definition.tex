@@ -30,7 +30,7 @@ concretization and abstraction maps for the intervals domain
     \abstr(X) & \defin
     \begin{cases}
       \bot & \text{if } X = \emptyset \\
-      \interval{\min(X)}{\max(X)} & \text{otherwise}
+      \interval{\inf(X)}{\sup(X)} & \text{otherwise}
     \end{cases}
   \end{align*}
 \end{definition}
@@ -67,3 +67,35 @@ intervals, namely the addition and subtraction of an integer constant:
   that conventionally \(\pm \infty + c = \pm\infty - c = \pm\infty\)).
 \end{definition}
 
+Notice that \(\concr\) and \(\abstr\) maps are concretization and
+abstraction maps to and from \(\poset{\z}\). We can therefore notice
+that there is a Galois connection between \(\poset{\z}\) and \(\Int\).
+
+\begin{lemma}[\(\Int\) abstracts \(\poset{\z}\)]\label{le:inteposetz}
+  Let \(\abstr,\concr\) be abstraction and concretization maps from
+  Definition~\ref{def:concrint}. Then
+  \(\tuple{\abstr, \poset{\z}, \Int, \concr}\) is a Galois connection.
+\end{lemma}
+
+\begin{proof}
+  We once again rely on the characterization of Galois connections
+  given by Theorem~\ref{th:alternate}:
+  \begin{enumerate}[label = (\roman*)]
+  \item \(\abstr\) and \(\concr\) are monotonic: let
+    \(\iota, \kappa\in\inte\) s.t.\
+    \(\iota \sqsubseteq \kappa \implies \concr(\iota) \subseteq
+    \concr(\kappa)\) while if we let \(R,S \in \bCnr\) s.t.\
+    \(R\subseteq S \implies \abstr(R) \sqsubseteq \abstr(S)\)
+  \item \(\concr \conc \abstr\) is extensive: \(\forall R \in \bCnr\)
+    \(R \sqsubseteq \concr(\abstr(R))\)
+  \item \(\abstr\conc\concr\) is reductive:
+    \(\forall \iota \in \inte\) \(\abstr(\concr(\iota)) = \iota\),
+    which implies that it is reductive.
+  \end{enumerate}
+  Therefore \(\tuple{\abstr, \poset{\z}, \Int, \concr}\) is a Galois
+  connection.
+\end{proof}
+
+Moreover, since \(\concr \conc \abstr = \id\) we can deduce that
+\(\tuple{\poset{\z}, \ovdot\subseteq} \galoiS{\abstr}{\concr}
+\tuple{\inte, \sqsubseteq}\) is a Galois insertion

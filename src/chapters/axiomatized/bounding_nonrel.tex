@@ -49,18 +49,19 @@ the same notation we used in \secref{sub:nonrelprop}:
 \end{proof}
 
 \begin{remark}
-  \todo{remark sul fatto che funziona perchè abbiamo limitato il
-    linguaggio?}  The key point is that in the base case
-  (\(\var\in I\)) we can say the same things we said for
-  intervals. This is because the filtering happens on an interval
-  \(I \in \inte\) instead on an arbitrary decidable set
-  \(S \in \poset{\z}\). If that was the case and we consider
-  \(\var[y] = \var\) it happens that
+  % \todo{remark sul fatto che funziona perchè abbiamo limitato il
+  % linguaggio?}
+  The key point is that in the base case (\(\var\in I\)) we can say
+  the same things we said for intervals. This is because the filtering
+  happens on an interval \(I \in \inte\) instead on an arbitrary
+  decidable set \(S \in \poset{\z}\). If that was the case and we
+  consider \(\var[y] = \var\) it would happen that
   \begin{equation}
     \max(\semnr{\var\in S}\eta\var[y]) = \max(\eta[\var \mapsto \eta\var \cap S]\var) = \max(\eta\var \cap S)
   \end{equation}
-  but since \(S\) is generally concave what happens is that generally
-  if \(\eta \var \cap S \neq \emptyset\) and \(\max(S) = +\infty\) then
+  but since \(S\) is generally non-convex what happens is that
+  generally if \(\eta \var \cap S \neq \emptyset\) and
+  \(\max(S) = +\infty\) then
   \begin{equation}
     \max(\eta\var \cap S) \leq \max(\eta\var)
   \end{equation}
@@ -105,8 +106,9 @@ the same notation we used in \secref{sub:nonrelprop}:
   which is false.
 \end{remark}
 
-The same applies for the increment on the lower bound, in a similar
-fashion as for the intervals:
+Since we posed such a constraint on the filtering then, the same
+applies for the increment on the lower bound, in a similar fashion as
+for the intervals:
 
 \begin{lemma}\label{le:decnr}
   Let \(\com\in \imp\).
@@ -115,8 +117,8 @@ fashion as for the intervals:
   % \({x \in \concr[\Int](a)}\).
   For all \(\eta \in \bCnr\) and \(\var[y] \in \Var\), if
   \(\min(\semnr{\com} \eta \var[y]) \neq -\infty\) and
-  \(\min(\semnr{\com}\eta \var[y]) < -\bound{\com}\) then there exist a
-  variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
+  \(\min(\semnr{\com}\eta \var[y]) < -\bound{\com}\) then there exist
+  a variable \(\var[z] \in \Var\) and an integer \(h \in \mathbb{Z}\)
   such that \(|h| \leq \bound{\com}\) and the following two properties
   hold:
   \begin{enumerate}[label=(\roman*)]
@@ -139,3 +141,6 @@ fashion as for the intervals:
   %   \(\min(\semnr{\com}\eta' \var[y]) \geq \max(\eta' \var[w]) + i\). \label{point2min}
   % \end{enumerate}
 \end{lemma}
+
+The proof is again left in Appendix~\ref{ap:minnr} as
+Lemma~\ref{le:decnr2}.

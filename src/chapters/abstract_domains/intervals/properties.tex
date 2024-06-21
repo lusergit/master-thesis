@@ -12,6 +12,7 @@ iterating over least upper bounds.
   operator:
   \begin{lstlisting}[caption=Program P\, denoting \(\fix{\com}\) and \(\com^*\) difference, label=codedec, language=Imp]
   while x < 8 do
+    /* P1: */
     if x = 2
       x := x+6;
     endif;
@@ -19,12 +20,14 @@ iterating over least upper bounds.
     if x <= 0
       x:=0;
     endif;
-  done;\end{lstlisting}
+  done;
+  \end{lstlisting}
   starting with the finite interval \(\interval{3}{4}\) we get the
-  following loop invariants:
+  following loop invariants depending on the way we model the overall
+  program \(\com[P]\):
   \begin{align*}
-    \text{Kleene: } &\sqcup\{[3,4], [0,1], [0,0], [0,0], \ldots\} = [0,4]\\
-    \text{Fix: } & \sqcup\{\bot, [3,4], [0,4], [0,5], [0,5],\ldots\} = [0,5]
+    \semi[\inte]{\kleene{\com[P]_1}} &\sqcup\{[3,4], [0,1], [0,0], [0,0], \ldots\} = [0,4]\\
+    \semi[\inte]{\fix{\com[P]_1}} & \sqcup\{\bot, [3,4], [0,4], [0,5], [0,5],\ldots\} = [0,5]
   \end{align*}
   \noindent
   Both invariants are correct, because they over-approximate the most

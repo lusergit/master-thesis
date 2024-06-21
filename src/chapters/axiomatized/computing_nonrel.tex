@@ -260,15 +260,18 @@ fixed \(k_1, k_2 \in \z\):
 We can now define base expressions based on the bca with the bounded
 non relational collecting semantics:
 
-\begin{definition}
+\begin{definition}\label{def:boundedtop}
   Let \(\com[e] \in \expr\). The semantics of base expressions over
   \(\btbCnr{k_1}{k_2}\) is defined as
-  \begin{equation*}
-    \absem[\btbCnr{k_1}{k_2}]{\com[e]} \defin {\tabstr[k_1,k_2]}\conc \absem[\bbCnr{k_1}{k_2}]{\com[e]}
-  \end{equation*}
-  i.e., the bca on the semantics of base expressions on bounded
-  non-relational collecting analysis.
+  \begin{align*}
+    \absem[\btbCnr{k_1}{k_2}]{\com[e]}(\top) \defin & \top \\
+    \absem[\btbCnr{k_1}{k_2}]{\com[e]}(\eta) \defin & \left({\tabstr[k_1,k_2]}\conc \absem[\bbCnr{k_1}{k_2}]{\com[e]}\right)\eta
+  \end{align*}
 \end{definition}
+Notice that this is \emph{not} the b.c.a.\ on the basic expressions:
+the \(\top\) element is preserved. This is proved in
+Lemma~\ref{le:btsemnrtop}.
+
 Once again, \(\semi[\btbCnr{k_1}{k_2}]{\cdot}\) is defined accordingly
 to the abstract inductive semantics of Definition~\ref{def:abstrsem}.
 Notice that contrary to latter definition of \(\bbCnr{k_1}{k_2}\) in
@@ -294,45 +297,12 @@ We preliminarly prove a simple but useful property of
     \btsemnr{k_1}{k_2}{\com}\top = \top
   \end{equation*}
   \begin{inductive}
-    \case{\(\var\in I\)} In this case
+    \case{\(\com[e]\)} In the case of base expressions
+    \(\com[e]\in\expr\) the Lemma follows from the definition of
+    base expressions over the top element.
     \begin{align*}
-      \btsemnr{k_1}{k_2}{\var \in I}\top & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) (\semnr{\var\in I}(\lambda \var[y] . \top)) \\
-      & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) f
-    \end{align*}
-    where
-    \begin{equation*}
-      f (\var[y]) = \begin{cases}
-        \concr[k_1,k_2](I) & \text{if } \var[y] = \var \\
-        \top & \text{otherwise}
-      \end{cases}
-    \end{equation*}
-    Now notice that for all \(\var[y] \neq \var\) it holds that
-    \(\dabstr[k_1,k_2](f)(\var[y]) = \top\), hence
-    \((\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2])(f) = \top\), which is
-    our thesis.
-
-    \case{\(\var := k\)} In this case
-    \begin{align*}
-      \btsemnr{k_1}{k_2}{\var := k}\top & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) (\semnr{\var:= k}(\lambda \var[y] . \top)) \\
-      & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) f
-    \end{align*}
-    where
-    \begin{equation*}
-      f (\var[y]) = \begin{cases}
-        \{k\} & \text{if } \var[y] = \var \\
-        \top & \text{otherwise}
-      \end{cases}
-    \end{equation*}
-    Now notice that for all \(\var[y] \neq \var\) it holds that
-    \(\dabstr[k_1,k_2](f)(\var[y]) = \top\), hence
-    \((\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2])(f) = \top\), which is
-    our thesis.
-
-    \case{\(\var := \var[y] + k\)} In this case
-    \begin{align*}
-      \btsemnr{k_1}{k_2}{\var := \var[y] + k}\top & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) (\semnr{\var := \var[y] + k}(\lambda \var[w] . \top)) \\
-                                                  & = (\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]) (\lambda \var[w] . \top) & \text{since } \top + k = \top \\
-                                                  & = \top
+      \btsemnr{k_1}{k_2}{\com[e]}\top & = \absem[\btbCnr{k_1}{k_2}]{\com[e]}(\top) \\
+                                      & = \top & \text{by Definition~\ref{def:boundedtop}}
     \end{align*}
 
     \case{\(\com_1 \ndet \com_2\)} In this case

@@ -13,7 +13,7 @@ the domain \(\poset{\z}\), building the abstract domain \(\bCnr\):
 In this domain, we define again abstraction and concretization maps,
 building a Galois connection with the concrete domain
 
-\begin{definition}\label{def:vwgalios}
+\begin{definition}\label{def:vwgalois}
   We define the \emph{concretization map} of abstract environments
   \(\eta \in \bCnr\), i.e., \({\concr : \bCnr \to \poset{\env}}\) as
   follows
@@ -36,7 +36,6 @@ on the concretization map. Let \(\eta, \theta \in \bCnr\), then
 \end{equation*}
 
 Notice that because of the definition of the concretization map
-(Definition~\ref{def:vwgalios})
 \begin{equation*}
   \eta \ovdot\subseteq \theta \iff \forall \var \in \Var \; \eta(\var) \ovdot\subseteq \theta(\var)
 \end{equation*}
@@ -78,3 +77,125 @@ operations on the non-relational collecting abstraction:
 \end{definition}
 With these base operations, \(\semi[\bCnr]{\cdot}\) is defined
 accordingly to Definition~\ref{def:abstrsem}.
+
+Thanks to \(\abstr\) and \(\concr\) maps of
+Definition~\ref{def:vwgalois} there is a Galois conncection between
+the concrete domain \(\dom\) and the abstract domain \(\bCnr\).
+
+\begin{lemma}[\(\bCnr\) abstracts \(\dom\)]
+  Let \(\abstr, \concr\) be the abstraction and concretization maps
+  from Definition~\ref{def:vwgalois}, then
+  \(\tuple{\abstr, \dom, \bCnr, \concr}\) is a Galois connection.
+\end{lemma}
+
+\begin{proof}
+  We use the characterization of Theorem~\ref{th:alternate}, which
+  means proving
+  \begin{enumerate}[label=(\roman*)]
+  \item\label{proof:1} \(\abstr,\concr\) are monotonic;
+  \item\label{proof:2} \(\concr \conc \abstr\) is extensive;
+  \item\label{proof:3} \(\abstr\conc\concr\) is reductive.
+  \end{enumerate}
+
+  Lets start by proving~\ref{proof:1}. Let \(\eta, \theta \in \bCnr\)
+  s.t.\ \(\eta\ovdot\subseteq\theta\). This means that
+  \(\forall \var\in\Var\) \(\eta\var \subseteq \theta\var\) and
+  therefore \(a\in\eta\var \implies a\in\theta\var\). By definition of
+  \(\concr\) this means that
+  \(\concr(\eta) \subseteq \concr(\theta)\). Let now
+  \(R, S \in \poset{\env}\) s.t.\ \(\rho \subseteq \sigma\), which
+  means that \(\rho \in R \implies \rho \in S\). By definition of
+  \(\abstr\) it follows that
+  \(\eta \in \abstr(R) \implies \eta \in \abstr(S)\) which means
+  exactly \(\abstr(R) \ovdot\subseteq \abstr(S)\) which is our thesis.
+
+  Let us now show~\ref{proof:2}. What we want to prove is that
+  \(\forall R\in\poset(\env)\) it holds that
+  \(R \subseteq \concr(\abstr(R))\). If
+  \(R = \emptyset \implies \abstr(\emptyset) = \bot\) and therefore
+  \(\concr(\bot) = \emptyset\) and therefore the statement
+  holds. Otherwise
+  \(R \neq \emptyset \implies \abstr(R) = \lambda x . \{\rho(\var)
+  \mid \rho \in R\} = \eta\). Now,
+  \(\concr(\eta) = \{\rho \in \env \mid \forall \var\in\Var \quad
+  \rho(\var) \in \eta\var\}\), this means that
+  \(\sigma \in R \implies \sigma \in \concr(\abstr(R))\), which is our
+  thesis \(R \subseteq \concr(\abstr(R))\).
+
+  We are left to show~\ref{proof:3}. Let \(\eta \in \bCnr\), we have 2
+  cases. Either \(\eta = \bot\), which means
+  \(\abstr(\concr(\bot)) = \abstr(\emptyset) = \bot \ovdot\subseteq
+  \bot\), hence the statement holds. Otherwise
+  \(\concr(\eta) = \{\rho \in \env \mid \forall \var\in\Var \;
+  \rho\var \in \eta\var\} = R\) and
+  \(\abstr(R) = \lambda\var.\{\rho\var \mid \rho\in R\} =\eta\), hence
+  \(\abstr(\concr(\eta)) = \eta\), which implies our thesis
+  \(\abstr \conc \concr\) is reductive, and therefore
+  \(\tuple{\abstr, \dom, \bCnr, \concr}\) is a Galois connection.
+\end{proof}
+
+Notice that in particular \(\abstr\conc\concr = \id\), and therefore
+there is a Galois insertion
+\(\tuple{\dom, \subseteq} \galoiS{\abstr}{\concr}\tuple{\bCnr,
+  \ovdot\subseteq}\) between the concrete domain \(\dom\) and the
+abstract domain \(\bCnr\).
+
+Moreover the abstract semantics \(\semnr{\cdot}\) is sound w.r.t.\ the
+concrete semantics \(\sem{\cdot}\):
+
+\begin{lemma}[Non-relational collecting soundess]\label{le:nrsoundness}
+  Let \(\com\in\imp, \eta\in \bCnr\)
+  \begin{equation*}
+    \sem{\com}\concr(\eta) \subseteq \concr(\semnr{\com}\eta)
+  \end{equation*}
+  i.e., Non-relational collecting inductive abstract semantics is sound
+  w.r.t.\ concrete semantics.
+\end{lemma}
+
+\begin{proof}
+  Since there is a galois connection between abstract inductive
+  semantics (notice that \(\sem\cdot = \semi[\dom]{\cdot}\)), We just
+  need to show that the two semantics are sound on base operations.
+
+  \begin{inductive}
+    \case{\(\var\in I\)} In this case we need to show that
+    \begin{equation*}
+      \sem{\var\in I}\concr(\eta) \subseteq \concr(\semnr{\var \in I}\eta)
+    \end{equation*}
+    recall that
+    \begin{align*}
+      \sem{\var\in I}\concr(\eta) & = \{\bsem{\var\in I}\rho \mid \rho \in \concr(\eta) \; \bsem{\var\in I}\rho \neq \bot\} \\
+      \concr(\semnr{\var\in I}\eta) & = \concr(\eta[\var\mapsto\eta\var\cap\concr[\inte](I)]) 
+    \end{align*}
+    to conclude notice that
+    \begin{align*}
+      \concr(\eta[\var\mapsto\eta\var\cap\concr[\inte](I)]) & = \{\rho \in \env \mid \forall \var\in\Var \; \rho\var\in\eta\var\} \\
+                                                            & \supseteq \{\bsem{\var\in I}\rho \mid \rho \in \concr(\eta) \; \bsem{\var\in I}\rho \neq \bot\}
+    \end{align*}
+    which is our thesis.
+
+    \case{\(\var := k\)} In this case we have to prove that
+    \begin{equation*}
+      \sem{\var := k}\concr(\eta) \subseteq \concr(\semnr{\var := k}\eta)
+    \end{equation*}
+    to do so just notice that
+    \begin{align*}
+      \sem{\var := k}\concr(\eta) & = \{\rho[\var\mapsto k] \mid \rho \in \concr(\eta)\} \\
+                                  & \subseteq \{\rho \in \env \mid \forall \var[y] \in \Var \; \rho\var[y] \in \eta[\var\mapsto \{k\}]\var[y]\} \\
+                                  & = \concr(\eta[\var\mapsto \{k\}])
+    \end{align*}
+    which is our thesis.
+
+    \case{\(\var := \var[y] + k\)} In this case similarly to the
+    latter case we can just notice that
+    \begin{align*}
+      \sem{\var := \var[y] + k}\concr(\eta) & = \{\rho[\var\mapsto \rho\var[y] + k] \mid \rho \in \concr(\eta)\} \\
+                                            & \subseteq \{\rho \in \env \mid \forall \var[w] \in \Var \; \rho\var[w] \in \eta[\var\mapsto \eta\var[y] + k]\var[w]\} \\
+                                            & = \concr(\eta[\var\mapsto \var[y] + k])
+    \end{align*}
+  \end{inductive}
+  Since we are sound on the base cases, by Theorem~\ref{th:sound}
+  \begin{equation*}
+    \sem{\com}\concr(\eta) \subseteq \concr(\semnr{\com}\eta)
+  \end{equation*}
+\end{proof}

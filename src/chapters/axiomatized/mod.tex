@@ -1,15 +1,46 @@
 % !TeX root = ../mod.tex
 \chapter{Program bounds and analysis termination}\label{ch:axiomatized}
 
-%% Framework, introduzione al linguaggio e alle sue proprietà, si
-%% definisce la semantica e si dimostrano un paio di cose
+In the last chapter we defined two abstract domains: the interval
+domain and the non-relational collecting domain. Both are
+non-relational domains, in the sense that they do not model the
+relation between variables, but their possible values. Trough the
+abstract inductive semantics of Definition~\ref{def:abstrsem} we
+defined a simple abstract interpreter for the \(\imp\) language,
+provided base expressions and an abstract domain \(\bA\). In
+Chapter~\ref{ch:framework} we proved that the \(\imp\) language is
+Turing-complete and therefore by Rice's theorem all non-trivial
+semantic properties of programs written in such language are not
+decidable.  
+% Calcolare l'invariante esatto di un programma non è decidibile,
+% appunto perchè è una proprietà semantica non triviale
+Exact invariants fall into this category, as they tie the initial
+state of a machine and a progam to the output the program would
+return.
+% Se invece usiamo invarianti astratti?
+% Abstract invariants, i.e., maps \(\Var \to \bA\), could be computable,
+% as the loss of information might be enough to allow for computation
+
+With this context, lets formalise the problem we will solve:
+
+\begin{problem}[Exact analysis computation]\label{problem1}
+  Given a program \(\com\in \imp\) and an abstract domain \(\bA\), for
+  all \(\eta \in \bA\), compute
+  \begin{equation*}
+    \semi[\bA]{\com} \eta
+  \end{equation*}
+\end{problem}
 
 In this chapter we argue that for the language \(\imp\) the abstract
-semantics is computable in finite time without widening for abstract
-domains with some properties.  Observe that the exact computation
-provides, already for our simple language, a precision which is not
-obtainable with (basic) widening and narrowing. In the example in
-Code~\ref{code1} if we consider the intervals abstract domain, the
+semantics is computable for the domain \(\inte\), while for the domain
+\(\bCnr\) we can only decide the termination of the analyzer.
+
+\medskip
+
+Observe that the exact computation of the abstract invariant provides,
+already for our simple language, a precision which is not obtainable
+with (basic) widening and narrowing. In the example in
+Code~\ref{code1} if we consider the abstract domain \(\inte\), the
 semantics maps \(\var\) and \(\var[y]\) to \(\interval{0}{2}\) and
 \(\interval{6}{8}\) respectively, while widening/narrowing to
 \(\interval{0}{+\infty}\) and \(\interval{6}{+\infty}\).
@@ -32,16 +63,8 @@ semantics maps \(\var\) and \(\var[y]\) to \(\interval{0}{2}\) and
 Of course, for the collecting semantics this is not the case. Already
 computing a finite upper bound for loop invariants when they are
 finite is impossible as this would allow to decide termination, as we
-have seen in \secref{sec:finiteness}. First let's formalize the
-problem we want to solve.
+have seen in \secref{sec:finiteness}.
 
-\begin{problem}[Analysis termination]\label{problem1}
-  Given a program \(\com\in \imp\) and an abstract domain \(\bA\) with
-  some top element \(\top\), for all \(\eta \in \bA\), decide
-  \begin{equation*}
-    \semi[\bA]{\com} \eta =^? \top
-  \end{equation*}
-\end{problem}
 
 The main idea, based on previous research is to \emph{bound} the
 domain \(\bA\). Each program is associated to a bound, an ideal value

@@ -1,12 +1,20 @@
 % !TeX root = mod.tex
 \section{Computing interval semantics}\label{sec:computingint}
 
-Lemma~\ref{le:inc} provides an effective algorithm for computing the abstract
-semantics of commands%  provided a domain that respects properties \ref{inc:hp1}
-% and \ref{inc:hp2}
-. This means that we can apply Lemma~\ref{le:inc} on the intervals
-domain \(\inte\).  First, we define the max and min values of the
-point wise lifting intervals in the following way:
+Lemma~\ref{le:inc} and Lemma~\ref{le:dec} provide us an useful insight
+to compute the abstract interval semantics of \(\imp\)
+programs. Combined, they state that each variable in a program can
+increment (or decrement) by a maximal value which depends on the
+initial state of the machine \(\eta\) and the constants that appear in
+the program itself: the bound \(\bound{\com}\). In this section we use
+this idea to compute the interval semantics in another abstract
+domain, which does not contain infinite ascending or descending
+chains, and therefore using the simple Kleene iteration to compute
+least fix points ensures termination.
+
+To start we dineine \(\min\) and \(\max\) values of an environment,
+they will later be useful to bound the interval domain based on the
+initial state and the program we are considering.
 
 \begin{definition}[\(\min\) and \(\max\)]\label{def:minmax}
   Given a command \(\com\), the corresponding finite set of variables
@@ -608,5 +616,5 @@ analysis. This can already be seen as an hint on the goal of next
 sections: while we reasoned on the values of the intermediate
 analysis, we did not reason about the \emph{internal} values of
 intervals. In other words if instead of intervals we considered
-arbitrary sets (i.e., possibly \emph{non-convex} sets) our results
-should still be valid.
+arbitrary sets (i.e., possibly \emph{non-convex} sets) we expect the
+same result.

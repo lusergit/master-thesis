@@ -15,7 +15,7 @@ building a Galois connection with the concrete domain. We do so by
 overloading the \(\abstr\) and \(\concr\) functions, to refer also to
 the abstraction and concretization of abstract environments.
 
-\begin{definition}\label{def:vwabstr}
+\begin{definition}[Concretization and abstraction]\label{def:vwabstr}
   We define the \emph{concretization map} of abstract environments
   \(\eta \in \inte\), i.e., \(\concr : \inte \to \poset{\env}\) as
   follows
@@ -75,4 +75,55 @@ intervals, by defining the base operations
   \end{align*}
 \end{definition}
 With these base operations, \(\semi[\inte]{\cdot}\) is defined
-accordingly to Definition~\ref{def:abstrsem}.
+accordingly to Definition~\ref{def:abstrsem}.  The next point is to
+prove that the interval semantics \(\semi[\inte]{\cdot}\) is sound
+w.r.t.\ the concrete semantics \(\sem\cdot\).
+
+\begin{observation}\label{obs:alternative}
+  Notice that there is an alternative characterization of
+  \(\absem[\inte]{\cdot}\): it can be viewed as the b.c.a. of base
+  expressions on \(\bCnr\):
+  \begin{equation*}
+    \absem[\inte]{\com[e]} = \abstr[\inte] \conc \absem[\bCnr]{\com[e]}
+  \end{equation*}
+\end{observation}
+
+\begin{lemma}[\(\inte\) abstracts \(\bCnr\)]
+  Let \(\dabstr, \dconcr\) be the abstraction and concretization maps
+  of Definition~\ref{def:vwabstr}, then
+  \(\tuple{\dabstr, \dom, \inte, \dconcr}\) is a Galois connection.
+\end{lemma}
+
+\begin{proof}
+  By Lemma~\ref{le:inteposetz}
+  \(\tuple{\poset{\z}, \subseteq} \galoiS{\abstr}{\concr} \tuple{\Int,
+    \sqsubseteq}\) and by Theorem~\ref{th:liftingins}
+  \(\tuple{\bCnr, \ovdot\subseteq} \galoiS{\dabstr}{\dconcr}
+  \tuple{\inte, \sqsubseteq}\)
+\end{proof}
+
+By latter Lemma and Observation~\ref{obs:alternative} we can deduce
+the following
+
+\begin{lemma}[intervals domain abstracts non-relational collecting semantics]\label{le:nonloso}
+  \begin{equation*}
+    \semnr{\com}\dconcr(\eta) \ovdot\subseteq \dconcr(\semi[\inte]{\com}\eta)
+  \end{equation*}
+\end{lemma}
+
+\begin{observation}
+  Analysis on the intervals domain is sound to the concrete
+  semantics. For all \(\eta\in\inte\)
+  \begin{equation*}
+    \sem{\com}\concr(\dconcr(\eta)) \subseteq \concr(\semnr{\com}\dconcr(\eta)) \subseteq \concr(\dconcr(\semi[\inte]{\com}\eta))
+  \end{equation*}
+\end{observation}
+
+\begin{proof}
+  The second inequality
+  \(\concr(\semnr{\com}\dconcr(\eta)) \subseteq
+  \concr(\dconcr(\semi[\inte]{\com}\eta))\) comes from
+  Lemma~\ref{le:nonloso} and monotonicity of \(\concr\), while the
+  first one is from Lemma~\ref{le:nrsoundness}
+\end{proof}
+  
