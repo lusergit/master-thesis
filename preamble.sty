@@ -197,3 +197,23 @@
 % Document properties
 % \linespread{2}
 % \setlength\parindent{0pt}
+
+% chapter format
+
+\RequirePackage{titlesec}
+\titleformat{\chapter}[display]
+{\bfseries\Large\filcenter}
+{\titlerule[1pt]%
+  \vspace{1pt}%
+  \titlerule%
+  \vspace{1pc}%
+  \LARGE\MakeUppercase{\chaptertitlename} \thechapter}
+{1pc}
+{\titlerule%
+  \vspace{1pc}%
+  \bfseries\Huge
+}
+[
+\vspace{1pc}%
+\titlerule
+]
