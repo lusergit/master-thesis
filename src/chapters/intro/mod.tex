@@ -8,7 +8,7 @@ to the most crucial ones. Banking, aviation, space industry, car
 controls are only a small example of important everyday tasks that
 software runs in the modern era. Such tasks demand requirements of
 safety and reliability which are difficult to pair with the growing
-complexity and size of contemporary software. Errors can be exphensive
+complexity and size of contemporary software. Errors can be expensive
 both in monetary and in human lives terms, hence preventing them
 becomes more and more valuable as well as detecting them early.
 
@@ -16,9 +16,9 @@ becomes more and more valuable as well as detecting them early.
 
 Notable examples of such bugs are Meltdown and
 Spectre~\cite{art:meltdown,art:spectre}. Those vulnerabilities
-exploted an hardware related bug in floating-point division to access
+exploited an hardware related bug in floating-point division to access
 data outside the bounds imposed to a program y the operating system,
-resulting in the theft of arbitrary data, meaning a malicius actor
+resulting in the theft of arbitrary data, meaning a malicious actor
 could access -- for example -- passwords stored locally or -- more
 realistically -- data of other customers in a cloud environment.
 Another notable example is the first internet worm, which allowed the
@@ -48,7 +48,7 @@ usefulness of formal methods to everyone (e.g.\
 with~\cite{10.1145/3371078, 10.1145/3338112} or with the Grand
 Challenge of software verification~\cite{1621009,Hoare2008,1707636})
 their use is still restricted to specific niches of developers. This
-is due to some prblems with the technique itself. Firstly, the problem
+is due to some problems with the technique itself. Firstly, the problem
 is intrinsic in the theory of computation. Consider the following
 program in a pseudo-C language
 
@@ -88,7 +88,7 @@ Mopsa~\cite{10.1007/978-3-031-30820-8_37} are two sound analyzers of C
 and python code, which can infer program properties and catch bugs
 ahead of time. They both use a technique called \emph{abstract
   interpretation} which (roughly) involves interpreting a given
-program by mapping variables to an abstract rapresentation of some
+program by mapping variables to an abstract representation of some
 properties we are interested in.
 
 \paragraph*{Abstract interpretation.} Since universal program
@@ -141,10 +141,10 @@ and our result \(\interval{-10}{+10}\) is a \emph{superset} of \(S\).
 \emph{Abstract interpretation}, introduced by Radhia and Patrick
 Cousot in~\cite{patrickradhia:one, patrickradhia:two} is therefore a
 framework that generalizes this idea by providing tools to compute
-efficently general abstractions. As a result, a sound verifier can be
+efficiently general abstractions. As a result, a sound verifier can be
 obtained by comparing the resulting abstraction with the program
 specification: if the latter satisfies the former (i.e.\ it is a
-\emph{superset}) then also the pregram does and therefore it is
+\emph{superset}) then also the program does and therefore it is
 correct, otherwise noting can be said about the program, as the
 abstraction is an \emph{over-approximation}.
 
@@ -169,9 +169,9 @@ abstract interpretation:
 Generally the abstract execution of our program (i.e.\ the abstract
 interpretation) involves \emph{fixpoint computations} on algebraic
 structures called \emph{lattices}. Lattices are sets equipped with a
-notion of \emph{order} between elements, while fixpoint computaitons
+notion of \emph{order} between elements, while fixpoint computations
 usually involve computing a minimal element in a \emph{chain} of
-lattice elements such that the computaiton does not proceed further.
+lattice elements such that the computation does not proceed further.
 In other words, at which point the guard of a loop is not satisfied
 anymore and which guarantees can we infer for the program \emph{after}
 the loop? Consider the snipped of Code~\ref{codeexample}. We argued
@@ -195,7 +195,7 @@ snippet
     x += 1;
   }
 \end{lstlisting}
-Obviously the concrete computaion does not halt, but looking at the
+Obviously the concrete computation does not halt, but looking at the
 chain of iterands for our program for the variable \(\var\) we could
 infer the chain
 \begin{equation*}
@@ -218,12 +218,12 @@ second step with a naive widening
 \(\interval{-2}{+2} \widen \interval{-4}{+4} =
 \interval{-\infty}{+\infty}\) and infer that our variable after the
 end of the loop has a value between \(+\infty\) and \(-\infty\). This
-is certanly true, but is however very imprecise.
+is certainly true, but is however very imprecise.
 
 To recover some information loss with the widening we can use
 narrowing operators, but these work only when the information to
-refine our anaysis is explicit. In our example a narrowing would be
-sufficent to infer that the variable is between \(-10\) and \(+10\),
+refine our analysis is explicit. In our example a narrowing would be
+sufficient to infer that the variable is between \(-10\) and \(+10\),
 but in general it is not.
 
 This opens a question, is it possible to have a precise analysis of
@@ -232,13 +232,13 @@ abstract properties, while ensuring the termination of the analyzer?
 \paragraph*{Precise interval analysis} Because the presence of
 infinite ascending chains in the domain of intervals, the analysis
 over that domain was considered an algorithmic challenge: ordinary
-fixpoint iteration (trough kleene iteration) will not result in
-terminating analysis algoritm, while widening and narrowing do not
+fixpoint iteration (trough Kleene iteration) will not result in
+terminating analysis algorithm, while widening and narrowing do not
 compute the least solution of a system of equations, but only a safe
 over approximation of it, while ensuring termination. Initially
 in~\cite{SU2005122} Su and Wagner identify a class of interval
 equations for which the least solution can be computed precisely in
-polinomial time. Later~\cite{Gawlitza2009} expands on the latter
+polynomial time. Later~\cite{Gawlitza2009} expands on the latter
 article by providing an algorithm to compute least solutions that also
 deals with the arbitrary multiplication of intervals.
 
@@ -257,5 +257,5 @@ properties of interval and non-relational collecting analysis on the
 \(\imp\) language, while Chapter~\ref{ch:axiomatized} proves that,
 similarly to previous work, it is possible to bound the domains we
 previously introduced to remove infinite ascending chains, hence
-ensuring analysis termination. Some contraits will emerge and the
+ensuring analysis termination. Some constraints will emerge and the
 results will later be exposed in Chapter~\ref{ch:conclusion}.
