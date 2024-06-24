@@ -1,5 +1,62 @@
 \chapter{Conclusions}\label{ch:conclusion}
 
-In conclusion we provided an alternative method to~\cite{Gawlitza2009}
-to do exact analysis with the interval domain, and also showed that
-some results are extensible to non relational collecting semantics.
+We looked at the most common framework to build static analysis tools:
+starting from hte \(\imp\) language grammar we defined its concrete
+denotational semantics and its small step semantics, proving that
+semantic properties are in general not decidable. We then abstracted
+the execution of programs with the non-relational collecting semantics
+\(\bCnr\): the most general non-relational domain. From there we made
+one more abstraction with the interval domain \(\inte\).
+
+\begin{figure}[H]
+  \centering
+  \usetikzlibrary{arrows.meta}
+  \begin{tikzpicture}[->, >=stealth]
+    % Nodes
+    \node (dom) {\(\dom\)};
+    \node (bcnr) [below=of dom] {\(\bCnr\)};
+    \node (ph1) [below=of bcnr] {};
+    \node (inte) [left=of ph1] {\(\inte\)};
+    \node (bbcnr) [right=of ph1] {\(\bbCnr{k_1}{k_2}\)};
+    \node (binte) [below=of inte] {\(\binte{k_1}{k_2}\)};
+    \node (btbcnr) [below=of bbcnr] {\(\btbCnr{k_1}{k_2}\)};
+    
+    % Arrows
+    \path
+    (dom) edge[bend right=10] node[left]{$\abstr$} (bcnr)
+    (bcnr) edge[bend right=10] node[right]{$\concr$} (dom)
+    (bcnr) edge[bend right=10] node[left]{$\abstr$} (inte)
+    (inte) edge[bend right=10] node[right]{$\concr$} (bcnr)
+    (bcnr) edge[bend right=10] node[left]{$\abstr$} (bbcnr)
+    (bbcnr) edge[bend right=10] node[right]{$\concr$} (bcnr)
+    (inte) edge[bend right=10] node[left]{$\abstr$} (binte)
+    (binte) edge[bend right=10] node[right]{$\concr$} (inte)
+    (bbcnr) edge[bend right=10] node[left]{$\abstr$} (btbcnr)
+    (btbcnr) edge[bend right=10] node[right]{$\concr$} (bbcnr);
+  \end{tikzpicture}
+  \caption{Abstractions chain we build troughout
+    Chapter~\ref{ch:abstractdomains}}
+\end{figure}
+
+We built the abstraction chain in figure, and defined abstract
+semantics in an inductive way on such domains, s.t.\ for any two
+domains \(\bA, \abstract\bA\) s.t.
+\(\bA \galois{\abstr}{\concr} \abstract\bA\) implies that
+\(\semi[\bA]{\com}\concr(\abstract\eta) \sqsubseteq
+\concr(\semi[\abstract\bA]{\com}\abstract\eta)\), i.e., if two domains
+are connected trough a Galois connection, teir abstract semantics are
+sound. Our goal was to prove that by only relying on the kleene
+iteration method to computer least fixpoints
+\begin{equation*}
+  \lfp(f) = \bigsqcup\left\{f^n(\bot) \mid n \in \n\right\}
+\end{equation*}
+it was possible to compute the exact abstract semantics
+\(\semi[\bA]{\com}\eta\) for any program \(\com\) and initial state
+\(\eta\in\bA\). We proved that such thing is possible with the
+interval domain \(\inte\) by \emph{bounding} the domain according to
+\(\com\) and \(\eta\) to some restricted domain
+\(\binte{k_1}{k_2}\). The original idea was that since in the proof
+that allowed us to find such domain bounding we did only talk about
+\(\sup\) and \(\inf\) values, it should have been possible to apply
+the same technique to the non-relational collecting domain \(\bCnr\),
+and therefore also compute the most precise invariant in such domain.

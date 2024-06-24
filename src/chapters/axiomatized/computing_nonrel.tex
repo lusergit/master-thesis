@@ -608,10 +608,16 @@ domain with Theorem~\ref{th:bounded}. In its essence it states that
 when doing static analysis with abstract interpretation using the non
 relational collecting domain \(\bCnr\) for some program
 \(\com\in\imp\) and an initial environment \(\eta \in \bCnr\) we can
-consider a bounded version of the domain \(\bbCnr{k_1}{k_2}\) with
+consider a bounded version of the domain \(\btbCnr{k_1}{k_2}\) with
 \(k_1 = \min(\eta) - \nlbound{\com}\) and
 \(k_2 = \max(\eta) + \nbound{\com}\) (hence computed accordingly to
-\(\com\) and \(\eta\)).
+\(\com\) and \(\eta\)). Such domain has no infinite ascending or
+descending chains, hence the Kleene iteration method is guaranteed to
+halt in finite time. The result however is not as precise as the
+bounded version of the interval analysis: while for intervals we could
+compute the exact invariant, for the non-relational collecting domain
+this is not the case. We can however decide weather the analysis over
+\(\bCnr\) halts in a finite time or not.
 % Possiamo fare analisi statica secondo la semantica induttiva di cui
 % sopra. Se la variabile ha come risultato un set finito, questo è
 % garantito essere nel reticolo ristretto. Altrimenti, dato che
