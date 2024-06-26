@@ -16,30 +16,25 @@ overloading the \(\abstr\) and \(\concr\) functions, to refer also to
 the abstraction and concretization of abstract environments.
 
 \begin{definition}[Concretization and abstraction]\label{def:vwabstr}
-  We define the \emph{concretization map} of abstract environments
-  \(\eta \in \inte\), i.e., \(\concr : \inte \to \poset{\env}\) as
-  follows
+  We define the concretization map \(\ovdot\concr : \inte \to \bCnr\)
+  and the abstraction map \(\ovdot\abstr : \bCnr \to \inte\) as the
+  point wise lifting of \(\concr, \abstr\) from
+  Definition~\ref{def:concrint}:
   \begin{align*}
-    \dconcr(\bot) & \defin \emptyset \\
-    \dconcr(\eta) & \defin \{\rho \in \env \mid \forall \var \in \Var \quad \rho(\var) \in \concr(\eta\var)\}
+    \ovdot\concr(\eta) & \defin \lambda \var . \concr(\eta\var) \\
+    \ovdot\abstr(\rho) & \defin \lambda \var . \abstr(\rho\var)
   \end{align*}
-  and the \emph{abstraction map} of sets of concrete environments
-  \(X \in \poset{\env}\), i.e., \(\abstr : \poset{\env} \to \inte\) as
-  \begin{align*}
-    \dabstr(\emptyset) & \defin \bot \\
-    \dabstr(X) & \defin \lambda \var \; . \; \abstr(\{\rho(\var) \mid \rho \in X\})
-  \end{align*}
+  for all \(\eta\in\inte, \rho\in\bCnr\).
 \end{definition}
 
 We can again define a notion of order for elements of \(\inte\) based
 on the concretization map. We do by overloading the 
 \(\sqsubseteq\) notation. Let \(\eta, \theta \in \inte\), then
 \begin{equation*}
-  \eta \sqsubseteq \theta \text{ iff } \dconcr(\eta) \subseteq \dconcr(\theta)
+  \eta \sqsubseteq \theta \text{ iff } \dconcr(\eta) \ovdot\subseteq \dconcr(\theta)
 \end{equation*}
 
-Notice that because of the definition of the concretization map
-(Definition~\ref{def:vwabstr})
+Notice that because of \(\ovdot\concr\) definition
 \begin{equation*}
   \eta \sqsubseteq \theta \iff \forall \var \in \Var \quad \eta(\var) \sqsubseteq \theta(\var)
 \end{equation*}
@@ -80,11 +75,10 @@ prove that the interval semantics \(\semi[\inte]{\cdot}\) is sound
 w.r.t.\ the concrete semantics \(\sem\cdot\).
 
 \begin{observation}\label{obs:alternative}
-  Notice that there is an alternative characterization of
-  \(\absem[\inte]{\cdot}\): it can be viewed as the b.c.a. of base
-  expressions on \(\bCnr\):
+  An alternative characterization of \(\absem[\inte]{\cdot}\) views it
+  as the b.c.a.\ of base expressions on \(\bCnr\):
   \begin{equation*}
-    \absem[\inte]{\com[e]} = \abstr[\inte] \conc \absem[\bCnr]{\com[e]} \conc \concr[\inte]
+    \absem[\inte]{\com[e]} = \ovdot\abstr \conc \absem[\bCnr]{\com[e]} \conc \ovdot\concr
   \end{equation*}
 \end{observation}
 
@@ -110,6 +104,13 @@ the following
     \semnr{\com}\dconcr(\eta) \ovdot\subseteq \dconcr(\semi[\inte]{\com}\eta)
   \end{equation*}
 \end{lemma}
+
+\begin{proof}
+  This follows from the fact that base expressions on intervals are
+  characterised by the best correct approximation of base expressions
+  on \(\bCnr\) and from Corollary~\ref{le:bcainducessoundness} b.c.a.\
+  induces soundness.
+\end{proof}
 
 \begin{observation}
   Analysis on the intervals domain is sound to the concrete

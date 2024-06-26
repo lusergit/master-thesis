@@ -1,14 +1,63 @@
 \chapter{Conclusions}\label{ch:conclusion}
 
-We looked at the most common framework to build static analysis tools:
-starting from hte \(\imp\) language grammar we defined its concrete
-denotational semantics and its small step semantics, proving that
-semantic properties are in general not decidable. We then abstracted
-the execution of programs with the non-relational collecting semantics
-\(\bCnr\): the most general non-relational domain. From there we made
-one more abstraction with the interval domain \(\inte\).
+% We looked at the most common framework to build static analysis tools:
+% starting from hte \(\imp\) language grammar we defined its concrete
+% denotational semantics and its small step semantics, proving that
+% semantic properties are in general not decidable. We then abstracted
+% the execution of programs with the non-relational collecting semantics
+% \(\bCnr\): the most general non-relational domain. We then defined and
+% showed the basic properties of the intervals domain \(\inte\), a
+% common domain in abstract interpretation literature. We then proved
+% that for both these abstract domains variables are bounded to increase
+% up to a bound we defined as \(\bound{\com}\), which depends on the
+% program \(\com\). With such constraint we tried to restrict the
+% abstract domains in such a way that there were no ascending and
+% descending chains.
+In this study, we examined the most prevalent framework for developing
+static analysis tools. Beginning with the \(\imp\) language grammar,
+we defined its concrete denotational semantics and small step
+semantics, demonstrating that semantic properties are generally
+undecidable. We then abstracted program execution using the
+non-relational collecting semantics \(\bCnr\), the most general
+non-relational domain. Subsequently, we defined and established the
+fundamental properties of the intervals domain \(\inte\), a well-known
+domain in abstract interpretation literature. We proved that in both
+these abstract domains, variables are constrained to increase up to a
+limit denoted as \(\bound{\com}\), which is dependent on the program
+\(\com\). With this constraint, we aimed to restrict the abstract
+domains in such a way that ascending and descending chains were
+eliminated.
 
-\begin{figure}[H]
+Furthermore, we demonstrated that in the case of \(\binte{k_1}{k_2}\)
+analysis, the bounded domain and the original \(\inte\) reach the same
+fixpoints, provided that \(k_1\) and \(k_2\) are selected based on the
+considered program \(\com\) and the initial environment
+\(\eta \in \binte{k_1}{k_2}\). With these constraints, we aimed to
+restrict the abstract domains to eliminate ascending and descending
+chains.
+
+In our investigation, we referenced~\cite{Gawlitza2009}
+highlighting their achievement of computing precise interval
+invariants within finite time. They detailed an algorithm capable of
+solving systems of equations describing programs in \(O(n^3)\), where
+\(n\) denotes the program's size. However, their approach heavily
+relied on the convexity of elements within \(\inte\). In response, we
+introduced an alternative method focused on constraining the domain of
+\(\inte\) and ensuring termination by eliminating infinite ascending
+chains.
+
+Initially, we anticipated that this method would extend to
+non-relational collecting abstractions, relying solely on variable
+increments rather than the convex properties of \(\inte\). To our
+surprise, we discovered that achieving precise invariants posed a
+greater challenge than anticipated. Specifically, for non-relational
+collecting semantics, we determined that while it was feasible to
+infer the analyzer's termination, achieving the most accurate
+invariant proved elusive. Despite this, we remain optimistic about the
+potential to achieve this goal as similar results have already been
+reached by James Worrell et al.\ in~\cite{Lefaucheux2024}.
+
+\begin{figure}
   \centering
   \usetikzlibrary{arrows.meta}
   \begin{tikzpicture}[->, >=stealth]
@@ -34,29 +83,34 @@ one more abstraction with the interval domain \(\inte\).
     (bbcnr) edge[bend right=10] node[left]{$\abstr$} (btbcnr)
     (btbcnr) edge[bend right=10] node[right]{$\concr$} (bbcnr);
   \end{tikzpicture}
-  \caption{Abstractions chain we build troughout
-    Chapter~\ref{ch:abstractdomains}}
+  \caption{Abstractions chain we build throughout
+    Chapter~\ref{ch:abstractdomains}}\label{fig:abstrchain}
 \end{figure}
 
-We built the abstraction chain in figure, and defined abstract
-semantics in an inductive way on such domains, s.t.\ for any two
-domains \(\bA, \abstract\bA\) s.t.
+We built the abstraction chain in Figure~\ref{fig:abstrchain}, and
+defined abstract semantics in an inductive way on such domains, s.t.\
+for any two domains \(\bA, \abstract\bA\) s.t.
 \(\bA \galois{\abstr}{\concr} \abstract\bA\) implies that
-\(\semi[\bA]{\com}\concr(\abstract\eta) \sqsubseteq
-\concr(\semi[\abstract\bA]{\com}\abstract\eta)\), i.e., if two domains
-are connected trough a Galois connection, teir abstract semantics are
-sound. Our goal was to prove that by only relying on the kleene
-iteration method to computer least fixpoints
+\[\semi[\bA]{\com}\concr(\abstract\eta) \sqsubseteq
+\concr(\semi[\abstract\bA]{\com}\abstract\eta)\]i.e., if two domains
+are connected trough a Galois connection, their abstract semantics are
+sound.  We proved with Theorem~\ref{th:bounded} that by restricting
+the interval domain to a precisely crafted subset of itself one can
+compute the exact fixpoint only by relying on the Kleene iteration
+method to compute least fixpoints
 \begin{equation*}
   \lfp(f) = \bigsqcup\left\{f^n(\bot) \mid n \in \n\right\}
 \end{equation*}
-it was possible to compute the exact abstract semantics
-\(\semi[\bA]{\com}\eta\) for any program \(\com\) and initial state
-\(\eta\in\bA\). We proved that such thing is possible with the
-interval domain \(\inte\) by \emph{bounding} the domain according to
-\(\com\) and \(\eta\) to some restricted domain
-\(\binte{k_1}{k_2}\). The original idea was that since in the proof
-that allowed us to find such domain bounding we did only talk about
-\(\sup\) and \(\inf\) values, it should have been possible to apply
-the same technique to the non-relational collecting domain \(\bCnr\),
-and therefore also compute the most precise invariant in such domain.
+
+\paragraph*{Future work.}
+In the process of writing this thesis we encounter various obstacles,
+that we present here as possible extensions and future work, as
+answering all the following would have been impossible for the scope
+of a master thesis due to the time constraints.
+
+The first and most obvious question is weather is it possible or not
+to actually compute the precise non-relational collecting
+semantics. Our educated guess is that it is actually possible, by
+looking into~\cite{Lefaucheux2024}.  Their work builds on Presburger
+arithmetics from~\cite{1571698599431503232} to provide an algoritm to
+find the solution of a system of equations in \(\bCnr\).

@@ -86,11 +86,14 @@ that there is a Galois connection between \(\poset{\z}\) and \(\Int\).
     \(\iota \sqsubseteq \kappa \implies \concr(\iota) \subseteq
     \concr(\kappa)\) while if we let \(R,S \in \bCnr\) s.t.\
     \(R\subseteq S \implies \abstr(R) \sqsubseteq \abstr(S)\)
-  \item \(\concr \conc \abstr\) is extensive: \(\forall R \in \bCnr\)
-    \(R \sqsubseteq \concr(\abstr(R))\)
-  \item \(\abstr\conc\concr\) is reductive:
-    \(\forall \iota \in \inte\) \(\abstr(\concr(\iota)) = \iota\),
-    which implies that it is reductive.
+  \item \(\concr \conc \abstr\) is extensive. Notice that
+    \(\forall R \in \bCnr\) it holds that
+    \(R \sqsubseteq \{x\in\z \mid \inf(R) \leq x \leq \sup(R)\} =
+    \concr(\abstr(R))\), which is our thesis.
+  \item \(\abstr\conc\concr\) is reductive. Notice that
+    \(\forall \iota \in \inte\) it holds that
+    \(\abstr(\concr(\iota)) = \iota\), which implies that it is
+    reductive.
   \end{enumerate}
   Therefore \(\tuple{\abstr, \poset{\z}, \Int, \concr}\) is a Galois
   connection.
@@ -98,4 +101,4 @@ that there is a Galois connection between \(\poset{\z}\) and \(\Int\).
 
 Moreover, since \(\concr \conc \abstr = \id\) we can deduce that
 \(\tuple{\poset{\z}, \ovdot\subseteq} \galoiS{\abstr}{\concr}
-\tuple{\inte, \sqsubseteq}\) is a Galois insertion
+\tuple{\Int, \sqsubseteq}\) is a Galois insertion
