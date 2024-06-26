@@ -243,20 +243,17 @@ of best correct approximations over \(\binte{k_1}{k_2}\).
   the abstract semantics over the interval domain bounded over some
   constants \(k_1, k_2 \in \z\) we will write
   \(\bsemi{k_1}{k_2}{\cdot}\) to refer to
-  \(\bsemi{k_1}{k_2}{\cdot}\).
+  \(\semi[\binte{k_1}{k_2}]{\cdot}\).
 \end{notation}
 
 \begin{definition}[Bounded interval analysis]\label{def:boundedanalysis}
   Let \(\rho \in \binte{k_1}{k_2}\) for some \(k_1, k_2 \in \z\) s.t.\
   \(k_1 \leq k_2\) and \(\com \in \imp\). We define
-  \(\bsemi{k_1}{k_2}{\com}\rho\) as follows
-  \begin{align*}
-    \bsemi{k_1}{k_2}{\com[e]}\rho & \defin \dabstr[k_1,k_2] \left(\semi{\com[e]}\rho\right) \\
-    \bsemi{k_1}{k_2}{\com_1 \ndet \com_2}\rho & \defin \bsemi{k_1}{k_2}{\com_1}\rho \sqcup \bsemi{k_1}{k_2}{\com_2}\rho \\
-    \bsemi{k_1}{k_2}{\com_1 \seq \com_2}\rho & \defin \left(\bsemi{k_1}{k_2}{\com_2} \circ \bsemi{k_1}{k_2}{\com_1}\right)\rho \\
-    \bsemi{k_1}{k_2}{\kleene{\com}}\rho & \defin \textstyle\bigsqcup_{i\in\n}{\left({\bsemi{k_1}{k_2}{\com}}\right)}^i\rho \\
-    \bsemi{k_1}{k_2}{\fix{\com}}\rho & \defin \lfp\left(\lambda \mu . \rho \sqcup \bsemi{k_1}{k_2}{\com}\mu\right)
-  \end{align*}
+  \(\absem[\binte{k_1}{k_2}]{\com[e]}\rho\) as the best correct
+  approximation of base expressions over \(\inte\):
+  \begin{equation*}
+    \absem[\binte{k_1}{k_2}]{\com[e]} \defin \dabstr[k_1,k_2] \conc \absem[\inte]{\com[e]} \conc \dconcr[k_1,k_2]
+  \end{equation*}
   where \(\com[e]\in\expr\). 
 \end{definition}
 \noindent
@@ -279,8 +276,9 @@ which allows us to prove the soundness of the analysis over
     \inte\galois{\ovdot\abstr_{k_1, k_2}}{\id}\binte{k_1}{k_2}
   \end{equation*}
   between \(\inte\) and \(\binte{k_1}{k_2}\) for all
-  \(k_1, k_2 \in \z \mid k_1 \leq k_2\). Hence by
-  Theorem~\ref{th:sound} follows that for all
+  \(k_1, k_2 \in \z \mid k_1 \leq k_2\) and the fact that base
+  expressions are defined with the best correct approxiation. Hence by
+  Corollary~\ref{le:bcainducessoundness} follows that for all
   \(\com\in\imp, \rho \in \binte{k_1}{k_2}\)
   \begin{equation*}
     \left(\semi{\com} \conc \id \right)\;\rho \sqsubseteq  \left(\id \conc \bsemi{k_1}{k_2}{\com}\right)\;\rho
