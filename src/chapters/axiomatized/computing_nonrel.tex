@@ -34,16 +34,16 @@ abstraction maps
 \begin{definition}\label{def:abstrnrb}
   Let \(k_1,k_2\in\z\) s.t.\ \(k_1 \leq k_2\). We define a
   concretization map
-  \(\concr[k_1,k_2] : \bposet[*]{k_1}{k_2}{\z} \to \poset[*]{\z}\) as
+  \(\sconcr[k_1,k_2] : \bposet[*]{k_1}{k_2}{\z} \to \poset[*]{\z}\) as
   the identity function
   \begin{equation*}
-    \concr[k_1,k_2] = \id
+    \sconcr[k_1,k_2] = \id
   \end{equation*}
   similarly we define an abstraction map
-  \(\abstr[k_1,k_2] : \poset[*]{\z} \to \bposet[*]{k_1}{k_2}{\z}\) in
+  \(\sabstr[k_1,k_2] : \poset[*]{\z} \to \bposet[*]{k_1}{k_2}{\z}\) in
   the following way
   \begin{equation*}
-    \abstr[k_1,k_2](S) = \begin{cases}
+    \sabstr[k_1,k_2](S) = \begin{cases}
       S & \text{if } \inf(S) \geq k_1 \land \sup(S) \leq k_2 \\
       \top & \text{otherwise}
     \end{cases}
@@ -53,36 +53,36 @@ abstraction maps
 \begin{lemma}
   Given \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\).
   \begin{equation*}
-    \tuple{\poset[*]\z, \subseteq} \galois{\abstr[k_1,k_2]}{\id} \tuple{\bposet[*]{k_1}{k_2}{\z}, \subseteq}
+    \tuple{\poset[*]\z, \subseteq} \galois{\sabstr[k_1,k_2]}{\sconcr[k_1,k_2]} \tuple{\bposet[*]{k_1}{k_2}{\z}, \subseteq}
   \end{equation*}
   i.e.,
-  \(\tuple{\abstr[k_1,k_2], \poset[*]{\z},
-    {\bposet[*]{k_1}{k_2}{\z}}, \id}\) is a Galois connection.
+  \(\tuple{\sabstr[k_1,k_2], \poset[*]{\z},
+    {\bposet[*]{k_1}{k_2}{\z}}, \sconcr[k_1,k_2]}\) is a Galois connection.
 \end{lemma} 
 
 \begin{proof}
-  The proof consists in showing that \(\concr[k_1,k_2]\) and
-  \(\abstr[k_1,k_2]\) satisfy the properties of
+  The proof consists in showing that \(\sconcr[k_1,k_2]\) and
+  \(\sabstr[k_1,k_2]\) satisfy the properties of
   Theorem~\ref{th:galoisprop}:
   \begin{enumerate}[label={(\arabic*)}]
-  \item\label{itemone} \(\abstr[k_1,k_2]\), \(\id\) are monotonic;
-  \item\label{itemtwo} \(\id \conc \abstr[k_1, k_2]\) is extensive, i.e.,
-    \(\sigma \subseteq \abstr[k_1,k_2](\sigma)\) for all
+  \item\label{itemone} \(\sabstr[k_1,k_2]\), \(\id\) are monotonic;
+  \item\label{itemtwo} \(\id \conc \sabstr[k_1, k_2]\) is extensive, i.e.,
+    \(\sigma \subseteq \sabstr[k_1,k_2](\sigma)\) for all
     \(\sigma \in \poset[*]{\z}\);
-  \item\label{itemthree} \(\abstr[k_1,k_2] \conc\concr\) is reductive, i.e.,
-    \(\abstr[k_1,k_2](\sigma_b) \subseteq \sigma_b\) for all
+  \item\label{itemthree} \(\sabstr[k_1,k_2] \conc\sconcr\) is reductive, i.e.,
+    \(\sabstr[k_1,k_2](\sigma_b) \subseteq \sigma_b\) for all
     \(\sigma_b \in \bposet[*]{k_1}{k_2}{\z}\).
   \end{enumerate}
   To start let's prove~\ref{itemone}. Of course \(\id\) is monotone by
-  definition. For \(\abstr[k_1,k_2]\) we have to prove that given any
+  definition. For \(\sabstr[k_1,k_2]\) we have to prove that given any
   \(\sigma, \tau \in \poset[*]{\z}\) s.t.\ \(\sigma \subseteq \tau\)
   it holds that
-  \(\abstr[k_1,k_2](\sigma) \subseteq \abstr[k_1,k_2](\tau)\). Notice
+  \(\sabstr[k_1,k_2](\sigma) \subseteq \sabstr[k_1,k_2](\tau)\). Notice
   that since \(\sigma \subseteq \tau\) it holds that
   \(\max(\sigma) \leq \max(\tau)\) and
   \(\min(\sigma) \geq \min(\tau)\), which means by
   Definition~\ref{def:abstrnrb}
-  \(\abstr[k_1,k_2]{\sigma} \subseteq \abstr[k_1,k_2]{\tau}\), which
+  \(\sabstr[k_1,k_2]{\sigma} \subseteq \sabstr[k_1,k_2]{\tau}\), which
   is our thesis.
 
   \medskip
@@ -91,23 +91,23 @@ abstraction maps
   Both~\ref{itemtwo} and~\ref{itemthree} follow from
   Definition~\ref{def:abstrnrb}. For~\ref{itemtwo} for all
   \(\sigma \in \poset[*]{\z}\) either
-  \(\abstr[k_1,k_2]({\sigma}) = \sigma\) or
-  \(\abstr[k_1,k_2]({\sigma}) = \top\), hence in both cases
-  \(\sigma \subseteq \abstr[k_1,k_2]({\sigma})\)
+  \(\sabstr[k_1,k_2]({\sigma}) = \sigma\) or
+  \(\sabstr[k_1,k_2]({\sigma}) = \top\), hence in both cases
+  \(\sigma \subseteq \sabstr[k_1,k_2]({\sigma})\)
   holds. For~\ref{itemthree}, for all
   \(\sigma_b \in \bposet[*]{k_1}{k_2}{\z}\) it holds that
   \(\max(\sigma_b) \leq k_2\) and \(\min(\sigma_b) \geq k_1\), hence
   \begin{equation}\label{eq:equality2}
-    \abstr[k_1,k_2]({\sigma_b}) = \sigma_b
+    \sabstr[k_1,k_2]({\sigma_b}) = \sigma_b
   \end{equation}
-  and therefore \(\abstr[k_1,k_2]({\sigma_b}) \subseteq \sigma_b\)
+  and therefore \(\sabstr[k_1,k_2]({\sigma_b}) \subseteq \sigma_b\)
   holds.  Moreover,~\eqref{eq:equality2} means that for all
   \(\sigma_b \in \bposet[*]{k_1}{k_2}{\z}\) that
-  \(\abstr[k_1,k_2] \conc \id = \id\), which means by
+  \(\sabstr[k_1,k_2] \conc \id = \id\), which means by
   Definition~\ref{def:insertion} that we formed a Galois insertion:
   \begin{equation*}
     \tuple{\poset[*]{\z}, \subseteq}
-    \galoiS{\abstr[k_1,k_2]}{\id}
+    \galoiS{\sabstr[k_1,k_2]}{\sconcr[k_1,k_2]}
     \tuple{\bposet[*]{k_1}{k_2}{\z}, \subseteq}
     \qedhere
   \end{equation*}
@@ -118,27 +118,27 @@ the point-wise lifting of \(\poset[*]{\z}\) and
 them:
 \begin{equation*}
   \tuple{\bCnr, \ovdot\subseteq}
-  \galoiS{\dabstr[k_1,k_2]}{\id}
+  \galoiS{\abstr[k_1,k_2]}{\concr[k_1,k_2]}
   \tuple{\bbCnr{k_1}{k_2}, \ovdot\subseteq}
 \end{equation*}
 Where
-\(\dabstr[k_1,k_2](\eta) = \lambda \var . \abstr[k_1,k_2](\eta\var)\).
-Since we have a Galois connection between the non relational
-collecting domain \(\bCnr\) and its bounded version
-\(\bbCnr{k_1}{k_2}\) we can define an abstract inductive semantics
-which is sound by construction:
-\begin{definition}[Abstract bounded non relational collecting semantics]
+\(\abstr[k_1,k_2](\eta) = \lambda \var . \sabstr[k_1,k_2](\eta\var)\)
+and \(\concr[k_1,k_2] = \id\).  Since we have a Galois connection
+between the non relational collecting domain \(\bCnr\) and its bounded
+version \(\bbCnr{k_1}{k_2}\) we can define an abstract inductive
+semantics which is sound by construction:
+\begin{definition}[Bounded non-relational collecting semantics]
   Let \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\).  We define basic
   expressions over the bounded non relational collecting semantics
   \({\absem[\bbCnr{k_1}{k_2}]{\cdot} : \expr \to \bbCnr{k_1}{k_2} \to
     \bbCnr{k_1}{k_2}}\) as
   \begin{equation*}
-    \absem[\bbCnr{k_1}{k_2}]{\com[e]} \defin \dabstr[k_1,k_2] \conc \absem[\bCnr]{\com[e]}
+    \absem[\bbCnr{k_1}{k_2}]{\com[e]} \defin \abstr[k_1,k_2] \conc \absem[\bCnr]{\com[e]}
   \end{equation*}
   i.e.\ the best correct abstraction.
 \end{definition}
 
-\begin{lemma}[Bounded non relational collecting is sound]\label{le:soundnr}
+\begin{lemma}[Bounded non-relational collecting is sound]\label{le:soundnr}
   Let \(k_1, k_2 \in \z\) s.t.\ \(k_1\leq k_2\). For all
   \(\abstract\eta \in \bbCnr{k_1}{k_2}\) it holds that
   \begin{equation*}
@@ -152,7 +152,7 @@ which is sound by construction:
   defined as the bca on basic expressions over \(\bCnr\) and there is
   a Galois connection
   \begin{equation*}
-    \tuple{\bCnr, \ovdot\subseteq} \galoiS{\abstr[k_1,k_2]}{\id} \tuple{\bbCnr{k_1}{k_2}, \ovdot\subseteq}
+    \tuple{\bCnr, \ovdot\subseteq} \galoiS{\abstr[k_1,k_2]}{\concr[k_1,k_2]} \tuple{\bbCnr{k_1}{k_2}, \ovdot\subseteq}
   \end{equation*}
   Hence by Lemma~\ref{le:bcainducessoundness} our thesis 
   \begin{equation*}
@@ -378,7 +378,7 @@ We preliminarly prove a simple but useful property of
     \end{equation*}
     First, if \(\overline\eta = \bot\) we can notice that
     \begin{equation*}
-      (\tabstr[k_1k_2] \conc \dabstr[k_1,k_2] \conc \semnr{\com[e]})\bot
+      (\tabstr[k_1k_2] \conc \abstr[k_1,k_2] \conc \semnr{\com[e]})\bot
       = \bot =
       \semnr{\com[e]}\tconcr[k_1,k_2](\bot)
     \end{equation*}
@@ -393,10 +393,10 @@ We preliminarly prove a simple but useful property of
       \max(\semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)\var[y]) & \leq \max(\tconcr[k_1,k_2](\overline\eta)) + \bound{\com[e]} \leq \max(\tconcr[k_1,k_2](\overline\eta)) + \nbound{\com[e]} = k_2 \\
       \min(\semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)\var[y]) & \geq \min(\tconcr[k_1,k_2](\overline\eta)) - \lbound{\com[e]} \geq \min(\tconcr[k_1,k_2](\overline\eta)) - \nlbound{\com[e]} = k_1
     \end{align*}
-    hence by definition of \(\dabstr[k_1,k_2]\) and
+    hence by definition of \(\abstr[k_1,k_2]\) and
     \(\tabstr[k_1,k_2]\)
     \begin{equation*}
-      \left(\tabstr[k_1,k_2] \conc \dabstr[k_1,k_2]\right)\left(\semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)\right)
+      \left(\tabstr[k_1,k_2] \conc \abstr[k_1,k_2]\right)\left(\semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)\right)
       =
       \semnr{\com[e]}\tconcr[k_1,k_2](\overline\eta)
     \end{equation*}
@@ -617,7 +617,12 @@ halt in finite time. The result however is not as precise as the
 bounded version of the interval analysis: while for intervals we could
 compute the exact invariant, for the non-relational collecting domain
 this is not the case. We can however decide weather the analysis over
-\(\bCnr\) halts in a finite time or not.
+\(\bCnr\) halts in a finite time or not: if the result of
+\(\btsemnr{k_1}{k_2}{\com}\) is \(\top\) it means that at some stage
+of the analysis some variable exceeded the program bound, hence its
+values are guaranteed to diverge to non-finite subset of \(\z\). This
+means that the Kleene iteration would not halt in finite time, hence
+the analysis would not halt in a finite time.
 % Possiamo fare analisi statica secondo la semantica induttiva di cui
 % sopra. Se la variabile ha come risultato un set finito, questo è
 % garantito essere nel reticolo ristretto. Altrimenti, dato che

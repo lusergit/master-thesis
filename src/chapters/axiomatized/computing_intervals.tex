@@ -225,11 +225,11 @@ because of the latter observation and since
 \(\Int, \bInt{k_1}{k_2}\) respectively, by Theorem~\ref{th:liftingins}
 it holds that
 \begin{equation}\label{eq:inteinsert}
-  \tuple{\inte, \sqsubseteq} \galoiS{\dabstr[k_1,k_2]}{\id} \tuple{\binte{k_1}{k_2}, \sqsubseteq}
+  \tuple{\inte, \sqsubseteq} \galoiS{\dabstr[k_1,k_2]}{\dconcr[k_1,k_2]} \tuple{\binte{k_1}{k_2}, \sqsubseteq}
 \end{equation}
 where
 \({\dabstr[k_1,k_2]}(\eta) = \lambda \var
-. \abstr[k_1,k_2](\eta\var)\).
+. \abstr[k_1,k_2](\eta\var)\) and \(\dconcr[k_1,k_2] = \id\).
 % From this we can observe that given a program \(\com\),
 % \(\semi{\com} : \inte \to \inte\) is a concrete operator on
 % \(\inte\) and

@@ -28,7 +28,7 @@ limit denoted as \(\bound{\com}\), which is dependent on the program
 domains in such a way that ascending and descending chains were
 eliminated.
 
-Furthermore, we demonstrated that in the case of \(\binte{k_1}{k_2}\)
+Furthermore, we proved that in the case of \(\binte{k_1}{k_2}\)
 analysis, the bounded domain and the original \(\inte\) reach the same
 fixpoints, provided that \(k_1\) and \(k_2\) are selected based on the
 considered program \(\com\) and the initial environment
@@ -103,14 +103,24 @@ method to compute least fixpoints
 \end{equation*}
 
 \paragraph*{Future work.}
-In the process of writing this thesis we encounter various obstacles,
-that we present here as possible extensions and future work, as
-answering all the following would have been impossible for the scope
-of a master thesis due to the time constraints.
+Throughout the development of this thesis, we encountered various
+obstacles, which we present here as potential extensions and
+directions for future research. Addressing all of these issues was
+beyond the scope of this master's thesis due to time constraints.
 
-The first and most obvious question is weather is it possible or not
-to actually compute the precise non-relational collecting
-semantics. Our educated guess is that it is actually possible, by
-looking into~\cite{Lefaucheux2024}.  Their work builds on Presburger
-arithmetics from~\cite{1571698599431503232} to provide an algoritm to
-find the solution of a system of equations in \(\bCnr\).
+The first and most prominent question is whether it is possible to
+precisely compute the non-relational collecting semantics. Our
+hypothesis is that it is indeed feasible, as indicated by the work
+of~\cite{Lefaucheux2024}. Their research builds on Presburger
+arithmetic from~\cite{1571698599431503232}, which, although beyond the
+scope of this thesis, presents interesting results, particularly its
+decidability.
+
+Finally, future work can be focused on the application to real-world
+tools. Aforementioned tools such as
+Astreé~\cite{10.1007/978-3-540-31987-0_3} and
+MOPSA~\cite{10.1007/978-3-031-30820-8_37} utilize the traditional
+widening technique, which, while sound, does not infer the most
+precise invariant in the domain of intervals. In contrast, we have
+demonstrated that it is possible to achieve more precise invariants
+within this domain.
