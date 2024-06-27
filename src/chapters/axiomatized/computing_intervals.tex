@@ -17,12 +17,12 @@ To start we define bounded abstract interval domains:
 
 \begin{definition}[Bounded interval]\label{def:boundedint}
   We define
-  \(\binte{k_1}{k_2} \veq (\Var_{\com} \to \bInt{k_1}{k_2}) \cup
+  \(\binte{\low}{\upp} \veq (\Var_{\com} \to \bInt{\low}{\upp}) \cup
   \{\bot\}\) where
   \begin{align*}
-    \bInt{k_1}{k_2} & \veq \{ \interval{a}{b} \mid a, b \in \z \; \land \; k_1 \leq a \leq b \leq k_2\} \\
-                    & \phantom{\veq} \cup \{\interval{a}{+\infty} \mid a \in \z \; \land \; a \geq k_1\} \\
-                    & \phantom{\veq} \cup \{\interval{-\infty}{b} \mid b \in \z \; \land \; b \leq k_2\}
+    \bInt{\low}{\upp} & \veq \{ \interval{a}{b} \mid a, b \in \z \; \land \; \low \leq a \leq b \leq \upp\} \\
+                    & \phantom{\veq} \cup \{\interval{a}{+\infty} \mid a \in \z \; \land \; a \geq \low\} \\
+                    & \phantom{\veq} \cup \{\interval{-\infty}{b} \mid b \in \z \; \land \; b \leq \upp\}
   \end{align*}
 \end{definition}
 
@@ -36,25 +36,25 @@ infinite ascending chains.
     \tikzset{node distance = .5cm}
     \node (top) {\(\top\)};
     \node (p1) [below=of top] {};
-    \node (1) [left=of p1]{\(\interval{k_1}{+\infty}\)};
-    \node (2) [right=of p1]{\(\interval{-\infty}{k_2}\)};
-    \node (4) [below=of p1]{\(\interval{k_1}{k_2}\)};
+    \node (1) [left=of p1]{\(\interval{\low}{+\infty}\)};
+    \node (2) [right=of p1]{\(\interval{-\infty}{\upp}\)};
+    \node (4) [below=of p1]{\(\interval{\low}{\upp}\)};
     \node (p2) [left=of 4]{};
     \node (p3) [right=of 4]{};
-    \node (3) [left=of p2]{\(\interval{k_1 + 1}{+\infty}\)};
-    \node (5) [right=of p3]{\(\interval{-\infty}{k_2 - 1}\)};
+    \node (3) [left=of p2]{\(\interval{\low + 1}{+\infty}\)};
+    \node (5) [right=of p3]{\(\interval{-\infty}{\upp - 1}\)};
     \node (p4) [below=of 4]{};
-    \node (6) [left=of p4]{\(\interval{k_1 + 1}{k_2}\)};
+    \node (6) [left=of p4]{\(\interval{\low + 1}{\upp}\)};
     \node (pp1) [left=of 6]{};
     \node (d1) [left=of pp1]{\(\dots\)};
-    \node (7) [right=of p4]{\(\interval{k_1}{k_2 - 1}\)};
+    \node (7) [right=of p4]{\(\interval{\low}{\upp - 1}\)};
     \node (pp2) [right=of 7]{};
     \node (d2) [right=of pp2]{\(\dots\)};
-    \node (9) [below=of p4]{\(\interval{k_1 + 1}{k_2 - 1}\)};
+    \node (9) [below=of p4]{\(\interval{\low + 1}{\upp - 1}\)};
     \node (p5) [left=of 9]{};
-    \node (8) [left=of p5]{\(\interval{k_1 + 2}{k_2}\)};
+    \node (8) [left=of p5]{\(\interval{\low + 2}{\upp}\)};
     \node (p6) [right=of 9]{};
-    \node (10) [right=of p6]{\(\interval{k_1}{k_2 - 2}\)};
+    \node (10) [right=of p6]{\(\interval{\low}{\upp - 2}\)};
     \node (d3) [left=of 8]{\(\dots\)};
     \node (d4) [right=of 10]{\(\dots\)};
     \node (vdot1) [below=of d3]{\(\vdots\)};
@@ -88,76 +88,76 @@ infinite ascending chains.
     (vdot1) edge (bot)
     (vdot2) edge (bot);
   \end{tikzpicture}
-  \caption{\(\bInt{k_1}{k_2}\) Hasse diagram}\label{fig:bound}
+  \caption{\(\bInt{\low}{\upp}\) Hasse diagram}\label{fig:bound}
 \end{figure}
 % 
-Now we can notice that given \(k_1, k_2 \in \z\) we can build a Galois
+Now we can notice that given \(\low, \upp \in \z\) we can build a Galois
 Connection (Definition~\ref{def:galoiscon}) between the interval
-domain \(\inte\) and the bounded interval domain \(\binte{k_1}{k_2}\)
+domain \(\inte\) and the bounded interval domain \(\binte{\low}{\upp}\)
 playing here the role of concrete and abstract domain respectively. To
 do so we first need to define a concretization and abstraction maps.
 
 \begin{definition}\label{def:abstrcons}
-  Given \(k_1, k_2\in\z\) we define a concretization map
-  \(\concr[k_1,k_2] : \bInt{k_1}{k_2} \to \Int\) as the function
+  Given \(\low, \upp\in\z\) we define a concretization map
+  \(\concr[\low,\upp] : \bInt{\low}{\upp} \to \Int\) as the function
   \begin{equation*}
-    \forall a \in \binte{k_1}{k_2} \quad \concr[k_1,k_2](a) = a
+    \forall a \in \binte{\low}{\upp} \quad \concr[\low,\upp](a) = a
   \end{equation*}
-  i.e., \(\concr[k_1,k_2] = \id\). While we define an abstraction map
-  \(\abstr[k_1, k_2] : \Int \to \bInt{k_1}{k_2}\) in the following way
+  i.e., \(\concr[\low,\upp] = \id\). While we define an abstraction map
+  \(\abstr[\low, \upp] : \Int \to \bInt{\low}{\upp}\) in the following way
   \begin{align*}
-    \abstr[k_1,k_2](\bot) & = \bot \\
-    \abstr[k_1,k_2](\interval{a}{b}) & =
+    \abstr[\low,\upp](\bot) & = \bot \\
+    \abstr[\low,\upp](\interval{a}{b}) & =
                                        \begin{cases}
-                                         \interval{a}{b} & \text{if } a \geq k_1 \wedge b \leq k_2 \\
-                                         \interval{-\infty}{b} & \text{if } a < k_1 \wedge b \leq k_2 \\
-                                         \interval{a}{+\infty} & \text{if } a \geq k_1 \wedge b > k_2 \\
+                                         \interval{a}{b} & \text{if } a \geq \low \wedge b \leq \upp \\
+                                         \interval{-\infty}{b} & \text{if } a < \low \wedge b \leq \upp \\
+                                         \interval{a}{+\infty} & \text{if } a \geq \low \wedge b > \upp \\
                                          \interval{-\infty}{+\infty} & \text{otherwise}
                                        \end{cases}
   \end{align*}
 \end{definition}
 
-Next, we prove that given \(k_1, k_2\in\z\) we in fact have a Galois
+Next, we prove that given \(\low, \upp\in\z\) we in fact have a Galois
 Connection:
 
 \begin{lemma}
-  Given \(k_1, k_2 \in \z\) s.t.~\({k_1 \leq k_2}\)
+  Given \(\low, \upp \in \z\) s.t.~\({\low \leq \upp}\)
   \begin{equation*}
-    \tuple{\Int, \sqsubseteq} \galois{\abstr[k_1, k_2]}{\id} \tuple{\bInt{k_1}{k_2}, \sqsubseteq}
+    \tuple{\Int, \sqsubseteq} \galois{\abstr[\low, \upp]}{\id} \tuple{\bInt{\low}{\upp}, \sqsubseteq}
   \end{equation*}
-  i.e., \(\tuple{\abstr[k_1, k_2], \Int, \bInt{k_1}{k_2}, \id}\) is
+  i.e., \(\tuple{\abstr[\low, \upp], \Int, \bInt{\low}{\upp}, \id}\) is
   a Galois Connection.
 \end{lemma}
 
 \begin{proof}
-  We want to prove that \(\id\) and \(\abstr[k_1,k_2]\) satisfy the
+  We want to prove that \(\id\) and \(\abstr[\low,\upp]\) satisfy the
   property as in Theorem~\ref{th:alternate}:
   \begin{enumerate}[label=(\arabic*)]
-  \item\label{prop1gal} \(\abstr[k_1,k_2], \id\) are monotonic;
-  \item\label{prop2gal} \(\id \circ \abstr[k_1, k_2]\) is
+  \item\label{prop1gal} \(\abstr[\low,\upp], \id\) are monotonic;
+  \item\label{prop2gal} \(\id \circ \abstr[\low, \upp]\) is
     extensive, i.e., \(\forall \iota \in \Int\) it holds that
-    \(\iota \sqsubseteq \id(\abstr[k_1, k_2](\iota))\);
+    \(\iota \sqsubseteq \id(\abstr[\low, \upp](\iota))\);
     
-  \item\label{prop3gal} \(\abstr[k_1,k_2] \circ \id\) is reductive,
-    i.e., \(\forall \iota_b \in \bInt{k_1}{k_2}\) it holds that
-    \(\abstr[k_1, k_2](\id(\iota_b)) \sqsubseteq \iota_b\).
+  \item\label{prop3gal} \(\abstr[\low,\upp] \circ \id\) is reductive,
+    i.e., \(\forall \iota_b \in \bInt{\low}{\upp}\) it holds that
+    \(\abstr[\low, \upp](\id(\iota_b)) \sqsubseteq \iota_b\).
   \end{enumerate}
 
   \medskip
 
   \noindent
   Let us show~\ref{prop1gal}. The function\(\id\) is monotone since
-  \(\forall \iota, \kappa \in \bInt{k_1}{k_2}\) it holds that
+  \(\forall \iota, \kappa \in \bInt{\low}{\upp}\) it holds that
   \(\iota \sqsubseteq \kappa \implies \iota \sqsubseteq \kappa\). For
-  \(\abstr[k_1,k_2]\) we have to prove that for all
+  \(\abstr[\low,\upp]\) we have to prove that for all
   \(\iota, \kappa \in \Int\) it holds that
-  \(\iota \sqsubseteq \kappa \implies \abstr[k_1,k_2](\iota)
-  \sqsubseteq \abstr[k_1,k_2](\kappa)\). Now notice that
+  \(\iota \sqsubseteq \kappa \implies \abstr[\low,\upp](\iota)
+  \sqsubseteq \abstr[\low,\upp](\kappa)\). Now notice that
   \(\iota \sqsubseteq \kappa \) means that
   \(\min(\iota) \geq \min(\kappa)\) and
   \(\max(\iota) \leq \max(\kappa)\). Hence, by
-  Definition~\ref{def:abstrcons} of \(\abstr[k_1, k_2]\) it holds that
-  \(\abstr[k_1, k_2](\iota) \sqsubseteq \abstr[k_1, k_2](\kappa)\),
+  Definition~\ref{def:abstrcons} of \(\abstr[\low, \upp]\) it holds that
+  \(\abstr[\low, \upp](\iota) \sqsubseteq \abstr[\low, \upp](\kappa)\),
   which is our thesis.
 
   \medskip
@@ -165,104 +165,104 @@ Connection:
   \noindent
   Let us now show~\ref{prop2gal}. We have to prove that
   \(\forall \iota \in \Int\) it holds that
-  \(\iota \sqsubseteq \concr(\abstr[k_1,k_2](\iota))\). By hypothesis
+  \(\iota \sqsubseteq \concr(\abstr[\low,\upp](\iota))\). By hypothesis
   \(\concr = \id\), hence we just have to prove that
-  \(\iota \sqsubseteq \abstr[k_1, k_2](\iota)\). Based on the
-  definition of \(\abstr[k_1, k_2]\) from
+  \(\iota \sqsubseteq \abstr[\low, \upp](\iota)\). Based on the
+  definition of \(\abstr[\low, \upp]\) from
   Definition~\ref{def:abstrcons} both the following hold:
   \begin{align*}
-    \min(\abstr[k_1,k_2](\iota)) \leq \min(\iota) \\
-    \max(\abstr[k_1,k_2](\iota)) \geq \max(\iota)
+    \min(\abstr[\low,\upp](\iota)) \leq \min(\iota) \\
+    \max(\abstr[\low,\upp](\iota)) \geq \max(\iota)
   \end{align*}
   Hence it holds that
   \begin{equation}
-    \iota \sqsubseteq \abstr[k_1, k_2](\iota)
+    \iota \sqsubseteq \abstr[\low, \upp](\iota)
   \end{equation}
 
   \medskip
 
   \noindent
   We can finally prove~\ref{prop3gal}:
-  \(\abstr[k_1, k_2] \circ \concr\) is reductive, i.e.,
-  \(\forall \iota_b \in \bInt{k_1}{k_2}, \abstr[k_1,k_2](\id(\iota_b))
+  \(\abstr[\low, \upp] \circ \concr\) is reductive, i.e.,
+  \(\forall \iota_b \in \bInt{\low}{\upp}, \abstr[\low,\upp](\id(\iota_b))
   \sqsubseteq \iota_b\).  Notice that
-  \(\forall \iota_b \in \bInt{k_1}{k_2}\) it holds that
+  \(\forall \iota_b \in \bInt{\low}{\upp}\) it holds that
   \begin{equation}\label{eq:injection}
-    \abstr[k_1,k_2](\iota_b) = \iota_b
+    \abstr[\low,\upp](\iota_b) = \iota_b
   \end{equation}
-  hence it holds that \(\abstr[k_1,k_2](\iota_b) \sqsubseteq \iota_b\)
+  hence it holds that \(\abstr[\low,\upp](\iota_b) \sqsubseteq \iota_b\)
 \end{proof}
 
 Notice that because of Equation~\eqref{eq:injection} holds we know
-that \(\abstr[k_1,k_2] \circ\concr[k_1,k_2] = \id\), hence we not only
+that \(\abstr[\low,\upp] \circ\concr[\low,\upp] = \id\), hence we not only
 have a Galois Connection but a Galois insertion
 (Definition~\ref{def:insertion}):
 \begin{equation}
-  \tuple{\Int, \sqsubseteq} \galoiS{\abstr[k_1, k_2]}{\id} \tuple{\bInt{k_1}{k_2}, \sqsubseteq}
+  \tuple{\Int, \sqsubseteq} \galoiS{\abstr[\low, \upp]}{\id} \tuple{\bInt{\low}{\upp}, \sqsubseteq}
 \end{equation}
 
 because of the latter observation and since
-\(\inte, \binte{k_1}{k_2}\) are the point(variable)-wise lifting of
-\(\Int, \bInt{k_1}{k_2}\) respectively, by Theorem~\ref{th:liftingins}
+\(\inte, \binte{\low}{\upp}\) are the point(variable)-wise lifting of
+\(\Int, \bInt{\low}{\upp}\) respectively, by Theorem~\ref{th:liftingins}
 it holds that
 \begin{equation}\label{eq:inteinsert}
-  \tuple{\inte, \sqsubseteq} \galoiS{\dabstr[k_1,k_2]}{\dconcr[k_1,k_2]} \tuple{\binte{k_1}{k_2}, \sqsubseteq}
+  \tuple{\inte, \sqsubseteq} \galoiS{\dabstr[\low,\upp]}{\dconcr[\low,\upp]} \tuple{\binte{\low}{\upp}, \sqsubseteq}
 \end{equation}
 where
-\({\dabstr[k_1,k_2]}(\eta) = \lambda \var
-. \abstr[k_1,k_2](\eta\var)\) and \(\dconcr[k_1,k_2] = \id\).
+\({\dabstr[\low,\upp]}(\eta) = \lambda \var
+. \abstr[\low,\upp](\eta\var)\) and \(\dconcr[\low,\upp] = \id\).
 % From this we can observe that given a program \(\com\),
 % \(\semi{\com} : \inte \to \inte\) is a concrete operator on
 % \(\inte\) and
-% \(\bsemi{k_1}{k_2}{\com} : \binte{k_1}{k_2} \to
-% \binte{k_1}{k_2}\) an abstract operator on \(\binte{k_1}{k_2}\)
-We can therefore define our analysis in \(\binte{k_1}{k_2}\) by means
-of best correct approximations over \(\binte{k_1}{k_2}\).
+% \(\bsemi{\low}{\upp}{\com} : \binte{\low}{\upp} \to
+% \binte{\low}{\upp}\) an abstract operator on \(\binte{\low}{\upp}\)
+We can therefore define our analysis in \(\binte{\low}{\upp}\) by means
+of best correct approximations over \(\binte{\low}{\upp}\).
 
 \begin{notation}
   For the following definition and whenever we will need to talk about
   the abstract semantics over the interval domain bounded over some
-  constants \(k_1, k_2 \in \z\) we will write
-  \(\bsemi{k_1}{k_2}{\cdot}\) to refer to
-  \(\semi[\binte{k_1}{k_2}]{\cdot}\).
+  constants \(\low, \upp \in \z\) we will write
+  \(\bsemi{\low}{\upp}{\cdot}\) to refer to
+  \(\semi[\binte{\low}{\upp}]{\cdot}\).
 \end{notation}
 
 \begin{definition}[Bounded interval analysis]\label{def:boundedanalysis}
-  Let \(\rho \in \binte{k_1}{k_2}\) for some \(k_1, k_2 \in \z\) s.t.\
-  \(k_1 \leq k_2\) and \(\com \in \imp\). We define
-  \(\absem[\binte{k_1}{k_2}]{\com[e]}\rho\) as the best correct
+  Let \(\rho \in \binte{\low}{\upp}\) for some \(\low, \upp \in \z\) s.t.\
+  \(\low \leq \upp\) and \(\com \in \imp\). We define
+  \(\absem[\binte{\low}{\upp}]{\com[e]}\rho\) as the best correct
   approximation of base expressions over \(\inte\):
   \begin{equation*}
-    \absem[\binte{k_1}{k_2}]{\com[e]} \defin \dabstr[k_1,k_2] \conc \absem[\inte]{\com[e]} \conc \dconcr[k_1,k_2]
+    \absem[\binte{\low}{\upp}]{\com[e]} \defin \dabstr[\low,\upp] \conc \absem[\inte]{\com[e]} \conc \dconcr[\low,\upp]
   \end{equation*}
   where \(\com[e]\in\expr\). 
 \end{definition}
 \noindent
 Notice that for basic expressions we are using the best correct
-approximation \(\dabstr[k_1,k_2] \circ \semi{\com[e]} \circ \id\),
+approximation \(\dabstr[\low,\upp] \circ \semi{\com[e]} \circ \id\),
 which allows us to prove the soundness of the analysis over
-\(\binte{k_1}{k_2}\) w.r.t.\ the analysis over \(\inte\):
+\(\binte{\low}{\upp}\) w.r.t.\ the analysis over \(\inte\):
 \begin{lemma}\label{le:leq}
-  For all \(k_1, k_2\in\z\) s.t.\ \(k_1 \leq k_2\),
-  \(\rho \in \binte{k_1}{k_2}\)
+  For all \(\low, \upp\in\z\) s.t.\ \(\low \leq \upp\),
+  \(\rho \in \binte{\low}{\upp}\)
   \begin{equation*}
-    \semi{\com}\rho \sqsubseteq \bsemi{k_1}{k_2}{\com}\rho
+    \semi{\com}\rho \sqsubseteq \bsemi{\low}{\upp}{\com}\rho
   \end{equation*}
-  i.e., with \(\binte{k_1}{k_2}\) we have an over-approximation of \(\inte\).
+  i.e., with \(\binte{\low}{\upp}\) we have an over-approximation of \(\inte\).
 \end{lemma}
 
 \begin{proof}
   The theorem follows from the fact that there is a Galois connection
   \begin{equation*}
-    \inte\galois{\ovdot\abstr_{k_1, k_2}}{\id}\binte{k_1}{k_2}
+    \inte\galois{\ovdot\abstr_{\low, \upp}}{\id}\binte{\low}{\upp}
   \end{equation*}
-  between \(\inte\) and \(\binte{k_1}{k_2}\) for all
-  \(k_1, k_2 \in \z \mid k_1 \leq k_2\) and the fact that base
+  between \(\inte\) and \(\binte{\low}{\upp}\) for all
+  \(\low, \upp \in \z \mid \low \leq \upp\) and the fact that base
   expressions are defined with the best correct approxiation. Hence by
   Corollary~\ref{le:bcainducessoundness} follows that for all
-  \(\com\in\imp, \rho \in \binte{k_1}{k_2}\)
+  \(\com\in\imp, \rho \in \binte{\low}{\upp}\)
   \begin{equation*}
-    \left(\semi{\com} \conc \id \right)\;\rho \sqsubseteq  \left(\id \conc \bsemi{k_1}{k_2}{\com}\right)\;\rho
+    \left(\semi{\com} \conc \id \right)\;\rho \sqsubseteq  \left(\id \conc \bsemi{\low}{\upp}{\com}\right)\;\rho
   \end{equation*}
   hence our thesis.
 \end{proof}
@@ -322,50 +322,50 @@ notion of domain bounded by initial state and program.
 \begin{definition}\label{def:boundedbycom}
   Let \(\com\in\imp\) and \(\rho \in \inte\). Then the \emph{bounded
     interval domain} \(\inte_{\com,\rho}\) is a bounded interval
-  domain \(\binte{k_1}{k_2}\) where
+  domain \(\binte{\low}{\upp}\) where
   \begin{align*}
-    k_1 & = \min(\rho) - \nlbound{\com} \\
-    k_2 & = \max(\rho) + \nbound{\com}
+    \low & = \min(\rho) - \nlbound{\com} \\
+    \upp & = \max(\rho) + \nbound{\com}
   \end{align*}
 \end{definition}
 \begin{theorem}\label{th:bounded}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
-  \(\rho : \Var \to \Int\) and \(k_1, k_2\in \z\) s.t.
-  \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2}\), i.e.,
-  \(k_1 \leq \min(\rho) - \nlbound{\com}\) and
-  \(k_2 \geq \max(\rho) + \nbound{\com}\)
+  \(\rho : \Var \to \Int\) and \(\low, \upp\in \z\) s.t.
+  \(\inte_{\com,\rho} \sqsubseteq \binte{\low}{\upp}\), i.e.,
+  \(\low \leq \min(\rho) - \nlbound{\com}\) and
+  \(\upp \geq \max(\rho) + \nbound{\com}\)
   \begin{equation}\label{eq:equal}
-    \semi{\com}\rho = \bsemi{k_1}{k_2}{\com}\rho
+    \semi{\com}\rho = \bsemi{\low}{\upp}{\com}\rho
   \end{equation}
   i.e., the abstract semantics \(\semi{\com} \rho\)
   % 
   % \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
   % \sqcup \rho}
-  computed in \(\inte\) and the one computed in \(\binte{k_1}{k_2}\)
+  computed in \(\inte\) and the one computed in \(\binte{\low}{\upp}\)
   coincide.
 \end{theorem}
 
 \begin{proof}
   Notice that because of Lemma~\ref{le:leq} the statement
-  \({\semi{\com}\rho} \sqsubseteq {\bsemi{k_1}{k_2}{\com}\rho}\)
+  \({\semi{\com}\rho} \sqsubseteq {\bsemi{\low}{\upp}{\com}\rho}\)
   already holds. Therefore what we are left to prove is that
   \begin{equation*}
-    \semi{\com}\rho \sqsupseteq \bsemi{k_1}{k_2}{\com}\rho
+    \semi{\com}\rho \sqsupseteq \bsemi{\low}{\upp}{\com}\rho
   \end{equation*}
   The proof will proceed by induction on the command \(\com\in\imp\).
   \begin{inductive}
     \case{\(\var\in S\)} In this case we want to prove that
     \({\semi{\var\in S}\rho \sqsupseteq
-      \bsemi{k_1}{k_2}{\var\in S}\rho}\). Recall that we are
+      \bsemi{\low}{\upp}{\var\in S}\rho}\). Recall that we are
     considering
-    \({k_1 \leq \min(\rho) - \nlbound{\var\in S}} = {\min(\rho) -
+    \({\low \leq \min(\rho) - \nlbound{\var\in S}} = {\min(\rho) -
       \lbound{\var\in S}}\) and
-    \({k_2 \geq \max(\rho) + \nbound{\var\in S}} = {\max(\rho) +
+    \({\upp \geq \max(\rho) + \nbound{\var\in S}} = {\max(\rho) +
       \bound{\var\in S}}\). Notice that either
     \(\rho\var \sqcap S = \bot\), which implies that
     \(\semi{\var\in S}\rho = \bot\), and therefore
-    \({\abstr[k_1,k_2](\semi{\var\in S})\rho} =
-    \abstr[k_1,k_2](\bot) = \bot\) and therefore
+    \({\abstr[\low,\upp](\semi{\var\in S})\rho} =
+    \abstr[\low,\upp](\bot) = \bot\) and therefore
     \(\bot \sqsupseteq \bot\) holds, or
     \(\rho\var \sqcap S = \interval{a}{b} \neq \bot\), but in this
     case
@@ -377,30 +377,30 @@ notion of domain bounded by initial state and program.
     \end{align*}
     hence
     \begin{equation*}
-      \semi{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap S] = \dabstr[k_1,k_2]\left(\semi{\var\in S}\rho\right) = \bsemi{k_1}{k_2}{\var\in S}\rho
+      \semi{\var\in S}\rho = \rho[\var \mapsto \rho\var \sqcap S] = \dabstr[\low,\upp]\left(\semi{\var\in S}\rho\right) = \bsemi{\low}{\upp}{\var\in S}\rho
     \end{equation*}
     which is our thesis.
     
     \case{\(\var := k\)} In this case we have to prove that
     \(\semi{\var := k}\rho \sqsupseteq
-    \bsemi{k_1}{k_2}{\var := k}\rho\). Recall that we are
+    \bsemi{\low}{\upp}{\var := k}\rho\). Recall that we are
     considering
-    \({k_1 \leq \min(\rho) - \nlbound{\var := k}} = {\min(\rho) -
+    \({\low \leq \min(\rho) - \nlbound{\var := k}} = {\min(\rho) -
       \lbound{\var := k}}\) and
-    \({k_2 \geq \max(\rho) + \nbound{\var := k}}\).  We can notice
+    \({\upp \geq \max(\rho) + \nbound{\var := k}}\).  We can notice
     similarly to the previous case, that because of the values of
-    \(k_1\) and \(k_2\) it holds that
+    \(\low\) and \(\upp\) it holds that
     \begin{equation*}
-      \semi{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}] = \dabstr[k_1,k_2]\left(\semi{\var := k}\rho\right) = \bsemi{k_1}{k_2}{\var := k}\rho
+      \semi{\var := k}\rho = \rho[\var \mapsto \interval{k}{k}] = \dabstr[\low,\upp]\left(\semi{\var := k}\rho\right) = \bsemi{\low}{\upp}{\var := k}\rho
     \end{equation*}
     hence our thesis holds.
     
     \case{\(\var := \var[y] + k\)} In this case we have to prove that
     \(\semi{\var := \var[y] + k}\rho \sqsupseteq
-    \bsemi{k_1}{k_2}{\var:=\var[y]+k}\rho\).  Recall that we
+    \bsemi{\low}{\upp}{\var:=\var[y]+k}\rho\).  Recall that we
     are considering
-    \({k_1 \leq \min(\rho) - \nlbound{\var:=\var[y]+k}}\) and
-    \({k_2 \geq \max(\rho) + \nbound{\var:=\var[y]+k}}\). Notice also
+    \({\low \leq \min(\rho) - \nlbound{\var:=\var[y]+k}}\) and
+    \({\upp \geq \max(\rho) + \nbound{\var:=\var[y]+k}}\). Notice also
     that
     \(\nlbound{\var := \var[y]+k} = k = \nbound{\var := \var[y] + k}\)
     and since
@@ -413,51 +413,51 @@ notion of domain bounded by initial state and program.
     \end{align*}
     hence
     \begin{equation*}
-      \bsemi{k_1}{k_2}{\var := \var[y] + k}\rho = \dabstr[k_1,k_2]\left(\rho[\var \mapsto \rho\var[y] + k]\right) = \rho[\var \mapsto \rho\var[y] + k] = \semi{\var := \var[y] + k}\rho
+      \bsemi{\low}{\upp}{\var := \var[y] + k}\rho = \dabstr[\low,\upp]\left(\rho[\var \mapsto \rho\var[y] + k]\right) = \rho[\var \mapsto \rho\var[y] + k] = \semi{\var := \var[y] + k}\rho
     \end{equation*}
     which is our thesis
     
     \case{\(\com_1 \ndet \com_2\)} In this case we have to prove that
     \(\semi{\com_1 \ndet \com_2}\rho \sqsupseteq
-    \bsemi{k_1}{k_2}{\com_1 \ndet \com_2}\rho\). Recall that we
+    \bsemi{\low}{\upp}{\com_1 \ndet \com_2}\rho\). Recall that we
     are considering
-    \(k_1 \leq \min(\rho) - \nlbound{\com_1 \ndet \com_2}\) and
-    \(k_2 \geq \max(\rho) + \nbound{\com_1 \ndet \com_2}\).  By
+    \(\low \leq \min(\rho) - \nlbound{\com_1 \ndet \com_2}\) and
+    \(\upp \geq \max(\rho) + \nbound{\com_1 \ndet \com_2}\).  By
     inductive hypothesis it holds that
     \begin{equation*}
-      \semi{\com_1}\rho = \bsemi{k_1}{k_2}{\com_1}\rho
+      \semi{\com_1}\rho = \bsemi{\low}{\upp}{\com_1}\rho
     \end{equation*}
-    for all \(k_1 \leq \min(\rho) - \nlbound{\com_1}\) and
-    \(k_2 \geq \max(\rho) + \nbound{\com_1}\). Again by inductive
+    for all \(\low \leq \min(\rho) - \nlbound{\com_1}\) and
+    \(\upp \geq \max(\rho) + \nbound{\com_1}\). Again by inductive
     hypothesis it holds that
     \begin{equation*}
-      \semi{\com_2}\rho = \bsemi{k_1}{k_2}{\com_2}\rho
+      \semi{\com_2}\rho = \bsemi{\low}{\upp}{\com_2}\rho
     \end{equation*}
-    for all \(k_1 \leq \min(\rho) - \nlbound{\com_2}\) and
-    \(k_2 \geq \max(\rho) + \nbound{\com_2}\). In particular, both hold
+    for all \(\low \leq \min(\rho) - \nlbound{\com_2}\) and
+    \(\upp \geq \max(\rho) + \nbound{\com_2}\). In particular, both hold
     for
     \begin{align*}
-      {k_1} \leq {\min(\rho) - \nlbound{\com_1} - \nlbound{\com_2}} & = {\min(\rho) - \nlbound{\com_1 \ndet \com_2}} \\
-      {k_2} \geq {\max(\rho) + \nbound{\com_1} + \nbound{\com_2}} & = {\max(\rho) + \nbound{\com_1 \ndet \com_2}}
+      {\low} \leq {\min(\rho) - \nlbound{\com_1} - \nlbound{\com_2}} & = {\min(\rho) - \nlbound{\com_1 \ndet \com_2}} \\
+      {\upp} \geq {\max(\rho) + \nbound{\com_1} + \nbound{\com_2}} & = {\max(\rho) + \nbound{\com_1 \ndet \com_2}}
     \end{align*}
-    i.e., our initial choice of \(k_1, k_2\). We can conclude by
+    i.e., our initial choice of \(\low, \upp\). We can conclude by
     closure over \(\sqcup\)
     \begin{equation*}
-      \semi{\com_1 \ndet \com_2}\rho = \semi{\com_1}\rho \sqcup \semi{\com_2}\rho = \bsemi{k_1}{k_2}{\com_1}\rho \sqcup \bsemi{k_1}{k_2}{\com_2}\rho = \bsemi{k_1}{k_2}{\com_1\ndet\com_2}\rho
+      \semi{\com_1 \ndet \com_2}\rho = \semi{\com_1}\rho \sqcup \semi{\com_2}\rho = \bsemi{\low}{\upp}{\com_1}\rho \sqcup \bsemi{\low}{\upp}{\com_2}\rho = \bsemi{\low}{\upp}{\com_1\ndet\com_2}\rho
     \end{equation*}
     which is our thesis.
 
     \case{\(\com_1 \seq \com_2\)} In this case we have to prove that
     \(\semi{\com_1 \seq \com_2}\rho \sqsupseteq
-    \bsemi{k_1}{k_2}{\com_1 \seq \com_2}\rho\) for all
-    \({k_1 \leq \min(\rho) - \nlbound{\com_1 \seq \com_2}}\) and
-    \({k_2 \geq \max(\com) + \nbound{\com_1 \seq \com_2}}\). Recall
+    \bsemi{\low}{\upp}{\com_1 \seq \com_2}\rho\) for all
+    \({\low \leq \min(\rho) - \nlbound{\com_1 \seq \com_2}}\) and
+    \({\upp \geq \max(\com) + \nbound{\com_1 \seq \com_2}}\). Recall
     that
     \(\semi{\com_1\seq\com_2}\rho = {\left(\semi{\com_2}
         \circ \semi{\com_1}\right)}\rho\). By inductive
     hypothesis it holds that
     \begin{align}
-      \semi{\com_1}\rho & = \bsemi{k_1}{k_2}{\com_1}\rho & \forall k_1 \leq \min(\rho) - \nlbound{\com_1} \; \land \; k_2 \geq \max(\rho) + \nbound{\com_1}\label{eq:ind1}\\
+      \semi{\com_1}\rho & = \bsemi{\low}{\upp}{\com_1}\rho & \forall \low \leq \min(\rho) - \nlbound{\com_1} \; \land \; \upp \geq \max(\rho) + \nbound{\com_1}\label{eq:ind1}\\
       \semi{\com_2}\rho' & = \bsemi{k_3}{k_4}{\com_2}\rho' & \forall k_3 \leq \min(\rho') - \nlbound{\com_2} \; \land \; k_4 \geq \max(\rho') + \nbound{\com_2}\label{eq:ind2}
     \end{align}
     where \(\rho' = \semi{\com_1}\rho\). In particular notice
@@ -478,28 +478,28 @@ notion of domain bounded by initial state and program.
 
     \case{\(\fix{\com}\)} What we want to prove in this case is that
     \(\semi{\fix\com}\rho \sqsupseteq
-    \bsemi{k_1}{k_2}{\fix\com}\rho\) for all
-    \(k_1 \leq \min(\rho) - \nlbound{\fix\com}\) and
-    \(k_2 \geq \max(\rho) + \nbound{\fix\com}\). Recall that by
+    \bsemi{\low}{\upp}{\fix\com}\rho\) for all
+    \(\low \leq \min(\rho) - \nlbound{\fix\com}\) and
+    \(\upp \geq \max(\rho) + \nbound{\fix\com}\). Recall that by
     Lemma~\ref{le:sugar} \(\semi{\fix\com}\) is syntactic sugar
     for \(\semi{\kleene{(\com \ndet \tru)}}\), therefore
     \begin{align}
       \semi{\fix\com}\rho & =
       \semi{\kleene{(\com\ndet\tru)}}\rho =
       \textstyle\bigsqcup_{i\in\n}{\left(\semi{\com\ndet\tru}\right)}^i\rho \label{eq:fixtolub}\\
-      \bsemi{k_1}{k_2}{\fix\com}\rho & =
-      \bsemi{k_1}{k_2}{\kleene{(\com\ndet\tru)}}\rho =
-      \textstyle\bigsqcup_{i\in\n}{\left(\bsemi{k_1}{k_2}{\com\ndet\tru}\right)}^i\rho \label{eq:fixtolubk}
+      \bsemi{\low}{\upp}{\fix\com}\rho & =
+      \bsemi{\low}{\upp}{\kleene{(\com\ndet\tru)}}\rho =
+      \textstyle\bigsqcup_{i\in\n}{\left(\bsemi{\low}{\upp}{\com\ndet\tru}\right)}^i\rho \label{eq:fixtolubk}
     \end{align}
     By latter equation we want to prove that for every \(i\in\n\) it
     holds that
     \begin{equation}
-      \semi{\fix\com}\rho \sqsupseteq {\left(\bsemi{k_1}{k_2}{\com\ndet\tru}\right)}^i\rho
+      \semi{\fix\com}\rho \sqsupseteq {\left(\bsemi{\low}{\upp}{\com\ndet\tru}\right)}^i\rho
     \end{equation}
     \begin{description}
     \item[Case] (\(i=0\)). In this case we can observe that our thesis
       \begin{equation*}
-        \semi{\fix\com}\rho \sqsupseteq {\left(\bsemi{k_1}{k_2}{\fix\com}\right)}^0\rho = \id(\rho) = \rho
+        \semi{\fix\com}\rho \sqsupseteq {\left(\bsemi{\low}{\upp}{\fix\com}\right)}^0\rho = \id(\rho) = \rho
       \end{equation*}
       holds by~\eqref{eq:fixtolub}.
       
@@ -528,15 +528,15 @@ notion of domain bounded by initial state and program.
       We can now continue. By calling
       \(\semi{\fix\com}\rho = \beta\) we have to prove that
       \begin{equation}\label{eq:boundless}
-        \semi{\com\ndet\tru}\beta \sqsupseteq \bsemi{k_1}{k_2}{\com\ndet\tru}\beta.
+        \semi{\com\ndet\tru}\beta \sqsupseteq \bsemi{\low}{\upp}{\com\ndet\tru}\beta.
       \end{equation}
-      for all \(k_1 \leq \min(\rho) - \nlbound{\fix\com}\) and
-      \(k_2 \geq \max(\rho) + \nbound{\fix\com}\). In other words what
+      for all \(\low \leq \min(\rho) - \nlbound{\fix\com}\) and
+      \(\upp \geq \max(\rho) + \nbound{\fix\com}\). In other words what
       we want to prove is that for every \(\var[y] \in \Var_{\com}\)
       both
       \begin{align*}
-        \max(\semi{\com\ndet\tru}\beta\var[y]) & \leq k_2 \\
-        \min(\semi{\com\ndet\tru}\beta\var[y]) & \geq k_1
+        \max(\semi{\com\ndet\tru}\beta\var[y]) & \leq \upp \\
+        \min(\semi{\com\ndet\tru}\beta\var[y]) & \geq \low
       \end{align*}
 
       To start notice that
@@ -549,25 +549,25 @@ notion of domain bounded by initial state and program.
                                                & \leq \max(\rho) + \bound{\fix\com} + \bound{\com} \\
                                                & = \max(\rho) + (n+2)\bound{\com} \\
                                                & \leq \max(\rho) + (n+2)\nbound{\com} \\
-                                               & = \max(\rho) + \nbound{\fix\com} = k_2
+                                               & = \max(\rho) + \nbound{\fix\com} = \upp
       \end{align*}
       A similar procedure can be applied on the minimum to observe
       that
       \[\min(\semi{\com\ndet\tru}\beta) \geq \min(\rho) -
-        \nlbound{\com}= k_1\]
+        \nlbound{\com}= \low\]
 
       Hence we can conclude by observing that
       \begin{align*}
-        \beta = \semi{\com\ndet\tru}\beta & \sqsupseteq \bsemi{k_1}{k_2}{\com\ndet\tru}\beta  & \text{by~\eqref{eq:boundless}}\\
-                                                 & \sqsupseteq \bsemi{k_1}{k_2}{\com\ndet\tru}{\left(\bsemi{k_1}{k_2}{\com\ndet\tru}\right)}^i\rho & \text{by induction on } i \\
-        & = {\left(\bsemi{k_1}{k_2}{\com\ndet\tru}\right)}^{i+1}\rho
+        \beta = \semi{\com\ndet\tru}\beta & \sqsupseteq \bsemi{\low}{\upp}{\com\ndet\tru}\beta  & \text{by~\eqref{eq:boundless}}\\
+                                                 & \sqsupseteq \bsemi{\low}{\upp}{\com\ndet\tru}{\left(\bsemi{\low}{\upp}{\com\ndet\tru}\right)}^i\rho & \text{by induction on } i \\
+        & = {\left(\bsemi{\low}{\upp}{\com\ndet\tru}\right)}^{i+1}\rho
       \end{align*}
       Therefore for all \(i\in\n\)
       \(\semi{\fix\com}\rho \sqsupseteq
-      {\left(\bsemi{k_1}{k_2}{\com\ndet\tru}\right)}^{i}\rho\). By
+      {\left(\bsemi{\low}{\upp}{\com\ndet\tru}\right)}^{i}\rho\). By
       this we can deduce that
       \begin{equation*}
-        \beta = \semi{\fix\com}\rho \sqsupseteq \bigsqcup_{i\in\n}{\left(\bsemi{k_1}{k_2}{\com\ndet\tru}\right)}^i\rho = \bsemi{k_1}{k_2}{\fix\com}\rho
+        \beta = \semi{\fix\com}\rho \sqsupseteq \bigsqcup_{i\in\n}{\left(\bsemi{\low}{\upp}{\com\ndet\tru}\right)}^i\rho = \bsemi{\low}{\upp}{\fix\com}\rho
       \end{equation*}
       which is our thesis.
     \end{description}
@@ -576,27 +576,27 @@ notion of domain bounded by initial state and program.
 
 % Since both
 % \({\semi{\com}\rho \sqsubseteq
-% \bsemi{k_1}{k_2}{\com}\rho}\) and
+% \bsemi{\low}{\upp}{\com}\rho}\) and
 % \({\semi{\com}\rho \sqsupseteq
-% \bsemi{k_1}{k_2}{\com}\rho}\) hold for
-% \(k_1 \leq \min(\rho) - \lbound{\com}\) and
-% \(k_2 \geq \max(\rho) + \bound{\com}\), then the following theorem
+% \bsemi{\low}{\upp}{\com}\rho}\) hold for
+% \(\low \leq \min(\rho) - \lbound{\com}\) and
+% \(\upp \geq \max(\rho) + \bound{\com}\), then the following theorem
 % holds:
 
 % \begin{theorem}[Bounding completeness]
 %   Let \(\com\in \imp\) be a command. Then, for all
-%   \({\rho : \Var_{\com} \to \Int}\), and \(k_1, k_2\in \z\) s.t.
-%   \(\inte_{\com,\rho} \sqsubseteq \binte{k_1}{k_2}\), i.e.,
-%   \(k_1 \leq \min(\rho) - \lbound{\com}\) and
-%   \(k_2 \geq \max(\rho) + \bound{\com}\)
+%   \({\rho : \Var_{\com} \to \Int}\), and \(\low, \upp\in \z\) s.t.
+%   \(\inte_{\com,\rho} \sqsubseteq \binte{\low}{\upp}\), i.e.,
+%   \(\low \leq \min(\rho) - \lbound{\com}\) and
+%   \(\upp \geq \max(\rho) + \bound{\com}\)
 %   \begin{equation*}
-%     \semi{\com}\rho = \bsemi{k_1}{k_2}{\com}\rho
+%     \semi{\com}\rho = \bsemi{\low}{\upp}{\com}\rho
 %   \end{equation*}
 %   i.e., the abstract semantics \(\semi{\com} \rho\)
 %   %   
 %   %   \semi{\fix{\com}} \rho & = \lfp{\lambda \rho'. (\semi{\com} \rho')
 %   %   \sqcup \rho}
-%   computed in \(\inte\) and in \(\binte{k_1}{k_2}\) coincide.
+%   computed in \(\inte\) and in \(\binte{\low}{\upp}\) coincide.
 %   \qed{}
 % \end{theorem}
 
