@@ -5,34 +5,15 @@ Lemma~\ref{le:inc} and Lemma~\ref{le:dec} provide us an useful insight
 to compute the abstract interval semantics of \(\imp\)
 programs. Combined, they state that each variable in a program can
 increment (or decrement) by a maximal value which depends on the
-initial state of the machine \(\eta\) and the constants that appear in
-the program itself: the bound \(\bound{\com}\). In this section we use
-this idea to compute the interval semantics in another abstract
-domain, which does not contain infinite ascending or descending
-chains, and therefore using the simple Kleene iteration to compute
-least fix points ensures termination.
+initial state \(\eta\) and the constants that appear in the program
+itself: the bound \(\bound{\com}\). In this section we use this idea
+to compute the interval semantics in another abstract domain, which
+does not contain infinite ascending or descending chains, and
+therefore using the simple Kleene iteration to compute least
+fixpoints ensures termination.
 
-To start we dineine \(\min\) and \(\max\) values of an environment,
-they will later be useful to bound the interval domain based on the
-initial state and the program we are considering.
+To start we define bounded abstract interval domains:
 
-\begin{definition}[\(\min\) and \(\max\)]\label{def:minmax}
-  Given a command \(\com\), the corresponding finite set of variables
-  \(\Var_{\com} \veq \varsof{\com}\), and an interval environment
-  \(\rho : \Var_{\com} \to \Int\), we define both the \(\min\) and the
-  \(\max\) value of an interval environment:
-  \begin{align*}
-    \max(\rho) & \veq \max\left\{\; \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com} \land \max(\rho(\var)) \neq + \infty\} \; , \; 0 \; \right\} \\
-    \min(\rho) & \veq \min\left\{\; \min \{ \min(\rho(\var)) \mid \var \in \Var_{\com} \land \min(\rho(\var)) \neq - \infty\} \; , \; 0 \; \right\}
-  \end{align*}
-\end{definition}
-% 
-Notice that it holds that \(\max(\rho) \geq 0\) and
-\(\min(\rho) \leq 0\). This will later be useful for the base cases of
-Lemma~\ref{le:inc} and Lemma~\ref{le:incnr}.  Now, when computing
-\(\semi{\com} \rho\) on such \(\rho\) having a finite domain,
-we can restrict to an interval domain bounded by some constant
-\(k\in\n\):
 
 \begin{definition}[Bounded interval]\label{def:boundedint}
   We define
@@ -214,7 +195,7 @@ Connection:
 
 Notice that because of Equation~\eqref{eq:injection} holds we know
 that \(\abstr[k_1,k_2] \circ\concr[k_1,k_2] = \id\), hence we not only
-have a Galois Connection but a Galois Injection
+have a Galois Connection but a Galois insertion
 (Definition~\ref{def:insertion}):
 \begin{equation}
   \tuple{\Int, \sqsubseteq} \galoiS{\abstr[k_1, k_2]}{\id} \tuple{\bInt{k_1}{k_2}, \sqsubseteq}
@@ -262,7 +243,7 @@ approximation \(\dabstr[k_1,k_2] \circ \semi{\com[e]} \circ \id\),
 which allows us to prove the soundness of the analysis over
 \(\binte{k_1}{k_2}\) w.r.t.\ the analysis over \(\inte\):
 \begin{lemma}\label{le:leq}
-  for all \(k_1, k_2\in\z\) s.t.\ \(k_1 \leq k_2\),
+  For all \(k_1, k_2\in\z\) s.t.\ \(k_1 \leq k_2\),
   \(\rho \in \binte{k_1}{k_2}\)
   \begin{equation*}
     \semi{\com}\rho \sqsubseteq \bsemi{k_1}{k_2}{\com}\rho
@@ -311,7 +292,31 @@ Theorem~\ref{th:bounded}.
 
 Notice that the updated bounds differ to bounds of
 Definition~\ref{def:bound} only in the case of the \(\fix\com\)
-command.  Thanks to the latter definition, we can now also define the
+command.  With this consideration we can now proceed to prove that the
+analysis on our bounded lattice \(\inte_{\com,\rho}\) produces the
+same result as the analysis on \(\inte\).  We preliminarly define
+\(\min\) and \(\max\) values of an environment. Intuitively they are
+the \(\min\) and \(\max\) values that variables can assume without
+diverging.
+
+\begin{definition}[\(\min\) and \(\max\)]\label{def:minmax}
+  Given a command \(\com\), the corresponding finite set of variables
+  \(\Var_{\com} \veq \varsof{\com}\), and an interval environment
+  \(\rho : \Var_{\com} \to \Int\), we define both the \(\min\) and the
+  \(\max\) value of an interval environment:
+  \begin{align*}
+    \max(\rho) & \veq \max\left\{\; \max \{ \max(\rho(\var)) \mid \var \in \Var_{\com} \land \max(\rho(\var)) \neq + \infty\} \; , \; 0 \; \right\} \\
+    \min(\rho) & \veq \min\left\{\; \min \{ \min(\rho(\var)) \mid \var \in \Var_{\com} \land \min(\rho(\var)) \neq - \infty\} \; , \; 0 \; \right\}
+  \end{align*}
+\end{definition}
+% 
+Notice that it holds that \(\max(\rho) \geq 0\) and
+\(\min(\rho) \leq 0\). This will later be useful for the base cases of
+Lemma~\ref{le:inc} and Lemma~\ref{le:incnr}.  Now, when computing
+\(\semi{\com} \rho\) on such \(\rho\) having a finite domain,
+we can restrict to an interval domain bounded by some constant
+\(k\in\n\):
+Thanks to the latter definition, we can now also define the
 notion of domain bounded by initial state and program.
 
 \begin{definition}\label{def:boundedbycom}
@@ -323,15 +328,6 @@ notion of domain bounded by initial state and program.
     k_2 & = \max(\rho) + \nbound{\com}
   \end{align*}
 \end{definition}
-
-With this consideration we can now proceed to prove that the analysis
-on our bounded lattice \(\inte_{\com,\rho}\) produces the same result
-as the analysis on \(\inte\).
-
-% We could also operate uniformly on all commands, defining the
-% semantics for \(\com\) in a domain with intervals bounded by
-% \(\max(\rho) +\bound{\com}\)
-
 \begin{theorem}\label{th:bounded}
   Let \(\com\in \imp\) be a command. Then, for all finitely supported
   \(\rho : \Var \to \Int\) and \(k_1, k_2\in \z\) s.t.

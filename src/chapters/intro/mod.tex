@@ -191,7 +191,7 @@ reached.
 \noindent
 However this is not always the case. Consider instead the following
 snippet
-\begin{lstlisting}[language=C, label=exampleloop]
+\begin{lstlisting}[language=C, caption=Program with a divergent loop, label=exampleloop]
   int x = 0;
   while(true) {
     x += 1;
@@ -200,14 +200,23 @@ snippet
 Obviously the concrete computation does not halt, but looking at the
 chain of iterands for our program for the variable \(\var\) we could
 infer the chain
-\begin{equation*}
+\begin{equation}\label{eq:diverging}
   \interval{0}{0}, \interval{+1}{+1}, \dots, \interval{+k}{+k}, \dots
-\end{equation*}
+  \tag{\dag}
+\end{equation}
 and therefore (intuitively) at the end of the loop we might want to
 say that our variable has a value in the range
 \(\interval{0}{+\infty}\), which is sound to the \emph{real} property
-of non-termination (i.e., \(\var\in\emptyset\), \(\var\) has
-\emph{no} final value).
+of non-termination (i.e., \(\var\in\emptyset\), \(\var\) has \emph{no}
+final value). The procedure we used to infer that the variable
+\(\var\) diverges, i.e., its invariant at the end of the loop is
+\(\interval{0}{+\infty}\), comes from intuition, and is not an
+automatic procedure. What a machine could do in fact is exploring the
+chain we are building in~\eqref{eq:diverging} element by element, and
+if at some point of the chain an element is repeated it can infer a
+fixpoint.  What happens with this naive method is that whenever an
+\emph{infinite} ascending (or descenging) chain is involved the
+termination of the analysis is not guaranteed.
 
 To infer properties while dealing with infinite chains the standard
 approach is to use \emph{widening} operators
@@ -217,32 +226,52 @@ increments. Such technique however, while still providing a sound
 analysis and ensuring termination, limits a lot the precision of the
 analysis itself. For example, we could widen our analysis after the
 second step with a naive widening
-\(\interval{-2}{+2} \widen \interval{-4}{+4} =
-\interval{-\infty}{+\infty}\) and infer that our variable after the
-end of the loop has a value between \(+\infty\) and \(-\infty\). This
-is certainly true, but is however very imprecise.
+\(\interval{0}{0} \widen \interval{+1}{+1} = \interval{0}{+\infty}\)
+and infer that our variable after the end of the loop has a value
+between \(0\) and \(+\infty\) while ensuring that our analysis halts
+in a finite time.  It might happen however that the widening loses
+more information than needed to ensure termination. Consider in fact
+the following snippet
 
-To recover some information loss with the widening we can use
-narrowing operators, but these work only when the information to
-refine our analysis is explicit. In our example a narrowing would be
-sufficient to infer that the variable is between \(-10\) and \(+10\),
-but in general it is not.
+\begin{lstlisting}[language=C, caption=Program with a convergent loop, label=exampleloop]
+  int x = 0;
+  while(x < 10) {
+    x += 1;
+  }
+\end{lstlisting}
+
+The initial steps of the analysis would still be
+\(\var \in \interval{0}{0}\) and \(\var \in \interval{1}{1}\), which
+widen become again
+\(\interval{0}{0}\widen\interval{1}{1} = \interval{0}{+\infty}\),
+which again is a sound analysis but is very imprecise. Simply by
+looking at the program we can infer that the cycle converges and at
+the end of the loop \(\var\in\interval{0}{10}\). To recover simple
+information as this from the program~\cite{10.1007/3-540-55844-6_142}
+also introduce a \emph{narrowing} operator, denoted as \(\narrowi\).
+This combination however still has some limitation, as it is heavely
+relying on the information directly embedded in the program.
 
 This opens a question, is it possible to have a precise analysis of
 abstract properties, while ensuring the termination of the analyzer?
 
-\paragraph*{Precise interval analysis} Because the presence of
-infinite ascending chains in the domain of intervals, the analysis
-over that domain was considered an algorithmic challenge: ordinary
-fixpoint iteration (trough Kleene iteration) will not result in
-terminating analysis algorithm, while widening and narrowing do not
-compute the least solution of a system of equations, but only a safe
-over approximation of it, while ensuring termination. Initially
-in~\cite{SU2005122} Su and Wagner identify a class of interval
-equations for which the least solution can be computed precisely in
-polynomial time. Later~\cite{Gawlitza2009} expands on the latter
-article by providing an algorithm to compute least solutions that also
-deals with the arbitrary multiplication of intervals.
+\paragraph*{Precise interval analysis} Because of the presence of
+infinite ascending chains in the domain of intervals, the computation
+of the exact abstract semantics over that domain was considered an
+algorithmic challenge: ordinary fixpoint iteration (trough Kleene
+iteration) will not result in terminating analysis algorithm, while
+widening and narrowing do not compute the least solution of a system
+of equations, but only a safe over approximation of it, while ensuring
+termination. Initially in~\cite{SU2005122} Su and Wagner identify a
+class of interval equations for which the least solution can be
+computed precisely in polynomial time. Later~\cite{Gawlitza2009}
+expands on the latter article by providing an algorithm to compute
+least solutions that also deals with the arbitrary multiplication of
+intervals.  In this thesis we prove that the same result can also be
+obtained by restricting the abstract domain and eliminating infinite
+ascending and descending chains, hence ensuring convergence of
+fixpoint computations even by only relying on Kleene iteration in the
+case of interval analysis.
 
 \paragraph*{Outline}
 The following document consists of 5

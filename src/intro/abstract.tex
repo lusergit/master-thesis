@@ -10,20 +10,24 @@ the semantics of programs over so-called \emph{abstract domains},
 usually represented as complete lattices, whose elements represent
 program properties. These approximations rely on some abstract
 operators, which usually include fixpoint iterations. Traditionally,
-to ensure convergence of such iterations, and therefore ensuring the
+to ensure convergence of such iterations, and therefore the
 termination of the analyzer, the literature relied on two important
 operators: the \emph{widening} and the \emph{narrowing} operators,
 first defined in~\cite{patrickradhia:one}: the first one to compute an
 upper bound on some chain in the complete lattice, and the second one
 to recover some additional information from the program and refine the
-upper bound provided by the widening. Such technique has however some
-limitations: nemely it cannot infer the most precise invariant in the
-considered domain. The thesis argues that for a special domain -- the
-\emph{interval} domain -- such invariant can be computed in finite
-time, while in another domain -- the \emph{non-relational collecting}
-domain -- the most precise invariant cannot be inferred in finite
-time, but rather it is possible to decide weather the analysis will
-halt or not.
+upper bound provided by the widening. This approach brings however a
+loss of precision: the inferred invariant is not the one provided by
+the abstract semantics, but an overapproximation of it. The thesis
+argues that for non relational abstract domains better results can be
+obtained. In particular, for the \emph{interval} domain, where each
+variable is associated with an interval of integers the abstract
+semantics is computed in an exact way. Instead, for the
+\emph{non-relational collecting} domain where each variable is mapped
+to a (possibly non-convex) subset of \(\z\) over which it can vary, we
+just show that it is possible to decide the termination of the
+abstract interpreter and, when this is the case, exactly compute the
+abstract semantics.
 
 \endgroup
 

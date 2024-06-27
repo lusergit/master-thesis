@@ -4,14 +4,14 @@
 In the last chapter we defined two abstract domains: the interval
 domain and the non-relational collecting domain. Both are
 non-relational domains, in the sense that they do not model the
-relation between variables, but their possible values. Trough the
-abstract inductive semantics of Definition~\ref{def:abstrsem} we
-defined a simple abstract interpreter for the \(\imp\) language,
-provided base expressions and an abstract domain \(\bA\). In
-Chapter~\ref{ch:framework} we proved that the \(\imp\) language is
-Turing-complete and therefore by Rice's theorem all non-trivial
-semantic properties of programs written in such language are not
-decidable.  
+relation between variables, but only their possible individual
+values. Trough the abstract inductive semantics of
+Definition~\ref{def:abstrsem} we defined a simple abstract interpreter
+for the \(\imp\) language, provided base expressions and an abstract
+domain \(\bA\). In Chapter~\ref{ch:framework} we proved that the
+\(\imp\) language is Turing-complete and therefore by Rice's theorem
+all non-trivial semantic properties of programs written in such
+language are not decidable.
 % Calcolare l'invariante esatto di un programma non è decidibile,
 % appunto perchè è una proprietà semantica non triviale
 Exact invariants fall into this category, as they tie the initial
@@ -21,7 +21,7 @@ return.
 % Abstract invariants, i.e., maps \(\Var \to \bA\), could be computable,
 % as the loss of information might be enough to allow for computation
 
-With this context, lets formalize the problem we will solve:
+With this context, we can formalize the problem we will solve:
 
 \begin{problem}[Exact analysis computation]\label{problem1}
   Given a program \(\com\in \imp\) and an abstract domain \(\bA\), for
@@ -33,7 +33,10 @@ With this context, lets formalize the problem we will solve:
 
 In this chapter we argue that for the language \(\imp\) the abstract
 semantics is computable for the domain \(\inte\), while for the domain
-\(\bCnr\) we can only decide the termination of the analyzer.
+\(\bCnr\) we will show that a further abstraction can be computed
+exactly. We will also show that the further abstraction coincides with
+the analysis over \(\bCnr\) when the analysis terminates. Indeed, our
+proof shows that we can decide the termination of the analyser.
 
 \medskip
 

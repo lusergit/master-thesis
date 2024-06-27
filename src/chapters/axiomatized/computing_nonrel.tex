@@ -1,12 +1,14 @@
 \section{Computing non-relational collecting semantics}\label{sec:computingnonrel}
 
-In the following section we follow the same scheme used in
-\secref{sec:computing} in order to prove that we can also bound
-the non relational collecting domain to ensure convergence while
-obtaining the most precise interval.  To start, we rely on
-Definition~\ref{def:minmax} of \(\min\) and \(\max\) values of an
-abstract environment \(\rho\) to bound the non relational collecting
-domain \(\bCnr\) in this way:
+In this section, we demonstrate the ability to compute a further
+abstraction of non-relational collecting semantics to infer the
+termination of non-relational collecting analysis. We illustrate that
+merely bounding individual variables, as done with intervals, is
+insufficient. Intuitively, we can no longer deduce that when one
+variable diverges, it does not impact the behavior of other variables.
+To start, we rely on Definition~\ref{def:minmax} of \(\min\) and
+\(\max\) values of an abstract environment \(\rho\) to bound the non
+relational collecting domain \(\bCnr\) in this way:
 
 \begin{definition}[Bounded non-relational collecting domain]
   We define
@@ -15,21 +17,23 @@ domain \(\bCnr\) in this way:
     \bposet[*]{k_1}{k_2}{\z} = \{S \subseteq \z \mid S \neq \emptyset \land \forall x \in S \quad k_1 \leq x \leq k_2\} \cup \{\top\}
   \end{equation*}
 \end{definition}
-Notice that contrary to \(\binte{k_1}{k_2}\) we have no way of
-representing a diverging element. For bounded intervals we had the
-\(\interval{a}{+\infty}\) and \(\interval{-\infty}{b}\) elements with
-\(a,b\in\z\), but for arbitrary subsets of \(z\) we have to rely on a
-smashed \(\top\) element.
+Notice that differently from what happened in the case of intervals,
+for the domain \(\bCnr\) we have no appropriate way of rapresenting an
+unbounded element: unbounded intervals could be rapresented with
+elements with the shape
+\(\interval{a}{+\infty}, \interval{-\infty}{b}\) with \(a,b\in
+\z\). For arbitrary subsets of \(\z\) we have instead to rely on a
+single \(\top\) element.
 
 \medskip
 
 \noindent
-We can already observe that by definition there are no infinite
-ascending nor descending chains, as every chain is bounded by above
-by some \(k_2 \in \z\) and below by some \(k_1\in\z\). Moreover, there
-is a Galois connection between this abstract domain and its unbounded
-counterpart \(\poset\z\). First let's define the concretization and
-abstraction maps
+A first observation we can make is that by definition there are no
+infinite ascending nor descending chains, as every chain is bounded by
+above by some \(k_2 \in \z\) and below by some \(k_1\in\z\). Moreover,
+there is a Galois connection between this abstract domain and its
+unbounded counterpart \(\poset\z\). First let's define the
+concretization and abstraction maps
 
 \begin{definition}\label{def:abstrnrb}
   Let \(k_1,k_2\in\z\) s.t.\ \(k_1 \leq k_2\). We define a
@@ -173,47 +177,74 @@ We bounded our analysis the same way we did with interval analysis in
 Definition~\ref{def:boundedint}. This initial solution however has a
 problem. Consider the following code snippet:
 \begin{lstlisting}[language=Imp,caption=Snippet where bounded analysis diverges from the unbounded counterpart, label=code3]
+  /* Pa */ 
   x := 0
   y := 0
+  /* Pb */ 
   while (x < 1)
     x := x + 1
     y := y + 2
+  /* Pc */ 
   if (y = 1)
     x := 2
 \end{lstlisting}
-before entering the \textcolor{blue}{\texttt{while}} loop variables
-are bounded to singleton sets
-\(\var \mapsto \{0\}, \var[y] \mapsto \{0\}\). Non-relational
-collecting semantics can infer for \(\var\) the set
-\(\var\mapsto \{0,1\}\), since the condition to enter the loop filters
-for \(\var \mapsto \{0\}\). For \(\var[y]\) however the guard does not
-filter anything (since the condition is on \(\var\) and the domain is
-non-relational). Hence after the loop non-relational collecting
-analysis infers the set of even numbers \(\mathbb{P}\):
-\(\var[y] \mapsto \mathbb{P}\). Since the set is infinite at some
-point it will surely exceed the program bound, which is a number in
-\(\n\). Hence the bounded analysis, after the loop can infer
-\(\var\mapsto\{0,1\}, \var[y] \mapsto \top\). The last
-\textcolor{blue}{\texttt{if}} is however where the two analysis
-diverge (while remaining sound): the original non-relational
-collecting before the \textcolor{blue}{\texttt{if}} infers
-\([\var\mapsto\{0,1\}, \var[y]\mapsto\mathbb{P}]\), hence the filter
-\(\var[y] = 1\) filters \(\bot\) and therefore after the
-\textcolor{blue}{\texttt{if}} the invariant remains
-\([\var\mapsto\{0,1\}, \var[y]\mapsto\mathbb{P}]\). The bounded
-analysis however filters \([\var\mapsto\{0,1\}, \var[y]\mapsto\{1\}]\)
-and therefore after the \textcolor{blue}{\texttt{if}} the inferred
-invariant is \([\var\mapsto\{0,1,2\}, \var[y]\mapsto\top]\), hence
-diverging. The idea is that by being non-relational and smashing all
-infinite elements of \(\poset{\z}\) to \(\top\) the loss of
-information does not allow to infer the correct invariant even for
-variables with finite mappings.
 
-Our guess is that it is possible to infer the precise infinite
-invariant, since all the information used to generate it are
-syntactically available: previous work on such matter is from James
-Worrell in~\cite{Lefaucheux2024}, which however deals with Presburger
-arithmetics (which are outside of scope in this thesis).
+This example highlights the main problem of just considering the
+bounds for each variable. When a variable exceeds the program bound
+and reaches \(\top\) this implies a loss of information, which leads
+to a difference between the non-relational collecting semantics and
+its bounded counterpart, even when the first one stays inside the
+bounds.
+
+To highlight the problem let's compute the exact semantics
+\(\semnr{\com[P]}\), to better address the problem, consider
+\(\com[P] = {\com[P]}_a\seq {\com[P]}_b \seq {\com[P]}_c\) and an
+initial environment \([\var\mapsto\top,\var[y]\mapsto\top] = \eta\).
+\begin{description}
+\item[\(\semnr{{\com[P]}_a}\eta\)] infers the invariant
+  \(\eta_a = [\var\mapsto \{0\}, \var[y]\mapsto\{0\}]\). This is our
+  starting point.
+\item[\(\semnr{{\com[P]}_b}\eta_a\)] infers the invariant
+  \(\eta_b = [\var\mapsto\{0,1\},
+  \var[y]\mapsto\mathbb{P}\cap\n]\). The analysis filters for all
+  elements greater than \(1\) for the variable \(\var\), while
+  variable \(\var[y]\) grows indefinetely, each time increasing by
+  \(2\), which means that it can assume any positive even number,
+  hence \(\mathbb{P} \cap \n\).
+\item[\(\semnr{{\com[P]}_c}\eta_b\)] infers the final result
+  \begin{equation*}
+    \eta_c = [\var\mapsto\{0,1\}, \var[y]\mapsto\mathbb{P}\cap\n]
+  \end{equation*}
+  The guard \(\var[y] = 1\) in the \col{if} statement filters for
+  \(\mathbb{P}\cap\n\cap\{1\} = \emptyset\) and therefore the variable
+  \(\var\) is never assigned to 2, leaving the result unchanged.
+\end{description}
+
+Let's consider instead an hypothetical analysis over
+\(\bbCnr{k_1}{k_2}\), with \(k_1,k_2\) chosen accordingly to the
+program.
+\begin{description}
+\item[\(\bsemnr{k_1}{k_2}{{\com[P]}_b}\eta_a\)] infers
+  \(\eta_b' = [\var\mapsto\{0,1\}, \var[y]\mapsto\top]\), since at
+  some point \(\var[y]\) will exceed the bound, hence the iteration
+  will widen to \(\top\).
+  
+\item[\(\bsemnr{k_1}{k_2}{{\com[P]}_c}\eta_b'\)] now has to filer
+  again for the guard \(\var[y] = 1\), but in this case
+  \(\top \cap \{1\} = \{1\}\), hence the final invariant becomes
+  \begin{equation*}
+    \eta_c' = [\var\mapsto\{0,1,2\}, \var[y] \mapsto \top]
+  \end{equation*}
+\end{description}
+hence \(\eta_c'\neq\eta_c\), which means that
+\(\bsemnr{k_1}{k_2}{\cdot}\) and \(\semnr{\cdot}\) diverge even when
+some variable in \(\semnr{\cdot}\) stays inside the program bounds.
+
+We hypothesize that it is feasible to deduce the exact infinite
+invariant, given that all the necessary information for its generation
+is syntactically accessible. Prior research on this topic, such as the
+work by Lefaucheux~\cite{Lefaucheux2024}, primarily addresses
+Presburger arithmetic, which is beyond the scope of this thesis.
 
 For this reason our approach consists in smashing the \(\top\) element
 of our analysis. Remember that the original problem we want to solve
@@ -616,17 +647,8 @@ descending chains, hence the Kleene iteration method is guaranteed to
 halt in finite time. The result however is not as precise as the
 bounded version of the interval analysis: while for intervals we could
 compute the exact invariant, for the non-relational collecting domain
-this is not the case. We can however decide weather the analysis over
-\(\bCnr\) halts in a finite time or not: if the result of
-\(\btsemnr{k_1}{k_2}{\com}\) is \(\top\) it means that at some stage
-of the analysis some variable exceeded the program bound, hence its
-values are guaranteed to diverge to non-finite subset of \(\z\). This
-means that the Kleene iteration would not halt in finite time, hence
-the analysis would not halt in a finite time.
-% Possiamo fare analisi statica secondo la semantica induttiva di cui
-% sopra. Se la variabile ha come risultato un set finito, questo è
-% garantito essere nel reticolo ristretto. Altrimenti, dato che
-% l'analisi è comunque sound per il teorema di prima, la semantica
-% induttiva farà divergere la variabile a \(\top\), dato che è
-% l'elemento del reticolo che identifica tutto \(\z\), ovvero l'unico
-% set infinito che consideriamo.
+this is the case only when the bounded semantics is not
+\(\top\). Intuitively this happens when all invariants inferred in the
+computation are finite, i.e., if the analysis over \(\bCnr\) halts in
+finite time. To put it differently, we can decide weather the analysis
+over \(\bCnr\) halts in finite time or not.

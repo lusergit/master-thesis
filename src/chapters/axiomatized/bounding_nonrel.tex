@@ -1,10 +1,14 @@
 \section{Bounded non-relational collecting
   semantics}\label{sec:boundingnonrel}
 
-In the following section we prove we will see that even though we are
-not able to compute the most precise invariant for any program in
-\(\imp\) we can however infer a sound invariant that gives us insights
-about the termination of the non-relational collecting analysis.
+In this section on non-relational collecting semantics, we demonstrate
+that while it is not possible to compute the most precise invariant
+for any given program in \(\imp\), it is feasible to compute a more
+abstract semantics. This abstract semantics provides valuable insights
+into the termination behavior of the non-relational collecting
+analyzer. Specifically, we show that the two abstract semantics align
+when the abstract analyzer for the non-relational collecting semantics
+terminates.
 
 For an easier reading, we will refer to \(\semi[\bCnr]{\cdot}\) with
 the same notation we used in \secref{sub:nonrelprop}:
@@ -49,34 +53,34 @@ the same notation we used in \secref{sub:nonrelprop}:
 \end{proof}
 
 \begin{remark}
-  % \todo{remark sul fatto che funziona perchè abbiamo limitato il
-  % linguaggio?}
-  The key point is that in the base case (\(\var\in I\)) we can say
-  the same things we said for intervals. This is because the filtering
-  happens on an interval \(I \in \inte\) instead on an arbitrary
-  decidable set \(S \in \poset{\z}\). If that was the case and we
-  consider \(\var[y] = \var\) it would happen that
+  The key point is that in the base case \((\var \in I)\), we can draw
+  similar conclusions as we did for intervals. This is because the
+  filtering occurs on an interval \(I \in \inte\) rather than on an
+  arbitrary decidable set. It is important to note that if we were to
+  allow a generic decidable set in a guard, the result would not
+  hold. Specifically, let \(S \in \poset{\z}\) be a decidable set and
+  consider \(\var[y] = \var\); under these conditions, we observe that
   \begin{equation}
     \max(\semnr{\var\in S}\eta\var[y]) = \max(\eta[\var \mapsto \eta\var \cap S]\var) = \max(\eta\var \cap S)
   \end{equation}
-  but since \(S\) is generally non-convex what happens is that
-  generally if \(\eta \var \cap S \neq \emptyset\) and
-  \(\max(S) = +\infty\) then
+  Since \(S\) is generally non-convex what happens is that from
+  \(\eta \var \cap S \neq \emptyset\) and \(\max(S) = +\infty\) we can
+  only deduce
   \begin{equation}
     \max(\eta\var \cap S) \leq \max(\eta\var)
   \end{equation}
-  providing a potential counterexample to the Lemma. For example
-  consider the program \((\var\in\mathbb{P})\)
+  and not equality, providing a potential counterexample to the
+  Lemma. For example consider the program \((\var\in\mathbb{P})\)
   % \begin{lstlisting}[caption=Potential counterexample, label=code2, language=Imp]
   %   x > 5;\end{lstlisting}
-  where \(\mathbb{P}\) is the set of even numbers and initial
+  where \(\mathbb{P}\) is the set of even numbers and an initial
   environment \({\eta \defin [\var\mapsto \mathbb{D} \cup \{2\}]}\),
   where \(\mathbb{D}\) is the set of odd numbers. Then
   \begin{equation*}
     {\semnr{\var\in\mathbb{P}}\eta\var} = \{2\}
   \end{equation*}
   and \(\max({\semnr{\var\in\mathbb{P}}\eta\var}) = 2\), while
-  \(\bound{\semnr{\var\in\mathbb{P}}\eta\var} = 0\).
+  \(\bound{\semnr{\var\in\mathbb{P}}} = 0\).
 
   \medskip
 
@@ -84,13 +88,12 @@ the same notation we used in \secref{sub:nonrelprop}:
   Hence both
   \(\max({\semnr{\var\in\mathbb{P}}\eta\var}) \neq +\infty\) and
   \(\max({\semnr{\var\in\mathbb{P}}\eta\var}) >
-  \bound{\semnr{\var\in\mathbb{P}}\eta\var}\) hold and what the Lemma
-  would state is that \(\exists \var[w] \in (\var\in \mathbb{P})\) and
+  \bound{\semnr{\var\in\mathbb{P}}}\) hold. The lemma would state that
+  \(\exists \var[w] \in \Var\) and
   \(h \in \z \mid |h| \leq \bound{\var\in\mathbb{P}}\) s.t.
   \begin{enumerate}[label=(\roman*)]
   \item\label{eq:equality}
-    \(\max(\semnr{\var\in \mathbb{P}}\eta\var) = \max(\eta\var[w]) +
-    h\)
+    \(\max(\semnr{\var\in \mathbb{P}}\eta\var) = \max(\eta\var[w]) + h\)
   \item
     \(\forall \eta'\sqsupseteq \eta \quad
     \max(\semnr{\var\in\mathbb{P}}\eta'\var[y]) \geq
@@ -104,11 +107,12 @@ the same notation we used in \secref{sub:nonrelprop}:
     \max(\semnr{\var\in\mathbb{P}}\eta\var) = 2 = +\infty = \max(\eta\var) + h
   \end{equation*}
   which is false.
+
+  \todo[inline]{Fare esempio sul quaderno}
 \end{remark}
 
-Since we posed such a constraint on the filtering then, the same
-applies for the increment on the lower bound, in a similar fashion as
-for the intervals:
+The same applies for the increment on the lower bound, in a similar
+fashion as for the intervals:
 
 \begin{lemma}\label{le:decnr}
   Let \(\com\in \imp\).
