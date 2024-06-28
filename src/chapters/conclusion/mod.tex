@@ -1,106 +1,92 @@
 \chapter{Conclusions}\label{ch:conclusion}
 
-% We looked at the most common framework to build static analysis tools:
-% starting from hte \(\imp\) language grammar we defined its concrete
-% denotational semantics and its small step semantics, proving that
-% semantic properties are in general not decidable. We then abstracted
-% the execution of programs with the non-relational collecting semantics
-% \(\bCnr\): the most general non-relational domain. We then defined and
-% showed the basic properties of the intervals domain \(\inte\), a
-% common domain in abstract interpretation literature. We then proved
-% that for both these abstract domains variables are bounded to increase
-% up to a bound we defined as \(\bound{\com}\), which depends on the
-% program \(\com\). With such constraint we tried to restrict the
-% abstract domains in such a way that there were no ascending and
-% descending chains.
-In this study, we examined the most prevalent framework for developing
-static analysis tools. Beginning with the \(\imp\) language grammar,
-we defined its concrete denotational semantics and small step
-semantics, demonstrating that semantic properties are generally
-undecidable. We then abstracted program execution using the
-non-relational collecting semantics \(\bCnr\), the most general
-non-relational domain. Subsequently, we defined and established the
-fundamental properties of the intervals domain \(\inte\), a well-known
-domain in abstract interpretation literature. We proved that in both
-these abstract domains, variables are constrained to increase up to a
-limit denoted as \(\bound{\com}\), which is dependent on the program
-\(\com\). With this constraint, we aimed to restrict the abstract
-domains in such a way that ascending and descending chains were
-eliminated.
-
-Furthermore, we proved that in the case of \(\binte{k_1}{k_2}\)
-analysis, the bounded domain and the original \(\inte\) reach the same
-fixpoints, provided that \(k_1\) and \(k_2\) are selected based on the
-considered program \(\com\) and the initial environment
-\(\eta \in \binte{k_1}{k_2}\). With these constraints, we aimed to
-restrict the abstract domains to eliminate ascending and descending
-chains.
-
-In our investigation, we referenced~\cite{Gawlitza2009}
-highlighting their achievement of computing precise interval
-invariants within finite time. They detailed an algorithm capable of
-solving systems of equations describing programs in \(O(n^3)\), where
-\(n\) denotes the program's size. However, their approach heavily
-relied on the convexity of elements within \(\inte\). In response, we
-introduced an alternative method focused on constraining the domain of
-\(\inte\) and ensuring termination by eliminating infinite ascending
-chains.
-
-Initially, we anticipated that this method would extend to
-non-relational collecting abstractions, relying solely on variable
-increments rather than the convex properties of \(\inte\). To our
-surprise, we discovered that achieving precise invariants posed a
-greater challenge than anticipated. Specifically, for non-relational
-collecting semantics, we determined that while it was feasible to
-infer the analyzer's termination, achieving the most accurate
-invariant proved elusive. Despite this, we remain optimistic about the
-potential to achieve this goal as similar results have already been
-reached by James Worrell et al.\ in~\cite{Lefaucheux2024}.
-
+In this study, we investigated some decidability questions in the
+setting of abstract interpretation, the most prevalent framework for
+developing static analysis tools.  The general question concerned the
+possibility of effectively computing the abstract semantics. The
+question is non trivial when the abstract domain can have infinite
+ascending chains and thus the fixpoint computations can diverge.
+Beginning with the \(\imp\) language grammar, we defined its concrete
+denotational semantics in its concrete domain \(\dom\) and small step
+semantics, demonstrating that all non-trivial semantic properties are
+undecidable due to Rice's Theorem. We therefore biult the abstraction
+chain in Figure~\ref{fig:abstrchain}.
 \begin{figure}
   \centering
   \usetikzlibrary{arrows.meta}
-  \begin{tikzpicture}[->, >=stealth]
+  \begin{tikzpicture}[, >=stealth]
     % Nodes
     \node (dom) {\(\dom\)};
     \node (bcnr) [below=of dom] {\(\bCnr\)};
     \node (ph1) [below=of bcnr] {};
     \node (inte) [left=of ph1] {\(\inte\)};
-    \node (bbcnr) [right=of ph1] {\(\bbCnr{k_1}{k_2}\)};
-    \node (binte) [below=of inte] {\(\binte{k_1}{k_2}\)};
-    \node (btbcnr) [below=of bbcnr] {\(\btbCnr{k_1}{k_2}\)};
+    \node (bbcnr) [right=of ph1] {\(\bbCnr{\low}{\upp}\)};
+    \node (binte) [below=of inte] {\(\binte{\low}{\upp}\)};
+    \node (btbcnr) [below=of bbcnr] {\(\btbCnr{\low}{\upp}\)};
+
+    \node at (-4,-3) (decidable)   {{\color{codegreen}\(\mathsf{decidable}\)}};
+    \node at (3, -2) (unknown)     {{\color{airforceblue}\(\mathsf{unknown}\)}};
+    \node at (2, .5) (undecidable) {{\color{red}\(\mathsf{undecidable}\)}};
+
+    % divisor lines
+    \draw[red, opacity=.4] (-3,1) edge[out=-40,in=180] (3,-1);
+    % \draw (description) edge[out=180,in=0,->] (text);
+    \draw[red, opacity=.4] (-3,-1) edge[out=-40,in=180] (3,-3.5);
     
     % Arrows
     \path
-    (dom) edge[bend right=10] node[left]{$\abstr$} (bcnr)
-    (bcnr) edge[bend right=10] node[right]{$\concr$} (dom)
-    (bcnr) edge[bend right=10] node[left]{$\abstr$} (inte)
-    (inte) edge[bend right=10] node[right]{$\concr$} (bcnr)
-    (bcnr) edge[bend right=10] node[left]{$\abstr$} (bbcnr)
-    (bbcnr) edge[bend right=10] node[right]{$\concr$} (bcnr)
-    (inte) edge[bend right=10] node[left]{$\abstr$} (binte)
-    (binte) edge[bend right=10] node[right]{$\concr$} (inte)
-    (bbcnr) edge[bend right=10] node[left]{$\abstr$} (btbcnr)
-    (btbcnr) edge[bend right=10] node[right]{$\concr$} (bbcnr);
+    (dom) edge[->, bend right=10] node[left]{$\abstr$} (bcnr)
+    (bcnr) edge[->, bend right=10] node[right]{$\concr$} (dom)
+    (bcnr) edge[->, bend right=10] node[left]{$\abstr$} (inte)
+    (inte) edge[->, bend right=10] node[right]{$\concr$} (bcnr)
+    (bcnr) edge[->, bend right=10] node[left]{$\abstr$} (bbcnr)
+    (bbcnr) edge[->, bend right=10] node[right]{$\concr$} (bcnr)
+    (inte) edge[->, bend right=10] node[left]{$\abstr$} (binte)
+    (binte) edge[->, bend right=10] node[right]{$\concr$} (inte)
+    (bbcnr) edge[->, bend right=10] node[left]{$\abstr$} (btbcnr)
+    (btbcnr) edge[->, bend right=10] node[right]{$\concr$} (bbcnr);
+
   \end{tikzpicture}
   \caption{Abstractions chain we build throughout
     Chapter~\ref{ch:abstractdomains}}\label{fig:abstrchain}
 \end{figure}
-
-We built the abstraction chain in Figure~\ref{fig:abstrchain}, and
-defined abstract semantics in an inductive way on such domains, s.t.\
-for any two domains \(\bA, \abstract\bA\) s.t.
-\(\bA \galois{\abstr}{\concr} \abstract\bA\) implies that
-\[\semi[\bA]{\com}\concr(\abstract\eta) \sqsubseteq
-\concr(\semi[\abstract\bA]{\com}\abstract\eta)\]i.e., if two domains
-are connected trough a Galois connection, their abstract semantics are
-sound.  We proved with Theorem~\ref{th:bounded} that by restricting
-the interval domain to a precisely crafted subset of itself one can
-compute the exact fixpoint only by relying on the Kleene iteration
-method to compute least fixpoints
-\begin{equation*}
-  \lfp(f) = \bigsqcup\left\{f^n(\bot) \mid n \in \n\right\}
-\end{equation*}
+First we abstracted program execution using the non-relational
+collecting semantics \(\bCnr\), the most general non-relational
+domain. Subsequently, we defined and established the fundamental
+properties of the intervals domain \(\inte\), a well-known domain in
+abstract interpretation literature. We proved that in the
+aforementioned abstract domains, variables are constrained to increase
+up to a limit denoted as \(\bound{\com}\), which is dependent on the
+program \(\com\). We therefore introduced the bounded interval domain
+\(\binte{\low}{\upp}\): such domain does not contain infinite
+ascending and descending chains, and therefore fixpoints are
+computable in finite time. We then proved that given a program and an
+initial environment \(\com\in\imp, \eta\in\inte\) and by crafting
+appropriate bounds for \(\binte{\low}{\upp}\), namely
+\(\low = \min(\eta) - \nlbound{\com}\) and
+\(\upp = \max(\eta) + \nbound{\com}\), we not only could compute
+\(\semi[\binte{\low}{\upp}]{\com}\eta\) but
+also \[\semi[\binte{\low}{\upp}]{\com}\eta = \semi[\inte]{\com}\eta\]
+which meant that we were able to compute exact interval analysis in
+finite time. Following the same practice we bounded \(\bCnr\) to
+\(\bbCnr{\low}{\upp}\), and showed with the example of
+Code~\ref{code3} that with a simple \(\top\) element for variables
+that exceed the bounds we loose too much information to infer equality
+with the non-relational collecting semantics.  Therefore we introduced
+\(\btbCnr{\low}{\upp}\), bonuded non-relational collecting with a
+smashed top element. With this analysis we could infer equality up to
+the top element, meaning that if the bounded analysis with smashed top
+resulted in something different than \(\top\) then its result was the
+same as the non-relational collecting, i.e.,
+\[\btsemnr{\low}{\upp}{\com}\eta \neq \top \implies \semnr{\com}\eta =
+  \btsemnr{\low}{\upp}{\com}\eta\] Intuitively, this implies that we
+can decide the termination of non-relational collecting analysis. The
+bounded version with the smashed \(\top\) element, only infers this
+\(\top\) element if, during the analysis, a variable exceeds the
+predefined bounds and follows an infinite sequence. Consequently, the
+original non-relational collecting analysis does not terminate under
+these conditions. While if something other than \(\top\) is inferred,
+it means that it is the most precise invariant.
 
 \paragraph*{Future work.}
 Throughout the development of this thesis, we encountered various
@@ -116,11 +102,31 @@ arithmetic from~\cite{1571698599431503232}, which, although beyond the
 scope of this thesis, presents interesting results, particularly its
 decidability.
 
+A second follow up question might involve the extension of the
+language to support non-linear expressions. Our hypothesis in this
+case is that invariants might become undecidable, as we are able to
+write diofantine equations. Take for example the following code
+snippet
+\begin{lstlisting}[language=Imp, caption=Program with diofantine equations, label=code5]
+  (*\(\vec{x}\)*) := null_vec_size(n); /* where n is the number of
+                            variables in the diofrantine
+                            equation */
+  while (true) do
+    ((*\(x_i\)*)++) + ((*\(x_i\)*)--)
+    z = P((*\(\vec{x}\)*)) /* Where P((*{\color{codegreen}\(\vec{x}\)}*)) is a diofantine equation */
+\end{lstlisting}
+If the non-relational collecting semantics were decidable in a
+language that permitted non-linear equations, we could determine the
+solution of any Diophantine equation by deciding whether
+\(0 \in \semnr{{\com[P]}_d}\). However, this is known to be an
+undecidable problem, as demonstrated in~\cite{zbMATH03336816}.
+
 Finally, future work can be focused on the application to real-world
 tools. Aforementioned tools such as
 Astreé~\cite{10.1007/978-3-540-31987-0_3} and
-MOPSA~\cite{10.1007/978-3-031-30820-8_37} utilize the traditional
-widening technique, which, while sound, does not infer the most
-precise invariant in the domain of intervals. In contrast, we have
+MOPSA~\cite{10.1007/978-3-031-30820-8_37} use the traditional widening
+technique, which, while sound, does not infer the most precise
+invariant in the domain of intervals. In contrast, we have
 demonstrated that it is possible to achieve more precise invariants
-within this domain.
+while ensuring the termination of the analyzer using the domain of
+intervals.

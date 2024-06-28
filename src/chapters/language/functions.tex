@@ -111,7 +111,7 @@ We also need to define what we mean by program output.
   computable if
 
   \[\exists \com \in\imp \mid \forall (a_1, \dots, a_k) \in \n^k \wedge
-  b \in \n \] \[\trans{\com}{\rho} \ahalts[b] \iff (a_1, \dots, a_k)
+  b \in \n \] \[\stt{\com, \rho} \ahalts[b] \iff (a_1, \dots, a_k)
   \in dom(f) \wedge f(a_1,\dots,a_k) = b\] with \(\rho = \envi{\var_1
     \mapsto a_1, \dots, \var_k \mapsto a_k}\).
 \end{definition}
