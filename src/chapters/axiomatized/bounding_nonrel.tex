@@ -99,16 +99,24 @@ the same notation we used in \secref{sub:nonrelprop}:
     \max(\semnr{\var\in\mathbb{P}}\eta'\var[y]) \geq
     \max(\eta'\var[w]) + h\)
   \end{enumerate}
-  and we can already see that~\ref{eq:equality} is false. In fact the
-  only variable in the program is \(\var\), hence \(\var[w] = \var\),
-  but \(\max(\eta\var) = +\infty\) and \(\forall h \in \z\) it happens
-  that \(+\infty + h = +\infty\), hence
+  Here we can observe that the hypothesis would hold:
+  \begin{align*}
+    \max(\semnr{\var\in\mathbb{P}}\eta\var) & = 2 \neq +\infty \\
+    \max(\semnr{\var\in\mathbb{P}}\eta\var) & > \bound{\var\in\mathbb{P}} = 0 & \text{By }\bound{\cdot} \text{ definition}
+  \end{align*}
+  but~\ref{eq:equality} does not hold, in fact \(\max(\eta\var) = 0\)
+  since \(\eta\var = \mathbb{D} \cup \{2\}\) and therefore
   \begin{equation*}
-    \max(\semnr{\var\in\mathbb{P}}\eta\var) = 2 = +\infty = \max(\eta\var) + h
+    \max(\semnr{\var\in\mathbb{P}}\eta\var) = 2 \neq 0 = \max(\eta\var) + \bound{\var\in\mathbb{P}}
   \end{equation*}
-  which is false.
 
-  \todo[inline]{Fare esempio sul quaderno}
+  With intervals the theorem instead holds, the rough idea is that the
+  intersection between an interval and a generic subset of \(\z\)
+  \(S\) preserves the maximal element of \(S\) whenever the interval
+  is open on the right, and preserves the minimal element when it is
+  open on the left, otherwise the preconditions for the lemma do not
+  hold. This is not the case for generic subsets of \(\z\) in the
+  guard as we showed with this remark.
 \end{remark}
 
 The same applies for the increment on the lower bound, in a similar
