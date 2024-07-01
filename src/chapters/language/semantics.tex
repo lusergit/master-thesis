@@ -13,7 +13,7 @@ program \emph{execution}.% The first building block are
 \begin{definition}[Semantics of Basic Expressions]
   Let \emph{environments} be the maps from the set of variables to
   their numerical value:
-  \(\env \defin \{\rho \mid \rho : \Var \to \z\}\). For basic
+  \(\env \defin \{\rho \mid \rho : \Var \to \z\} \cup \{\bot\}\). For basic
   expressions \(e \in \expr\) the \emph{concrete semantics}
   \(\bsem{ \cdot} : \expr \to \env \to \env\) is
   inductively defined by:
@@ -26,10 +26,9 @@ program \emph{execution}.% The first building block are
     % \bsem{\tru} \rho & \defin \rho \\
     % \bsem{\ff} \rho & \defin \bot \\
     \bsem{\var:= k} \rho & \defin \rho [\var\mapsto k] \\
-    \bsem{\var:= \var[y] + k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) + k]
+    \bsem{\var:= \var[y] + k} \rho & \defin \rho [\var\mapsto \rho(\var[y]) + k]
     % \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
   \end{align*}
-  where with \(\smashed{\env}\) we mean \(\env \cup \{\bot\}\).
 \end{definition}
 
 The next building block is the concrete collecting semantics for the
