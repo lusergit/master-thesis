@@ -231,7 +231,8 @@ in a finite time.  It might happen however that the widening loses
 more information than needed to ensure termination. Consider in fact
 the following snippet
 
-\begin{lstlisting}[language=C, caption=Program with a convergent loop, label=exampleloop]
+\begin{lstlisting}[language=C, caption=Program with a convergent loop,
+  label=exampleloopconverges]
   int x = 0;
   while(x < 10) {
     x += 1;
