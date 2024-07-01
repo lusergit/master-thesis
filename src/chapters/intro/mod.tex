@@ -139,16 +139,14 @@ and our result \(\interval{-10}{+10}\) is a \emph{superset} of \(S\).
 
 \medskip
 
-\noindent
 \emph{Abstract interpretation}, introduced by Radhia and Patrick
 Cousot in~\cite{patrickradhia:one, patrickradhia:two} is therefore a
 framework that generalizes this idea by providing tools to compute
 efficiently general abstractions. As a result, a sound verifier can be
 obtained by comparing the resulting abstraction with the program
-specification: if the latter satisfies the former (i.e.\ it is a
-\emph{superset}) then also the program does and therefore it is
-correct, otherwise noting can be said about the program, as the
-abstraction is an \emph{over-approximation}.
+specification: if the latter satisfies the former then also the
+program does and therefore it is correct, otherwise noting can be said
+about the program, as the abstraction is an \emph{over-approximation}.
 
 \medskip
 
@@ -176,15 +174,15 @@ usually involve computing a minimal element in a \emph{chain} of
 lattice elements such that the computation does not proceed further.
 In other words, at which point the guard of a loop is not satisfied
 anymore and which guarantees can we infer for the program \emph{after}
-the loop? Consider the snipped of Code~\ref{codeexample}. We argued
-that our computation of the abstract value of the variable \(\var\)
-could start from \(\interval{0}{0}\) and proceed with
-\(\interval{-2}{+2}, \interval{-4}{+4}, \dots\) In this case we find a
-fixpoint with \(\interval{-8}{+8}\), since the guard of the loop is
-not respected anymore (because of the variable \(\var[i]\)) and
-therefore ``executing'' the loop again would result in the same
-initial value \(\interval{-8}{+8}\), hence a \emph{fixpoint} is
-reached.
+the loop? As an example, consider the snipped of
+Code~\ref{codeexample}. We argued that our computation of the abstract
+value of the variable \(\var\) could start from \(\interval{0}{0}\)
+and proceed with \(\interval{-2}{+2}, \interval{-4}{+4}, \dots\) In
+this case we find a fixpoint with \(\interval{-10}{+10}\), since the
+guard of the loop is not respected anymore (because of the variable
+\(\var[i]\)) and therefore ``executing'' the loop again would result
+in the same initial value \(\interval{-10}{+10}\), hence a
+\emph{fixpoint} is reached.
 
 \medskip
 
@@ -250,31 +248,80 @@ the end of the loop \(\var\in\interval{0}{10}\). To recover simple
 information as this from the program~\cite{10.1007/3-540-55844-6_142}
 also introduce a \emph{narrowing} operator, denoted as \(\narrowi\).
 This combination however still has some limitation, as it is heavely
-relying on the information directly embedded in the program.
+relying on the information directly embedded in the program.  This
+opens a question, which is the general problem faced in the thesis:
 
-This opens a question, is it possible to have a precise analysis of
-abstract properties, while ensuring the termination of the analyzer?
+\begin{problem*}
+  Is it possible to have a precise analysis of abstract properties,
+  while ensuring the termination of the analyzer?
+\end{problem*}
 
-\paragraph*{Precise interval analysis} Because of the presence of
-infinite ascending chains in the domain of intervals, the computation
-of the exact abstract semantics over that domain was considered an
-algorithmic challenge: ordinary fixpoint iteration (trough Kleene
-iteration) will not result in terminating analysis algorithm, while
-widening and narrowing do not compute the least solution of a system
-of equations, but only a safe over approximation of it, while ensuring
-termination. Initially in~\cite{SU2005122} Su and Wagner identify a
-class of interval equations for which the least solution can be
-computed precisely in polynomial time. Later~\cite{Gawlitza2009}
-expands on the latter article by providing an algorithm to compute
-least solutions that also deals with the arbitrary multiplication of
-intervals.  In this thesis we prove that the same result can also be
-obtained by restricting the abstract domain and eliminating infinite
-ascending and descending chains, hence ensuring convergence of
-fixpoint computations even by only relying on Kleene iteration in the
-case of interval analysis. We then work on non-relational collecting
-semantics, an abstract domain where variables are mapped to subsets of
-\(\z\) rather than integer intervals. We prove in this case that we
-are able to decide the termination of the analyzer.
+The thesis starts by formalising some expected results about the
+undecidability of the collecting semantics for a simple imperative,
+Turing complete language. The language include a minimal set of
+constructs that make it Turing powerful: linear assignements, interval
+based guards, non-deterministic choice (which jointly with guards
+allows us to encode conditionals) and a fixpoint operation (which can
+be used to encode while loops). Roughly speaking, what is shown is
+that precise invariants cannot be computed. Actually, it is not even
+possible to decide the finiteness of invariants, as the halting
+problem, which is notoriously undecidable, reduces to the finiteness
+of program invariants.
+
+We try to provide some answers to the question above, by focusing on
+so-called non-relational abstract semantics, i.e., abstract semantics
+which disregard the depedencies between the different variables in a
+program and provide, for each single variable, an abstraction of the
+set of possible values. It must be observed that if in the abstract
+domain of interest all ascending chains are finite, the problem
+trivialises as all fixpoint computations will converge in a finite
+amount of steps. Thus they can be conducted in a precise way, without
+the need of any additional theory. The thesis will start by focusing
+on the domain of intervals, where as observed above one can have
+infinite ascending chaings and thus the computation of the exact
+abstract semantics is a challenging task. Actually, in principle, one
+might even think that this is not possible because, in absence of a
+result proving the converse, establishing whether the abstract
+analyser terminates (which reduces to establish whetehr ordinary
+fixpoint iteration trough Kleene iteration does terminate) might be
+undecidable.
+
+Actually, some results showing that, under some restrictions, interval
+analysis can be computed exactly were already
+available. In~\cite{SU2005122} the autors identify a class of interval
+equations for which the least solution can be computed precisely in
+polynomial time and the result is later generalised
+in~\cite{Gawlitza2009} which provides an algorithm that also deals
+with the arbitrary multiplication of intervals.
+
+In this thesis we take a radically different approach. We show that a
+preliminary analysis of the program allows one to identify some bounds
+such that, intuitively, when variables are beyond the bounds the
+behaviour of the program stabilises. This is the basic tool which
+allows us to determine whether fixpoint computations will diverge,
+thus providing a way of estalishing the exact result of the
+computation. Technically, this is obtained by restricting the abstract
+domain to intervals which are bounded or infinite. Then we prove that
+the interval semantics computed over this subdomain coincide with the
+semantics computed on the full domain. This, together with the fact
+that the bounded domain has no infinite ascending chain allows us to
+conclude.
+
+The generality of the approach suggests the possibilty of extending
+the result to other non-relational semantics. We then focus on what we
+call the non-relational collecting semantics, the most precise
+non-relational semantics, which maps each variable to a set of
+possible values, forgetting only the relation between variables. The
+fact that invariants are no longer convex sets, makes the problem
+sensibly more difficult. We do not succeed in showing that the
+abstract semantics is computable, but we manage to prove a partial
+result which, intuitively, says that the termination of the abstract
+interpreter is decidable or, equivalently, that all inviariants
+generated during the analysis of the program are finite. In case the
+program has a single while loop, this corresponds exactly to the
+finiteness of the invariants. This partial results makes us confident
+about the possibility of proving that also the non-relational
+collecting semantics is computable in an exact way.
 
 \paragraph*{Outline}
 The following document consists of 5
@@ -291,5 +338,6 @@ properties of interval and non-relational collecting analysis on the
 \(\imp\) language, while Chapter~\ref{ch:axiomatized} proves that,
 similarly to previous work, it is possible to bound the domains we
 previously introduced to remove infinite ascending chains, hence
-ensuring analysis termination. Some constraints will emerge and the
-results will later be exposed in Chapter~\ref{ch:conclusion}.
+ensuring analysis termination. Finally Chapter~\ref{ch:conclusion}
+presents the results of the thesis and proposes a direction for future
+work on the topic.
