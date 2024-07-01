@@ -85,14 +85,15 @@ bounded version with the smashed \(\top\) element, only infers this
 \(\top\) element if, during the analysis, a variable exceeds the
 predefined bounds and follows an infinite sequence. Consequently, the
 original non-relational collecting analysis does not terminate under
-these conditions. While if something other than \(\top\) is inferred,
-it means that it is the most precise invariant.
+these conditions using the Kleene iteration. While if something other
+than \(\top\) is inferred, it means that it is the most precise
+invariant.
 
 \paragraph*{Future work.}
 Throughout the development of this thesis, we encountered various
 obstacles, which we present here as potential extensions and
 directions for future research. Addressing all of these issues was
-beyond the scope of this master's thesis due to time constraints.
+beyond the scope of this thesis due to time constraints.
 
 The first and most prominent question is whether it is possible to
 precisely compute the non-relational collecting semantics. Our
@@ -122,7 +123,7 @@ solution of any Diophantine equation by deciding whether
 undecidable problem, as demonstrated in~\cite{zbMATH03336816}.
 
 Finally, future work can be focused on the application to real-world
-tools. Aforementioned tools such as
+scenarios. Aforementioned tools such as
 Astreé~\cite{10.1007/978-3-540-31987-0_3} and
 MOPSA~\cite{10.1007/978-3-031-30820-8_37} use the traditional widening
 technique, which, while sound, does not infer the most precise
