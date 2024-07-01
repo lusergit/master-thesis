@@ -37,14 +37,14 @@ chain in Figure~\ref{fig:abstrchain}.
     \path
     (dom) edge[->, bend right=10] node[left]{$\abstr$} (bcnr)
     (bcnr) edge[->, bend right=10] node[right]{$\concr$} (dom)
-    (bcnr) edge[->, bend right=10] node[left]{$\abstr$} (inte)
-    (inte) edge[->, bend right=10] node[right]{$\concr$} (bcnr)
-    (bcnr) edge[->, bend right=10] node[left]{$\abstr$} (bbcnr)
-    (bbcnr) edge[->, bend right=10] node[right]{$\concr$} (bcnr)
-    (inte) edge[->, bend right=10] node[left]{$\abstr$} (binte)
-    (binte) edge[->, bend right=10] node[right]{$\concr$} (inte)
-    (bbcnr) edge[->, bend right=10] node[left]{$\abstr$} (btbcnr)
-    (btbcnr) edge[->, bend right=10] node[right]{$\concr$} (bbcnr);
+    (bcnr) edge[->, bend right=10] node[left]{$\dabstr$} (inte)
+    (inte) edge[->, bend right=10] node[right]{$\dconcr$} (bcnr)
+    (bcnr) edge[->, bend right=10] node[left]{$\sabstr[\low,\upp]$} (bbcnr)
+    (bbcnr) edge[->, bend right=10] node[right]{$\sconcr[\low,\upp]$} (bcnr)
+    (inte) edge[->, bend right=10] node[left]{$\dabstr[\low,\upp]$} (binte)
+    (binte) edge[->, bend right=10] node[right]{$\dconcr[\low,\upp]$} (inte)
+    (bbcnr) edge[->, bend right=10] node[left]{$\tabstr[\low,\upp]$} (btbcnr)
+    (btbcnr) edge[->, bend right=10] node[right]{$\tconcr[\low,\upp]$} (bbcnr);
 
   \end{tikzpicture}
   \caption{Abstractions chain we build throughout
