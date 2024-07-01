@@ -15,9 +15,10 @@ program \emph{execution}.% The first building block are
   their numerical value:
   \(\env \defin \{\rho \mid \rho : \Var \to \z\}\). For basic
   expressions \(e \in \expr\) the \emph{concrete semantics}
-  \(\bsem{ \cdot} : \expr \to \env \to \smashed{\env}\) is
+  \(\bsem{ \cdot} : \expr \to \env \to \env\) is
   inductively defined by:
   \begin{align*}
+    \bsem{\com[e]}\bot & \defin \bot \\
     \bsem{\var\in I} \rho & \defin \begin{cases} \rho & \rho(\var)\in I \\ \bot & \text{otherwise} \end{cases} \\
     % \bsem{\var\in [a,b]} \rho & \defin \begin{cases} \rho & \rho(\var)\in [a,b] \\ \bot & \text{otherwise} \end{cases} \\
     % \bsem{\var\leq k} \rho & \defin \begin{cases} \rho & \rho(\var)\leq k \\ \bot & \text{otherwise} \end{cases} \\
@@ -25,8 +26,8 @@ program \emph{execution}.% The first building block are
     % \bsem{\tru} \rho & \defin \rho \\
     % \bsem{\ff} \rho & \defin \bot \\
     \bsem{\var:= k} \rho & \defin \rho [\var\mapsto k] \\
-    \bsem{\var:= \var[y] + k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) + k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
-    \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
+    \bsem{\var:= \var[y] + k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) + k]
+    % \bsem{\var:= \var[y] - k} \rho & \defin \begin{cases} \rho [\var\mapsto \rho(\var[y]) - k] & \rho \neq \bot \\ \bot & \text{otherwise}\end{cases} \\
   \end{align*}
   where with \(\smashed{\env}\) we mean \(\env \cup \{\bot\}\).
 \end{definition}
