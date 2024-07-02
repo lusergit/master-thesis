@@ -92,14 +92,6 @@ a finite path in \(\langle X,\to\rangle\)
 % \medskip
 % More in detail, for the interval domain \(\Int\) and its variable-wise
 % lifing \(\inte\) the following lemma holds:
-We also preliminarly need to define the \(\max\) function for
-intervals. More in detail \(\max : \Int \to \z\) is defined as follows
-\begin{align*}
-  \max(\bot) & \defin - \infty \\
-  \max(\interval{a}{b}) & \defin b
-\end{align*}
-Notice in particular that since
-\(\top = \interval{-\infty}{+\infty}\), \(\max(\top) = +\infty\).
 
 We will now prove a fundamental property of analysis over the lattice
 of intervals: if a variable in a program does not diverge, then the
@@ -163,46 +155,45 @@ chains) to one of its subsets that does not contain such chains.
   \(\max(\semi{\com}\eta' \var[y]) \geq \max(\eta' \var[z]) + h\)
   trivially holds, hence we will sometimes silently omit this case.
   \begin{inductive}
-    \case{\(\var \in S\)}
+    \case{\(\var \in I\)}
     % 
     Take \(\eta \in \inte\) and assume
-    \(+\infty\neq\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
+    \(+\infty\neq\max(\semi{\var \in I}\eta \var[y]) > \bound{\var \in I}\).
     % 
-    Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get
+    Clearly \(\semi{\var \in I}\eta \neq \bot\), otherwise we would get
     the contradiction
-    \(\max(\semi{\var \in S}\eta \var[y]) = -\infty \leq \bound{\var \in
-      S}\).
+    \(\max(\semi{\var \in I}\eta \var[y]) = -\infty \leq \bound{\var \in
+      I}\).
     
     We distinguish two cases:
     \begin{itemize}
       
     \item If \(\var[y] \neq \var\), then for all \(\eta' \in \inte\) such
       that \(\eta \sqsubseteq \eta'\) it holds
-      \[\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto
-        {\abstr[\Int](\concr[\Int](\eta'(\var)) \cap \concr[\Int](S))}]\]
+      \[\bot \neq \semi{\var \in I}\eta' = \eta'[\var \mapsto
+        {\eta\var\sqcap I}]\]
       and thus
       \begin{equation*}
-        \max(\semi{\var \in S}\eta' \var[y]) = \max(\eta' \var[y]) = \max(\eta' \var[y]) + 0
+        \max(\semi{\var \in I}\eta' \var[y]) = \max(\eta' \var[y]) = \max(\eta' \var[y]) + 0
       \end{equation*}
       hence the thesis follows with \(\var[z]=\var[y]\) and \(h = 0\).
 
     \item If \(\var[y] = \var[x]\) then
       \begin{equation*}
-        \max(\semi{\var \in S}\eta \var[y]) = \max(\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S)))
+        \max(\semi{\var \in I}\eta \var[y]) = \max({\eta\var\sqcap I})
       \end{equation*}
-      Note that it cannot be \(\max(S)\in \z\). Otherwise, by
+      Note that it cannot be \(\max(I)\in \z\). Otherwise, by
       Definition~\ref{def:bound},
-      \(\max ({\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S))})
-      \leq \max(S)= \bound{\var \in S}\), violating the assumption
-      \(\max(\semi{\var \in S}\eta \var[y]) > \bound{\var \in S}\).
-      Hence, \(\max(S) = +\infty\) must hold and therefore % by
+      \(\max ({\eta\var\sqcap I}) \leq \sup(I)= \bound{\var \in I}\),
+      violating the assumption
+      \(\max(\semi{\var \in I}\eta \var[y]) > \bound{\var \in I}\).
+      Hence, \(\max(I) = +\infty\) must hold and therefore % by
       % \ref{inc:hp1}
-      \(\max ({\abstr[\Int](\concr[\Int](\eta\var) \cap
-        \concr[\Int](S))}) = \max(\eta(\var)) = \max(\eta(\var)) +
-      0\). It is immediate to check that the same holds for all
-      \(\eta' \sqsupseteq \eta\), i.e.,
+      \(\max ({\eta\var\sqcap I}) = \max(\eta(\var)) =
+      \max(\eta(\var)) + 0\). It is immediate to check that the same
+      holds for all \(\eta' \sqsupseteq \eta\), i.e.,
       \begin{equation*}
-        \max(\abstr[\Int](\concr[\Int](\eta'\var) \cap \concr[\Int](S))) = \max(\eta'\var) + 0
+        \max({\eta\var\sqcap I}) = \max(\eta'\var) + 0
       \end{equation*}
       % \[
       %   \max (\eta'(\var) \sqcap \abstr(S)) = \max(\eta'(\var))=
@@ -217,7 +208,7 @@ chains) to one of its subsets that does not contain such chains.
     \(\max(\semi{\var := k}\eta \var[y]) > \bound{\var := k} = |k|\).
 
     Observe that it cannot be \(\var = \var[y]\). In fact, since
-    \(\semi{\var := k}\eta = \eta[\var \mapsto \abstr[\Int](\{k\})]\),
+    \(\semi{\var := k}\eta = \eta[\var \mapsto \interval{k}{k}]\),
     we would have
     \(\semi{\var := k}\eta \var[y] = \abstr[\Int](\{k\}) =
     \interval{k}{k}\) and thus % \todo[inline]{Forse non ovvio perchè
@@ -615,7 +606,7 @@ chains) to one of its subsets that does not contain such chains.
 
     \noindent
     However, this would contradict the hypothesis
-    \(\semi{\fix{\com}} \eta \var[y] \neq \infty\). In fact the
+    \(\max(\semi{\fix{\com}} \eta \var[y]) \neq \infty\). In fact the
     inequality~\eqref{nopp} would imply
     \begin{align*}
       \semi{\fix{\com}} \eta \var[w]

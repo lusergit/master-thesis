@@ -27,66 +27,65 @@ finite derivation sequences.
 
 \begin{proof}
   By induction on the program \(\com[D]\):
-  \paragraph*{Base case:\\}
-  \(\com[D] \equiv e\), therefore
-  \begin{enumerate}[label=(\roman*).]
-  \item \label{it:1}
-    \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X , \bsem{e}\rho \neq
-    \bot\}\), which is finite, since \(X\) is finite;
-  \item \label{it:2} by expr rule \(\forall \rho \in X\) either
-    \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho} \not\to\). In
-    both cases there are no infinite derivation sequences, and therefore
-    \(\trans{\com[e]}{\rho} \ahalts\);
-  \item Notice that \(\forall \rho \in X\) either by the expr rule
-    \(\stt{\com[e], \rho} \to \seme{\com[e]}\rho\) or
-    \(\stt{\com[e], \rho}\not\to\) therefore
-    \[\sizeof{\trans{\com[e]}{\rho}} \leq \sizeof{X} < \infty\]
-  \end{enumerate}
-  
-  \paragraph*{Inductive cases:\\}
-  \begin{enumerate}
-  \item \(\com[D]\equiv \com[D_1 + D_2]\), therefore
+  \begin{inductive}
+    \case{\(\com[D] = e\)} Let's prove each point in order.
+    \begin{enumerate}[label=(\roman*).]
+    \item~\label{it:1}
+      \(\sem{e}X = \{\bsem{e}\rho \mid \rho \in X , \bsem{e}\rho \neq
+      \bot\}\), which is finite, since \(X\) is finite;
+    \item~\label{it:2} by expr rule \(\forall \rho \in X\) either
+      \(\stt{e,\rho} \to \bsem{e}\rho\) or \(\stt{e,\rho} \not\to\). In
+      both cases there are no infinite derivation sequences, and therefore
+      \(\trans{\com[e]}{\rho} \ahalts\);
+    \item Notice that \(\forall \rho \in X\) either by the expr rule
+      \(\stt{\com[e], \rho} \to \seme{\com[e]}\rho\) or
+      \(\stt{\com[e], \rho}\not\to\) therefore
+      \[\sizeof{\trans{\com[e]}{\rho}} \leq \sizeof{X} < \infty\]
+    \end{enumerate}
+    
+    \case{\({\com[D]} = \com[D_1 + D_2]\)} In this case consider
     \begin{enumerate}[label=(\roman*).]
     \item \(\sem{D_1 + D_2} X = \sem{D_1}X \cup \sem{D_2}X\). By
       inductive hypothesis, both \(\sem{D_1}X, \sem{D_2}X\) are
-      finite, as they are sub expressions of \(\com[D]\). Since the
+      finite, as they are sub expressions of \({\com[D]}\). Since the
       union of finite sets is finite, \(\sem{D_1 + D_2}X\) is finite;
     \item by inductive hypothesis again \(\forall \rho \in X\)
-      \(\stt{\com[D]_1, \rho}\ahalts\) and
-      \(\stt{\com[D]_2, \rho}\ahalts\). By sum\(_1\) rule
-      \(\stt{\com[D]_1 + \com[D]_2, \rho} \to \stt{\com[D]_1, \rho}\)
+      \(\stt{{\com[D]}_1, \rho}\ahalts\) and
+      \(\stt{{\com[D]}_2, \rho}\ahalts\). By sum\(_1\) rule
+      \(\stt{{\com[D]}_1 + {\com[D]}_2, \rho} \to \stt{{\com[D]}_1, \rho}\)
       and by sum\(_2\)
-      \(\stt{\com[D]_1 + \com[D]_2, \rho} \to \stt{\com[D]_2,
+      \(\stt{{\com[D]}_1 + {\com[D]}_2, \rho} \to \stt{{\com[D]}_2,
         \rho}\). Therefore
-      \(\stt{\com[D]_1 + \com[D]_2}{\rho}\ahalts\).
+      \(\stt{{\com[D]}_1 + {\com[D]}_2}{\rho}\ahalts\).
     \item For the latter argument, since both
-      \(\stt{\com[D]_1}{\rho}\) and \(\stt{\com[D_2]}{\rho}\) are
+      \(\stt{{\com[D]}_1}{\rho}\) and \(\stt{\com[D_2]}{\rho}\) are
       finite and composed of finite derivation sequences
-      \(\sizeof{\trans{\com[D]_1 + \com[D]_2}{\rho}} < \infty\).
+      \(\sizeof{\trans{{\com[D]}_1 + {\com[D]}_2}{\rho}} < \infty\).
     \end{enumerate}
-  \item \(\com[D]\equiv \com[D_1; D_2]\), therefore
+    \case{\({\com[D]} = \com[D_1; D_2]\)} We can notice the
+    follwing:
     \begin{enumerate}[label=(\roman*).]
     \item \(\sem{D_1;D_2}X = \sem{D_2}(\sem{D_1}X)\). By inductive
       hypothesis \(\sem{D_1}X = Y\). By inductive hypothesis again
       \(\sem{D_2}Y\) is finite;
     \item by inductive hypothesis both \(\forall \rho \in X\)
-      \(\stt{\com[D]_1, \rho}\ahalts\) and \(\forall \rho' \in Y\)
-      \(\stt{\com[D]_2,\rho'}\ahalts\), therefore by composition
-      lemma \(\stt{\com[D]_1;\com[D]_2, \rho} \ahalts\)
+      \(\stt{{\com[D]}_1, \rho}\ahalts\) and \(\forall \rho' \in Y\)
+      \(\stt{{\com[D]}_2,\rho'}\ahalts\), therefore by composition
+      lemma \(\stt{{\com[D]}_1;{\com[D]}_2, \rho} \ahalts\)
     \item by inductive hypothesis both
-      \(\sizeof{\trans{\com[D]_1}{\rho}} < \infty\) and
-      \(\sizeof{\trans{\com[D]_2}{\rho'}} < \infty\)
-      \(\forall \rho \in X, \rho'\in \sem{\com[D]_1}X\). For all
-      derivation sequences starting from \(\stt{\com[D]_1, \rho}\)
-      where \[\stt{\com[D]_1, \rho} \to^* \rho'\] with
-      \(\rho'\in \sem{\com[D]_1}X\) we can apply the composition lemma
+      \(\sizeof{\trans{{\com[D]}_1}{\rho}} < \infty\) and
+      \(\sizeof{\trans{{\com[D]}_2}{\rho'}} < \infty\)
+      \(\forall \rho \in X, \rho'\in \sem{{\com[D]}_1}X\). For all
+      derivation sequences starting from \(\stt{{\com[D]}_1, \rho}\)
+      where \[\stt{{\com[D]}_1, \rho} \to^* \rho'\] with
+      \(\rho'\in \sem{{\com[D]}_1}X\) we can apply the composition lemma
       and state that
-      \[\stt{\com[D]_1;\com[D]_2, \rho} \to^* \stt{\com[D]_2, \rho'} \quad
+      \[\stt{{\com[D]}_1;{\com[D]}_2, \rho} \to^* \stt{{\com[D]}_2, \rho'} \quad
         \forall \rho \in X\] from there we can notice that since
-      \(\sizeof{\stt{\com[D]_2, \rho'}} < \infty\) then
-      \(\sizeof{\stt{\com[D]_1;\com[D]_2, \rho'}} < \infty\)
+      \(\sizeof{\stt{{\com[D]}_2, \rho'}} < \infty\) then
+      \(\sizeof{\stt{{\com[D]}_1;{\com[D]}_2, \rho'}} < \infty\)
     \end{enumerate}
-  \end{enumerate}
+  \end{inductive}
 \end{proof}
 
 
@@ -103,18 +102,16 @@ Lemma:
     \forall j \in \n \quad \sem{D}^{k+1+j}\rho \subseteq \bigcup_{i=0}^k\sem{D}^i\rho
   \end{equation}
   and therefore
-  \(\sem{\com[D]^*}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\)
+  \(\sem{{\com[D]}^*}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\)
 \end{lemma}
 \begin{proof}
-  We can show \eqref{eq:what} by induction on \(j\):
-  \begin{itemize}
-  \item if \(j=0\) then we want to show that
-    \(\sem{D}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\), which is
-    true by hypothesis \eqref{eq:hp};
+  We can show~\eqref{eq:what} by induction on \(j\):
+  \begin{inductive}
+    \case{\(j=0\)} In this case we want to show that
+    \(\sem{D}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{D}^i\rho\), which
+    is true by hypothesis~\eqref{eq:hp};
     
-  \item In the inductive case we have to show that if the
-    statement holds for \(j\), it also holds for \(j+1\). We know
-    that
+    \case{\(j \implies j+1\)} In this case we know that
     \begin{align*}
       \bigcup_{i=0}^k\sem{\com[D]}^i\rho & = \bigcup_{i=0}^{k+1}\sem{\com[D]}^i\rho & \text{since by \eqref{eq:hp} } \sem{\com[D]}^{k+1}\rho \subseteq \cup_{i=0}^k\sem{\com[D]}^i\rho \\
                                          & = \rho \cup \bigcup _{i=1}^{k+1}\sem{\com[D]}^i \rho \\
@@ -132,7 +129,7 @@ Lemma:
     \begin{equation*}
       \sem{\com[D]}^{(k+1)+(j+1)}\rho \subseteq \left(\bigcup_{i=1}^{k+1}\sem{\com[D]}^i\rho \right) \subseteq \rho \cup \left(\bigcup_{i=1}^{k+1}\sem{\com[D]}^i\rho \right) = \bigcup_{i=0}^{k+1}\sem{\com[D]}^i\rho = \bigcup_{i=0}^{k}\sem{\com[D]}^i\rho
     \end{equation*}
-  \end{itemize}
+  \end{inductive}
 \end{proof}
 
 We also need to recall König's Lemma from \cite{konig1926lemma}:

@@ -77,7 +77,7 @@ Let's denote as \(\semnr{\cdot}\) the abstract semantics over
   \medskip 
 
   \noindent
-  \textbf{Case}  (\(\com \equiv \com_1 + \com_2\)).
+  \textbf{Case}  (\(\com_1 + \com_2\)).
   % 
   Then
   \begin{align*}
@@ -89,7 +89,7 @@ Let's denote as \(\semnr{\cdot}\) the abstract semantics over
   \medskip
 
   \noindent
-  \textbf{Case}  (\(\com \equiv \com_1 ; \com_2\)).
+  \textbf{Case}  (\(\com_1 ; \com_2\)).
   Then
   \begin{align*}
     \semnr{\com_1 ; \com_2}(\eta \ovdot\cup \sigma) & = \semnr{\com_2}(\semnr{\com_1}(\eta \ovdot\cup \theta)) \\
@@ -100,7 +100,7 @@ Let's denote as \(\semnr{\cdot}\) the abstract semantics over
   \medskip
 
   \noindent
-  \textbf{Case}  (\(\com \equiv \com^*\)).
+  \textbf{Case}  (\(\com^*\)).
   % 
   Then
   \begin{equation*}
@@ -109,19 +109,19 @@ Let's denote as \(\semnr{\cdot}\) the abstract semantics over
   What we have to show now is that \(\forall i \in \n\)
   \(\semnr{\com}^i(\eta \ovdot\cup \theta) = \semnr{\com}^i \eta \ovdot\cup
   \semnr{\com}^i\theta\). We can show this by induction on \(i\):
-  \begin{itemize}
-  \item  \(i=0\). Then
+  \begin{inductive}
+  \case{\(i=0\)} Then
     \begin{equation*}
       \semnr{\com}^0(\eta\ovdot\cup\theta) = \eta\ovdot\cup\theta = \semnr{\com}^0\eta \ovdot\cup \semnr{\com}^0\theta
     \end{equation*}
     and the statement holds.
-  \item  \(i \implies i + 1\). Notice that
+    \case{\(i \implies i + 1\)} Notice that
     \begin{align*}
       \semnr{\com}^{i+1}(\eta \ovdot\cup \theta) & = \semnr{\com}\left(\semnr{\com}^i(\eta \ovdot\cup \theta)\right) \\
                                                  & = \semnr{\com}(\semnr{\com}^i\eta \ovdot\cup \semnr{\com}^i\theta) & \text{by inductive hypothesis} \\
                                                  & = \semnr{\com}^{i+1}\eta \ovdot\cup \semnr{\com}^{i+1}\theta & \text{by additivity}
     \end{align*}
-  \end{itemize}
+  \end{inductive}
   Therefore
   \begin{align*}
     \semnr{\com^*}(\eta\ovdot\cup\theta) & = \textstyle \ovdot\bigcup_{i\in\n} \semnr{\com}^i(\eta \ovdot\cup \theta) \\

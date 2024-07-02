@@ -1,4 +1,23 @@
 \section{Program bounds}\label{sec:bounds}
+We need to define the \(\max\) and \(\min\) function for
+intervals. 
+\begin{definition}(\(\max\) and \(\min\) on intervals) Let
+  \(\mathcal{Z} \defin \z \cup \{-\infty, +\infty\}\), then
+  \(\max : \Int \to \mathcal{Z}\) is defined as
+  \begin{align*}
+    \max(\bot) & \defin - \infty \\
+    \max(\interval{a}{b}) & \defin b
+  \end{align*}
+  while the \(\min\) function \(\min : \Int \to \mathcal{Z}\)
+  is defined as follows
+  \begin{align*}
+    \min(\bot) & \defin + \infty \\
+    \min(\interval{a}{b}) & \defin a
+  \end{align*}
+\end{definition}
+Notice in particular that since
+\(\top = \interval{-\infty}{+\infty}\),
+\(\max(\top) = +\infty, \min(\top) = -\infty\).
 
 \begin{definition}[Program bound]\label{def:bound}
   The \emph{upper bound} associated with a command \(\com\in \imp\) is
@@ -9,7 +28,7 @@
     \bound{\var \in I}  
     & \veq \begin{cases}
       |\max(I)| & \text{if } \max(I)\in\z \\
-      |\min(I)| & \text{if } \max(I)=+\infty \land \min(S) \neq -\infty\\
+      |\min(I)| & \text{if } \max(I)=+\infty \land \min(S)\in\z\\
       0 & \text{otherwise}
     \end{cases}
     \\
@@ -36,10 +55,11 @@
 
   \begin{align*}
     % 
-    \lbound{\var \in S}  
+    \lbound{\var \in I}  
     & \veq \begin{cases}
-      |\max(S)| & \text{if } \min(S)=-\infty\\
-      |\min(S)| & \text{if } \min(S)\in \z
+      |\min(I)| & \text{if } \min(I)\in \z \\
+      |\max(I)| & \text{if } \min(I)=-\infty \land \max(I)\in\z \\
+      0 & \text{otherwise}
     \end{cases}
     \\
     % 

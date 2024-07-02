@@ -64,15 +64,16 @@ operations on the non-relational collecting abstraction:
                                      \bot & \text{otherwise}
                                    \end{cases} \\
     \absem[\bCnr]{\var := k}\eta & \defin
-                                   \begin{cases}
-                                     \eta[\var\mapsto\{k\}] & \text{if } \eta\var\neq\top \\
-                                     \eta & \text{otherwise}
-                                   \end{cases} \\
+                                   % \begin{cases}
+                                     \eta[\var\mapsto\{k\}] % & \text{if } \eta\var\neq\top \\
+                                     % \eta & \text{otherwise}
+                                   % \end{cases}
+    \\
     \absem[\bCnr]{\var := \var[y] + k}\eta & \defin
-                                             \begin{cases}
-                                               \eta[\var\mapsto\eta\var[y] + k] & \text{if } \eta\var\neq\top \\
-                                               \eta & \text{otherwise}
-                                             \end{cases}
+                                             % \begin{cases}
+                                               \eta[\var\mapsto\eta\var[y] + k] % & \text{if } \eta\var\neq\top \\
+                                               % \eta & \text{otherwise}
+                                             % \end{cases}
   \end{align*}
 \end{definition}
 With these base operations, \(\semi[\bCnr]{\cdot}\) is defined
