@@ -287,10 +287,10 @@ we will often use the syntactic sugar instead of its real equivalent
 for the sake of simplicity.
 \begin{align*}
   \var \in \interval{a}{b} & = \var \in I & \text{with } I = \interval{a}{b}\\
-  \var \leq k & = \var \in (-\infty, k]\\
-  \var > k & = \var \in [k+1, + \infty) \\
-  \tru & = \var \in \z \\
-  \ff & = \var \in \emptyset \\
+  \var \leq k & = \var \in \interval{-\infty}{k}\\
+  \var > k & = \var \in \interval{k+1}{+\infty} \\
+  \tru & = \var \in \top \\
+  \ff & = \var \in \bot \\
   \var \in I_1 \vee \var \in I_2 & = (\var \in I_1) + (\var \in I_2) \\ 
   \var \in I_1 \wedge \var \in I_2 & = (\var \in I_1);(\var \in I_2) \\
   %% \var \not\in I & = \var \in \neg I \\
