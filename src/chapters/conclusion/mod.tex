@@ -5,53 +5,74 @@ setting of abstract interpretation, the most prevalent framework for
 developing static analysis tools.  The general question concerned the
 possibility of effectively computing the abstract semantics. The
 question is non trivial when the abstract domain can have infinite
-ascending chains and thus the fixpoint computations can diverge.
-Beginning with the \(\imp\) language grammar, we defined its concrete
-denotational semantics in its concrete domain \(\dom\) and small step
-semantics, demonstrating that all non-trivial semantic properties are
-undecidable due to Rice's Theorem. We therefore biult the abstraction
-chain in Figure~\ref{fig:abstrchain}.
+ascending chains and thus the fixpoint computations can diverge.  We
+focused on a simple imperative language \(\imp\), offering a set of
+constructs sufficient to make it Turing complete. We defined its
+concrete denotational semantics in its concrete domain \(\dom\) and
+small step semantics. We first showed that, as expected, all
+non-trivial properties of the collecting semantics are undecidable due
+to Rice's Theorem. We then built the abstraction chain in
+Figure~\ref{fig:abstrchain}.
 \begin{figure}
   \centering
   \usetikzlibrary{arrows.meta}
   \begin{tikzpicture}[, >=stealth]
     % Nodes
-    \node (dom) {\(\dom\)};
-    \node (bcnr) [below=of dom] {\(\bCnr\)};
-    \node (ph1) [below=of bcnr] {};
-    \node (inte) [left=of ph1] {\(\inte\)};
-    \node (bbcnr) [right=of ph1] {\(\bbCnr{\low}{\upp}\)};
-    \node (binte) [below=of inte] {\(\binte{\low}{\upp}\)};
-    \node (btbcnr) [below=of bbcnr] {\(\btbCnr{\low}{\upp}\)};
+    \node[minimum size=20pt] (dom) {\(\dom\)};
+    \node[minimum size=20pt] (bcnr) [below=of dom] {\(\bCnr\)};
+    \node[minimum size=20pt] (ph1) [below=of bcnr] {};
+    \node[minimum size=20pt] (inte) [left=of ph1] {\(\inte\)};
+    \node[minimum size=20pt] (bbcnr) [right=of ph1] {\(\bbCnr{\low}{\upp}\)};
+    \node[minimum size=20pt] (binte) [below=of inte] {\(\binte{\low}{\upp}\)};
+    \node[minimum size=20pt] (btbcnr) [below=of bbcnr] {\(\btbCnr{\low}{\upp}\)};
 
     \node at (-4,-3) (decidable)   {{\color{codegreen}\(\mathsf{decidable}\)}};
     \node at (3, -2) (unknown)     {{\color{airforceblue}\(\mathsf{unknown}\)}};
     \node at (2, .5) (undecidable) {{\color{red}\(\mathsf{undecidable}\)}};
 
-    % divisor lines
-    \draw[red, opacity=.4] (-3,1) edge[out=-40,in=180] (3,-1);
-    % \draw (description) edge[out=180,in=0,->] (text);
-    \draw[red, opacity=.4] (-3,-1) edge[out=-40,in=180] (3,-3.5);
+    % % divisor lines
+    \draw[red, opacity=.4] (-3,1) edge[out=-40,in=180, dashed] (3,-1);
+    \draw[airforceblue, opacity=.4] (-3,0.9) edge[out=-40,in=180, dashed] (3,-1.1);
+    % % \draw (description) edge[out=180,in=0,->] (text);
+    \draw[airforceblue, opacity=.4] (-3,-1) edge[out=-50,in=180, dashed] (3,-4.2);
+    \draw[codegreen, opacity=.4] (-3,-1.1) edge[out=-50,in=180, dashed] (3,-4.3);
     
     % Arrows
     \path
-    (dom) edge[->, bend right=10] node[left]{$\abstr$} (bcnr)
-    (bcnr) edge[->, bend right=10] node[right]{$\concr$} (dom)
-    (bcnr) edge[->, bend right=10] node[left]{$\dabstr$} (inte)
-    (inte) edge[->, bend right=10] node[right]{$\dconcr$} (bcnr)
-    (bcnr) edge[->, bend right=10] node[left]{$\sabstr[\low,\upp]$} (bbcnr)
-    (bbcnr) edge[->, bend right=10] node[right]{$\sconcr[\low,\upp]$} (bcnr)
-    (inte) edge[->, bend right=10] node[left]{$\dabstr[\low,\upp]$} (binte)
-    (binte) edge[->, bend right=10] node[right]{$\dconcr[\low,\upp]$} (inte)
-    (bbcnr) edge[->, bend right=10] node[left]{$\tabstr[\low,\upp]$} (btbcnr)
-    (btbcnr) edge[->, bend right=10] node[right]{$\tconcr[\low,\upp]$} (bbcnr);
+    (dom.250) edge[->] node[left]  {$\abstr$}             (bcnr.110)
+    (bcnr.70) edge[->] node[right] {$\concr$}             (dom.290)
+    (bcnr.195)    edge[->] node[left]  {$\dabstr$}        (inte.75)
+    (inte.35)    edge[->] node[right] {$\dconcr$}         (bcnr.235)
+    (bcnr.305)    edge[->] node[left]  {$\sabstr[\low,\upp]$} (bbcnr.145)
+    (bbcnr.115)   edge[->] node[right] {$\sconcr[\low,\upp]$} (bcnr.335)
+    (inte.250)    edge[->] node[left]  {$\dabstr[\low,\upp]$} (binte.110)
+    (binte.70)   edge[->] node[right] {$\dconcr[\low,\upp]$} (inte.290)
+    (bbcnr.250)   edge[->] node[left]  {$\tabstr[\low,\upp]$} (btbcnr.110)
+    (btbcnr.70)  edge[->] node[right] {$\tconcr[\low,\upp]$} (bbcnr.290);
+    
+    % % Decidable set
+    % \filldraw[fill=green, fill opacity=0.1, draw=green, dotted, rounded corners] 
+    % (inte.north -| inte.west) to[out=210, in=120]
+    % (binte.south -| binte.west) to[out=330, in=225] 
+    % (btbcnr.south -| btbcnr.east) to[out=45, in=315]
+    % (btbcnr.north -| btbcnr.east) to[out=135, in=-10] 
+    % (inte.north -| inte.east) to[out=170, in=10]
+    % (inte.north -| inte.west);
+
+    % % Unknown set
+    % \filldraw[fill=airforceblue, fill opacity=0.1, draw=airforceblue, dotted] 
+    % (bcnr.south -| bcnr.west) to[out=315, in=155]
+    % (bbcnr.south -| bbcnr.west) to[out=325, in=315]
+    % (bbcnr.north -| bbcnr.east) to[out=135, in=325]
+    % (bcnr.north -| bcnr.east) to[out=155, in=135]
+    % (bcnr.south -| bcnr.west);
 
   \end{tikzpicture}
   \caption{Abstractions chain we build throughout
     Chapter~\ref{ch:abstractdomains}}\label{fig:abstrchain}
 \end{figure}
 First we abstracted program execution using the non-relational
-collecting semantics \(\bCnr\), the most general non-relational
+collecting semantics \(\bCnr\), the finest non-relational
 domain. Subsequently, we defined and established the fundamental
 properties of the intervals domain \(\inte\), a well-known domain in
 abstract interpretation literature. We proved that in the
@@ -65,15 +86,16 @@ initial environment \(\com\in\imp, \eta\in\inte\) and by crafting
 appropriate bounds for \(\binte{\low}{\upp}\), namely
 \(\low = \min(\eta) - \nlbound{\com}\) and
 \(\upp = \max(\eta) + \nbound{\com}\), we not only could compute
-\(\semi[\binte{\low}{\upp}]{\com}\eta\) but
-also \[\semi[\binte{\low}{\upp}]{\com}\eta = \semi[\inte]{\com}\eta\]
-which meant that we were able to compute exact interval analysis in
-finite time. Following the same practice we bounded \(\bCnr\) to
-\(\bbCnr{\low}{\upp}\), and showed with the example of
-Code~\ref{code3} that with a simple \(\top\) element for variables
-that exceed the bounds we loose too much information to infer equality
-with the non-relational collecting semantics.  Therefore we introduced
-\(\btbCnr{\low}{\upp}\), bonuded non-relational collecting with a
+\(\semi[\binte{\low}{\upp}]{\com}\eta\) but also show
+that \[\semi[\binte{\low}{\upp}]{\com}\eta = \semi[\inte]{\com}\eta\]
+This means that we were able to compute exact interval analysis in
+finite time. Then we tries to adopt the same technique to the
+non-relational collecting semantics. Indeed one can introduce a
+bounded version \(\bbCnr{\low}{\upp}\) of \(\bCnr\) where a \(\top\)
+element is used for variables that exceed the bounds. However in this
+way we loose too much information to infer equality with the
+non-relational collecting semantics.  Therefore we introduced
+\(\btbCnr{\low}{\upp}\), bounded non-relational collecting with a
 smashed top element. With this analysis we could infer equality up to
 the top element, meaning that if the bounded analysis with smashed top
 resulted in something different than \(\top\) then its result was the
@@ -97,7 +119,7 @@ beyond the scope of this thesis due to time constraints.
 
 The first and most prominent question is whether it is possible to
 precisely compute the non-relational collecting semantics. Our
-hypothesis is that it is indeed feasible, as indicated by the work
+hypothesis is that it is indeed feasible, as suggested by the work
 of~\cite{Lefaucheux2024}. Their research builds on Presburger
 arithmetic from~\cite{1571698599431503232}, which, although beyond the
 scope of this thesis, presents interesting results, particularly its
@@ -106,7 +128,7 @@ decidability.
 A second follow up question might involve the extension of the
 language to support non-linear expressions. Our hypothesis in this
 case is that invariants might become undecidable, as we are able to
-write diofantine equations. Take for example the following code
+write diophantine equations. Take for example the following code
 snippet
 \begin{lstlisting}[language=Imp, caption=Program with diofantine equations, label=code5]
   (*\(\vec{x}\)*) := null_vec_size(n); /* where n is the number of

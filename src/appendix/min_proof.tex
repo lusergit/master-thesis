@@ -123,44 +123,43 @@ and recall the Lemma~\ref{le:dec} statement:
   \medskip
   
   \noindent
-  \textbf{Case} (\(\var \in S\))\\
+  \textbf{Case} (\(\var \in I\))\\
   % 
   Take \(\eta \in \inte\) and assume
-  \(-\infty\neq\min(\semi{\var \in S}\eta \var[y]) < - \lbound{\var \in S}\).
+  \(-\infty\neq\min(\semi{\var \in I}\eta \var[y]) < - \lbound{\var \in I}\).
   %
-  Clearly \(\semi{\var \in S}\eta \neq \bot\), otherwise we would get
+  Clearly \(\semi{\var \in I}\eta \neq \bot\), otherwise we would get
   the contradiction
-  \(\min(\semi{\var \in S}\eta \var[y]) = +\infty \geq \lbound{\var
-    \in S}\).  We distinguish two cases:
+  \(\min(\semi{\var \in I}\eta \var[y]) = +\infty \geq \lbound{\var
+    \in I}\).  We distinguish two cases:
   \begin{itemize}
     
   \item If \(\var[y] \neq \var\), then for all \(\eta' \in \inte\) such
     that \(\eta \sqsubseteq \eta'\) it holds
-    \[\bot \neq \semi{\var \in S}\eta' = \eta'[\var \mapsto
-      {\abstr[\Int](\concr[\Int](\eta(\var)) \cap \concr[\Int](S))}]\]
+    \[\bot \neq \semi{\var \in I}\eta' = \eta'[\var \mapsto
+      {\eta\var\sqcap I}]\]
     and thus
     \begin{equation*}
-      \min(\semi{\var \in S}\eta' \var[y]) = \min(\eta' \var[y]) = \min(\eta' \var[y]) + 0
+      \min(\semi{\var \in I}\eta' \var[y]) = \min(\eta' \var[y]) = \min(\eta' \var[y]) + 0
     \end{equation*}
     hence the thesis follows with \(\var[z]=\var[y]\) and \(h = 0\).
 
   \item If \(\var[y] = \var[x]\) then \(\eta(\var) \in \Int\) and
     \begin{equation*}
-      \min(\semi{\var \in S}\eta \var[y]) = \min(\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S)))
+      \min(\semi{\var \in I}\eta \var[y]) = \min({\eta\var\sqcap I})
     \end{equation*}
-    Note that it cannot be \(\min(S)\in \z\). Otherwise, by
+    Note that it cannot be \(\min(I)\in \z\). Otherwise, by
     Definition~\ref{def:bound},
-    \(\min ({\abstr[\Int](\concr[\Int](\eta\var) \cap \concr[\Int](S))})
-    \geq \min(S)= \lbound{\var \in S}\), violating the assumption
-    \(\min(\semi{\var \in S}\eta \var[y]) < - \lbound{\var \in S}\).
+    \(\min ({\eta\var\sqcap I}) \geq \min(I)= \lbound{\var \in I}\),
+    violating the assumption
+    \(\min(\semi{\var \in I}\eta \var[y]) < - \lbound{\var \in I}\).
     Hence, \(\min(S) = -\infty\) must hold and therefore % by
     % \ref{inc:hp1}
-    \(\min ({\abstr[\Int](\concr[\Int](\eta\var) \cap
-      \concr[\Int](S))}) = \min(\eta(\var)) = \min(\eta(\var)) +
-    0\). It is immediate to check that the same holds for all
+    \(\min ({\eta\var\sqcap I}) = \min(\eta(\var)) = \min(\eta(\var))
+    + 0\). It is immediate to check that the same holds for all
     \(\eta' \sqsupseteq \eta\), i.e.,
     \begin{equation*}
-      \min(\abstr[\Int](\concr[\Int](\eta'\var) \cap \concr[\Int](S))) = \min(\eta'\var) + 0
+      \min({\eta'\var\sqcap I}) = \min(\eta'\var) + 0
     \end{equation*}
     % \[
     % \min (\eta'(\var) \sqcap \abstr(S)) = \min(\eta'(\var))=
@@ -179,9 +178,8 @@ and recall the Lemma~\ref{le:dec} statement:
 
   Observe that it cannot be \(\var = \var[y]\). In fact, since
   \(\semi{\var := k}\eta = \eta[\var \mapsto \abstr[\Int](\{k\})]\),
-  we would have
-  \(\semi{\var := k}\eta \var[y] = \abstr[\Int](\{k\}) =
-  \interval{k}{k}\) and thus % \todo[inline]{Forse non ovvio perchè
+  we would have \(\semi{\var := k}\eta \var[y] = \interval{k}{k}\) and
+  thus % \todo[inline]{Forse non ovvio perchè
     % \(\abstr[\Int](\{k\})\) può non rappresentare esattamente
     % \(\{k\}\).}
   \begin{equation*}
