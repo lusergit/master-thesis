@@ -12,10 +12,9 @@ program \emph{execution}.% The first building block are
 
 \begin{definition}[Semantics of Basic Expressions]
   Let \emph{environments} be the maps from the set of variables to
-  their numerical value:
-  \(\env \defin \{\rho \mid \rho : \Var \to \z\} \cup \{\bot\}\). For basic
-  expressions \(e \in \expr\) the \emph{concrete semantics}
-  \(\bsem{ \cdot} : \expr \to \env \to \env\) is
+  their numerical value: \(\env \defin (\Var \to \z) \cup
+  \{\bot\}\). For basic expressions \(e \in \expr\) the \emph{concrete
+    semantics} \(\bsem{ \cdot} : \expr \to \env \to \env\) is
   inductively defined by:
   \begin{align*}
     \bsem{\com[e]}\bot & \defin \bot \\
@@ -294,7 +293,7 @@ for the sake of simplicity.
   \var \in I_1 \vee \var \in I_2 & = (\var \in I_1) + (\var \in I_2) \\ 
   \var \in I_1 \wedge \var \in I_2 & = (\var \in I_1);(\var \in I_2) \\
   %% \var \not\in I & = \var \in \neg I \\
-  \ifte{b}{C_1}{C_2} & = (\com[e];\com_1) + (\com[\neg e];\com_2) \\
+  \ifte{b}{C_1}{C_2} & = (\com[b];\com_1) + (\com[\neg b];\com_2) \\
   \while{b}{C} & = \fix{b;\com};\neg b \\
   \pplus{\var} & = \var := \var + 1
 \end{align*}
