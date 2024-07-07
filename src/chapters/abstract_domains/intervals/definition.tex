@@ -25,14 +25,13 @@ concretization and abstraction maps for the intervals domain
   \end{align*}
 
   And the \emph{abstraction map} \(\abstr:\poset{\z} \to \Int\) as
-  \begin{align*}
-    \abstr(\emptyset) & \defin \bot \\
-    \abstr(X) & \defin
+  \begin{equation*}
+    \abstr(S) \defin
     \begin{cases}
-      \bot & \text{if } X = \emptyset \\
-      \interval{\inf(X)}{\sup(X)} & \text{otherwise}
+      \bot & \text{if } S = \emptyset \\
+      \interval{\inf(S)}{\sup(S)} & \text{otherwise}
     \end{cases}
-  \end{align*}
+  \end{equation*}
 \end{definition}
 The next step is to define some order on \(\Int\). For this purpose
 we define a partial order \(\sqsubseteq\) based on the concretization
